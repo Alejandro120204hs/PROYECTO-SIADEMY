@@ -42,26 +42,41 @@
                 <div class="container-fluid">
                     <!-- nav de buscar -->
                     <div class="encabezado">
-                        <h3>Agregar Estudiante</h5>
+                        <h3>Agregar Estudiante</h3>
+                        <div class="perfil">
+                            <div class="icons">
+                                <i class="bi bi-bell"></i>
+                                <i class="bi bi-gear"></i>
+                            </div>
+                            <div class="">
+                                <p class="">Julian Amaya</p>
+                                <small>Administrador</small>
+                            </div>
+                            <div class="user"></div>
+                        </div>
                     </div>
 
                     <form action="">
                         <div class="tabla-titulo">
                             <h5>Datos del Estudiante</h5>
                         </div>
-    
+
                         <div class="row">
                             <div class="cont-add">
-                                <label for="">Foto</label>
-                                <div class="border border-secondary d-flex flex-column justify-content-center align-items-center p-3 rounded">
-                                    <small>Selecciona un archivo<br>(opcional)</small>
-                                    <input type="file" class="form-control mt-2" />
+                                <div class="foto">
+                                    <label for="">Foto*</label>
+                                    <div
+                                        class="border border-secondary d-flex flex-column justify-content-center align-items-center p-3 rounded">
+                                        <small>Selecciona un archivo</small>
+                                        <input type="file" class="form-control mt-2" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="cont-add">
+
+                            <div class="cont-add ">
                                 <div>
                                     <label for="">N° Documento*</label>
-                                    <input type="text">
+                                    <input type="number">
                                 </div>
                                 <div>
                                     <label for="">Nombres*</label>
@@ -69,36 +84,45 @@
                                 </div>
                                 <div>
                                     <label for="">Fecha y lugar de nacimiento*</label>
-                                    <input type="text">
-                                    <input type="text">
+                                    <div class="inpLuFe">
+                                        <input type="date">
+                                        <input type="text">
+                                    </div>
+
                                 </div>
                                 <div>
                                     <label for="">Email*</label>
-                                    <input type="text">
+                                    <input type="email">
                                 </div>
-                                
+
                             </div>
                             <div class="cont-add">
-                                <div>
-                                    <label for="">Apellidos*</label>
-                                    <input type="text">
+                                <div class="sw3">
+                                    <div>
+                                        <label for="">Apellidos*</label>
+                                        <input type="text">
+                                    </div>
+                                    <div>
+                                        <label for="">N° Telefono*</label>
+                                        <input type="tel">
+                                    </div>
                                 </div>
-                                <div>
-                                    <label for="">N° Telefono*</label>
-                                    <input type="text">
-                                </div>
+
                             </div>
                         </div>
                         <div class="row">
                             <div class="cont-add">
-                               <div>
+                            </div>
+
+                            <div class="cont-add">
+                                <div>
                                     <label for="">Nombre del Acudiente*</label>
                                     <input type="text">
                                 </div>
                                 <div>
                                     <label for="">Email de Acudiente*</label>
-                                    <input type="text">
-                                </div> 
+                                    <input type="email">
+                                </div>
                             </div>
                             <div class="cont-add">
                                 <div>
@@ -107,17 +131,17 @@
                                 </div>
                                 <div>
                                     <label for="">N° Telefono Acudiente*</label>
-                                    <input type="text">
+                                    <input type="tel">
                                 </div>
                             </div>
                         </div>
                     </form>
 
                     <!-- Botones -->
-                     <div class="botones">
+                    <div class="botones">
                         <button>Cancelar</button>
                         <button>Agregar</button>
-                     </div>
+                    </div>
 
                 </div>
             </main>
