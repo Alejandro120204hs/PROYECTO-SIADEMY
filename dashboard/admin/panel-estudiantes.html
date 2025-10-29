@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIADEMY • Estudiantes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/dashboard/css/styles-panel-estudiantes.css">
+
+</head>
+
+<body>
+  <div class="app" id="appGrid">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="leftSidebar">
+      <a class="brand" href="#">
+        <span class="logo"><i class="ri-shield-star-line"></i></span>
+        <span>Siademy</span>
+      </a>
+      <nav class="nav">
+        <a href="admin.html"><i class="ri-home-5-line"></i> Panel</a>
+        <a class="active" href="panel_estudiante.html"><i class="ri-team-line"></i> Estudiantes</a>
+        <a href="#"><i class="ri-user-3-line"></i> Profesores</a>
+        <a href="#"><i class="ri-calendar-event-line"></i> Eventos</a>
+        <a href="#"><i class="ri-message-3-line"></i> Chat</a>
+        <div class="spacer"></div>
+        <div class="section">Cursos / Asignaturas</div>
+        <a href="#"><i class="ri-pulse-line"></i> Seguimiento</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
+            <i class="ri-menu-2-line"></i>
+          </button>
+          <div class="title">Estudiantes</div>
+        </div>
+        <div class="search">
+          <i class="ri-search-2-line"></i>
+          <input type="text" placeholder="Buscar Aquí">
+        </div>
+        
+        <!-- Botón Agregar Estudiante -->
+        <button class="btn-agregar-estudiante">
+          <i class="ri-add-line"></i> Agregar Estudiante
+        </button>
+        
+        <!-- Dropdown Más Nuevo -->
+        <div class="dropdown-custom">
+          <button class="dropdown-toggle-custom">
+            Más Nuevo <i class="ri-arrow-down-s-line"></i>
+          </button>
+        </div>
+        
+        <div class="user">
+          <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
+          <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
+          <div class="avatar" title="Diego A.">DA</div>
+        </div>
+      </div>
+
+      <!-- Tabla de Estudiantes -->
+      <div class="datatable-card">
+        <table id="tablaEstudiantes" class="table table-dark table-hover">
+          <thead>
+            <tr>
+              <th width="40">
+                <input type="checkbox" class="form-check-input" id="selectAll">
+              </th>
+              <th>Nombres</th>
+              <th>N° Identificación</th>
+              <th>Fecha Nacimiento</th>
+              <th>Nombre Pariente</th>
+              <th>Ciudad</th>
+              <th>Contactos</th>
+              <th>Grado</th>
+              <th width="100">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input type="checkbox" class="form-check-input row-checkbox">
+              </td>
+              <td>
+                <div class="student-info">
+                  <div class="student-avatar" style="background: #9b59b6;">SW</div>
+                  <span class="student-name">Samanta William</span>
+                </div>
+              </td>
+              <td>#463436465</td>
+              <td>28 de marzo de 2016</td>
+              <td>Maria William</td>
+              <td>Jatarta</td>
+              <td>
+                <div class="contacts">
+                  <i class="ri-phone-line"></i>
+                  <i class="ri-mail-line"></i>
+                </div>
+              </td>
+              <td>VII A</td>
+              <td>
+                <button class="btn-action">Ver A</button>
+                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" class="form-check-input row-checkbox">
+              </td>
+              <td>
+                <div class="student-info">
+                  <div class="student-avatar" style="background: #9b59b6;">TS</div>
+                  <span class="student-name">Tony Soap</span>
+                </div>
+              </td>
+              <td>#213423423</td>
+              <td>05 de julio de 2014</td>
+              <td>James Soap</td>
+              <td>Jatarta</td>
+              <td>
+                <div class="contacts">
+                  <i class="ri-phone-line"></i>
+                  <i class="ri-mail-line"></i>
+                </div>
+              </td>
+              <td>VII B</td>
+              <td>
+                <button class="btn-action">Ver B</button>
+                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" class="form-check-input row-checkbox">
+              </td>
+              <td>
+                <div class="student-info">
+                  <div class="student-avatar" style="background: #9b59b6;">KH</div>
+                  <span class="student-name">Karen Hope</span>
+                </div>
+              </td>
+              <td>#43209847</td>
+              <td>20 de marzo de 2015</td>
+              <td>Justin Hope</td>
+              <td>Jatarta</td>
+              <td>
+                <div class="contacts">
+                  <i class="ri-phone-line"></i>
+                  <i class="ri-mail-line"></i>
+                </div>
+              </td>
+              <td>VII C</td>
+              <td>
+                <button class="btn-action">Ver C</button>
+                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" class="form-check-input row-checkbox">
+              </td>
+              <td>
+                <div class="student-info">
+                  <div class="student-avatar" style="background: #9b59b6;">JN</div>
+                  <span class="student-name">Jordan Nico</span>
+                </div>
+              </td>
+              <td>#852910385</td>
+              <td>26 de diciembre de 2016</td>
+              <td>Amanda Nico</td>
+              <td>Jatarta</td>
+              <td>
+                <div class="contacts">
+                  <i class="ri-phone-line"></i>
+                  <i class="ri-mail-line"></i>
+                </div>
+              </td>
+              <td>VII A</td>
+              <td>
+                <button class="btn-action">Ver A</button>
+                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" class="form-check-input row-checkbox">
+              </td>
+              <td>
+                <div class="student-info">
+                  <div class="student-avatar" style="background: #9b59b6;">NA</div>
+                  <span class="student-name">Nadila Adja</span>
+                </div>
+              </td>
+              <td>#462390130</td>
+              <td>26 de marzo de 2014</td>
+              <td>Jack Adja</td>
+              <td>Jatarta</td>
+              <td>
+                <div class="contacts">
+                  <i class="ri-phone-line"></i>
+                  <i class="ri-mail-line"></i>
+                </div>
+              </td>
+              <td>VII A</td>
+              <td>
+                <button class="btn-action">Ver A</button>
+                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" class="form-check-input row-checkbox">
+              </td>
+              <td>
+                <div class="student-info">
+                  <div class="student-avatar" style="background: #9b59b6;">JA</div>
+                  <span class="student-name">Johnny Ahmad</span>
+                </div>
+              </td>
+              <td>#423523464</td>
+              <td>27 de marzo de 2015</td>
+              <td>Donny Ahmad</td>
+              <td>Jatarta</td>
+              <td>
+                <div class="contacts">
+                  <i class="ri-phone-line"></i>
+                  <i class="ri-mail-line"></i>
+                </div>
+              </td>
+              <td>VII A</td>
+              <td>
+                <button class="btn-action">Ver A</button>
+                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Bootstrap and DataTables Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+  <script src="../../assets/dashboard/js/main-panel-estudiantes.js"></script>
+</body>
+
+</html>
