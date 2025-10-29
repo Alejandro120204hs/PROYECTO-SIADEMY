@@ -1,0 +1,87 @@
+body {
+    background-color: #0c1121;
+    font-family: "Poppins", sans-serif;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+/* ======== PANEL IZQUIERDO ======== */
+aside.col-3 {
+    background-color: #1E1E1E;
+    color: #fff;
+    min-height: 100vh;
+    padding: 1rem 0;
+}
+
+.nav01 {
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-top: 30px;
+}
+
+.navIzq {
+    margin-top: 2rem;
+}
+
+.itemsNavIzq {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navItem-izq {
+    margin: 1rem 0;
+    margin-left: 3rem;
+}
+
+.navItem-izq a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.9rem 1.5rem;
+    transition: all 0.3s ease;
+    border-radius: 25px 0 0 25px;
+    border-left: 3px solid transparent;
+}
+
+.navItem-izq a:hover,
+.navItem-izq a.active {
+    background-color: #fff;
+    color: #000;
+    ;
+}
+
+/* Main */
+main.col-9 {
+    background-color: #0c1b46;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Encabezado */
+.encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+}
+
+.encabezado h3 {
+    color: #fff;
+    font-weight: 700;
+}
+
+form {
+    background: red;
+    padding: 20px;
+}
+
+.tabla-titulo {
+    background-color: #0075F2;
+    padding: 8px;
+}
