@@ -242,3 +242,6 @@ document.getElementById('nextMonth').addEventListener('click', () => {
 
 // Initialize calendar
 generateCalendar(currentMonth, currentYear);
+
+
+
