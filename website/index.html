@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIADEMY - Gestiona tu institución académica</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/website/css/styles.css">
+</head>
+<body>
+    <!-- Header / Navigation -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <div class="logo-layers"></div>
+                    </div>
+                    <span class="logo-text">SIADEMY</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="#" class="active">Inicio</a></li>
+                    <li><a href="#">Modulos</a></li>
+                    <li><a href="#">Roles</a></li>
+                    <li><a href="#">Nuestro equipo</a></li>
+                </ul>
+                
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary">INICIAR SESION</button>
+                    <button class="btn btn-primary">REGISTRARSE</button>
+                </div>
+
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <span class="hero-badge">Nunca dejes de aprender</span>
+                    
+                    <h1 class="hero-title">
+                        Gestiona y mejora tu institución académica.
+                    </h1>
+                    
+                    <div class="hero-cta">
+                        <button class="btn btn-cta">COMENZAR AHORA</button>
+                        
+                        <div class="reviews">
+                            <div class="reviews-avatars">
+                                <img src="https://i.pravatar.cc/150?img=1" alt="Usuario 1">
+                                <img src="https://i.pravatar.cc/150?img=2" alt="Usuario 2">
+                                <img src="https://i.pravatar.cc/150?img=3" alt="Usuario 3">
+                            </div>
+                            <div class="reviews-info">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="reviews-count">(10k+ Reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-button">
+                        <button class="btn-video-play">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <span class="video-text">Note - Explore</span>
+                    </div>
+                </div>
+                
+                <div class="hero-right">
+                    <div class="hero-image">
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&h=800&fit=crop" alt="Estudiante feliz">
+                    </div>
+                    
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stats-info">
+                            <span class="stats-number">+1000</span>
+                            <span class="stats-label">Estudiantes satisfechos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative Wave -->
+        <div class="wave-bottom">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0L60 10C120 20 240 40 360 46.7C480 53 600 47 720 43.3C840 40 960 40 1080 46.7C1200 53 1320 67 1380 73.3L1440 80V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V0Z" fill="#1a3a6e"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Módulos Section -->
+    <section class="modulos">
+        <div class="container">
+            <div class="modulos-header">
+                <h2 class="modulos-title">Módulos</h2>
+                <div class="modulos-nav">
+                    <button class="nav-arrow prev-arrow">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="nav-arrow next-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="modulos-slider">
+                <div class="modulos-track">
+                    <!-- Card 1 - Estudiantes -->
+                    <div class="modulo-card">
+                        <div class="card-image">
+                            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=250&fit=crop" alt="Estudiantes">
+                            <span class="card-badge">Estudiantes</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Product Management Basic - Course</h3>
+                            <p class="card-description">
+                                Este módulo permite gestionar la información académica y personal de los estudiantes, incluyendo su matrícula, asistencia, actividades, calificaciones y seguimiento escolar. Es el eje principal del sistema.
+                            </p>
+                            <button class="btn-enroll">Enroll Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 - Acudientes -->
+                    <div class="modulo-card">
+                        <div class="card-image">
+                            <img src="https://images.unsplash.com/photo-1609220136736-443140cffec6?w=400&h=250&fit=crop" alt="Acudientes">
+                            <span class="card-badge badge-acudientes">Acudientes</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">BM Data Science Professional Certificate</h3>
+                            <p class="card-description">
+                                Los acudientes pueden acceder a la información académica de sus hijos o representados, visualizar reportes, recibir notificaciones y estar en comunicación constante con docentes y la institución.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 - Docentes -->
+                    <div class="modulo-card">
+                        <div class="card-image">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=250&fit=crop" alt="Docentes">
+                            <span class="card-badge badge-docentes">Docentes</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">The Science of Well-Being</h3>
+                            <p class="card-description">
+                                A través de este módulo, los docentes pueden registrar asistencia, gestionar actividades y calificaciones, participar en foros, emitir reportes académicos y comunicarse con estudiantes y acudientes.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 - Administradores -->
+                    <div class="modulo-card">
+                        <div class="card-image">
+                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop" alt="Administradores">
+                            <span class="card-badge badge-admin">Administradores</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Gestión Institucional Integral</h3>
+                            <p class="card-description">
+                                Este módulo está enfocado en la gestión institucional: control de usuarios, asignación de roles, creación de cursos y niveles académicos, seguimiento de matrículas y generación de reportes globales.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roles Section -->
+    <section class="roles">
+        <div class="container">
+            <h2 class="roles-title">
+                Nuestra plataforma se adapta a cada rol educativo, brindando herramientas específicas para estudiantes, docentes, acudientes y administradores
+            </h2>
+
+            <div class="roles-grid">
+                <!-- Card Estudiantes -->
+                <div class="role-card">
+                    <button class="role-badge">Estudiantes</button>
+                    <p class="role-description">
+                        Accede a tus clases, revisa actividades, calificaciones, calendario académico y mantente al tanto de tu progreso académico en un solo lugar.
+                    </p>
+                </div>
+
+                <!-- Card Acudientes -->
+                <div class="role-card">
+                    <button class="role-badge">Acudientes</button>
+                    <p class="role-description">
+                        Supervisa el avance académico de tu hijo(a), recibe notificaciones importantes y mantente conectado con docentes e institución.
+                    </p>
+                </div>
+
+                <!-- Card Docentes -->
+                <div class="role-card">
+                    <button class="role-badge">Docentes</button>
+                    <p class="role-description">
+                        Gestiona cursos, registra asistencia, calificaciones y actividades. Comunícate fácilmente con estudiantes y acudientes.
+                    </p>
+                </div>
+
+                <!-- Card Administración -->
+                <div class="role-card">
+                    <button class="role-badge">Administración</button>
+                    <p class="role-description">
+                        Administra la plataforma, usuarios, matrículas y reportes institucionales. Asegura el buen funcionamiento del entorno académico.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuestro Equipo Section -->
+    <section class="team">
+        <div class="container">
+            <div class="team-content">
+                <div class="team-left">
+                    <p class="team-text">
+                        En SIADEMY, creemos que la educación merece herramientas digitales que realmente marquen la diferencia. Por eso, detrás de nuestra plataforma hay un equipo comprometido, apasionado y con visión de futuro.
+                    </p>
+                    <p class="team-text">
+                        Somos estudiantes y desarrolladores en formación, unidos por un objetivo común: transformar la gestión educativa con tecnología práctica, accesible y funcional.
+                    </p>
+                    <p class="team-text">
+                        Cada módulo, cada función y cada detalle de SIADEMY ha sido pensado por un grupo que comprende las necesidades reales de instituciones, docentes, estudiantes y padres. Nos esforzamos cada día por crear soluciones que no solo funcionen, sino que también mejoren la experiencia educativa.
+                    </p>
+                </div>
+
+                <div class="team-right">
+                    <div class="team-cards">
+                        <!-- Tarjeta Principal -->
+                        <div class="id-card main-card">
+                            <div class="card-header">
+                                <div class="card-corner corner-left"></div>
+                                <div class="card-corner corner-right"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="profile-photo">
+                                    <img src="https://i.pravatar.cc/300?img=12" alt="Mark J. William">
+                                </div>
+                                <h3 class="profile-name">Mark J. William</h3>
+                                <p class="profile-label">Nombre</p>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Secundaria -->
+                        <div class="id-card secondary-card">
+                            <div class="card-info">
+                                <div class="info-item">
+                                    <span class="bullet"></span>
+                                    <p class="info-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore</p>
+                                </div>
+                                <div class="info-item">
+                                    <span class="bullet"></span>
+                                    <p class="info-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore</p>
+                                </div>
+                            </div>
+                            <div class="card-signature">
+                                <p class="signature-label">card holder signature</p>
+                                <div class="signature">
+                                    <span class="signature-text">William</span>
+                                </div>
+                                <p class="signature-id">Mark J. William / 0121 2170 1 2911</p>
+                            </div>
+                            <div class="card-logo">
+                                <div class="owl-logo">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capacitación Section -->
+    <section class="training">
+        <div class="container">
+            <div class="training-content">
+                <div class="training-left">
+                    <div class="training-illustration">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=500&fit=crop" alt="Capacitación">
+                    </div>
+                </div>
+
+                <div class="training-right">
+                    <span class="training-badge">Training</span>
+                    <h2 class="training-title">Capacitacion Del Personal</h2>
+                    
+                    <div class="training-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-th"></i>
+                            </div>
+                            <p class="feature-text">
+                                Guías y talleres para que los docentes aprendan a manejar los módulos (asistencias, calificaciones, actividades, reportes).
+                            </p>
+                        </div>
+
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-laptop"></i>
+                            </div>
+                            <p class="feature-text">
+                                Cursos de actualización en nuevas metodologías educativas.
+                            </p>
+                        </div>
+
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <p class="feature-text">
+                                Soporte y acompañamiento
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plan Institucional Section -->
+    <section class="pricing">
+        <div class="container">
+            <div class="pricing-card">
+                <div class="pricing-content">
+                    <div class="pricing-left">
+                        <h2 class="pricing-title">Plan Institucional</h2>
+                        
+                        <div class="pricing-features">
+                            <div class="pricing-item">
+                                <div class="pricing-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="pricing-text">
+                                    Plan flexible según la cantidad de estudiantes matriculados
+                                </p>
+                            </div>
+
+                            <div class="pricing-item">
+                                <div class="pricing-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="pricing-text">
+                                    <strong>Solo 5,000 COP por estudiante:</strong> paga solo por lo que usas.
+                                </p>
+                            </div>
+
+                            <div class="pricing-item">
+                                <div class="pricing-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="pricing-text">
+                                    Escalable y accesible: se adapta al crecimiento de tu institución.
+                                </p>
+                            </div>
+                        </div>
+
+                        <button class="btn-pricing">¡Adquirir!</button>
+                    </div>
+
+                    <div class="pricing-right">
+                        <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=600&h=600&fit=crop" alt="Estudiante feliz">
+                    </div>
+                </div>
+
+                <!-- Decorative Icon -->
+                <div class="pricing-decoration">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+
+                <!-- Background Pattern -->
+                <div class="pricing-pattern"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Paquetes Section -->
+    <section class="packages">
+        <div class="container">
+            <h2 class="packages-title">
+                Siademy es una plataforma innovadora que facilita el seguimiento académico para tu Institución Educativa.
+            </h2>
+
+            <div class="packages-carousel">
+                <button class="carousel-btn prev-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="packages-wrapper">
+                    <div class="packages-track">
+                        <!-- Package Card 1 -->
+                        <div class="package-card">
+                            <div class="package-illustration">
+                                <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=400&h=400&fit=crop" alt="Educación Virtual">
+                            </div>
+                            <div class="package-info">
+                                <h3 class="package-title">Paquete basico de administracion institucional</h3>
+                                <p class="package-description">
+                                    Facilita la administración de estudiantes y docentes, incluye registro de matrículas, asistencia y reportes académicos básicos.
+                                </p>
+                                <div class="package-users">
+                                    <div class="users-avatars">
+                                        <img src="https://i.pravatar.cc/150?img=11" alt="Usuario 1">
+                                        <img src="https://i.pravatar.cc/150?img=12" alt="Usuario 2">
+                                        <img src="https://i.pravatar.cc/150?img=13" alt="Usuario 3">
+                                        <img src="https://i.pravatar.cc/150?img=14" alt="Usuario 4">
+                                        <img src="https://i.pravatar.cc/150?img=15" alt="Usuario 5">
+                                    </div>
+                                    <span class="users-count">+ 40 students</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Package Card 2 -->
+                        <div class="package-card">
+                            <div class="package-illustration">
+                                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop" alt="Gestión Avanzada">
+                            </div>
+                            <div class="package-info">
+                                <h3 class="package-title">Paquete completo de gestión educativa</h3>
+                                <p class="package-description">
+                                    Incluye todas las funcionalidades del paquete básico más herramientas avanzadas de comunicación, foros, y análisis de datos académicos.
+                                </p>
+                                <div class="package-users">
+                                    <div class="users-avatars">
+                                        <img src="https://i.pravatar.cc/150?img=16" alt="Usuario 1">
+                                        <img src="https://i.pravatar.cc/150?img=17" alt="Usuario 2">
+                                        <img src="https://i.pravatar.cc/150?img=18" alt="Usuario 3">
+                                        <img src="https://i.pravatar.cc/150?img=19" alt="Usuario 4">
+                                        <img src="https://i.pravatar.cc/150?img=20" alt="Usuario 5">
+                                    </div>
+                                    <span class="users-count">+ 100 students</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Package Card 3 -->
+                        <div class="package-card">
+                            <div class="package-illustration">
+                                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&h=400&fit=crop" alt="Paquete Premium">
+                            </div>
+                            <div class="package-info">
+                                <h3 class="package-title">Paquete premium institucional</h3>
+                                <p class="package-description">
+                                    Solución completa con personalización, soporte prioritario 24/7, integraciones con sistemas externos y capacitación continua del personal.
+                                </p>
+                                <div class="package-users">
+                                    <div class="users-avatars">
+                                        <img src="https://i.pravatar.cc/150?img=21" alt="Usuario 1">
+                                        <img src="https://i.pravatar.cc/150?img=22" alt="Usuario 2">
+                                        <img src="https://i.pravatar.cc/150?img=23" alt="Usuario 3">
+                                        <img src="https://i.pravatar.cc/150?img=24" alt="Usuario 4">
+                                        <img src="https://i.pravatar.cc/150?img=25" alt="Usuario 5">
+                                    </div>
+                                    <span class="users-count">+ 200 students</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="carousel-btn next-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Carousel Indicators -->
+            <div class="carousel-indicators">
+                <button class="indicator active" data-slide="0"></button>
+                <button class="indicator" data-slide="1"></button>
+                <button class="indicator" data-slide="2"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Wave Decorative -->
+        <div class="footer-wave">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 120L60 110C120 100 240 80 360 73.3C480 67 600 73 720 76.7C840 80 960 80 1080 73.3C1200 67 1320 53 1380 46.7L1440 40V0H1380C1320 0 1200 0 1080 0C960 0 840 0 720 0C600 0 480 0 360 0C240 0 120 0 60 0H0V120Z" fill="#2d2d2d"/>
+            </svg>
+        </div>
+
+        <div class="container">
+            <div class="footer-content">
+                <!-- Logo y Contacto -->
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <div class="logo-icon">
+                            <div class="logo-layers"></div>
+                        </div>
+                        <span class="logo-text">SIADEMY</span>
+                    </div>
+
+                    <div class="footer-contact">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Dirección: Carrera 10</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>Tel: 3125321798</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email: siademy@gmail.com</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categorías -->
+                <div class="footer-column">
+                    <h3 class="footer-title">Categorias</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Asesoramiento</a></li>
+                        <li><a href="#">Más</a></li>
+                    </ul>
+                </div>
+
+                <!-- Links -->
+                <div class="footer-column">
+                    <h3 class="footer-title">Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Sobre nosotros</a></li>
+                        <li><a href="#">Mas</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="footer-newsletter">
+                    <h3 class="newsletter-title">Mantenganse al dia con nosotros</h3>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Email" class="newsletter-input" required>
+                        <button type="submit" class="newsletter-btn">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/website/js/main.js"></script>
+</body>
+</html>
