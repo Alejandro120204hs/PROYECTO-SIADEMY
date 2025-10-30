@@ -560,7 +560,11 @@
       background-color: #11193a;
       color: #333;
       border-radius: 12px;
+<<<<<<< HEAD:public/assets/dashboard/css/styles-tabla-formulario.css
       padding: 0 10px 20px 10px;
+=======
+      padding: 0 30px 10px 30px;
+>>>>>>> a72600c (Se realizaron cambios y se ajusto el formulario con bootstrap):dashboard/admin/styles-tabla-formulario.css
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     }
 
