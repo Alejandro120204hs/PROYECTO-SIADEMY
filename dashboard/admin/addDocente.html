@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 
 <head>
@@ -11,9 +11,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/dashboard/css/styles-tabla-formulario.css">
+    <link rel="stylesheet" href="../../assets/dashboard/css/styles-form-docente.css">
 
-    <link rel="stylesheet" href="estilos.css">
 </head>
 
 <body>
@@ -43,10 +42,9 @@
                     <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
                         <i class="ri-menu-2-line"></i>
                     </button>
-                    <div class="title">Agregar Estudiante</div>
+                    <div class="title">Agregar Profesor</div>
                     
                 </div>
-            </aside>
 
                 <div class="user">
                     <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
@@ -54,7 +52,7 @@
                     <div class="avatar" title="Diego A.">DA</div>
                 </div>
             </div>
-            <div class="subtitulo"><p>Formulario de registro, Completa los siguientes pasos para registrar un nuevo estudiante en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>
+            <div class="subtitulo"><p>Formulario de registro, Completa los siguientes pasos para registrar un Profesor en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>
 
             <!-- Formulario Wizard -->
             <div class="container-fluid py-3">
@@ -70,29 +68,23 @@
                     <!-- Paso 1 -->
                     <div class="step active">
                         <div class="tabla-titulo mb-3">
-                            <h5>Datos del Estudiante</h5>
+                            <h5>Datos del Profesor</h5>
                             
                         </div>
 
                         <div class="row g-3">
                             <!-- Foto -->
-                            <div class="col-md-3 poFoto">
-                                <label for="">Foto*</label>
-                                <div
-                                    class=" esPhoto">
-                                    <small>Selecciona un archivo</small>
-                                    <input type="file" class="form-control mt-2" />
-                                </div>
+                            <div class="col-md-1 poFoto">
+                                
                             </div>
 
                             <!-- Datos personales -->
                             <div class="col-md-5">
-                                <div class="mb-3 w-50">
+                                <div class="mb-3">
                                     <label for="">Tipo de Documento*</label>
                                     <select class="selector">
                                         <option selected>Selecciona el tipo de Documento</option>
                                         <option value="1">CC</option>
-                                        <option value="2">TI</option>
                                         <option value="3">CE</option>
                                         <option value="4">OTRO</option>
                                     </select>
@@ -101,32 +93,18 @@
                                     <label for="">Nombres*</label>
                                     <input type="text" class="form-control">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="">Fecha de nacimiento*</label>
-                                    <div class="d-flex gap-2">
-                                        <input type="date" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="">N° Teléfono*</label>
-                                    <input type="tel" class="form-control">
-                                </div>
 
                             </div>
 
                             <!-- Apellidos y teléfono -->
-                            <div class="col-md-4">
-                                <div class="mb-3 parte2">
+                            <div class="col-md-5">
+                                <div class="mb-3">
                                     <label for="">N° Documento*</label>
                                     <input type="number" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label for="">Apellidos*</label>
                                     <input type="text" class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="">Email*</label>
-                                    <input type="email" class="form-control">
                                 </div>
 
                             </div>
@@ -135,41 +113,33 @@
                         <div class="botones mt-3">
                             <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente</button>
                         </div>
-                    </form>
-
-                    <!-- Botones -->
-                    <div class="botones">
-                        <button>Cancelar</button>
-                        <button>Agregar</button>
                     </div>
 
                     <!-- Paso 2 -->
                     <div class="step">
                         <div class="tabla-titulo mb-3">
-                            <h5>Datos del Acudiente</h5>
+                            <h5>Datos De Contacto</h5>
                         </div>
 
                         <div class="row g-3">
                             <div class="col-md-1"></div>
                             <div class="col-md-5">
                                 <div class="mb-3">
-                                    <label for="">Nombre del Acudiente*</label>
-                                    <input type="text" class="form-control">
+                                    <label for="">N° Telefono*</label>
+                                    <div class="d-flex gap-2">
+                                        <input type="tel" class="form-control">
+                                    </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="">Email de Acudiente*</label>
+                                    <label for="">Asignaturas*</label>
                                     <input type="email" class="form-control">
                                 </div>
                             </div>
 
                             <div class="col-md-5">
                                 <div class="mb-3">
-                                    <label for="">Parentesco*</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="">N° Teléfono Acudiente*</label>
-                                    <input type="tel" class="form-control">
+                                    <label for="">Email*</label>
+                                    <input type="email" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -180,7 +150,7 @@
                         </div>
                     </div>
 
-                    <!-- Paso 3 -->
+                    <!-- Paso 4 -->
                     <div class="step">
                         <div class="tabla-titulo mb-3">
                             <h5>Confirmar Registro</h5>
@@ -189,7 +159,7 @@
 
                         <div class="botones mt-3">
                             <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
-                            <button type="submit" class="btn btn-success">Agregar Estudiante</button>
+                            <button type="submit" class="btn btn-success">Agregar Profesor</button>
                         </div>
                     </div>
 
@@ -198,13 +168,13 @@
         </main>
     </div>
 
+    <!-- Bootstrap and DataTables Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-<<<<<<< HEAD
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-=======
-    <script src="../../assets/dashboard/js/main-formulario.js"></script>
->>>>>>> ea384db (Se Ajusto el formulario de estudiantes implementandole wizard para mejorar la orientacion)
+    <script src="../../assets/dashboard/js/main-form-docente.js"></script>
 </body>
 
 </html>
