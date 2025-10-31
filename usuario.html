@@ -1,0 +1,982 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIADEMY • Panel de Usuario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  <style>
+    :root {
+      --bg: #0f1e4a;
+      --bg-2: #0b1736;
+      --panel: #0d1f58;
+      --sidebar: #14151c;
+      --sidebar-2: #191b24;
+      --card: #ffffff;
+      --muted: #9aa3b2;
+      --brand: #4f46e5;
+      --accent: #ffb020;
+      --accent-2: #ff6b6b;
+      --chip: #232636;
+      --border: rgba(255, 255, 255, .08);
+      --text: #101828;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu;
+      color: #fff;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 260px 1fr 360px;
+      gap: 0;
+      min-height: 100dvh;
+      transition: grid-template-columns 0.3s ease;
+    }
+
+    .app.hide-left {
+      grid-template-columns: 0 1fr 360px;
+    }
+
+    .app.hide-right {
+      grid-template-columns: 260px 1fr 0;
+    }
+
+    .app.hide-both {
+      grid-template-columns: 0 1fr 0;
+    }
+
+    /* LEFT SIDEBAR */
+    .sidebar {
+      background: linear-gradient(180deg, #161821 0%, #101117 100%);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      position: sticky;
+      top: 0;
+      height: 100dvh;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar.hidden {
+      padding: 0;
+      width: 0;
+      min-width: 0;
+      border: none;
+      opacity: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      margin-bottom: 18px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      font-size: 20px;
+    }
+
+    .brand .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: #1e2336;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .25), inset 0 0 0 1px var(--border);
+    }
+
+    .nav {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #d7d9df;
+    }
+
+    .nav a.active,
+    .nav a:hover {
+      background: #1d2030;
+      color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+    }
+
+    .nav i {
+      width: 22px;
+      height: 22px;
+      font-size: 22px;
+      color: #aab1c1;
+    }
+
+    .spacer {
+      height: 18px
+    }
+
+    .nav .section {
+      color: #8b91a3;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      padding: 6px 10px
+    }
+
+    /* MAIN */
+    .main {
+      padding: 28px 28px 40px 28px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toggle-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: #11193a;
+      border: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #98a2b3;
+      font-size: 20px;
+    }
+
+    .toggle-btn:hover {
+      background: #151d3e;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+    }
+
+    .toggle-btn:active {
+      transform: scale(0.95);
+    }
+
+    .title {
+      font-size: 34px;
+      font-weight: 700;
+    }
+
+    .search {
+      margin-left: auto;
+      width: min(560px, 55%);
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      background: #101632;
+      color: #e6e9f4;
+      padding: 14px 48px;
+      outline: none;
+      font-size: 15px;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .03) inset, 0 10px 30px rgba(0, 0, 0, .12);
+    }
+
+    .search i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #98a2b3;
+      font-size: 20px
+    }
+
+    /* PROFILE CARD */
+    .profile-card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 0;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-header-bg {
+      height: 120px;
+      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    }
+
+    .profile-content {
+      padding: 0 32px 28px;
+      margin-top: -50px;
+      position: relative;
+    }
+
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%);
+      border: 4px solid white;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .15);
+    }
+
+    .profile-name {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a1d2e;
+      margin-bottom: 4px;
+    }
+
+    .profile-role {
+      color: #6b7280;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .profile-location {
+      color: #9ca3af;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    .profile-details {
+      display: flex;
+      gap: 32px;
+    }
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .detail-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #3b82f6;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .detail-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-label {
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .detail-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1d2e;
+    }
+
+    .menu-dots {
+      position: absolute;
+      top: 130px;
+      right: 28px;
+      background: none;
+      border: none;
+      color: #9ca3af;
+      cursor: pointer;
+      font-size: 24px;
+    }
+
+    .menu-dots:hover {
+      color: #1a1d2e;
+    }
+
+    /* CARDS GRID */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .user-card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1d2e;
+      margin-bottom: 4px;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .add-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #8b5cf6;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, .3);
+    }
+
+    .add-button:hover {
+      background: #7c3aed;
+      transform: scale(1.05);
+    }
+
+    .card-search {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .card-search input {
+      width: 100%;
+      padding: 10px 16px 10px 38px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #f9fafb;
+      color: #1a1d2e;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .card-search input:focus {
+      border-color: #8b5cf6;
+      background: white;
+    }
+
+    .card-search i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      font-size: 16px;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 360px;
+      overflow-y: auto;
+    }
+
+    .contact-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .contact-list::-webkit-scrollbar-track {
+      background: #f3f4f6;
+      border-radius: 10px;
+    }
+
+    .contact-list::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 10px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 10px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .contact-item:hover {
+      background: #f9fafb;
+    }
+
+    .contact-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%);
+      flex-shrink: 0;
+    }
+
+    .contact-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .contact-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1d2e;
+      margin-bottom: 2px;
+    }
+
+    .contact-role {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .contact-action {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #e5e7eb;
+      background: white;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #9ca3af;
+      flex-shrink: 0;
+    }
+
+    .contact-action:hover {
+      background: #f3f4f6;
+      color: #1a1d2e;
+    }
+
+    .contact-action.active {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: white;
+    }
+
+    .message-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .message-time {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .message-badge {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ef4444;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+    }
+
+    .view-more {
+      text-align: center;
+      padding: 12px;
+      color: #3b82f6;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .view-more:hover {
+      background: #f9fafb;
+    }
+
+    /* RIGHT SIDEBAR */
+    .rightbar {
+      background: linear-gradient(180deg, #111321 0%, #0e0f17 100%);
+      border-left: 1px solid var(--border);
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100dvh;
+      overflow: auto;
+      transition: all 0.3s ease;
+    }
+
+    .rightbar.hidden {
+      padding: 0;
+      width: 0;
+      min-width: 0;
+      border: none;
+      opacity: 0;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+
+    .user .btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: #1d2030;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #c7cbe1;
+    }
+
+    .user .btn:hover {
+      background: #252a42;
+      color: #fff;
+    }
+
+    .user .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: #2d3353;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+    }
+
+    .panel-title {
+      font-weight: 700;
+      font-size: 20px;
+      margin: 14px 2px 10px
+    }
+
+    .muted {
+      color: #c6cada;
+      font-size: 13px;
+      margin: 0 2px 12px
+    }
+
+    .btn-primary {
+      margin-top: 12px;
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 12px 16px;
+      background: #1f2340;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #252a42;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .timeline-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #8b5cf6;
+      margin-top: 4px;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, .2);
+    }
+
+    .timeline-content {
+      flex: 1;
+    }
+
+    .timeline-text {
+      font-size: 13px;
+      color: #e5e7eb;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .timeline-date {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .timeline-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 18px;
+      bottom: -16px;
+      width: 2px;
+      background: rgba(139, 92, 246, .2);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width:1200px) {
+      .app {
+        grid-template-columns: 220px 1fr 320px
+      }
+
+      .app.hide-left {
+        grid-template-columns: 0 1fr 320px;
+      }
+
+      .app.hide-right {
+        grid-template-columns: 220px 1fr 0;
+      }
+
+      .app.hide-both {
+        grid-template-columns: 0 1fr 0;
+      }
+    }
+
+    @media (max-width:980px) {
+      .app {
+        grid-template-columns: 1fr
+      }
+
+      .app.hide-left,
+      .app.hide-right,
+      .app.hide-both {
+        grid-template-columns: 1fr
+      }
+
+      .sidebar,
+      .rightbar {
+        position: relative;
+        height: auto
+      }
+
+      .rightbar {
+        order: 3
+      }
+
+      .sidebar.hidden,
+      .rightbar.hidden {
+        display: none;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search {
+        width: 100%
+      }
+    }
+
+    @media (max-width:600px) {
+      .title {
+        font-size: 26px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app" id="appGrid">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="leftSidebar">
+      <a class="brand" href="#">
+        <span class="logo"><i class="ri-shield-star-line"></i></span>
+        <span>Siademy</span>
+      </a>
+      <nav class="nav">
+        <a class="active" href="#"><i class="ri-home-5-line"></i> Panel</a>
+        <a href="#"><i class="ri-team-line"></i> Estudiantes</a>
+        <a href="#"><i class="ri-user-3-line"></i> Profesores</a>
+        <a href="#"><i class="ri-calendar-event-line"></i> Eventos</a>
+        <a href="#"><i class="ri-message-3-line"></i> Chat</a>
+        <div class="spacer"></div>
+        <div class="section">Cursos / Asignaturas</div>
+        <a href="#"><i class="ri-pulse-line"></i> Seguimiento</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
+            <i class="ri-menu-2-line"></i>
+          </button>
+          <div class="title">Panel De Usuario</div>
+        </div>
+        <div class="search">
+          <i class="ri-search-2-line"></i>
+          <input type="text" placeholder="Buscar">
+        </div>
+        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
+          <i class="ri-layout-right-2-line"></i>
+        </button>
+      </div>
+
+      <!-- PROFILE CARD -->
+      <div class="profile-card">
+        <div class="profile-header-bg"></div>
+        <div class="profile-content">
+          <div class="profile-avatar"></div>
+          <h2 class="profile-name">Felipe Restrepo</h2>
+          <p class="profile-role">Profesor</p>
+          <p class="profile-location">
+            <i class="ri-map-pin-line"></i>
+            Colombia
+          </p>
+          <div class="profile-details">
+            <div class="detail-item">
+              <div class="detail-icon">
+                <i class="ri-phone-line"></i>
+              </div>
+              <div class="detail-text">
+                <span class="detail-label">Teléfono</span>
+                <span class="detail-value">+52 345 6789 0</span>
+              </div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-icon">
+                <i class="ri-mail-line"></i>
+              </div>
+              <div class="detail-text">
+                <span class="detail-label">Email</span>
+                <span class="detail-value">natblue@gmail.com</span>
+              </div>
+            </div>
+          </div>
+          <button class="menu-dots">
+            <i class="ri-more-2-fill"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- CARDS GRID -->
+      <div class="cards-grid">
+        <!-- CONTACTOS -->
+        <div class="user-card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Contactos</h3>
+              <p class="card-subtitle">Lista de Contactos</p>
+            </div>
+            <button class="add-button">+</button>
+          </div>
+          <div class="card-search">
+            <i class="ri-search-line"></i>
+            <input type="text" placeholder="Buscar Aquí">
+          </div>
+          <div class="contact-list">
+            <div class="contact-item">
+              <div class="contact-avatar"></div>
+              <div class="contact-info">
+                <div class="contact-name">Samantha William</div>
+                <div class="contact-role">Estudiante</div>
+              </div>
+              <button class="contact-action">
+                <i class="ri-mail-line"></i>
+              </button>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar"></div>
+              <div class="contact-info">
+                <div class="contact-name">Tony Soap</div>
+                <div class="contact-role">Estudiante</div>
+              </div>
+              <button class="contact-action active">
+                <i class="ri-message-3-line"></i>
+              </button>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar"></div>
+              <div class="contact-info">
+                <div class="contact-name">Karen Hope</div>
+                <div class="contact-role">Clase VII A</div>
+              </div>
+              <button class="contact-action">
+                <i class="ri-mail-line"></i>
+              </button>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar"></div>
+              <div class="contact-info">
+                <div class="contact-name">Jordan Nico</div>
+                <div class="contact-role">Estudiante</div>
+              </div>
+              <button class="contact-action">
+                <i class="ri-mail-line"></i>
+              </button>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar"></div>
+              <div class="contact-info">
+                <div class="contact-name">Nadila Adja</div>
+                <div class="contact-role">Estudiante</div>
+              </div>
+              <button class="contact-action">
+                <i class="ri-mail-line"></i>
+              </button>
+            </div>
+          </div>
+          <div class="view-more">Ver Más</div>
+        </div>
+
+        <!-- MENSAJES -->
+        <div class="user-card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Mensajes</h3>
+            </div>
+          </div>
+          <div class="card-search">
+            <i class="ri-search-line"></i>
+            <input type="text" placeholder="Buscar Aquí">
+          </div>
+          <div class="contact-list">
+            <div class="contact-item">
+              <div class="contact-avatar"></div>
+              <div class="contact-info">
+                <div class="contact-name">Samantha William</div>
+                <div class="contact-role">Estudiante</div>
+              </div>
+              <div class="message-meta">
+                <span class="message-time">12:45 PM</span>
+                <span class="message-badge">1</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar"></div>
+              <div class="contact-info">
+                <div class="contact-name">Tony Soap</div>
+                <div class="contact-role">Estudiante</div>
+              </div>
+              <div class="message-meta">
+                <span class="message-time">12:45 PM</span>
+                <span class="message-badge">1</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar"></div>
+              <div class="contact-info">
+                <div class="contact-name">Karen Hope</div>
+                <div class="contact-role">Estudiante</div>
+              </div>
+              <div class="message-meta">
+                <span class="message-time">12:45 PM</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar"></div>
+              <div class="contact-info">
+                <div class="contact-name">Jordan Nico</div>
+                <div class="contact-role">Estudiante</div>
+              </div>
+              <div class="message-meta">
+                <span class="message-time">12:45 PM</span>
+                <span class="message-badge">2</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar"></div>
+              <div class="contact-info">
+                <div class="contact-name">Nadila Adja</div>
+                <div class="contact-role">Estudiante</div>
+              </div>
+              <div class="message-meta">
+                <span class="message-time">12:45 PM</span>
+              </div>
+            </div>
+          </div>
+          <div class="view-more">Ver Más</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="rightbar" id="rightSidebar">
+      <div class="user">
+        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
+        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
+        <div class="avatar" title="Profesor">PR</div>
+      </div>
+
+      <div class="panel-title">Actividades y notificaciones</div>
+      <p class="muted">Últimas actualizaciones</p>
+
+      <div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <p class="timeline-text">Samantha William publicó en Fotografías...</p>
+            <p class="timeline-date">5 marzo 2021 8:00</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <p class="timeline-text">Tony Soap publicó en Fotografías...</p>
+            <p class="timeline-date">6 marzo 2021 12:45 PM</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
