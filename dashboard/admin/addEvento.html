@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SIADEMY • Formulario • Eventos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/dashboard/css/styles-tabla-formulario.css">
+
+</head>
+
+<body>
+    <div class="app" id="appGrid">
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar" id="leftSidebar">
+            <a class="brand" href="#">
+                <span class="logo"><i class="ri-shield-star-line"></i></span>
+                <span>Siademy</span>
+            </a>
+            <nav class="nav">
+                <a href="admin.html"><i class="ri-home-5-line"></i> Panel</a>
+                <a href="panel-estudiantes.html"><i class="ri-team-line"></i> Estudiantes</a>
+                <a href="panel-profesores.html"><i class="ri-user-3-line"></i> Profesores</a>
+                <a class="active" href="eventos.html"><i class="ri-calendar-event-line"></i> Eventos</a>
+                <a href="#"><i class="ri-message-3-line"></i> Chat</a>
+                <div class="spacer"></div>
+                <div class="section">Cursos / Asignaturas</div>
+                <a href="#"><i class="ri-pulse-line"></i> Seguimiento</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
+                        <i class="ri-menu-2-line"></i>
+                    </button>
+                    <div class="title">Agregar Evento</div>
+                    
+                </div>
+
+                <div class="user">
+                    <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
+                    <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
+                    <div class="avatar" title="Diego A.">DA</div>
+                </div>
+            </div>
+            <div class="subtitulo"><p>Formulario de registro. Completa los siguientes pasos para registrar un nuevo evento en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>
+
+            <!-- Formulario Wizard -->
+            <div class="container-fluid py-3">
+
+                <div class="wizard-progress">
+                    <div id="stepIndicator1" class="active-step">Paso 1</div>
+                    <div id="stepIndicator2">Paso 2</div>
+                    <div id="stepIndicator3">Confirmar</div>
+                </div>
+
+                <form id="formWizard">
+
+                    <!-- Paso 1: Datos del Evento -->
+                    <div class="step active">
+                        <div class="tabla-titulo mb-3">
+                            <h5>Datos del Evento</h5>
+                        </div>
+
+                        <div class="row g-3">
+                            <!-- Tipo de Evento -->
+                            <div class="col-md-6">
+                                <label for="eventType">Tipo de Evento*</label>
+                                <select id="eventType" class="selector" required>
+                                    <option selected>Selecciona el tipo de evento</option>
+                                    <option value="meetings">Reunión</option>
+                                    <option value="exams">Examen</option>
+                                    <option value="activities">Actividad Deportiva</option>
+                                    <option value="cultural">Actividad Cultural</option>
+                                    <option value="fair">Feria/Exposición</option>
+                                    <option value="workshop">Taller</option>
+                                    <option value="ceremony">Ceremonia</option>
+                                </select>
+                            </div>
+
+                            <!-- Nombre del Evento -->
+                            <div class="col-md-6">
+                                <label for="eventName">Nombre del Evento*</label>
+                                <input type="text" id="eventName" class="form-control" placeholder="Ej: Reunión de Padres - Grado 7°" required>
+                            </div>
+
+                            <!-- Descripción -->
+                            <div class="col-md-12">
+                                <label for="eventDescription">Descripción*</label>
+                                <textarea id="eventDescription" class="form-control" rows="4" placeholder="Descripción detallada del evento..." required></textarea>
+                            </div>
+
+                            <!-- Fecha -->
+                            <div class="col-md-4">
+                                <label for="eventDate">Fecha del Evento*</label>
+                                <input type="date" id="eventDate" class="form-control" required>
+                            </div>
+
+                            <!-- Hora de Inicio -->
+                            <div class="col-md-4">
+                                <label for="startTime">Hora de Inicio*</label>
+                                <input type="time" id="startTime" class="form-control" required>
+                            </div>
+
+                            <!-- Hora de Fin -->
+                            <div class="col-md-4">
+                                <label for="endTime">Hora de Finalización*</label>
+                                <input type="time" id="endTime" class="form-control" required>
+                            </div>
+
+                            <!-- Ubicación -->
+                            <div class="col-md-12">
+                                <label for="eventLocation">Ubicación*</label>
+                                <input type="text" id="eventLocation" class="form-control" placeholder="Ej: Auditorio Principal" required>
+                            </div>
+                        </div>
+
+                        <div class="botones mt-3">
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Paso 2: Participantes y Detalles -->
+                    <div class="step">
+                        <div class="tabla-titulo mb-3">
+                            <h5>Participantes y Detalles Adicionales</h5>
+                        </div>
+
+                        <div class="row g-3">
+                            <!-- Curso/Grado -->
+                            <div class="col-md-6">
+                                <label for="eventGrade">Curso/Grado</label>
+                                <select id="eventGrade" class="selector">
+                                    <option selected>Selecciona el grado</option>
+                                    <option value="6A">6° A</option>
+                                    <option value="6B">6° B</option>
+                                    <option value="7A">7° A</option>
+                                    <option value="7B">7° B</option>
+                                    <option value="8A">8° A</option>
+                                    <option value="8B">8° B</option>
+                                    <option value="9A">9° A</option>
+                                    <option value="9B">9° B</option>
+                                    <option value="10A">10° A</option>
+                                    <option value="10B">10° B</option>
+                                    <option value="11A">11° A</option>
+                                    <option value="11B">11° B</option>
+                                    <option value="all">Todos los grados</option>
+                                </select>
+                            </div>
+
+                            <!-- Número de Participantes -->
+                            <div class="col-md-6">
+                                <label for="expectedParticipants">N° Participantes Esperados</label>
+                                <input type="number" id="expectedParticipants" class="form-control" placeholder="Ej: 50" min="1">
+                            </div>
+
+                            <!-- Responsable del Evento -->
+                            <div class="col-md-6">
+                                <label for="eventResponsible">Responsable del Evento*</label>
+                                <input type="text" id="eventResponsible" class="form-control" placeholder="Nombre del docente responsable" required>
+                            </div>
+
+                            <!-- Email de Contacto -->
+                            <div class="col-md-6">
+                                <label for="contactEmail">Email de Contacto</label>
+                                <input type="email" id="contactEmail" class="form-control" placeholder="correo@ejemplo.com">
+                            </div>
+
+                            <!-- Requiere Confirmación -->
+                            <div class="col-md-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="requiresConfirmation">
+                                    <label class="form-check-label" for="requiresConfirmation">
+                                        ¿Requiere confirmación de asistencia?
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Materiales Necesarios -->
+                            <div class="col-md-12">
+                                <label for="materials">Materiales o Recursos Necesarios</label>
+                                <textarea id="materials" class="form-control" rows="3" placeholder="Lista de materiales, equipos o recursos necesarios..."></textarea>
+                            </div>
+
+                            <!-- Notas Adicionales -->
+                            <div class="col-md-12">
+                                <label for="additionalNotes">Notas Adicionales</label>
+                                <textarea id="additionalNotes" class="form-control" rows="3" placeholder="Información adicional relevante..."></textarea>
+                            </div>
+
+                            <!-- Enviar Notificación -->
+                            <div class="col-md-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="sendNotification" checked>
+                                    <label class="form-check-label" for="sendNotification">
+                                        Enviar notificación automática a los participantes
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="botones mt-3">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Paso 3: Confirmar -->
+                    <div class="step">
+                        <div class="tabla-titulo mb-3">
+                            <h5>Confirmar Registro</h5>
+                        </div>
+                        <p>Revisa los datos ingresados antes de agregar el evento.</p>
+
+                        <div class="botones mt-3">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                            <button type="submit" class="btn btn-success">Agregar Evento</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap and DataTables Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="../../assets/dashboard/js/main-formulario.js"></script>
+</body>
+
+</html>
