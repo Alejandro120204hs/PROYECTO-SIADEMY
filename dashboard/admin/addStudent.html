@@ -4,12 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIADEMY • Estudiantes</title>
+    <title>SIADEMY • Formulario • Estudiantes</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
-    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/dashboard/css/styles-tabla-formulario.css">
@@ -37,24 +36,15 @@
             </nav>
         </aside>
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Panel de la izquierda -->
-            <aside class="col-3 p-0">
-                <div class="">
-                    <div class="nav01">
-                        <img src="" alt="">
-                        <nav class="navIzq">
-                            <ul class="itemsNavIzq">
-                                <li class="navItem-izq"><a href="">Panel</a></li>
-                                <li class="navItem-izq"><a href="">Estudiantes</a></li>
-                                <li class="navItem-izq"><a href="">Profesores</a></li>
-                                <li class="navItem-izq"><a href="">Eventos</a></li>
-                                <li class="navItem-izq"><a href="">Chat</a></li>
-                                <li class="navItem-izq"><a href="">Cursos/Asignaturas</a></li>
-                            </ul>
-                        </nav>
-                    </div>
+        <!-- MAIN -->
+        <main class="main">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
+                        <i class="ri-menu-2-line"></i>
+                    </button>
+                    <div class="title">Agregar Estudiante</div>
+                    
                 </div>
             </aside>
 
@@ -64,60 +54,73 @@
                     <div class="avatar" title="Diego A.">DA</div>
                 </div>
             </div>
+            <div class="subtitulo"><p>Formulario de registro, Completa los siguientes pasos para registrar un nuevo estudiante en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>
 
-            <!-- Formulario de add estudiante -->
+            <!-- Formulario Wizard -->
             <div class="container-fluid py-3">
 
-                <form action="">
-                    <div class="tabla-titulo mb-3">
-                        <h5>Datos del Estudiante</h5>
-                    </div>
+                <div class="wizard-progress">
+                    <div id="stepIndicator1" class="active-step">Paso 1</div>
+                    <div id="stepIndicator2">Paso 2</div>
+                    <div id="stepIndicator3">Paso 3</div>
+                    <div id="stepIndicator4">Confirmar</div>
+                </div>
 
-                    <!-- Primera fila -->
-                    <div class="row g-3">
-                        <!-- Foto -->
-                        <div class="col-md-3">
-                            <label for="">Foto*</label>
-                            <div
-                                class="border border-secondary d-flex flex-column justify-content-center align-items-center p-3 rounded">
-                                <small>Selecciona un archivo</small>
-                                <input type="file" class="form-control mt-2" />
-                            </div>
+                <form id="formWizard">
+
+                    <!-- Paso 1 -->
+                    <div class="step active">
+                        <div class="tabla-titulo mb-3">
+                            <h5>Datos del Estudiante</h5>
+                            
                         </div>
 
-                        <!-- Datos personales -->
-                        <div class="col-md-5">
-                            <div class="mb-3">
-                                <label for="">N° Documento*</label>
-                                <input type="number" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label for="">Nombres*</label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label for="">Fecha y lugar de nacimiento*</label>
-                                <div class="d-flex gap-2">
-                                    <input type="date" class="form-control w-50">
-                                    <input type="text" class="form-control w-50" placeholder="Lugar">
+                        <div class="row g-3">
+                            <!-- Foto -->
+                            <div class="col-md-3 poFoto">
+                                <label for="">Foto*</label>
+                                <div
+                                    class=" esPhoto">
+                                    <small>Selecciona un archivo</small>
+                                    <input type="file" class="form-control mt-2" />
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="">Email*</label>
-                                <input type="email" class="form-control">
+
+                            <!-- Datos personales -->
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label for="">Tipo de Documento*</label>
+                                    <select class="selector">
+                                        <option selected>Selecciona el tipo de Documento</option>
+                                        <option value="1">CC</option>
+                                        <option value="2">TI</option>
+                                        <option value="3">CE</option>
+                                        <option value="4">OTRO</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Nombres*</label>
+                                    <input type="text" class="form-control">
+                                </div>
+
+                            </div>
+
+                            <!-- Apellidos y teléfono -->
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="">N° Documento*</label>
+                                    <input type="number" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Apellidos*</label>
+                                    <input type="text" class="form-control">
+                                </div>
+
                             </div>
                         </div>
 
-                        <!-- Apellidos y teléfono -->
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="">Apellidos*</label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label for="">N° Teléfono*</label>
-                                <input type="tel" class="form-control">
-                            </div>
+                        <div class="botones mt-3">
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente</button>
                         </div>
                     </form>
 
@@ -127,50 +130,103 @@
                         <button>Agregar</button>
                     </div>
 
-                    <!-- Segunda fila -->
-                    <div class="row g-3 mt-2">
-                        <div class="col-md-3"></div> 
+                    <!-- Paso 2 -->
+                    <div class="step">
+                        <div class="tabla-titulo mb-3">
+                            <h5>Datos del Estudiante</h5>
+                        </div>
 
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="">Nombre del Acudiente*</label>
-                                <input type="text" class="form-control">
+                        <div class="row g-3">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label for="">Fecha de nacimiento*</label>
+                                    <div class="d-flex gap-2">
+                                        <input type="date" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Email*</label>
+                                    <input type="email" class="form-control">
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="">Email de Acudiente*</label>
-                                <input type="email" class="form-control">
+
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label for="">N° Teléfono*</label>
+                                    <input type="tel" class="form-control">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="">Parentesco*</label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label for="">N° Teléfono Acudiente*</label>
-                                <input type="tel" class="form-control">
-                            </div>
+                        <div class="botones mt-3">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente</button>
                         </div>
                     </div>
 
-                    <!-- Botones -->
-                    <div class="botones mt-3">
-                        <button type="reset" class="">Cancelar</button>
-                        <button type="submit" class="">Agregar</button>
+                    <!-- Paso 3 -->
+                    <div class="step">
+                        <div class="tabla-titulo mb-3">
+                            <h5>Datos del Acudiente</h5>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label for="">Nombre del Acudiente*</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Email de Acudiente*</label>
+                                    <input type="email" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label for="">Parentesco*</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">N° Teléfono Acudiente*</label>
+                                    <input type="tel" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="botones mt-3">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Paso 4 -->
+                    <div class="step">
+                        <div class="tabla-titulo mb-3">
+                            <h5>Confirmar Registro</h5>
+                        </div>
+                        <p>Revisa los datos ingresados antes de agregar el estudiante.</p>
+
+                        <div class="botones mt-3">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                            <button type="submit" class="btn btn-success">Agregar Estudiante</button>
+                        </div>
                     </div>
 
                 </form>
-
             </div>
-
-
         </main>
     </div>
 
 
+<<<<<<< HEAD
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+=======
+    <script src="../../assets/dashboard/js/main-formulario.js"></script>
+>>>>>>> ea384db (Se Ajusto el formulario de estudiantes implementandole wizard para mejorar la orientacion)
 </body>
 
 </html>
