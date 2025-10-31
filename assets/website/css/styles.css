@@ -23,6 +23,8 @@ background-color: #1a1a1a;
 padding: 20px 0;
 position: relative;
 z-index: 100;
+position: fixed;
+width: 100%;
 }
 
 .navbar {
@@ -79,6 +81,8 @@ opacity: 0.4;
 color: #ffffff;
 letter-spacing: 1px;
 }
+
+
 
 .nav-menu {
 display: flex;
