@@ -57,7 +57,7 @@ html {
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
     text-align: center;
     width: 100%;
-    max-width: 920px;
+    max-width: 1020px;
     background: var(--bg-2);
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
     border-radius: 20px;
@@ -108,6 +108,15 @@ html {
     margin-bottom: 30px;
     font-size: 28px;
     font-weight: 700;
+}
+
+form .selector {
+    width: 100% !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-size: 0.95rem !important;
+    transition: border-color 0.2s ease !important;
+    color: var(--sidebar) !important;
 }
 
 .input-group {
@@ -229,15 +238,18 @@ html {
 
 /* Animación de rebote para el logo */
 @keyframes bounce {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0);
     }
+
     50% {
         transform: translateY(-4px);
     }
 }
 
-.login-left > div:first-child {
+.login-left>div:first-child {
     animation: bounce 2s ease-in-out infinite;
 }
 
