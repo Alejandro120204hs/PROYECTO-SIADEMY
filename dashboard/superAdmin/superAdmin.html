@@ -1,0 +1,868 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIADEMY • Panel de Administración del Sistema</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/dashboard/css/styles-superAdmin.css">
+
+</head>
+
+<body>
+  <div class="app" id="appGrid">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="leftSidebar">
+      <a class="brand" href="#">
+        <span class="logo"><i class="ri-shield-star-line"></i></span>
+        <span>Siademy <small>ADMIN</small></span>
+      </a>
+      <nav class="nav">
+        <a class="active" href="#"><i class="ri-dashboard-line"></i> Panel</a>
+        <a href="#"><i class="ri-school-line"></i> Escuelas</a>
+        <a href="#"><i class="ri-user-settings-line"></i> Administradores</a>
+        <a href="#"><i class="ri-bill-line"></i> Pagos</a>
+        <a href="#"><i class="ri-bar-chart-box-line"></i> Reportes</a>
+        <div class="spacer"></div>
+        <div class="section">Configuración</div>
+        <a href="#"><i class="ri-settings-3-line"></i> Ajustes</a>
+        <a href="#"><i class="ri-shield-check-line"></i> Seguridad</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
+            <i class="ri-menu-2-line"></i>
+          </button>
+          <div class="title">Admin Sistema</div>
+        </div>
+        <div class="search">
+          <i class="ri-search-2-line"></i>
+          <input type="text" placeholder="Buscar escuela...">
+        </div>
+        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
+          <i class="ri-layout-right-2-line"></i>
+        </button>
+      </div>
+
+      <!-- KPIs -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px">
+        <div style="background:#11193a;border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.2)">
+          <div style="color:#98a2b3;font-size:13px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.1em">Total Escuelas</div>
+          <div style="font-size:32px;font-weight:700;margin-bottom:4px">24</div>
+          <div style="color:#10b981;font-size:13px"><i class="ri-arrow-up-line"></i> 3 nuevas este mes</div>
+        </div>
+        <div style="background:#11193a;border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.2)">
+          <div style="color:#98a2b3;font-size:13px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.1em">Escuelas Activas</div>
+          <div style="font-size:32px;font-weight:700;margin-bottom:4px">20</div>
+          <div style="color:#10b981;font-size:13px"><i class="ri-checkbox-circle-line"></i> 83.3% del total</div>
+        </div>
+        <div style="background:#11193a;border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.2)">
+          <div style="color:#98a2b3;font-size:13px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.1em">Pagos Pendientes</div>
+          <div style="font-size:32px;font-weight:700;margin-bottom:4px;color:#ff6b6b">7</div>
+          <div style="color:#ff6b6b;font-size:13px"><i class="ri-error-warning-line"></i> Requieren atención</div>
+        </div>
+        <div style="background:#11193a;border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.2)">
+          <div style="color:#98a2b3;font-size:13px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.1em">Ingresos del Mes</div>
+          <div style="font-size:32px;font-weight:700;margin-bottom:4px">$48,500</div>
+          <div style="color:#10b981;font-size:13px"><i class="ri-arrow-up-line"></i> +12% vs mes anterior</div>
+        </div>
+      </div>
+
+      <!-- Tabla 1: Estado de Escuelas (Activas/Bloqueadas) -->
+      <div class="datatable-card">
+        <h3><i class="ri-shield-check-line"></i> Gestión de Estado de Escuelas</h3>
+        <p style="color:#98a2b3;font-size:14px;margin-bottom:15px">Control de acceso al sistema: Activar o bloquear instituciones</p>
+        <table id="statusTable" class="table table-dark table-hover" style="width:100%">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Escuela</th>
+              <th>Ciudad</th>
+              <th>Estudiantes</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-id="001">
+              <td>001</td>
+              <td><strong>Colegio San José</strong></td>
+              <td>Bogotá</td>
+              <td>450</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="002">
+              <td>002</td>
+              <td><strong>Instituto Técnico Nacional</strong></td>
+              <td>Medellín</td>
+              <td>780</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="003">
+              <td>003</td>
+              <td><strong>Liceo Moderno</strong></td>
+              <td>Cali</td>
+              <td>320</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="004">
+              <td>004</td>
+              <td><strong>Colegio Los Andes</strong></td>
+              <td>Barranquilla</td>
+              <td>590</td>
+              <td><span class="badge bg-danger status-badge">Bloqueado</span></td>
+              <td>
+                <button class="btn btn-sm btn-success toggle-status" data-status="blocked">
+                  <i class="ri-lock-unlock-line"></i> Activar
+                </button>
+              </td>
+            </tr>
+            <tr data-id="005">
+              <td>005</td>
+              <td><strong>Academia Santa María</strong></td>
+              <td>Cartagena</td>
+              <td>410</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="006">
+              <td>006</td>
+              <td><strong>Colegio Bilingüe Cambridge</strong></td>
+              <td>Bucaramanga</td>
+              <td>650</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="007">
+              <td>007</td>
+              <td><strong>Instituto Pedagógico</strong></td>
+              <td>Pereira</td>
+              <td>280</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="008">
+              <td>008</td>
+              <td><strong>Colegio La Esperanza</strong></td>
+              <td>Manizales</td>
+              <td>380</td>
+              <td><span class="badge bg-danger status-badge">Bloqueado</span></td>
+              <td>
+                <button class="btn btn-sm btn-success toggle-status" data-status="blocked">
+                  <i class="ri-lock-unlock-line"></i> Activar
+                </button>
+              </td>
+            </tr>
+            <tr data-id="009">
+              <td>009</td>
+              <td><strong>Liceo del Norte</strong></td>
+              <td>Santa Marta</td>
+              <td>520</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="010">
+              <td>010</td>
+              <td><strong>Colegio Internacional</strong></td>
+              <td>Ibagué</td>
+              <td>470</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="011">
+              <td>011</td>
+              <td><strong>Instituto San Francisco</strong></td>
+              <td>Pasto</td>
+              <td>340</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="012">
+              <td>012</td>
+              <td><strong>Colegio Nueva Granada</strong></td>
+              <td>Cúcuta</td>
+              <td>610</td>
+              <td><span class="badge bg-danger status-badge">Bloqueado</span></td>
+              <td>
+                <button class="btn btn-sm btn-success toggle-status" data-status="blocked">
+                  <i class="ri-lock-unlock-line"></i> Activar
+                </button>
+              </td>
+            </tr>
+            <tr data-id="013">
+              <td>013</td>
+              <td><strong>Academia del Caribe</strong></td>
+              <td>Montería</td>
+              <td>390</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="014">
+              <td>014</td>
+              <td><strong>Liceo Bolivariano</strong></td>
+              <td>Villavicencio</td>
+              <td>440</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="015">
+              <td>015</td>
+              <td><strong>Colegio La Salle</strong></td>
+              <td>Armenia</td>
+              <td>560</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="016">
+              <td>016</td>
+              <td><strong>Instituto Cultural</strong></td>
+              <td>Popayán</td>
+              <td>310</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="017">
+              <td>017</td>
+              <td><strong>Colegio Americano</strong></td>
+              <td>Neiva</td>
+              <td>480</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="018">
+              <td>018</td>
+              <td><strong>Liceo del Valle</strong></td>
+              <td>Valledupar</td>
+              <td>370</td>
+              <td><span class="badge bg-danger status-badge">Bloqueado</span></td>
+              <td>
+                <button class="btn btn-sm btn-success toggle-status" data-status="blocked">
+                  <i class="ri-lock-unlock-line"></i> Activar
+                </button>
+              </td>
+            </tr>
+            <tr data-id="019">
+              <td>019</td>
+              <td><strong>Instituto Santander</strong></td>
+              <td>Sincelejo</td>
+              <td>420</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="020">
+              <td>020</td>
+              <td><strong>Colegio San Agustín</strong></td>
+              <td>Tunja</td>
+              <td>360</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="021">
+              <td>021</td>
+              <td><strong>Academia La Paz</strong></td>
+              <td>Riohacha</td>
+              <td>290</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="022">
+              <td>022</td>
+              <td><strong>Liceo Nacional</strong></td>
+              <td>Florencia</td>
+              <td>330</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="023">
+              <td>023</td>
+              <td><strong>Colegio Santa Rosa</strong></td>
+              <td>Quibdó</td>
+              <td>270</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+            <tr data-id="024">
+              <td>024</td>
+              <td><strong>Instituto del Pacífico</strong></td>
+              <td>Yopal</td>
+              <td>400</td>
+              <td><span class="badge bg-success status-badge">Activo</span></td>
+              <td>
+                <button class="btn btn-sm btn-danger toggle-status" data-status="active">
+                  <i class="ri-lock-line"></i> Bloquear
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tabla 2: Gestión de Pagos -->
+      <div class="datatable-card">
+        <h3><i class="ri-money-dollar-circle-line"></i> Gestión de Pagos</h3>
+        <p style="color:#98a2b3;font-size:14px;margin-bottom:15px">Seguimiento de pagos y transacciones de las instituciones</p>
+        <table id="paymentsTable" class="table table-dark table-hover" style="width:100%">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Escuela</th>
+              <th>Ciudad</th>
+              <th>Plan</th>
+              <th>Estado de Pago</th>
+              <th>Último Pago</th>
+              <th>Próximo Vencimiento</th>
+              <th>Monto Mensual</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>001</td>
+              <td><strong>Colegio San José</strong></td>
+              <td>Bogotá</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-15</td>
+              <td>2024-11-15</td>
+              <td>$2,500</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>002</td>
+              <td><strong>Instituto Técnico Nacional</strong></td>
+              <td>Medellín</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-danger">Pendiente</span></td>
+              <td>2024-08-20</td>
+              <td>2024-09-20</td>
+              <td>$3,800</td>
+              <td>
+                <button class="btn btn-sm btn-warning" onclick="alert('Enviando recordatorio de pago...')">
+                  <i class="ri-mail-send-line"></i> Recordar
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>003</td>
+              <td><strong>Liceo Moderno</strong></td>
+              <td>Cali</td>
+              <td><span class="badge bg-secondary">Básico</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-28</td>
+              <td>2024-11-28</td>
+              <td>$1,800</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>004</td>
+              <td><strong>Colegio Los Andes</strong></td>
+              <td>Barranquilla</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-warning">Vencido</span></td>
+              <td>2024-07-10</td>
+              <td>2024-08-10</td>
+              <td>$2,900</td>
+              <td>
+                <button class="btn btn-sm btn-danger" onclick="alert('Enviando recordatorio URGENTE...')">
+                  <i class="ri-alarm-warning-line"></i> Urgente
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>005</td>
+              <td><strong>Academia Santa María</strong></td>
+              <td>Cartagena</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-22</td>
+              <td>2024-11-22</td>
+              <td>$2,200</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>006</td>
+              <td><strong>Colegio Bilingüe Cambridge</strong></td>
+              <td>Bucaramanga</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-danger">Pendiente</span></td>
+              <td>2024-09-05</td>
+              <td>2024-10-05</td>
+              <td>$3,200</td>
+              <td>
+                <button class="btn btn-sm btn-warning" onclick="alert('Enviando recordatorio de pago...')">
+                  <i class="ri-mail-send-line"></i> Recordar
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>007</td>
+              <td><strong>Instituto Pedagógico</strong></td>
+              <td>Pereira</td>
+              <td><span class="badge bg-secondary">Básico</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-18</td>
+              <td>2024-11-18</td>
+              <td>$1,600</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>008</td>
+              <td><strong>Colegio La Esperanza</strong></td>
+              <td>Manizales</td>
+              <td><span class="badge bg-secondary">Básico</span></td>
+              <td><span class="badge bg-warning">Vencido</span></td>
+              <td>2024-06-30</td>
+              <td>2024-07-30</td>
+              <td>$2,000</td>
+              <td>
+                <button class="btn btn-sm btn-danger" onclick="alert('Enviando recordatorio URGENTE...')">
+                  <i class="ri-alarm-warning-line"></i> Urgente
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>009</td>
+              <td><strong>Liceo del Norte</strong></td>
+              <td>Santa Marta</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-25</td>
+              <td>2024-11-25</td>
+              <td>$2,700</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>010</td>
+              <td><strong>Colegio Internacional</strong></td>
+              <td>Ibagué</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-danger">Pendiente</span></td>
+              <td>2024-08-15</td>
+              <td>2024-09-15</td>
+              <td>$2,400</td>
+              <td>
+                <button class="btn btn-sm btn-warning" onclick="alert('Enviando recordatorio de pago...')">
+                  <i class="ri-mail-send-line"></i> Recordar
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>011</td>
+              <td><strong>Instituto San Francisco</strong></td>
+              <td>Pasto</td>
+              <td><span class="badge bg-secondary">Básico</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-20</td>
+              <td>2024-11-20</td>
+              <td>$1,900</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>012</td>
+              <td><strong>Colegio Nueva Granada</strong></td>
+              <td>Cúcuta</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-warning">Vencido</span></td>
+              <td>2024-07-25</td>
+              <td>2024-08-25</td>
+              <td>$3,100</td>
+              <td>
+                <button class="btn btn-sm btn-danger" onclick="alert('Enviando recordatorio URGENTE...')">
+                  <i class="ri-alarm-warning-line"></i> Urgente
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>013</td>
+              <td><strong>Academia del Caribe</strong></td>
+              <td>Montería</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-12</td>
+              <td>2024-11-12</td>
+              <td>$2,100</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>014</td>
+              <td><strong>Liceo Bolivariano</strong></td>
+              <td>Villavicencio</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-danger">Pendiente</span></td>
+              <td>2024-09-10</td>
+              <td>2024-10-10</td>
+              <td>$2,300</td>
+              <td>
+                <button class="btn btn-sm btn-warning" onclick="alert('Enviando recordatorio de pago...')">
+                  <i class="ri-mail-send-line"></i> Recordar
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>015</td>
+              <td><strong>Colegio La Salle</strong></td>
+              <td>Armenia</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-30</td>
+              <td>2024-11-30</td>
+              <td>$2,800</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>016</td>
+              <td><strong>Instituto Cultural</strong></td>
+              <td>Popayán</td>
+              <td><span class="badge bg-secondary">Básico</span></td>
+              <td><span class="badge bg-danger">Pendiente</span></td>
+              <td>2024-08-28</td>
+              <td>2024-09-28</td>
+              <td>$1,700</td>
+              <td>
+                <button class="btn btn-sm btn-warning" onclick="alert('Enviando recordatorio de pago...')">
+                  <i class="ri-mail-send-line"></i> Recordar
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>017</td>
+              <td><strong>Colegio Americano</strong></td>
+              <td>Neiva</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-24</td>
+              <td>2024-11-24</td>
+              <td>$2,500</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>018</td>
+              <td><strong>Liceo del Valle</strong></td>
+              <td>Valledupar</td>
+              <td><span class="badge bg-secondary">Básico</span></td>
+              <td><span class="badge bg-warning">Vencido</span></td>
+              <td>2024-07-05</td>
+              <td>2024-08-05</td>
+              <td>$2,000</td>
+              <td>
+                <button class="btn btn-sm btn-danger" onclick="alert('Enviando recordatorio URGENTE...')">
+                  <i class="ri-alarm-warning-line"></i> Urgente
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>019</td>
+              <td><strong>Instituto Santander</strong></td>
+              <td>Sincelejo</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-16</td>
+              <td>2024-11-16</td>
+              <td>$2,200</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>020</td>
+              <td><strong>Colegio San Agustín</strong></td>
+              <td>Tunja</td>
+              <td><span class="badge bg-secondary">Básico</span></td>
+              <td><span class="badge bg-danger">Pendiente</span></td>
+              <td>2024-09-15</td>
+              <td>2024-10-15</td>
+              <td>$1,950</td>
+              <td>
+                <button class="btn btn-sm btn-warning" onclick="alert('Enviando recordatorio de pago...')">
+                  <i class="ri-mail-send-line"></i> Recordar
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>021</td>
+              <td><strong>Academia La Paz</strong></td>
+              <td>Riohacha</td>
+              <td><span class="badge bg-secondary">Básico</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-21</td>
+              <td>2024-11-21</td>
+              <td>$1,650</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>022</td>
+              <td><strong>Liceo Nacional</strong></td>
+              <td>Florencia</td>
+              <td><span class="badge bg-secondary">Básico</span></td>
+              <td><span class="badge bg-danger">Pendiente</span></td>
+              <td>2024-08-30</td>
+              <td>2024-09-30</td>
+              <td>$1,850</td>
+              <td>
+                <button class="btn btn-sm btn-warning" onclick="alert('Enviando recordatorio de pago...')">
+                  <i class="ri-mail-send-line"></i> Recordar
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>023</td>
+              <td><strong>Colegio Santa Rosa</strong></td>
+              <td>Quibdó</td>
+              <td><span class="badge bg-secondary">Básico</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-27</td>
+              <td>2024-11-27</td>
+              <td>$1,550</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>024</td>
+              <td><strong>Instituto del Pacífico</strong></td>
+              <td>Yopal</td>
+              <td><span class="badge bg-primary">Premium</span></td>
+              <td><span class="badge bg-success">Pagado</span></td>
+              <td>2024-10-29</td>
+              <td>2024-11-29</td>
+              <td>$2,150</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="alert('Ver detalles del pago')">
+                  <i class="ri-eye-line"></i> Ver
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="rightbar" id="rightSidebar">
+      <div class="user">
+        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
+        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
+        <div class="avatar" title="Super Admin">SA</div>
+      </div>
+
+      <div class="panel-title">Actividad Reciente</div>
+      <p class="muted">Últimas acciones del sistema</p>
+
+      <div class="msg">
+        <div class="avatar">🔒</div>
+        <div>
+          <strong>Escuela Bloqueada</strong>
+          <div class="muted">Colegio Los Andes • Por falta de pago</div>
+        </div>
+        <span class="time">1h</span>
+      </div>
+
+      <div class="msg">
+        <div class="avatar">✅</div>
+        <div>
+          <strong>Nuevo Pago Recibido</strong>
+          <div class="muted">Liceo Moderno • $1,800</div>
+        </div>
+        <span class="time">2h</span>
+      </div>
+
+      <div class="msg">
+        <div class="avatar">🏫</div>
+        <div>
+          <strong>Nueva Escuela</strong>
+          <div class="muted">Instituto del Pacífico • Yopal</div>
+        </div>
+        <span class="time">5h</span>
+      </div>
+
+      <!-- EVENTS SECTION -->
+      <div class="events-section">
+        <div class="panel-title">Alertas del Sistema</div>
+        <p class="muted">Notificaciones importantes</p>
+
+        <div class="event-item">
+          <div class="event-date" style="background: #ef4444;">
+            <span class="day">7</span>
+            <span class="month">Pendientes</span>
+          </div>
+          <div class="event-content">
+            <h4>Pagos Vencidos</h4>
+            <p>Hay 7 escuelas con pagos pendientes que requieren seguimiento</p>
+            <div class="event-time">⚠️ Acción requerida</div>
+          </div>
+        </div>
+
+        <div class="event-item">
+          <div class="event-date" style="background: #f59e0b;">
+            <span class="day">4</span>
+            <span class="month">Bloqueadas</span>
+          </div>
+          <div class="event-content">
+            <h4>Escuelas Bloqueadas</h4>
+            <p>Instituciones temporalmente suspendidas por falta de pago</p>
+            <div class="event-time">🔒 Restablecer acceso tras pago</div>
+          </div>
+        </div>
+
+        <div class="event-item">
+          <div class="event-date" style="background: #10b981;">
+            <span class="day">20</span>
+            <span class="month">Activas</span>
+          </div>
+          <div class="event-content">
+            <h4>Escuelas Operando</h4>
+            <p>Instituciones con acceso completo al sistema</p>
+            <div class="event-time">✅ Estado: Normal</div>
+          </div>
+        </div>
+
+        <a href="#" class="btn-primary">Ver reporte completo</a>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Bootstrap and DataTables Scripts -->
+   <script src="../../assets/dashboard/js/main-superAdmin.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+</body>
+
+</html>
