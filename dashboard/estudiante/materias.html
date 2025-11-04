@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIADEMY • Mis Materias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/dashboard/css/styles-estudiante.css">
+  <style>
+    /* Badges en menú */
+    .nav a {
+      position: relative;
+    }
+    
+    .nav a .badge {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #4f46e5;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 12px;
+      min-width: 22px;
+      text-align: center;
+    }
+    
+    .nav a .badge.bg-warning {
+      background: #ffb020;
+      color: #0f1e4a;
+    }
+    
+    .nav a .badge.bg-success {
+      background: #10b981;
+      color: white;
+    }
+    
+    .nav a .badge.bg-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    /* Grid para 3 columnas */
+    .app {
+      display: grid;
+      grid-template-columns: 260px 1fr 320px;
+      gap: 0;
+      min-height: 100dvh;
+    }
+
+    /* Stats cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: #11193a;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .3);
+      border-color: #4f46e5;
+    }
+
+    .stat-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.blue {
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+      color: white;
+    }
+
+    .stat-icon.green {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .stat-icon.orange {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+    }
+
+    .stat-icon.red {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .stat-content h3 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .stat-content p {
+      margin: 4px 0 0 0;
+      font-size: 13px;
+      color: #8b91a3;
+    }
+
+    /* Filter buttons */
+    .filter-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0e142e;
+      color: #8b91a3;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      background: #1d2340;
+      color: #fff;
+    }
+
+    .filter-btn.active {
+      background: #4f46e5;
+      color: white;
+      border-color: #4f46e5;
+    }
+
+    /* Materias grid */
+    .materias-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .materia-card {
+      background: #11193a;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .materia-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #4f46e5 0%, #6366f1 100%);
+    }
+
+    .materia-card.riesgo::before {
+      background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+    }
+
+    .materia-card.critico::before {
+      background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+    }
+
+    .materia-card.excelente::before {
+      background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    }
+
+    .materia-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .3);
+      border-color: #4f46e5;
+    }
+
+    .materia-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .materia-title h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .materia-title p {
+      margin: 4px 0 0 0;
+      font-size: 13px;
+      color: #8b91a3;
+    }
+
+    .materia-nota {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .materia-nota.excelente {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .materia-nota.bien {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+    }
+
+    .materia-nota.riesgo {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+    }
+
+    .materia-nota.critico {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .materia-profesor {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #0e142e;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+
+    .profesor-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #4f46e5;
+      display: grid;
+      place-items: center;
+      font-weight: 600;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .profesor-info strong {
+      display: block;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .profesor-info small {
+      display: block;
+      font-size: 12px;
+      color: #8b91a3;
+    }
+
+    .materia-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .materia-stat {
+      text-align: center;
+      padding: 10px;
+      background: #0e142e;
+      border-radius: 8px;
+    }
+
+    .materia-stat-value {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .materia-stat-label {
+      display: block;
+      font-size: 11px;
+      color: #8b91a3;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .materia-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-materia {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-materia.primary {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .btn-materia.primary:hover {
+      background: #5b52f5;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-materia.secondary {
+      background: #1d2340;
+      color: #a4b1ff;
+      border: 1px solid var(--border);
+    }
+
+    .btn-materia.secondary:hover {
+      background: #242842;
+      color: #fff;
+    }
+
+    /* Rightbar styles */
+    .panel-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .muted {
+      color: #8b91a3;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .quick-action {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: #1d2030;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quick-action:hover {
+      background: #242842;
+      border-color: #4f46e5;
+      transform: translateX(4px);
+    }
+
+    .quick-action-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .quick-action-icon.blue {
+      background: rgba(79, 70, 229, 0.2);
+      color: #4f46e5;
+    }
+
+    .quick-action-icon.green {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+    }
+
+    .quick-action-icon.orange {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+
+    .quick-action-icon.red {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .quick-action-content strong {
+      display: block;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .quick-action-content small {
+      display: block;
+      font-size: 12px;
+      color: #8b91a3;
+    }
+
+    .profesor-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .profesor-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #1d2030;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .profesor-item:hover {
+      background: #242842;
+      border-color: #4f46e5;
+    }
+
+    .profesor-item .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #4f46e5;
+      display: grid;
+      place-items: center;
+      font-weight: 600;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .profesor-item strong {
+      display: block;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    .profesor-item small {
+      display: block;
+      font-size: 11px;
+      color: #8b91a3;
+    }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: #4f46e5;
+      color: white;
+      text-align: center;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: #5b52f5;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+
+    /* Tips card */
+    .tips-card {
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+      border-radius: 14px;
+      padding: 20px;
+      margin-top: 24px;
+      color: white;
+    }
+
+    .tips-card h4 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tips-card p {
+      margin: 0;
+      font-size: 13px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1400px) {
+      .app {
+        grid-template-columns: 260px 1fr 280px;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .app {
+        grid-template-columns: 220px 1fr 260px;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+      
+      .rightbar {
+        order: 3;
+      }
+      
+      .materias-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app" id="appGrid">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="leftSidebar">
+      <a class="brand" href="#">
+        <span class="logo"><i class="ri-shield-star-line"></i></span>
+        <span>Siademy</span>
+      </a>
+
+      <nav class="nav">
+        <a href="estudiante.html">
+          <i class="ri-home-5-line"></i> Panel
+        </a>
+
+        <a class="active" href="materias.html">
+          <i class="ri-book-2-line"></i> Mis Materias
+          <span class="badge">6</span>
+        </a>
+
+        <a href="actividades.html">
+          <i class="ri-task-line"></i> Actividades
+          <span class="badge bg-warning">3</span>
+        </a>
+
+        <a href="calificaciones.html">
+          <i class="ri-bar-chart-line"></i> Calificaciones
+        </a>
+
+        <a href="asistencia.html">
+          <i class="ri-calendar-check-line"></i> Asistencia
+          <span class="badge bg-success">92%</span>
+        </a>
+
+        <div class="spacer"></div>
+        <div class="section">Académico</div>
+
+        <a href="profesores.html">
+          <i class="ri-user-3-line"></i> Mis Profesores
+        </a>
+
+        <a href="recursos.html">
+          <i class="ri-folder-2-line"></i> Recursos
+        </a>
+
+        <a href="mensajes.html">
+          <i class="ri-message-3-line"></i> Mensajes
+          <span class="badge bg-danger">2</span>
+        </a>
+
+        <a href="anuncios.html">
+          <i class="ri-megaphone-line"></i> Anuncios
+        </a>
+
+        <div class="spacer"></div>
+        <div class="section">Personal</div>
+
+        <a href="perfil.html">
+          <i class="ri-user-line"></i> Mi Perfil
+        </a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
+            <i class="ri-menu-2-line"></i>
+          </button>
+          <div class="title">Mis Materias</div>
+        </div>
+
+        <div class="search">
+          <i class="ri-search-2-line"></i>
+          <input type="text" id="searchInput" placeholder="Buscar materias...">
+        </div>
+
+        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
+          <i class="ri-layout-right-2-line"></i>
+        </button>
+      </div>
+
+      <!-- STATS CARDS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="ri-book-2-line"></i>
+          </div>
+          <div class="stat-content">
+            <h3>6</h3>
+            <p>Materias Activas</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="ri-checkbox-circle-line"></i>
+          </div>
+          <div class="stat-content">
+            <h3>3.8</h3>
+            <p>Promedio General</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon orange">
+            <i class="ri-alert-line"></i>
+          </div>
+          <div class="stat-content">
+            <h3>2</h3>
+            <p>En Riesgo</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon red">
+            <i class="ri-error-warning-line"></i>
+          </div>
+          <div class="stat-content">
+            <h3>3</h3>
+            <p>Act. Pendientes</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTERS -->
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="todas">Todas las Materias</button>
+        <button class="filter-btn" data-filter="excelente">Excelentes</button>
+        <button class="filter-btn" data-filter="riesgo">En Riesgo</button>
+        <button class="filter-btn" data-filter="critico">Críticas</button>
+      </div>
+
+      <!-- MATERIAS GRID -->
+      <div class="materias-grid" id="materiasGrid">
+
+        <!-- MATERIA 1: Matemáticas -->
+        <div class="materia-card riesgo" data-status="riesgo">
+          <div class="materia-header">
+            <div class="materia-title">
+              <h3>Matemáticas</h3>
+              <p>Álgebra y Geometría</p>
+            </div>
+            <div class="materia-nota riesgo">2.8</div>
+          </div>
+          <div class="materia-profesor">
+            <div class="profesor-avatar">CM</div>
+            <div class="profesor-info">
+              <strong>Prof. Carlos Méndez</strong>
+              <small>carlos.mendez@colegio.edu</small>
+            </div>
+          </div>
+          <div class="materia-stats">
+            <div class="materia-stat"><span class="materia-stat-value">12</span><span class="materia-stat-label">Actividades</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">3</span><span class="materia-stat-label">Pendientes</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">88%</span><span class="materia-stat-label">Asistencia</span></div>
+          </div>
+          <div class="materia-actions">
+            <button class="btn-materia primary"><i class="ri-eye-line"></i> Ver Detalles</button>
+            <button class="btn-materia secondary"><i class="ri-folder-2-line"></i> Recursos</button>
+          </div>
+        </div>
+
+        <!-- MATERIA 2: Física -->
+        <div class="materia-card critico" data-status="critico">
+          <div class="materia-header">
+            <div class="materia-title">
+              <h3>Física</h3>
+              <p>Mecánica Clásica</p>
+            </div>
+            <div class="materia-nota critico">2.5</div>
+          </div>
+          <div class="materia-profesor">
+            <div class="profesor-avatar" style="background:#10b981">AR</div>
+            <div class="profesor-info">
+              <strong>Prof. Ana Rodríguez</strong>
+              <small>ana.rodriguez@colegio.edu</small>
+            </div>
+          </div>
+          <div class="materia-stats">
+            <div class="materia-stat"><span class="materia-stat-value">15</span><span class="materia-stat-label">Actividades</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">2</span><span class="materia-stat-label">Pendientes</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">82%</span><span class="materia-stat-label">Asistencia</span></div>
+          </div>
+          <div class="materia-actions">
+            <button class="btn-materia primary"><i class="ri-eye-line"></i> Ver Detalles</button>
+            <button class="btn-materia secondary"><i class="ri-folder-2-line"></i> Recursos</button>
+          </div>
+        </div>
+
+        <!-- MATERIA 3: Química -->
+        <div class="materia-card riesgo" data-status="riesgo">
+          <div class="materia-header">
+            <div class="materia-title">
+              <h3>Química</h3>
+              <p>Química Orgánica</p>
+            </div>
+            <div class="materia-nota riesgo">3.0</div>
+          </div>
+          <div class="materia-profesor">
+            <div class="profesor-avatar" style="background:#f59e0b">LT</div>
+            <div class="profesor-info">
+              <strong>Prof. Luis Torres</strong>
+              <small>luis.torres@colegio.edu</small>
+            </div>
+          </div>
+          <div class="materia-stats">
+            <div class="materia-stat"><span class="materia-stat-value">10</span><span class="materia-stat-label">Actividades</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">1</span><span class="materia-stat-label">Pendientes</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">90%</span><span class="materia-stat-label">Asistencia</span></div>
+          </div>
+          <div class="materia-actions">
+            <button class="btn-materia primary"><i class="ri-eye-line"></i> Ver Detalles</button>
+            <button class="btn-materia secondary"><i class="ri-folder-2-line"></i> Recursos</button>
+          </div>
+        </div>
+
+        <!-- MATERIA 4: Inglés -->
+        <div class="materia-card excelente" data-status="excelente">
+          <div class="materia-header">
+            <div class="materia-title">
+              <h3>Inglés</h3>
+              <p>Nivel Intermedio</p>
+            </div>
+            <div class="materia-nota excelente">4.5</div>
+          </div>
+          <div class="materia-profesor">
+            <div class="profesor-avatar" style="background:#ef4444">PG</div>
+            <div class="profesor-info">
+              <strong>Prof. Patricia Gómez</strong>
+              <small>patricia.gomez@colegio.edu</small>
+            </div>
+          </div>
+          <div class="materia-stats">
+            <div class="materia-stat"><span class="materia-stat-value">14</span><span class="materia-stat-label">Actividades</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">0</span><span class="materia-stat-label">Pendientes</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">95%</span><span class="materia-stat-label">Asistencia</span></div>
+          </div>
+          <div class="materia-actions">
+            <button class="btn-materia primary"><i class="ri-eye-line"></i> Ver Detalles</button>
+            <button class="btn-materia secondary"><i class="ri-folder-2-line"></i> Recursos</button>
+          </div>
+        </div>
+
+        <!-- MATERIA 5: Programación -->
+        <div class="materia-card critico" data-status="critico">
+          <div class="materia-header">
+            <div class="materia-title">
+              <h3>Programación</h3>
+              <p>Java Avanzado</p>
+            </div>
+            <div class="materia-nota critico">2.7</div>
+          </div>
+          <div class="materia-profesor">
+            <div class="profesor-avatar" style="background:#8b5cf6">DA</div>
+            <div class="profesor-info">
+              <strong>Prof. Diego Álvarez</strong>
+              <small>diego.alvarez@colegio.edu</small>
+            </div>
+          </div>
+          <div class="materia-stats">
+            <div class="materia-stat"><span class="materia-stat-value">18</span><span class="materia-stat-label">Actividades</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">4</span><span class="materia-stat-label">Pendientes</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">85%</span><span class="materia-stat-label">Asistencia</span></div>
+          </div>
+          <div class="materia-actions">
+            <button class="btn-materia primary"><i class="ri-eye-line"></i> Ver Detalles</button>
+            <button class="btn-materia secondary"><i class="ri-folder-2-line"></i> Recursos</button>
+          </div>
+        </div>
+
+        <!-- MATERIA 6: Historia -->
+        <div class="materia-card excelente" data-status="excelente">
+          <div class="materia-header">
+            <div class="materia-title">
+              <h3>Historia</h3>
+              <p>Historia de Colombia</p>
+            </div>
+            <div class="materia-nota bien">4.2</div>
+          </div>
+          <div class="materia-profesor">
+            <div class="profesor-avatar" style="background:#06b6d4">MR</div>
+            <div class="profesor-info">
+              <strong>Prof. María Ramírez</strong>
+              <small>maria.ramirez@colegio.edu</small>
+            </div>
+          </div>
+          <div class="materia-stats">
+            <div class="materia-stat"><span class="materia-stat-value">11</span><span class="materia-stat-label">Actividades</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">1</span><span class="materia-stat-label">Pendientes</span></div>
+            <div class="materia-stat"><span class="materia-stat-value">97%</span><span class="materia-stat-label">Asistencia</span></div>
+          </div>
+          <div class="materia-actions">
+            <button class="btn-materia primary"><i class="ri-eye-line"></i> Ver Detalles</button>
+            <button class="btn-materia secondary"><i class="ri-folder-2-line"></i> Recursos</button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="rightbar" id="rightSidebar">
+      <div class="user">
+        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
+        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
+        <div class="avatar" title="Diego A.">DA</div>
+      </div>
+
+      <div class="panel-title">Acciones Rápidas</div>
+      <p class="muted">Accesos directos</p>
+
+      <div class="quick-action">
+        <div class="quick-action-icon blue"><i class="ri-calendar-event-line"></i></div>
+        <div class="quick-action-content"><strong>Ver Horario</strong><small>Horario de clases semanal</small></div>
+      </div>
+
+      <div class="quick-action">
+        <div class="quick-action-icon green"><i class="ri-task-line"></i></div>
+        <div class="quick-action-content"><strong>Actividades</strong><small>3 tareas pendientes</small></div>
+      </div>
+
+      <div class="quick-action">
+        <div class="quick-action-icon orange"><i class="ri-bar-chart-line"></i></div>
+        <div class="quick-action-content"><strong>Calificaciones</strong><small>Ver todas mis notas</small></div>
+      </div>
+
+      <div class="quick-action">
+        <div class="quick-action-icon red"><i class="ri-download-line"></i></div>
+        <div class="quick-action-content"><strong>Descargar Boletín</strong><small>Período actual en PDF</small></div>
+      </div>
+
+      <div class="panel-title" style="margin-top:24px">Mis Profesores</div>
+      <p class="muted">Contactos directos</p>
+
+      <div class="profesor-list">
+        <div class="profesor-item"><div class="avatar">CM</div><div><strong>Prof. Carlos Méndez</strong><small>Matemáticas</small></div></div>
+        <div class="profesor-item"><div class="avatar" style="background:#10b981">AR</div><div><strong>Prof. Ana Rodríguez</strong><small>Física</small></div></div>
+        <div class="profesor-item"><div class="avatar" style="background:#f59e0b">LT</div><div><strong>Prof. Luis Torres</strong><small>Química</small></div></div>
+        <div class="profesor-item"><div class="avatar" style="background:#ef4444">PG</div><div><strong>Prof. Patricia Gómez</strong><small>Inglés</small></div></div>
+      </div>
+
+      <button class="btn-primary">Ver todos los profesores</button>
+
+      <div class="tips-card">
+        <h4><i class="ri-lightbulb-line"></i> Consejo Académico</h4>
+        <p>Recuerda revisar diariamente tus actividades pendientes y mantener comunicación con tus profesores para mejorar tu rendimiento académico.</p>
+      </div>
+    </aside>
+  </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Toggle sidebars
+    document.getElementById('toggleLeft')?.addEventListener('click', function() {
+      document.getElementById('leftSidebar').classList.toggle('hidden');
+    });
+
+    document.getElementById('toggleRight')?.addEventListener('click', function() {
+      document.getElementById('rightSidebar').classList.toggle('hidden');
+    });
+
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const materiaCards = document.querySelectorAll('.materia-card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Remove active from all buttons
+        filterButtons.forEach(b => b.classList.remove('active'));
+        // Add active to clicked button
+        this.classList.add('active');
+
+        const filter = this.getAttribute('data-filter');
+
+        materiaCards.forEach(card => {
+          if (filter === 'todas') {
+            card.style.display = 'block';
+          } else {
+            if (card.getAttribute('data-status') === filter) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          }
+        });
+      });
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    searchInput?.addEventListener('input', function(e) {
+      const searchTerm = e.target.value.toLowerCase();
+
+      materiaCards.forEach(card => {
+        const title = card.querySelector('.materia-title h3').textContent.toLowerCase();
+        const profesor = card.querySelector('.profesor-info strong').textContent.toLowerCase();
+
+        if (title.includes(searchTerm) || profesor.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+
+    // Button actions
+    document.querySelectorAll('.btn-materia.primary').forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Aquí iría la navegación a materia-detalle.html
+        alert('Ir a detalles de la materia');
+      });
+    });
+
+    document.querySelectorAll('.btn-materia.secondary').forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Aquí iría la navegación a recursos.html
+        alert('Ver recursos de la materia');
+      });
+    });
+
+    // Quick actions
+    document.querySelectorAll('.quick-action').forEach(action => {
+      action.addEventListener('click', function() {
+        const actionText = this.querySelector('strong').textContent;
+        console.log('Acción:', actionText);
+      });
+    });
+  </script>
+</body>
+
+</html>
