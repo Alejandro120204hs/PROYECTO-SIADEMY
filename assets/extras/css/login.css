@@ -110,15 +110,6 @@ html {
     font-weight: 700;
 }
 
-form .selector {
-    width: 100% !important;
-    border: none !important;
-    border-radius: 6px !important;
-    font-size: 0.95rem !important;
-    transition: border-color 0.2s ease !important;
-    color: var(--sidebar) !important;
-}
-
 .input-group {
     background: white;
     border-radius: 10px;
