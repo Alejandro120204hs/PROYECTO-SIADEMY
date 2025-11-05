@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIADEMY • Detalle Profesor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/dashboard/css/styles-admin.css">
+</head>
+
+<body>
+  <div class="app" id="appGrid">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="leftSidebar">
+      <a class="brand" href="#">
+        <span class="logo"><i class="ri-shield-star-line"></i></span>
+        <span>Siademy</span>
+      </a>
+      <nav class="nav">
+        <a href="admin.html"><i class="ri-home-5-line"></i> Panel</a>
+        <a href="panel-estudiantes.html"><i class="ri-team-line"></i> Estudiantes</a>
+        <a class="active" href="panel-profesores.html"><i class="ri-user-3-line"></i> Profesores</a>
+        <a href="eventos.html"><i class="ri-calendar-event-line"></i> Eventos</a>
+
+        <div class="spacer"></div>
+        <div class="section">Cursos / Asignaturas</div>
+        <a href="cursos.html"><i class="ri-book-2-line"></i> Cursos</a>
+        <a href="asignaturas.html"><i class="ri-booklet-line"></i> Asignaturas</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
+            <i class="ri-menu-2-line"></i>
+          </button>
+          <button class="btn-back" onclick="window.location.href='panel-profesores.html'">
+            <i class="ri-arrow-left-line"></i>
+            Volver
+          </button>
+        </div>
+        
+        <div class="user">
+          <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
+          <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
+          <div class="avatar" title="Diego A.">DA</div>
+        </div>
+      </div>
+
+      <!-- TEACHER PROFILE HEADER -->
+      <div class="teacher-profile-header">
+        <div class="profile-main">
+          <div class="profile-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            SW
+          </div>
+          <div class="profile-info">
+            <h2>Samanta William</h2>
+            <p class="profile-subtitle">Profesora de Matemáticas y Física</p>
+            <div class="profile-badges">
+              <span class="badge-item badge-active">
+                <i class="ri-checkbox-circle-fill"></i>
+                Activo
+              </span>
+              <span class="badge-item badge-info">
+                <i class="ri-star-fill"></i>
+                Docente Destacado
+              </span>
+              <span class="badge-item badge-warning">
+                <i class="ri-time-line"></i>
+                8 años experiencia
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn-profile-action btn-primary-action">
+            <i class="ri-message-3-line"></i>
+            Enviar Mensaje
+          </button>
+          <button class="btn-profile-action btn-secondary-action">
+            <i class="ri-edit-2-line"></i>
+            Editar Perfil
+          </button>
+          <button class="btn-profile-action btn-icon-action">
+            <i class="ri-more-2-fill"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- QUICK STATS -->
+      <div class="quick-stats">
+        <div class="stat-card">
+          <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="ri-book-open-line"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Asignaturas</span>
+            <span class="stat-value">6</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <i class="ri-team-line"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Estudiantes</span>
+            <span class="stat-value">142</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <i class="ri-calendar-check-line"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Asistencia</span>
+            <span class="stat-value">98%</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <i class="ri-bar-chart-box-line"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Rendimiento</span>
+            <span class="stat-value">4.8</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABS NAVIGATION -->
+      <div class="tabs-navigation">
+        <button class="tab-btn active" data-tab="info">
+          <i class="ri-information-line"></i>
+          Información
+        </button>
+        <button class="tab-btn" data-tab="subjects">
+          <i class="ri-book-2-line"></i>
+          Asignaturas
+        </button>
+        <button class="tab-btn" data-tab="schedule">
+          <i class="ri-calendar-2-line"></i>
+          Horario
+        </button>
+        <button class="tab-btn" data-tab="performance">
+          <i class="ri-line-chart-line"></i>
+          Rendimiento
+        </button>
+        <button class="tab-btn" data-tab="evaluations">
+          <i class="ri-file-list-3-line"></i>
+          Evaluaciones
+        </button>
+      </div>
+
+      <!-- TABS CONTENT -->
+      <div class="tabs-content">
+        <!-- TAB: INFORMACIÓN -->
+        <div class="tab-pane active" id="info">
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-header">
+                <h3><i class="ri-user-line"></i> Información Personal</h3>
+              </div>
+              <div class="info-card-body">
+                <div class="info-row">
+                  <span class="info-label">Nombre Completo</span>
+                  <span class="info-value">Samanta William</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">N° Identificación</span>
+                  <span class="info-value">#463436465</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Fecha de Nacimiento</span>
+                  <span class="info-value">28 de marzo de 1990</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Género</span>
+                  <span class="info-value">Femenino</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Estado Civil</span>
+                  <span class="info-value">Casado(a)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <h3><i class="ri-phone-line"></i> Contacto</h3>
+              </div>
+              <div class="info-card-body">
+                <div class="info-row">
+                  <span class="info-label">Email Principal</span>
+                  <span class="info-value">samanta.w@colegio.edu</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Email Personal</span>
+                  <span class="info-value">samanta.william@gmail.com</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Teléfono</span>
+                  <span class="info-value">+57 300 123 4567</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Teléfono Emergencia</span>
+                  <span class="info-value">+57 301 987 6543</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Ciudad</span>
+                  <span class="info-value">Bogotá, Colombia</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <h3><i class="ri-graduation-cap-line"></i> Formación Académica</h3>
+              </div>
+              <div class="info-card-body">
+                <div class="info-row">
+                  <span class="info-label">Título Profesional</span>
+                  <span class="info-value">Lic. en Matemáticas</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Universidad</span>
+                  <span class="info-value">Universidad Nacional</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Posgrado</span>
+                  <span class="info-value">Maestría en Educación</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Especialización</span>
+                  <span class="info-value">Pedagogía Digital</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Certificaciones</span>
+                  <span class="info-value">5 activas</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <h3><i class="ri-building-line"></i> Información Laboral</h3>
+              </div>
+              <div class="info-card-body">
+                <div class="info-row">
+                  <span class="info-label">Fecha de Ingreso</span>
+                  <span class="info-value">15 de enero de 2016</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Tipo de Contrato</span>
+                  <span class="info-value">Tiempo Completo</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Cargo</span>
+                  <span class="info-value">Docente</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Departamento</span>
+                  <span class="info-value">Ciencias Exactas</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Estado</span>
+                  <span class="badge-status status-active">Activo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: ASIGNATURAS -->
+        <div class="tab-pane" id="subjects">
+          <div class="teacher-subjects-section">
+            <h3 class="section-title">Asignaturas Asignadas</h3>
+            <div class="subjects-grid-teacher">
+              <div class="teacher-subject-card">
+                <div class="subject-header-teacher">
+                  <div class="subject-icon-teacher" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="ri-calculator-line"></i>
+                  </div>
+                  <span class="subject-status-teacher status-active">Activa</span>
+                </div>
+                <h4>Matemáticas Avanzadas</h4>
+                <p class="subject-course">Grado 11° A</p>
+                <div class="subject-stats-teacher">
+                  <div class="stat-item-teacher">
+                    <i class="ri-user-line"></i>
+                    <div>
+                      <span class="stat-label-teacher">Estudiantes</span>
+                      <strong>28</strong>
+                    </div>
+                  </div>
+                  <div class="stat-item-teacher">
+                    <i class="ri-time-line"></i>
+                    <div>
+                      <span class="stat-label-teacher">Horas/Semana</span>
+                      <strong>6</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="subject-performance-teacher">
+                  <div class="performance-header">
+                    <span>Promedio del curso</span>
+                    <strong class="grade-excellent">4.5</strong>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 90%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+                  </div>
+                </div>
+                <div class="subject-actions-teacher">
+                  <button class="btn-secondary">
+                    <i class="ri-eye-line"></i>
+                    Ver Detalles
+                  </button>
+                  <button class="btn-icon">
+                    <i class="ri-more-2-fill"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="teacher-subject-card">
+                <div class="subject-header-teacher">
+                  <div class="subject-icon-teacher" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="ri-calculator-line"></i>
+                  </div>
+                  <span class="subject-status-teacher status-active">Activa</span>
+                </div>
+                <h4>Matemáticas Básicas</h4>
+                <p class="subject-course">Grado 9° B</p>
+                <div class="subject-stats-teacher">
+                  <div class="stat-item-teacher">
+                    <i class="ri-user-line"></i>
+                    <div>
+                      <span class="stat-label-teacher">Estudiantes</span>
+                      <strong>32</strong>
+                    </div>
+                  </div>
+                  <div class="stat-item-teacher">
+                    <i class="ri-time-line"></i>
+                    <div>
+                      <span class="stat-label-teacher">Horas/Semana</span>
+                      <strong>5</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="subject-performance-teacher">
+                  <div class="performance-header">
+                    <span>Promedio del curso</span>
+                    <strong class="grade-good">4.2</strong>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 84%; background: linear-gradient(90deg, #34d399, #10b981);"></div>
+                  </div>
+                </div>
+                <div class="subject-actions-teacher">
+                  <button class="btn-secondary">
+                    <i class="ri-eye-line"></i>
+                    Ver Detalles
+                  </button>
+                  <button class="btn-icon">
+                    <i class="ri-more-2-fill"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="teacher-subject-card">
+                <div class="subject-header-teacher">
+                  <div class="subject-icon-teacher" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="ri-flashlight-line"></i>
+                  </div>
+                  <span class="subject-status-teacher status-active">Activa</span>
+                </div>
+                <h4>Física Mecánica</h4>
+                <p class="subject-course">Grado 10° A</p>
+                <div class="subject-stats-teacher">
+                  <div class="stat-item-teacher">
+                    <i class="ri-user-line"></i>
+                    <div>
+                      <span class="stat-label-teacher">Estudiantes</span>
+                      <strong>30</strong>
+                    </div>
+                  </div>
+                  <div class="stat-item-teacher">
+                    <i class="ri-time-line"></i>
+                    <div>
+                      <span class="stat-label-teacher">Horas/Semana</span>
+                      <strong>4</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="subject-performance-teacher">
+                  <div class="performance-header">
+                    <span>Promedio del curso</span>
+                    <strong class="grade-warning">3.8</strong>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 76%; background: linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+                  </div>
+                </div>
+                <div class="subject-actions-teacher">
+                  <button class="btn-secondary">
+                    <i class="ri-eye-line"></i>
+                    Ver Detalles
+                  </button>
+                  <button class="btn-icon">
+                    <i class="ri-more-2-fill"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="teacher-subject-card">
+                <div class="subject-header-teacher">
+                  <div class="subject-icon-teacher" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <i class="ri-calculator-line"></i>
+                  </div>
+                  <span class="subject-status-teacher status-active">Activa</span>
+                </div>
+                <h4>Álgebra Lineal</h4>
+                <p class="subject-course">Grado 11° B</p>
+                <div class="subject-stats-teacher">
+                  <div class="stat-item-teacher">
+                    <i class="ri-user-line"></i>
+                    <div>
+                      <span class="stat-label-teacher">Estudiantes</span>
+                      <strong>25</strong>
+                    </div>
+                  </div>
+                  <div class="stat-item-teacher">
+                    <i class="ri-time-line"></i>
+                    <div>
+                      <span class="stat-label-teacher">Horas/Semana</span>
+                      <strong>4</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="subject-performance-teacher">
+                  <div class="performance-header">
+                    <span>Promedio del curso</span>
+                    <strong class="grade-excellent">4.6</strong>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 92%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+                  </div>
+                </div>
+                <div class="subject-actions-teacher">
+                  <button class="btn-secondary">
+                    <i class="ri-eye-line"></i>
+                    Ver Detalles
+                  </button>
+                  <button class="btn-icon">
+                    <i class="ri-more-2-fill"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: HORARIO -->
+        <div class="tab-pane" id="schedule">
+          <div class="schedule-section">
+            <h3 class="section-title">Horario Semanal</h3>
+            <div class="schedule-table">
+              <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th>Hora</th>
+                    <th>Lunes</th>
+                    <th>Martes</th>
+                    <th>Miércoles</th>
+                    <th>Jueves</th>
+                    <th>Viernes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="time-cell">7:00 - 8:00</td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #667eea;">
+                        <strong>Matemáticas Avanzadas</strong>
+                        <small>11° A - Salón 201</small>
+                      </div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #667eea;">
+                        <strong>Matemáticas Avanzadas</strong>
+                        <small>11° A - Salón 201</small>
+                      </div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #667eea;">
+                        <strong>Matemáticas Avanzadas</strong>
+                        <small>11° A - Salón 201</small>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="time-cell">8:00 - 9:00</td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #f093fb;">
+                        <strong>Matemáticas Básicas</strong>
+                        <small>9° B - Salón 105</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #4facfe;">
+                        <strong>Física Mecánica</strong>
+                        <small>10° A - Lab. Física</small>
+                      </div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #f093fb;">
+                        <strong>Matemáticas Básicas</strong>
+                        <small>9° B - Salón 105</small>
+                      </div>
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td class="time-cell">9:00 - 10:00</td>
+                    <td></td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #fa709a;">
+                        <strong>Álgebra Lineal</strong>
+                        <small>11° B - Salón 202</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #f093fb;">
+                        <strong>Matemáticas Básicas</strong>
+                        <small>9° B - Salón 105</small>
+                      </div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #4facfe;">
+                        <strong>Física Mecánica</strong>
+                        <small>10° A - Lab. Física</small>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="time-cell">10:00 - 10:30</td>
+                    <td colspan="5" class="break-cell">
+                      <i class="ri-cup-line"></i> Descanso
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="time-cell">10:30 - 11:30</td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #fa709a;">
+                        <strong>Álgebra Lineal</strong>
+                        <small>11° B - Salón 202</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #667eea;">
+                        <strong>Matemáticas Avanzadas</strong>
+                        <small>11° A - Salón 201</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #4facfe;">
+                        <strong>Física Mecánica</strong>
+                        <small>10° A - Lab. Física</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #fa709a;">
+                        <strong>Álgebra Lineal</strong>
+                        <small>11° B - Salón 202</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #f093fb;">
+                        <strong>Matemáticas Básicas</strong>
+                        <small>9° B - Salón 105</small>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="time-cell">11:30 - 12:30</td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #fa709a;">
+                        <strong>Álgebra Lineal</strong>
+                        <small>11° B - Salón 202</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="schedule-class" style="border-left: 4px solid #4facfe;">
+                        <strong>Física Mecánica</strong>
+                        <small>10° A - Lab. Física</small>
+                      </div>
+                    </td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: RENDIMIENTO -->
+        <div class="tab-pane" id="performance">
+          <div class="performance-section">
+            <h3 class="section-title">Análisis de Rendimiento</h3>
+            
+            <div class="performance-overview">
+              <div class="performance-card">
+                <div class="performance-icon" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
+                  <i class="ri-star-fill"></i>
+                </div>
+                <div class="performance-info">
+                  <span class="performance-label">Evaluación General</span>
+                  <span class="performance-value grade-excellent">4.8/5.0</span>
+                  <p class="performance-desc">Excelente desempeño docente</p>
+                </div>
+              </div>
+
+              <div class="performance-card">
+                <div class="performance-icon" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
+                  <i class="ri-medal-line"></i>
+                </div>
+                <div class="performance-info">
+                  <span class="performance-label">Promedio Estudiantes</span>
+                  <span class="performance-value grade-excellent">4.3/5.0</span>
+                  <p class="performance-desc">Resultados sobresalientes</p>
+                </div>
+              </div>
+
+              <div class="performance-card">
+                <div class="performance-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);">
+                  <i class="ri-checkbox-circle-line"></i>
+                </div>
+                <div class="performance-info">
+                  <span class="performance-label">Cumplimiento</span>
+                  <span class="performance-value grade-excellent">96%</span>
+                  <p class="performance-desc">Plan de estudios</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-container">
+              <h4>Evolución del Rendimiento - Último Semestre</h4>
+              <div class="chart-placeholder">
+                <canvas id="performanceChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: EVALUACIONES -->
+        <div class="tab-pane" id="evaluations">
+          <div class="evaluations-section">
+            <h3 class="section-title">Evaluaciones Estudiantiles</h3>
+            
+            <div class="evaluation-summary">
+              <div class="evaluation-card">
+                <div class="evaluation-header">
+                  <h4>Período 2024-1</h4>
+                  <span class="badge-mini badge-success">Completado</span>
+                </div>
+                <div class="evaluation-stats">
+                  <div class="eval-stat">
+                    <i class="ri-user-line"></i>
+                    <div>
+                      <span>Participación</span>
+                      <strong>98%</strong>
+                    </div>
+                  </div>
+                  <div class="eval-stat">
+                    <i class="ri-star-line"></i>
+                    <div>
+                      <span>Calificación</span>
+                      <strong>4.7/5.0</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="evaluation-comments">
+                  <h5>Comentarios Destacados:</h5>
+                  <div class="comment-item">
+                    <i class="ri-chat-quote-line"></i>
+                    <p>"Excelente metodología de enseñanza, muy clara en sus explicaciones"</p>
+                  </div>
+                  <div class="comment-item">
+                    <i class="ri-chat-quote-line"></i>
+                    <p>"Siempre disponible para resolver dudas, muy comprometida"</p>
+                  </div>
+                  <div class="comment-item">
+                    <i class="ri-chat-quote-line"></i>
+                    <p>"Las clases son dinámicas y motivadoras"</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="evaluation-card">
+                <div class="evaluation-header">
+                  <h4>Período 2023-2</h4>
+                  <span class="badge-mini badge-success">Completado</span>
+                </div>
+                <div class="evaluation-stats">
+                  <div class="eval-stat">
+                    <i class="ri-user-line"></i>
+                    <div>
+                      <span>Participación</span>
+                      <strong>95%</strong>
+                    </div>
+                  </div>
+                  <div class="eval-stat">
+                    <i class="ri-star-line"></i>
+                    <div>
+                      <span>Calificación</span>
+                      <strong>4.6/5.0</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="evaluation-comments">
+                  <h5>Comentarios Destacados:</h5>
+                  <div class="comment-item">
+                    <i class="ri-chat-quote-line"></i>
+                    <p>"Domina muy bien los temas, explica con paciencia"</p>
+                  </div>
+                  <div class="comment-item">
+                    <i class="ri-chat-quote-line"></i>
+                    <p>"Utiliza ejemplos prácticos que facilitan el aprendizaje"</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="rightbar" id="rightSidebar">
+      <div class="user">
+        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
+        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
+        <div class="avatar" title="Diego A.">DA</div>
+      </div>
+
+      <div class="panel-title">Acciones Rápidas</div>
+      <div class="quick-actions">
+        <button class="quick-action-btn">
+          <i class="ri-calendar-line"></i>
+          <span>Ver Agenda</span>
+        </button>
+        <button class="quick-action-btn">
+          <i class="ri-file-text-line"></i>
+          <span>Generar Reporte</span>
+        </button>
+        <button class="quick-action-btn">
+          <i class="ri-mail-line"></i>
+          <span>Enviar Correo</span>
+        </button>
+        <button class="quick-action-btn">
+          <i class="ri-phone-line"></i>
+          <span>Contactar</span>
+        </button>
+      </div>
+
+      <div class="panel-title" style="margin-top: 24px;">Documentos</div>
+      <div class="documents-list">
+        <div class="document-item">
+          <i class="ri-file-pdf-line"></i>
+          <div>
+            <strong>CV Actualizado</strong>
+            <small>PDF - 2.4 MB</small>
+          </div>
+        </div>
+        <div class="document-item">
+          <i class="ri-file-pdf-line"></i>
+          <div>
+            <strong>Certificados</strong>
+            <small>PDF - 1.8 MB</small>
+          </div>
+        </div>
+        <div class="document-item">
+          <i class="ri-file-pdf-line"></i>
+          <div>
+            <strong>Plan de Estudios</strong>
+            <small>PDF - 3.2 MB</small>
+          </div>
+        </div>
+        <div class="document-item">
+          <i class="ri-file-pdf-line"></i>
+          <div>
+            <strong>Contrato Laboral</strong>
+            <small>PDF - 1.1 MB</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-title" style="margin-top: 24px;">Próximas Clases</div>
+      <div class="upcoming-classes">
+        <div class="class-item">
+          <div class="class-time">
+            <i class="ri-time-line"></i>
+            <span>7:00 AM</span>
+          </div>
+          <div class="class-info">
+            <strong>Matemáticas Avanzadas</strong>
+            <small>11° A - Salón 201</small>
+          </div>
+        </div>
+        <div class="class-item">
+          <div class="class-time">
+            <i class="ri-time-line"></i>
+            <span>8:00 AM</span>
+          </div>
+          <div class="class-info">
+            <strong>Matemáticas Básicas</strong>
+            <small>9° B - Salón 105</small>
+          </div>
+        </div>
+        <div class="class-item">
+          <div class="class-time">
+            <i class="ri-time-line"></i>
+            <span>10:30 AM</span>
+          </div>
+          <div class="class-info">
+            <strong>Álgebra Lineal</strong>
+            <small>11° B - Salón 202</small>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Bootstrap Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // Toggle Sidebars
+    document.getElementById('toggleLeft').addEventListener('click', function() {
+      document.getElementById('leftSidebar').classList.toggle('hidden');
+      document.getElementById('appGrid').classList.toggle('hide-left');
+    });
+
+    // Tabs Functionality
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tabId = button.getAttribute('data-tab');
+        
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabPanes.forEach(pane => pane.classList.remove('active'));
+        
+        button.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // Performance Chart
+    const ctx = document.getElementById('performanceChart');
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Promedio Estudiantes',
+            data: [4.1, 4.2, 4.3, 4.2, 4.4, 4.3],
+            borderColor: '#667eea',
+            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+            tension: 0.4,
+            fill: true
+          }, {
+            label: 'Evaluación Docente',
+            data: [4.6, 4.7, 4.6, 4.8, 4.7, 4.8],
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: '#e6e9f4',
+                font: {
+                  family: 'Poppins',
+                  size: 12
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 3.5,
+              max: 5.0,
+              ticks: {
+                color: '#97a1b6',
+                font: {
+                  family: 'Poppins'
+                }
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.08)'
+              }
+            },
+            x: {
+              ticks: {
+                color: '#97a1b6',
+                font: {
+                  family: 'Poppins'
+                }
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.08)'
+              }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
