@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIADEMY • Asistencia del Estudiante</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/dashboard/css/styles-acudiente.css">
+</head>
+<body>
+  <div class="app" id="appGrid">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="leftSidebar">
+      <a class="brand" href="#">
+        <span class="logo"><i class="ri-shield-star-line"></i></span>
+        <span>Siademy</span>
+      </a>
+      <nav class="nav">
+        <a href="index.html"><i class="ri-home-5-line"></i> Panel</a>
+        <a href="calificaciones.html"><i class="ri-file-text-line"></i> Calificaciones</a>
+        <a class="active" href="asistencia.html"><i class="ri-calendar-check-line"></i> Asistencia</a>
+     
+        
+        <div class="spacer"></div>
+      
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-btn" id="toggleLeft">
+            <i class="ri-menu-2-line"></i>
+          </button>
+          <div class="title">Control de Asistencia</div>
+        </div>
+        <button class="toggle-btn" id="toggleRight">
+          <i class="ri-layout-right-2-line"></i>
+        </button>
+      </div>
+
+      <!-- STUDENT BAR -->
+      <div class="student-bar">
+        <div class="student-quick-info">
+          <div class="student-avatar-small">JS</div>
+          <div>
+            <strong>Juan Sebastián Rodríguez</strong>
+            <small>Grado 7° A • ID: 1045823456</small>
+          </div>
+        </div>
+        <div class="period-selector">
+          <label>Periodo:</label>
+          <select>
+            <option>2° Periodo - 2025</option>
+            <option>1° Periodo - 2025</option>
+            <option>4° Periodo - 2024</option>
+            <option>3° Periodo - 2024</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SUMMARY CARDS -->
+      <section class="summary-cards">
+        <div class="summary-card">
+          <div class="summary-icon" style="background: rgba(34, 197, 94, .15); color: #4ade80;">
+            <i class="ri-calendar-check-fill"></i>
+          </div>
+          <div class="summary-content">
+            <small>Días Asistidos</small>
+            <strong>58</strong>
+            <span class="trend up"><i class="ri-arrow-up-line"></i> +2 esta semana</span>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon" style="background: rgba(239, 68, 68, .15); color: #f87171;">
+            <i class="ri-calendar-close-fill"></i>
+          </div>
+          <div class="summary-content">
+            <small>Inasistencias</small>
+            <strong>2</strong>
+            <span class="trend neutral"><i class="ri-subtract-line"></i> Sin cambios</span>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon" style="background: rgba(251, 191, 36, .15); color: #fbbf24;">
+            <i class="ri-time-line"></i>
+          </div>
+          <div class="summary-content">
+            <small>Retardos</small>
+            <strong>1</strong>
+            <span class="trend down"><i class="ri-arrow-down-line"></i> -1 esta semana</span>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon" style="background: rgba(99, 102, 241, .15); color: #a4b1ff;">
+            <i class="ri-percent-line"></i>
+          </div>
+          <div class="summary-content">
+            <small>Porcentaje</small>
+            <strong>96%</strong>
+            <span class="trend up"><i class="ri-arrow-up-line"></i> Excelente</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ATTENDANCE CHART -->
+      <section class="card">
+        <h3>Tendencia de Asistencia Mensual</h3>
+        <canvas id="attendanceChart"></canvas>
+      </section>
+
+      <!-- WEEKLY CALENDAR -->
+      <section class="card">
+        <h3>Asistencia Semanal (Oct 27 - Oct 31, 2025)</h3>
+        <div class="weekly-calendar">
+          <div class="day-column">
+            <div class="day-header">
+              <span class="day-name">Lun</span>
+              <span class="day-number">27</span>
+            </div>
+            <div class="attendance-item present">
+              <i class="ri-checkbox-circle-fill"></i>
+              <span>Presente</span>
+              <small>8:00 AM</small>
+            </div>
+          </div>
+
+          <div class="day-column">
+            <div class="day-header">
+              <span class="day-name">Mar</span>
+              <span class="day-number">28</span>
+            </div>
+            <div class="attendance-item present">
+              <i class="ri-checkbox-circle-fill"></i>
+              <span>Presente</span>
+              <small>8:05 AM</small>
+            </div>
+          </div>
+
+          <div class="day-column">
+            <div class="day-header">
+              <span class="day-name">Mié</span>
+              <span class="day-number">29</span>
+            </div>
+            <div class="attendance-item late">
+              <i class="ri-time-fill"></i>
+              <span>Retardo</span>
+              <small>8:20 AM</small>
+            </div>
+          </div>
+
+          <div class="day-column">
+            <div class="day-header">
+              <span class="day-name">Jue</span>
+              <span class="day-number">30</span>
+            </div>
+            <div class="attendance-item present">
+              <i class="ri-checkbox-circle-fill"></i>
+              <span>Presente</span>
+              <small>7:55 AM</small>
+            </div>
+          </div>
+
+          <div class="day-column">
+            <div class="day-header">
+              <span class="day-name">Vie</span>
+              <span class="day-number">31</span>
+            </div>
+            <div class="attendance-item present">
+              <i class="ri-checkbox-circle-fill"></i>
+              <span>Presente</span>
+              <small>8:02 AM</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DETAILED ATTENDANCE TABLE -->
+      <section class="card">
+        <h3>Registro Detallado de Asistencia</h3>
+        <table class="grades-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Día</th>
+              <th>Estado</th>
+              <th>Hora de Entrada</th>
+              <th>Observaciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>31 Oct 2025</strong></td>
+              <td>Viernes</td>
+              <td><span class="status-badge present"><i class="ri-checkbox-circle-fill"></i> Presente</span></td>
+              <td>8:02 AM</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>30 Oct 2025</strong></td>
+              <td>Jueves</td>
+              <td><span class="status-badge present"><i class="ri-checkbox-circle-fill"></i> Presente</span></td>
+              <td>7:55 AM</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>29 Oct 2025</strong></td>
+              <td>Miércoles</td>
+              <td><span class="status-badge late"><i class="ri-time-fill"></i> Retardo</span></td>
+              <td>8:20 AM</td>
+              <td>Transporte público retrasado</td>
+            </tr>
+            <tr>
+              <td><strong>28 Oct 2025</strong></td>
+              <td>Martes</td>
+              <td><span class="status-badge present"><i class="ri-checkbox-circle-fill"></i> Presente</span></td>
+              <td>8:05 AM</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>27 Oct 2025</strong></td>
+              <td>Lunes</td>
+              <td><span class="status-badge present"><i class="ri-checkbox-circle-fill"></i> Presente</span></td>
+              <td>8:00 AM</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>24 Oct 2025</strong></td>
+              <td>Viernes</td>
+              <td><span class="status-badge present"><i class="ri-checkbox-circle-fill"></i> Presente</span></td>
+              <td>8:03 AM</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>23 Oct 2025</strong></td>
+              <td>Jueves</td>
+              <td><span class="status-badge absent"><i class="ri-close-circle-fill"></i> Ausente</span></td>
+              <td>—</td>
+              <td>Cita médica justificada</td>
+            </tr>
+            <tr>
+              <td><strong>22 Oct 2025</strong></td>
+              <td>Miércoles</td>
+              <td><span class="status-badge present"><i class="ri-checkbox-circle-fill"></i> Presente</span></td>
+              <td>8:01 AM</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>21 Oct 2025</strong></td>
+              <td>Martes</td>
+              <td><span class="status-badge present"><i class="ri-checkbox-circle-fill"></i> Presente</span></td>
+              <td>7:58 AM</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>20 Oct 2025</strong></td>
+              <td>Lunes</td>
+              <td><span class="status-badge present"><i class="ri-checkbox-circle-fill"></i> Presente</span></td>
+              <td>8:00 AM</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ATTENDANCE BY SUBJECT -->
+      <section class="card">
+        <h3>Asistencia por Asignatura</h3>
+        <div class="subject-attendance-grid">
+          <div class="subject-attendance-card">
+            <div class="subject-att-header">
+              <i class="ri-calculator-line"></i>
+              <h4>Matemáticas</h4>
+            </div>
+            <div class="attendance-stats">
+              <div class="stat-circle excellent">
+                <span class="percentage">100%</span>
+              </div>
+              <div class="stat-details">
+                <div class="stat-row">
+                  <span>Clases totales:</span>
+                  <strong>24</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Asistió:</span>
+                  <strong style="color: #4ade80;">24</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Faltó:</span>
+                  <strong>0</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subject-attendance-card">
+            <div class="subject-att-header">
+              <i class="ri-book-open-line"></i>
+              <h4>Español</h4>
+            </div>
+            <div class="attendance-stats">
+              <div class="stat-circle excellent">
+                <span class="percentage">100%</span>
+              </div>
+              <div class="stat-details">
+                <div class="stat-row">
+                  <span>Clases totales:</span>
+                  <strong>20</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Asistió:</span>
+                  <strong style="color: #4ade80;">20</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Faltó:</span>
+                  <strong>0</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subject-attendance-card">
+            <div class="subject-att-header">
+              <i class="ri-global-line"></i>
+              <h4>Inglés</h4>
+            </div>
+            <div class="attendance-stats">
+              <div class="stat-circle good">
+                <span class="percentage">95%</span>
+              </div>
+              <div class="stat-details">
+                <div class="stat-row">
+                  <span>Clases totales:</span>
+                  <strong>20</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Asistió:</span>
+                  <strong style="color: #4ade80;">19</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Faltó:</span>
+                  <strong style="color: #f87171;">1</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subject-attendance-card">
+            <div class="subject-att-header">
+              <i class="ri-microscope-line"></i>
+              <h4>Ciencias</h4>
+            </div>
+            <div class="attendance-stats">
+              <div class="stat-circle excellent">
+                <span class="percentage">100%</span>
+              </div>
+              <div class="stat-details">
+                <div class="stat-row">
+                  <span>Clases totales:</span>
+                  <strong>18</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Asistió:</span>
+                  <strong style="color: #4ade80;">18</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Faltó:</span>
+                  <strong>0</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subject-attendance-card">
+            <div class="subject-att-header">
+              <i class="ri-earth-line"></i>
+              <h4>Sociales</h4>
+            </div>
+            <div class="attendance-stats">
+              <div class="stat-circle excellent">
+                <span class="percentage">100%</span>
+              </div>
+              <div class="stat-details">
+                <div class="stat-row">
+                  <span>Clases totales:</span>
+                  <strong>16</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Asistió:</span>
+                  <strong style="color: #4ade80;">16</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Faltó:</span>
+                  <strong>0</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subject-attendance-card">
+            <div class="subject-att-header">
+              <i class="ri-run-line"></i>
+              <h4>Ed. Física</h4>
+            </div>
+            <div class="attendance-stats">
+              <div class="stat-circle good">
+                <span class="percentage">94%</span>
+              </div>
+              <div class="stat-details">
+                <div class="stat-row">
+                  <span>Clases totales:</span>
+                  <strong>16</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Asistió:</span>
+                  <strong style="color: #4ade80;">15</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Faltó:</span>
+                  <strong style="color: #f87171;">1</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="rightbar" id="rightSidebar">
+      <div class="user">
+        <button class="btn"><i class="ri-notification-3-line"></i></button>
+        <button class="btn"><i class="ri-settings-3-line"></i></button>
+        <div class="avatar">MR</div>
+      </div>
+
+      <div class="panel-title">Resumen del Mes</div>
+      <p class="muted">Octubre 2025</p>
+
+      <div class="stat-item">
+        <span>Total de días hábiles</span>
+        <strong>22</strong>
+      </div>
+      <div class="stat-item">
+        <span>Días asistidos</span>
+        <strong style="color: #4ade80;">21</strong>
+      </div>
+      <div class="stat-item">
+        <span>Inasistencias</span>
+        <strong style="color: #f87171;">1</strong>
+      </div>
+      <div class="stat-item">
+        <span>Retardos</span>
+        <strong style="color: #fbbf24;">1</strong>
+      </div>
+
+      <div class="panel-title" style="margin-top:20px">Información</div>
+      <p class="muted">Horarios y políticas</p>
+
+      <div class="info-box">
+        <i class="ri-time-line"></i>
+        <div>
+          <strong>Hora de entrada</strong>
+          <small>8:00 AM - 8:15 AM</small>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="ri-alarm-warning-line"></i>
+        <div>
+          <strong>Retardo</strong>
+          <small>Después de 8:15 AM</small>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="ri-file-text-line"></i>
+        <div>
+          <strong>Justificación</strong>
+          <small>Requerida para ausencias</small>
+        </div>
+      </div>
+
+      <div class="panel-title" style="margin-top:20px">Acciones Rápidas</div>
+
+      <button class="quick-action">
+        <i class="ri-file-add-line"></i>
+        Justificar Ausencia
+      </button>
+
+      <button class="quick-action">
+        <i class="ri-download-line"></i>
+        Descargar Reporte
+      </button>
+
+      <button class="quick-action">
+        <i class="ri-calendar-line"></i>
+        Ver Calendario
+      </button>
+    </aside>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script>
+    // Toggle sidebars
+    const app = document.getElementById('appGrid');
+    const toggleLeft = document.getElementById('toggleLeft');
+    const toggleRight = document.getElementById('toggleRight');
+    const leftSidebar = document.getElementById('leftSidebar');
+    const rightSidebar = document.getElementById('rightSidebar');
+
+    toggleLeft.addEventListener('click', () => {
+      leftSidebar.classList.toggle('hidden');
+      app.classList.toggle('hide-left');
+    });
+
+    toggleRight.addEventListener('click', () => {
+      rightSidebar.classList.toggle('hidden');
+      app.classList.toggle('hide-right');
+    });
+
+    // Attendance Chart
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Agosto', 'Septiembre', 'Octubre'],
+        datasets: [
+          {
+            label: 'Porcentaje de Asistencia',
+            data: [94, 97, 96],
+            borderColor: '#4ade80',
+            backgroundColor: 'rgba(74, 222, 128, 0.1)',
+            tension: 0.4,
+            fill: true,
+            pointRadius: 6,
+            pointHoverRadius: 8
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            labels: { color: '#e6e9f4', font: { size: 13 } }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: { color: '#97a1b6', callback: value => value + '%' },
+            grid: { color: 'rgba(255, 255, 255, 0.06)' }
+          },
+          x: {
+            ticks: { color: '#97a1b6' },
+            grid: { color: 'rgba(255, 255, 255, 0.06)' }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

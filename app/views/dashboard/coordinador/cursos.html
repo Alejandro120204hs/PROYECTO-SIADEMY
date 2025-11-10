@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIADEMY • Gestión de Cursos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/dashboard/css/styles-admin.css">
+ 
+</head>
+
+<body>
+  <div class="app" id="appGrid">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="leftSidebar">
+      <a class="brand" href="#">
+        <span class="logo"><i class="ri-shield-star-line"></i></span>
+        <span>Siademy</span>
+      </a>
+     <nav class="nav">
+        <a href="admin.html"><i class="ri-home-5-line"></i> Panel</a>
+        <a href="panel-estudiantes.html"><i class="ri-team-line"></i> Estudiantes</a>
+        <a href="panel-profesores.html"><i class="ri-user-3-line"></i> Profesores</a>
+        <a href="eventos.html"><i class="ri-calendar-event-line"></i> Eventos</a>
+        
+        <div class="spacer"></div>
+        <div class="section">Cursos / Asignaturas</div>
+         <a class="active"  href="cursos.html"><i class="ri-book-2-line"></i> Cursos</a>
+        <a href="asignaturas.html"><i class="ri-booklet-line"></i> Asignaturas</a>
+
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
+            <i class="ri-menu-2-line"></i>
+          </button>
+          <div class="title">Gestión de Cursos</div>
+        </div>
+        <div class="search">
+          <i class="ri-search-2-line"></i>
+          <input type="text" placeholder="Buscar curso, profesor o materia...">
+        </div>
+        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
+          <i class="ri-layout-right-2-line"></i>
+        </button>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="kpis">
+        <div class="kpi">
+          <div class="icon"><i class="ri-book-3-line"></i></div>
+          <div>
+            <small>Total Cursos</small>
+            <strong>24</strong>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="icon"><i class="ri-group-line"></i></div>
+          <div>
+            <small>Total Estudiantes</small>
+            <strong>842</strong>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="icon"><i class="ri-user-star-line"></i></div>
+          <div>
+            <small>Profesores Activos</small>
+            <strong>38</strong>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="icon"><i class="ri-alarm-warning-line"></i></div>
+          <div>
+            <small>Alertas Activas</small>
+            <strong>12</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTER SECTION -->
+     
+
+      <!-- COURSES GRID -->
+      <section class="courses-section">
+        <div class="courses-header">
+          <h3>Cursos Activos (24)</h3>
+          <div class="view-toggle">
+            <button class="view-btn active" data-view="grid"><i class="ri-grid-line"></i></button>
+            <button class="view-btn" data-view="list"><i class="ri-list-check"></i></button>
+          </div>
+        </div>
+
+        <div class="courses-grid">
+          <!-- Course Card 1 -->
+          <div class="course-card">
+            <div class="course-header">
+              <div class="course-badge" style="background: #4f46e5;">7A</div>
+              <div class="course-status status-success">Activo</div>
+            </div>
+            <h4>Matemáticas Avanzadas</h4>
+            <p class="course-subtitle">Álgebra y Geometría</p>
+            
+            <div class="course-stats">
+              <div class="stat">
+                <i class="ri-group-line"></i>
+                <span>35 estudiantes</span>
+              </div>
+              <div class="stat">
+                <i class="ri-user-line"></i>
+                <span>Prof. Carlos Méndez</span>
+              </div>
+            </div>
+
+            <div class="course-performance">
+              <div class="performance-label">
+                <span>Promedio General</span>
+                <strong class="grade-good">4.2</strong>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 84%; background: #10b981;"></div>
+              </div>
+            </div>
+
+            <div class="course-alerts">
+              <div class="alert-item">
+                <i class="ri-error-warning-line"></i>
+                <span>3 estudiantes en riesgo</span>
+              </div>
+            </div>
+
+            <div class="course-actions">
+              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
+              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
+            </div>
+          </div>
+
+          <!-- Course Card 2 -->
+          <div class="course-card">
+            <div class="course-header">
+              <div class="course-badge" style="background: #7c3aed;">7B</div>
+              <div class="course-status status-warning">En Riesgo</div>
+            </div>
+            <h4>Física Mecánica</h4>
+            <p class="course-subtitle">Cinemática y Dinámica</p>
+            
+            <div class="course-stats">
+              <div class="stat">
+                <i class="ri-group-line"></i>
+                <span>32 estudiantes</span>
+              </div>
+              <div class="stat">
+                <i class="ri-user-line"></i>
+                <span>Prof. Ana Rodríguez</span>
+              </div>
+            </div>
+
+            <div class="course-performance">
+              <div class="performance-label">
+                <span>Promedio General</span>
+                <strong class="grade-warning">3.1</strong>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 62%; background: #f59e0b;"></div>
+              </div>
+            </div>
+
+            <div class="course-alerts">
+              <div class="alert-item alert-critical">
+                <i class="ri-alert-line"></i>
+                <span>8 estudiantes en riesgo</span>
+              </div>
+            </div>
+
+            <div class="course-actions">
+              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
+              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
+            </div>
+          </div>
+
+          <!-- Course Card 3 -->
+          <div class="course-card">
+            <div class="course-header">
+              <div class="course-badge" style="background: #06b6d4;">8A</div>
+              <div class="course-status status-success">Activo</div>
+            </div>
+            <h4>Química Orgánica</h4>
+            <p class="course-subtitle">Compuestos y Reacciones</p>
+            
+            <div class="course-stats">
+              <div class="stat">
+                <i class="ri-group-line"></i>
+                <span>38 estudiantes</span>
+              </div>
+              <div class="stat">
+                <i class="ri-user-line"></i>
+                <span>Prof. Luis Torres</span>
+              </div>
+            </div>
+
+            <div class="course-performance">
+              <div class="performance-label">
+                <span>Promedio General</span>
+                <strong class="grade-good">3.9</strong>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 78%; background: #10b981;"></div>
+              </div>
+            </div>
+
+            <div class="course-alerts">
+              <div class="alert-item">
+                <i class="ri-error-warning-line"></i>
+                <span>2 estudiantes en riesgo</span>
+              </div>
+            </div>
+
+            <div class="course-actions">
+              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
+              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
+            </div>
+          </div>
+
+          <!-- Course Card 4 -->
+          <div class="course-card">
+            <div class="course-header">
+              <div class="course-badge" style="background: #f59e0b;">9A</div>
+              <div class="course-status status-danger">Crítico</div>
+            </div>
+            <h4>Programación Java</h4>
+            <p class="course-subtitle">POO y Estructuras de Datos</p>
+            
+            <div class="course-stats">
+              <div class="stat">
+                <i class="ri-group-line"></i>
+                <span>28 estudiantes</span>
+              </div>
+              <div class="stat">
+                <i class="ri-user-line"></i>
+                <span>Prof. Diego Álvarez</span>
+              </div>
+            </div>
+
+            <div class="course-performance">
+              <div class="performance-label">
+                <span>Promedio General</span>
+                <strong class="grade-danger">2.7</strong>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 54%; background: #ef4444;"></div>
+              </div>
+            </div>
+
+            <div class="course-alerts">
+              <div class="alert-item alert-critical">
+                <i class="ri-alert-line"></i>
+                <span>12 estudiantes en riesgo</span>
+              </div>
+            </div>
+
+            <div class="course-actions">
+              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
+              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
+            </div>
+          </div>
+
+          <!-- Course Card 5 -->
+          <div class="course-card">
+            <div class="course-header">
+              <div class="course-badge" style="background: #ec4899;">10A</div>
+              <div class="course-status status-success">Activo</div>
+            </div>
+            <h4>Literatura Universal</h4>
+            <p class="course-subtitle">Siglo XX y Contemporánea</p>
+            
+            <div class="course-stats">
+              <div class="stat">
+                <i class="ri-group-line"></i>
+                <span>30 estudiantes</span>
+              </div>
+              <div class="stat">
+                <i class="ri-user-line"></i>
+                <span>Prof. María González</span>
+              </div>
+            </div>
+
+            <div class="course-performance">
+              <div class="performance-label">
+                <span>Promedio General</span>
+                <strong class="grade-excellent">4.5</strong>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 90%; background: #10b981;"></div>
+              </div>
+            </div>
+
+            <div class="course-alerts">
+              <div class="alert-item alert-success">
+                <i class="ri-checkbox-circle-line"></i>
+                <span>Sin alertas</span>
+              </div>
+            </div>
+
+            <div class="course-actions">
+              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
+              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
+            </div>
+          </div>
+
+          <!-- Course Card 6 -->
+          <div class="course-card">
+            <div class="course-header">
+              <div class="course-badge" style="background: #14b8a6;">11A</div>
+              <div class="course-status status-success">Activo</div>
+            </div>
+            <h4>Inglés Avanzado</h4>
+            <p class="course-subtitle">Nivel B2 - Upper Intermediate</p>
+            
+            <div class="course-stats">
+              <div class="stat">
+                <i class="ri-group-line"></i>
+                <span>26 estudiantes</span>
+              </div>
+              <div class="stat">
+                <i class="ri-user-line"></i>
+                <span>Prof. Patricia Gómez</span>
+              </div>
+            </div>
+
+            <div class="course-performance">
+              <div class="performance-label">
+                <span>Promedio General</span>
+                <strong class="grade-good">4.1</strong>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 82%; background: #10b981;"></div>
+              </div>
+            </div>
+
+            <div class="course-alerts">
+              <div class="alert-item">
+                <i class="ri-error-warning-line"></i>
+                <span>1 estudiante en riesgo</span>
+              </div>
+            </div>
+
+            <div class="course-actions">
+              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
+              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="rightbar" id="rightSidebar">
+      <div class="user">
+        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
+        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
+        <div class="avatar" title="Diego A.">DA</div>
+      </div>
+
+      <div class="panel-title">Cursos Recientes</div>
+      <p class="muted">Tienes 12 cursos</p>
+      <div class="course-list">
+        <div class="course">
+          <div class="dot">A</div>
+          <div><strong>Curso 1</strong><small>Clase VII A</small></div><i class="ri-information-line" style="margin-left:auto;color:#94a3b8"></i>
+        </div>
+        <div class="course">
+          <div class="dot">B</div>
+          <div><strong>Curso 2</strong><small>Clase VII A</small></div><i class="ri-information-line" style="margin-left:auto;color:#94a3b8"></i>
+        </div>
+        <div class="course">
+          <div class="dot">C</div>
+          <div><strong>Curso 3</strong><small>Clase VII A</small></div><i class="ri-information-line" style="margin-left:auto;color:#94a3b8"></i>
+        </div>
+        <div class="course">
+          <div class="dot">D</div>
+          <div><strong>Curso 4</strong><small>Clase VII B</small></div><i class="ri-information-line" style="margin-left:auto;color:#94a3b8"></i>
+        </div>
+        <div class="course">
+          <div class="dot">E</div>
+          <div><strong>Curso 5</strong><small>Clase VII B</small></div><i class="ri-information-line" style="margin-left:auto;color:#94a3b8"></i>
+        </div>
+      </div>
+      <a href="#" class="btn-primary">Ver más</a>
+
+      <div class="panel-title" style="margin-top:18px">Mensajes</div>
+
+      <div class="msg">
+        <div class="avatar">S</div>
+        <div>
+          <strong>Samantha William</strong>
+          <div class="muted">Profesora • &nbsp;Nuevo material para la clase de mañana...</div>
+        </div>
+        <span class="time">12:45 PM</span>
+      </div>
+      <div class="msg">
+        <div class="avatar">J</div>
+        <div>
+          <strong>Juan Pérez</strong>
+          <div class="muted">Estudiante • &nbsp;Profe, ¿puede revisar mi actividad?</div>
+        </div>
+        <span class="time">12:10 PM</span>
+      </div>
+
+      <!-- EVENTS SECTION -->
+      <div class="events-section">
+        <div class="panel-title">Próximos Eventos</div>
+        <p class="muted">Eventos académicos programados</p>
+
+        <div class="event-item">
+          <div class="event-date">
+            <span class="day">28</span>
+            <span class="month">Oct</span>
+          </div>
+          <div class="event-content">
+            <h4>Reunión de Padres</h4>
+            <p>Reunión general para padres de familia del grado 7°</p>
+            <div class="event-time">📅 2:00 PM - 4:00 PM</div>
+          </div>
+        </div>
+
+        <div class="event-item">
+          <div class="event-date">
+            <span class="day">30</span>
+            <span class="month">Oct</span>
+          </div>
+          <div class="event-content">
+            <h4>Examen de Matemáticas</h4>
+            <p>Evaluación final del segundo período académico</p>
+            <div class="event-time">📚 8:00 AM - 10:00 AM</div>
+          </div>
+        </div>
+
+        <div class="event-item">
+          <div class="event-date">
+            <span class="day">02</span>
+            <span class="month">Nov</span>
+          </div>
+          <div class="event-content">
+            <h4>Festival Cultural</h4>
+            <p>Presentación de obras teatrales y danzas típicas</p>
+            <div class="event-time">🎭 9:00 AM - 12:00 PM</div>
+          </div>
+        </div>
+
+        <div class="event-item">
+          <div class="event-date">
+            <span class="day">05</span>
+            <span class="month">Nov</span>
+          </div>
+          <div class="event-content">
+            <h4>Día del Deporte</h4>
+            <p>Competencias deportivas inter-cursos</p>
+            <div class="event-time">⚽ 7:00 AM - 3:00 PM</div>
+          </div>
+        </div>
+
+        <div class="event-item">
+          <div class="event-date">
+            <span class="day">10</span>
+            <span class="month">Nov</span>
+          </div>
+          <div class="event-content">
+            <h4>Feria de Ciencias</h4>
+            <p>Exposición de proyectos científicos estudiantiles</p>
+            <div class="event-time">🔬 1:00 PM - 5:00 PM</div>
+          </div>
+        </div>
+
+        <a href="#" class="btn-primary">Ver todos los eventos</a>
+      </div>
+    </aside>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/dashboard/js/main-estudiante.js"></script>
+  <script>
+    // Toggle view grid/list
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const view = this.dataset.view;
+        const grid = document.querySelector('.courses-grid');
+        if (view === 'list') {
+          grid.style.gridTemplateColumns = '1fr';
+        } else {
+          grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(340px, 1fr))';
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
