@@ -17,7 +17,7 @@
             </div>
             <div class="login-box">
                 <h2>Iniciar Sesión</h2>
-                <form action="iniciarSesion" method="POST">
+                <form action="iniciar-sesion" method="POST">
                     <div class="input-group">
                         <i class="bi bi-person-fill"></i>
                         <input type="text" placeholder="Correo" required name="correo">

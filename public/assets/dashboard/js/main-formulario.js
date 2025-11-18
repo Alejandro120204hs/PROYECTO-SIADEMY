@@ -104,7 +104,3 @@ function prevStep() {
     showStep(currentStep);
 }
 
-document.getElementById("formWizard").addEventListener("submit", function (e) {
-    e.preventDefault();
-    alert("Estudiante agregado con éxito");
-});

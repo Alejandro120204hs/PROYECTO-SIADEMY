@@ -28,6 +28,7 @@ body {
     font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu;
     color: #fff;
     background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    overflow-x: hidden;
 }
 
 a {
@@ -2848,5 +2849,641 @@ canvas {
     .schedule-class {
         padding: 8px;
         min-height: 50px;
+    }
+}
+
+
+/* ========================================
+   ESTILOS PARA DETALLE DEL ACUDIENTE
+   Agregar al final de styles-admin.css
+   ======================================== */
+
+/* GUARDIAN PROFILE HEADER */
+.guardian-profile-header {
+    background: #11193a;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+/* GUARDIAN STUDENTS SECTION */
+.guardian-students-section {
+    background: #11193a;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+.students-grid-guardian {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 20px;
+}
+
+.student-card-guardian {
+    background: #171a28;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.student-card-guardian:hover {
+    border-color: rgba(102, 126, 234, .3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+    transform: translateY(-2px);
+}
+
+.student-header-guardian {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.student-avatar-guardian {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+}
+
+.student-main-info h4 {
+    margin: 0 0 6px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.student-grade {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    color: #97a1b6;
+}
+
+.student-performance-guardian {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.performance-item-guardian {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #0e142e;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.performance-item-guardian i {
+    font-size: 24px;
+    color: #6366f1;
+    flex-shrink: 0;
+}
+
+.performance-item-guardian .perf-label {
+    display: block;
+    font-size: 12px;
+    color: #97a1b6;
+    margin-bottom: 2px;
+}
+
+.performance-item-guardian strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.student-alerts-guardian {
+    margin-bottom: 16px;
+}
+
+.student-actions-guardian {
+    display: flex;
+    gap: 8px;
+}
+
+/* COMMUNICATION SECTION */
+.communication-section {
+    background: #11193a;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+.communication-timeline {
+    margin-top: 24px;
+    position: relative;
+    padding-left: 40px;
+}
+
+.communication-timeline::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, #4f46e5, transparent);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 32px;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -40px;
+    top: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 0 0 4px #11193a, 0 4px 12px rgba(0, 0, 0, .3);
+}
+
+.timeline-content {
+    background: #171a28;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.timeline-header strong {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.timeline-date {
+    font-size: 12px;
+    color: #97a1b6;
+}
+
+.timeline-text {
+    margin: 0 0 14px 0;
+    font-size: 14px;
+    color: #c8cede;
+    line-height: 1.6;
+}
+
+.timeline-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-timeline {
+    padding: 8px 14px;
+    background: #0e142e;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: #e6e9f4;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.btn-timeline:hover {
+    background: #1d2340;
+    border-color: #4f46e5;
+    color: #fff;
+}
+
+.btn-timeline i {
+    font-size: 16px;
+}
+
+/* MEETINGS SECTION */
+.meetings-section {
+    background: #11193a;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+.meetings-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.meeting-stat-card {
+    background: #171a28;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.meeting-stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+}
+
+.meeting-stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.meeting-stat-label {
+    font-size: 12px;
+    color: #97a1b6;
+    margin-bottom: 4px;
+}
+
+.meeting-stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.meetings-list {
+    margin-top: 32px;
+}
+
+.meeting-item {
+    background: #171a28;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+}
+
+.meeting-item:hover {
+    border-color: rgba(102, 126, 234, .3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .2);
+}
+
+.meeting-item.upcoming {
+    border-left: 4px solid #4f46e5;
+}
+
+.meeting-item.past {
+    opacity: 0.85;
+}
+
+.meeting-item.past.attended {
+    border-left: 4px solid #10b981;
+}
+
+.meeting-item.past.missed {
+    border-left: 4px solid #ef4444;
+}
+
+.meeting-date-badge {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 70px;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, .3);
+}
+
+.meeting-date-badge.past {
+    background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+    box-shadow: 0 4px 12px rgba(107, 114, 128, .2);
+}
+
+.meeting-day {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+}
+
+.meeting-month {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, .8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+}
+
+.meeting-details {
+    flex: 1;
+}
+
+.meeting-details h5 {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.meeting-details p {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    color: #c8cede;
+    line-height: 1.4;
+}
+
+.meeting-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.meeting-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #97a1b6;
+}
+
+.meeting-meta i {
+    font-size: 14px;
+    color: #6366f1;
+}
+
+.meeting-status {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.meeting-status.attended {
+    background: rgba(16, 185, 129, .15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, .3);
+}
+
+.meeting-status.missed {
+    background: rgba(239, 68, 68, .15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, .3);
+}
+
+.meeting-actions {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+}
+
+.btn-meeting {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-confirm {
+    background: #4f46e5;
+    color: white;
+}
+
+.btn-confirm:hover {
+    background: #6366f1;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, .4);
+}
+
+.btn-calendar {
+    background: #0e142e;
+    color: #a4b1ff;
+    border: 1px solid var(--border);
+}
+
+.btn-calendar:hover {
+    background: #1d2340;
+    color: #fff;
+}
+
+/* SIDEBAR - AUTHORIZED LIST */
+.authorized-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.authorized-item {
+    background: #171a28;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.authorized-item.primary {
+    border-color: rgba(79, 70, 229, .3);
+    background: rgba(79, 70, 229, .05);
+}
+
+.authorized-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+}
+
+.authorized-item strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.authorized-item small {
+    display: block;
+    font-size: 12px;
+    color: #97a1b6;
+}
+
+/* SIDEBAR - REMINDERS LIST */
+.reminders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.reminder-item {
+    background: #171a28;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reminder-item.important {
+    border-color: rgba(245, 158, 11, .3);
+    background: rgba(245, 158, 11, .05);
+}
+
+.reminder-item i {
+    font-size: 22px;
+    color: #6366f1;
+    flex-shrink: 0;
+}
+
+.reminder-item.important i {
+    color: #f59e0b;
+}
+
+.reminder-item strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.reminder-item small {
+    display: block;
+    font-size: 11px;
+    color: #97a1b6;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+    .students-grid-guardian {
+        grid-template-columns: 1fr;
+    }
+    
+    .meetings-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 980px) {
+    .guardian-profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    
+    .profile-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    
+    .btn-profile-action {
+        flex: 1;
+    }
+    
+    .meetings-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .communication-timeline {
+        padding-left: 30px;
+    }
+    
+    .timeline-marker {
+        left: -30px;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+    
+    .communication-timeline::before {
+        left: 6px;
+    }
+}
+
+@media (max-width: 600px) {
+    .profile-main {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .profile-badges {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .meeting-item {
+        flex-direction: column;
+    }
+    
+    .meeting-date-badge {
+        align-self: flex-start;
+    }
+    
+    .meeting-actions {
+        flex-direction: row;
+        width: 100%;
+    }
+    
+    .btn-meeting {
+        flex: 1;
+    }
+    
+    .timeline-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
     }
 }

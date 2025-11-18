@@ -10,9 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/dashboard/css/styles-estudiante.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
 </head>
 
 <body>
@@ -23,62 +22,14 @@
         <span class="logo"><i class="ri-shield-star-line"></i></span>
         <span>Siademy</span>
       </a>
-<nav class="nav">
-  <a class="active" href="#">
-    <i class="ri-home-5-line"></i> Panel
-  </a>
-  
-  <a href="materias.html">
-    <i class="ri-book-2-line"></i> Mis Materias
-    <span class="badge">6</span> <!-- COUNT de estudiante_materia -->
-  </a>
-  
-  <a href="actividades.php">
-    <i class="ri-task-line"></i> Actividades
-    <span class="badge bg-warning">3</span> <!-- Pendientes -->
-  </a>
-  
-  <a href="calificaciones.php">
-    <i class="ri-bar-chart-line"></i> Calificaciones
-  </a>
-  
-  <a href="asistencia.php">
-    <i class="ri-calendar-check-line"></i> Asistencia
-    <span class="badge bg-success">92%</span>
-  </a>
-  
-  <div class="spacer"></div>
-  <div class="section">Académico</div>
-  
-  <a href="profesores.php">
-    <i class="ri-user-3-line"></i> Mis Profesores
-  </a>
-  
-  <a href="recursos.php">
-    <i class="ri-folder-2-line"></i> Recursos
-  </a>
-  
-  <a href="mensajes.php">
-    <i class="ri-message-3-line"></i> Mensajes
-    <span class="badge bg-danger">2</span> <!-- No leídos -->
-  </a>
-  
-  <a href="anuncios.php">
-    <i class="ri-megaphone-line"></i> Anuncios
-  </a>
-  
-  <div class="spacer"></div>
-  <div class="section">Seguimiento</div>
-  
-  <a href="progreso.php">
-    <i class="ri-line-chart-line"></i> Mi Progreso
-  </a>
-  
-  <a href="alertas.php">
-    <i class="ri-alert-line"></i> Alertas
-    <span class="badge bg-danger">2</span> <!-- Materias en riesgo -->
-  </a>
-</nav>
+      <nav class="nav">
+        <a class="active" href="#"><i class="ri-home-5-line"></i> Panel</a>
+        <a href="cursos.html"><i class="ri-team-line"></i> Cursos</a>
+          
+        <a href="eventos.html"><i class="ri-calendar-event-line"></i> Eventos</a>
+
+    
+      </nav>
     </aside>
 
     <!-- MAIN -->
@@ -98,36 +49,68 @@
           <i class="ri-layout-right-2-line"></i>
         </button>
       </div>
-      <!-- DATATABLE SECTION -->
-      <!-- DATATABLE: Materias con bajo rendimiento -->
+
+      <section class="kpis">
+        <div class="kpi">
+          <div class="icon"><i class="ri-user-3-line"></i></div>
+          <div>
+            <small>Estudiantes</small>
+            <strong>932</strong>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="icon"><i class="ri-user-2-line"></i></div>
+          <div>
+            <small>Acudientes</small>
+            <strong>754</strong>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="icon"><i class="ri-user-star-line"></i></div>
+          <div>
+            <small>Cursos</small>
+            <strong>40</strong>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="icon"><i class="ri-calendar-2-line"></i></div>
+          <div>
+            <small>Eventos</small>
+            <strong>32</strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- DATATABLE: Cursos Asignados -->
       <section class="datatable-card">
-        <h3>Mis Materias con Bajo Rendimiento</h3>
+        <h3>Mis Cursos Asignados</h3>
 
         <div class="table-responsive">
-          <table id="studentsTable" class="table table-dark table-hover align-middle" style="width:100%">
+          <table id="coursesTable" class="table table-dark table-hover align-middle" style="width:100%">
             <thead>
               <tr>
-                <th>Materia</th>
-                <th>Profesor</th>
-                <th>Nota Actual</th>
-                <th>Periodo</th>
-                <th class="text-center" style="width:100px">Estado</th>
+                <th>Curso/Materia</th>
+                <th>Grado</th>
+                <th>N° Estudiantes</th>
+                <th>Horario</th>
                 <th class="text-center" style="width:60px">Ver</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
-                  <strong>Matemáticas</strong>
-                  <small class="d-block text-muted">Álgebra y Geometría</small>
+                  <strong>Matemáticas Avanzadas</strong>
+                  <small class="d-block text-muted">Álgebra y Trigonometría</small>
                 </td>
-                <td>Prof. Carlos Méndez</td>
                 <td>
-                  <span class="badge bg-danger">2.8</span>
+                  <strong>10° A</strong>
                 </td>
-                <td>Segundo Periodo</td>
-                <td class="text-center">
-                  <span class="badge bg-warning">En Riesgo</span>
+                <td>
+                  <span class="badge bg-info">32 estudiantes</span>
+                </td>
+                <td>
+                  <small class="d-block">Lun - Mié - Vie</small>
+                  <small class="text-muted">8:00 AM - 9:30 AM</small>
                 </td>
                 <td class="text-center">
                   <button class="btn btn-sm btn-outline-light" title="Ver detalles">
@@ -138,16 +121,18 @@
 
               <tr>
                 <td>
-                  <strong>Física</strong>
+                  <strong>Física I</strong>
                   <small class="d-block text-muted">Mecánica Clásica</small>
                 </td>
-                <td>Prof. Ana Rodríguez</td>
                 <td>
-                  <span class="badge bg-danger">2.5</span>
+                  <strong>11° B</strong>
                 </td>
-                <td>Segundo Periodo</td>
-                <td class="text-center">
-                  <span class="badge bg-danger">Crítico</span>
+                <td>
+                  <span class="badge bg-info">28 estudiantes</span>
+                </td>
+                <td>
+                  <small class="d-block">Mar - Jue</small>
+                  <small class="text-muted">10:00 AM - 11:30 AM</small>
                 </td>
                 <td class="text-center">
                   <button class="btn btn-sm btn-outline-light" title="Ver detalles">
@@ -158,16 +143,18 @@
 
               <tr>
                 <td>
-                  <strong>Química</strong>
-                  <small class="d-block text-muted">Química Orgánica</small>
+                  <strong>Cálculo Diferencial</strong>
+                  <small class="d-block text-muted">Límites y Derivadas</small>
                 </td>
-                <td>Prof. Luis Torres</td>
                 <td>
-                  <span class="badge bg-warning text-dark">3.0</span>
+                  <strong>11° A</strong>
                 </td>
-                <td>Segundo Periodo</td>
-                <td class="text-center">
-                  <span class="badge bg-warning">En Riesgo</span>
+                <td>
+                  <span class="badge bg-info">30 estudiantes</span>
+                </td>
+                <td>
+                  <small class="d-block">Lun - Mié - Vie</small>
+                  <small class="text-muted">2:00 PM - 3:30 PM</small>
                 </td>
                 <td class="text-center">
                   <button class="btn btn-sm btn-outline-light" title="Ver detalles">
@@ -178,16 +165,18 @@
 
               <tr>
                 <td>
-                  <strong>Inglés</strong>
-                  <small class="d-block text-muted">Nivel Intermedio</small>
+                  <strong>Estadística</strong>
+                  <small class="d-block text-muted">Probabilidad y Análisis</small>
                 </td>
-                <td>Prof. Patricia Gómez</td>
                 <td>
-                  <span class="badge bg-warning text-dark">2.9</span>
+                  <strong>10° B</strong>
                 </td>
-                <td>Segundo Periodo</td>
-                <td class="text-center">
-                  <span class="badge bg-warning">En Riesgo</span>
+                <td>
+                  <span class="badge bg-info">29 estudiantes</span>
+                </td>
+                <td>
+                  <small class="d-block">Mar - Jue</small>
+                  <small class="text-muted">8:00 AM - 9:30 AM</small>
                 </td>
                 <td class="text-center">
                   <button class="btn btn-sm btn-outline-light" title="Ver detalles">
@@ -198,20 +187,146 @@
 
               <tr>
                 <td>
-                  <strong>Programación</strong>
-                  <small class="d-block text-muted">Java Avanzado</small>
+                  <strong>Geometría Analítica</strong>
+                  <small class="d-block text-muted">Vectores y Plano Cartesiano</small>
                 </td>
-                <td>Prof. Diego Álvarez</td>
                 <td>
-                  <span class="badge bg-danger">2.7</span>
+                  <strong>9° A</strong>
                 </td>
-                <td>Segundo Periodo</td>
-                <td class="text-center">
-                  <span class="badge bg-danger">Crítico</span>
+                <td>
+                  <span class="badge bg-info">35 estudiantes</span>
+                </td>
+                <td>
+                  <small class="d-block">Lun - Vie</small>
+                  <small class="text-muted">10:00 AM - 11:00 AM</small>
                 </td>
                 <td class="text-center">
                   <button class="btn btn-sm btn-outline-light" title="Ver detalles">
                     <i class="ri-eye-line"></i>
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Física II</strong>
+                  <small class="d-block text-muted">Electromagnetismo</small>
+                </td>
+                <td>
+                  <strong>11° C</strong>
+                </td>
+                <td>
+                  <span class="badge bg-info">27 estudiantes</span>
+                </td>
+                <td>
+                  <small class="d-block">Mié - Vie</small>
+                  <small class="text-muted">1:00 PM - 2:30 PM</small>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-light" title="Ver detalles">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- DATATABLE SECTION -->
+      <!-- DATATABLE: Estudiantes con bajo rendimiento -->
+      <section class="datatable-card">
+        <h3>Estudiantes con bajo rendimiento</h3>
+
+        <div class="table-responsive">
+          <table id="studentsTable" class="table table-dark table-hover align-middle" style="width:100%">
+            <thead>
+              <tr>
+                <th>Nombres</th>
+                <th>N° Documento</th>
+                <th style="min-width:140px">Curso</th>
+                <th>Asignaturas</th>
+                <th class="text-center" style="width:60px">Imprimir</th>
+                <th class="text-center" style="width:60px">Opc.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tony Soap</td>
+                <td><a href="#">ID 213423423</a></td>
+                <td>
+                  <small class="d-block text-muted">Clase</small>
+                  <strong>VII A</strong>
+                </td>
+                <td>Matemáticas</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-light" title="Imprimir">
+                    <i class="ri-printer-line"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-light" title="Más opciones">
+                    <i class="ri-more-2-fill"></i>
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Jordan Nico</td>
+                <td><a href="#">ID 852910385</a></td>
+                <td>
+                  <small class="d-block text-muted">Clase</small>
+                  <strong>VII A</strong>
+                </td>
+                <td>Castellano</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-light" title="Imprimir">
+                    <i class="ri-printer-line"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-light" title="Más opciones">
+                    <i class="ri-more-2-fill"></i>
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Karen Hope</td>
+                <td><a href="#">ID 43209847</a></td>
+                <td>
+                  <small class="d-block text-muted">Clase</small>
+                  <strong>VII A</strong>
+                </td>
+                <td>Inglés</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-light" title="Imprimir">
+                    <i class="ri-printer-line"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-light" title="Más opciones">
+                    <i class="ri-more-2-fill"></i>
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Nadila Adja</td>
+                <td><a href="#">ID 462390130</a></td>
+                <td>
+                  <small class="d-block text-muted">Clase</small>
+                  <strong>VII A</strong>
+                </td>
+                <td>Historia</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-light" title="Imprimir">
+                    <i class="ri-printer-line"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-light" title="Más opciones">
+                    <i class="ri-more-2-fill"></i>
                   </button>
                 </td>
               </tr>
@@ -368,7 +483,8 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="../../assets/dashboard/js/main-estudiante.js"></script>
+  <script src="../../assets/dashboard/js/main-docente.js"></script>
+
 </body>
 
 </html>

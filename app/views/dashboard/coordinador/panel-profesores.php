@@ -1,42 +1,25 @@
+<?php 
+  require_once BASE_PATH . '/app/helpers/session_coordinador.php';
+?>
 <!doctype html>
 <html lang="es">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SIADEMY • Estudiantes</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/dashboard/css/styles-panel-estudiantes.css">
+  <title>SIADEMY • Profesores</title>
+  <?php 
+    include_once __DIR__ . '/../../layouts/header_coordinador.php'
+  ?>
+  <link rel="stylesheet" href="public/assets/dashboard/css/styles-panel-estudiantes.css">
 
 </head>
-
 <body>
   <div class="app" id="appGrid">
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar" id="leftSidebar">
-      <a class="brand" href="#">
-        <span class="logo"><i class="ri-shield-star-line"></i></span>
-        <span>Siademy</span>
-      </a>
-      <nav class="nav">
-        <a  href="admin.html"><i class="ri-home-5-line"></i> Panel</a>
-        <a class="active" href="panel-estudiantes.html"><i class="ri-team-line"></i> Estudiantes</a>
-        <a href="panel-profesores.html"><i class="ri-user-3-line"></i> Profesores</a>
-        <a href="eventos.html"><i class="ri-calendar-event-line"></i> Eventos</a>
-     
-        <div class="spacer"></div>
-        <div class="section">Cursos / Asignaturas</div>
-         <a href="cursos.html"><i class="ri-book-2-line"></i> Cursos</a>
-        <a href="asignaturas.html"><i class="ri-booklet-line"></i> Asignaturas</a>
-
-      </nav>
-    </aside>
+    <?php 
+      include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'
+    ?>
+   
 
     <!-- MAIN -->
     <main class="main">
@@ -45,7 +28,7 @@
           <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
             <i class="ri-menu-2-line"></i>
           </button>
-          <div class="title">Estudiantes</div>
+          <div class="title">Profesores</div>
         </div>
         <div class="search">
           <i class="ri-search-2-line"></i>
@@ -53,8 +36,8 @@
         </div>
         
         <!-- Botón Agregar Estudiante -->
-        <button class="btn-agregar-estudiante" onclick="window.location.href='addStudent.html'">
-          <i class="ri-add-line"></i> Agregar Estudiante
+        <button class="btn-agregar-estudiante" onclick="window.location.href='coordinador/registrar-profesores'">
+          <i class="ri-add-line"></i> Agregar Profesor
         </button>
         
         <!-- Dropdown Más Nuevo -->
@@ -85,7 +68,7 @@
               <th>Nombre Pariente</th>
               <th>Ciudad</th>
               <th>Contactos</th>
-              <th>Grado</th>
+              <th>Materia</th>
               <th width="100">Acción</th>
             </tr>
           </thead>
@@ -112,7 +95,7 @@
               </td>
               <td>VII A</td>
               <td>
-                <button class="btn-action"><a href="detalle-estudiante.html">Ver</a></button>
+                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
                 <button class="btn-more"><i class="ri-more-2-fill"></i></button>
               </td>
             </tr>
@@ -138,7 +121,7 @@
               </td>
               <td>VII B</td>
               <td>
-                <button class="btn-action"><a href="detalle-estudiante.html">Ver</a></button>
+                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
                 <button class="btn-more"><i class="ri-more-2-fill"></i></button>
               </td>
             </tr>
@@ -164,7 +147,7 @@
               </td>
               <td>VII C</td>
               <td>
-                <button class="btn-action"><a href="detalle-estudiante.html">Ver</a></button>
+                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
                 <button class="btn-more"><i class="ri-more-2-fill"></i></button>
               </td>
             </tr>
@@ -190,7 +173,7 @@
               </td>
               <td>VII A</td>
               <td>
-                <button class="btn-action"><a href="detalle-estudiante.html">Ver</a></button>
+                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
                 <button class="btn-more"><i class="ri-more-2-fill"></i></button>
               </td>
             </tr>
@@ -216,7 +199,7 @@
               </td>
               <td>VII A</td>
               <td>
-                <button class="btn-action"><a href="detalle-estudiante.html">Ver</a></button>
+                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
                 <button class="btn-more"><i class="ri-more-2-fill"></i></button>
               </td>
             </tr>
@@ -242,7 +225,7 @@
               </td>
               <td>VII A</td>
               <td>
-                <button class="btn-action"><a href="detalle-estudiante.html">Ver</a></button>
+                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
                 <button class="btn-more"><i class="ri-more-2-fill"></i></button>
               </td>
             </tr>

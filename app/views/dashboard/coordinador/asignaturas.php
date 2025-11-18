@@ -5,34 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SIADEMY • Gestión de Asignaturas</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/dashboard/css/styles-admin.css">
+  <?php 
+    include_once __DIR__ . '/../../layouts/header_coordinador.php'
+  ?>
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
 </head>
 
 <body>
   <div class="app" id="appGrid">
     <!-- LEFT SIDEBAR -->
-    <aside class="sidebar" id="leftSidebar">
-      <a class="brand" href="#">
-        <span class="logo"><i class="ri-shield-star-line"></i></span>
-        <span>Siademy</span>
-      </a>
-      <nav class="nav">
-        <a href="admin.html"><i class="ri-home-5-line"></i> Panel</a>
-        <a href="panel-estudiantes.html"><i class="ri-team-line"></i> Estudiantes</a>
-        <a href="panel-profesores.html"><i class="ri-user-3-line"></i> Profesores</a>
-        <a href="eventos.html"><i class="ri-calendar-event-line"></i> Eventos</a>
-        
-        <div class="spacer"></div>
-        <div class="section">Cursos / Asignaturas</div>
-        <a href="cursos.html"><i class="ri-book-2-line"></i> Cursos</a>
-        <a class="active" href="asignaturas.html"><i class="ri-booklet-line"></i> Asignaturas</a>
-      </nav>
-    </aside>
+    <?php 
+      include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'
+    ?>
 
     <!-- MAIN -->
     <main class="main">
@@ -632,9 +616,10 @@
     </aside>
   </div>
 
+  <!-- FOOTER -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../../assets/dashboard/js/main-admin.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
 </body>
 
 </html>

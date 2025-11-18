@@ -1,3 +1,7 @@
+<?php 
+  require_once BASE_PATH . '/app/helpers/session_coordinador.php';
+?>
+
 <!doctype html>
 <html lang="es">
 
@@ -5,38 +9,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SIADEMY • Panel Principal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/dashboard/css/styles-admin.css">
+  <?php
+    include_once __DIR__ . '/../../layouts/header_coordinador.php'
+  ?>
+<link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
 
 </head>
 
 <body>
   <div class="app" id="appGrid">
     <!-- LEFT SIDEBAR -->
-    <aside class="sidebar" id="leftSidebar">
-      <a class="brand" href="#">
-        <span class="logo"><i class="ri-shield-star-line"></i></span>
-        <span>Siademy</span>
-      </a>
-      <nav class="nav">
-        <a class="active" href="admin.html"><i class="ri-home-5-line"></i> Panel</a>
-        <a href="panel-estudiantes.html"><i class="ri-team-line"></i> Estudiantes</a>
-        <a href="panel-profesores.html"><i class="ri-user-3-line"></i> Profesores</a>
-        <a href="eventos.html"><i class="ri-calendar-event-line"></i> Eventos</a>
-        
-        <div class="spacer"></div>
-        <div class="section">Cursos / Asignaturas</div>
-         <a href="cursos.html"><i class="ri-book-2-line"></i> Cursos</a>
-        <a href="asignaturas.html"><i class="ri-booklet-line"></i> Asignaturas</a>
-
-      </nav>
-    </aside>
+    <!-- AQUI VA EL INCLUDE DEL SIDEBAR LEFT -->
+     <?php
+      include_once __DIR__ . '/../../layouts/sidebar_coordinador.php';
+     ?>
 
     <!-- MAIN -->
     <main class="main">
@@ -221,129 +207,14 @@
     </main>
 
     <!-- RIGHT SIDEBAR -->
-    <aside class="rightbar" id="rightSidebar">
-      <div class="user">
-        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-        <div class="avatar" title="Diego A.">DA</div>
-      </div>
-
-      <div class="panel-title">Cursos Recientes</div>
-      <p class="muted">Tienes 12 cursos</p>
-      <div class="course-list">
-        <div class="course">
-          <div class="dot">A</div>
-          <div><strong>Curso 1</strong><small>Clase VII A</small></div><i class="ri-information-line" style="margin-left:auto;color:#94a3b8"></i>
-        </div>
-        <div class="course">
-          <div class="dot">B</div>
-          <div><strong>Curso 2</strong><small>Clase VII A</small></div><i class="ri-information-line" style="margin-left:auto;color:#94a3b8"></i>
-        </div>
-        <div class="course">
-          <div class="dot">C</div>
-          <div><strong>Curso 3</strong><small>Clase VII A</small></div><i class="ri-information-line" style="margin-left:auto;color:#94a3b8"></i>
-        </div>
-        <div class="course">
-          <div class="dot">D</div>
-          <div><strong>Curso 4</strong><small>Clase VII B</small></div><i class="ri-information-line" style="margin-left:auto;color:#94a3b8"></i>
-        </div>
-        <div class="course">
-          <div class="dot">E</div>
-          <div><strong>Curso 5</strong><small>Clase VII B</small></div><i class="ri-information-line" style="margin-left:auto;color:#94a3b8"></i>
-        </div>
-      </div>
-      <a href="#" class="btn-primary">Ver más</a>
-
-      <div class="panel-title" style="margin-top:18px">Mensajes</div>
-
-      <div class="msg">
-        <div class="avatar">S</div>
-        <div>
-          <strong>Samantha William</strong>
-          <div class="muted">Profesora • &nbsp;Nuevo material para la clase de mañana...</div>
-        </div>
-        <span class="time">12:45 PM</span>
-      </div>
-      <div class="msg">
-        <div class="avatar">J</div>
-        <div>
-          <strong>Juan Pérez</strong>
-          <div class="muted">Estudiante • &nbsp;Profe, ¿puede revisar mi actividad?</div>
-        </div>
-        <span class="time">12:10 PM</span>
-      </div>
-
-      <!-- EVENTS SECTION -->
-      <div class="events-section">
-        <div class="panel-title">Próximos Eventos</div>
-        <p class="muted">Eventos académicos programados</p>
-
-        <div class="event-item">
-          <div class="event-date">
-            <span class="day">28</span>
-            <span class="month">Oct</span>
-          </div>
-          <div class="event-content">
-            <h4>Reunión de Padres</h4>
-            <p>Reunión general para padres de familia del grado 7°</p>
-            <div class="event-time">📅 2:00 PM - 4:00 PM</div>
-          </div>
-        </div>
-
-        <div class="event-item">
-          <div class="event-date">
-            <span class="day">30</span>
-            <span class="month">Oct</span>
-          </div>
-          <div class="event-content">
-            <h4>Examen de Matemáticas</h4>
-            <p>Evaluación final del segundo período académico</p>
-            <div class="event-time">📚 8:00 AM - 10:00 AM</div>
-          </div>
-        </div>
-
-        <div class="event-item">
-          <div class="event-date">
-            <span class="day">02</span>
-            <span class="month">Nov</span>
-          </div>
-          <div class="event-content">
-            <h4>Festival Cultural</h4>
-            <p>Presentación de obras teatrales y danzas típicas</p>
-            <div class="event-time">🎭 9:00 AM - 12:00 PM</div>
-          </div>
-        </div>
-
-        <div class="event-item">
-          <div class="event-date">
-            <span class="day">05</span>
-            <span class="month">Nov</span>
-          </div>
-          <div class="event-content">
-            <h4>Día del Deporte</h4>
-            <p>Competencias deportivas inter-cursos</p>
-            <div class="event-time">⚽ 7:00 AM - 3:00 PM</div>
-          </div>
-        </div>
-
-        <div class="event-item">
-          <div class="event-date">
-            <span class="day">10</span>
-            <span class="month">Nov</span>
-          </div>
-          <div class="event-content">
-            <h4>Feria de Ciencias</h4>
-            <p>Exposición de proyectos científicos estudiantiles</p>
-            <div class="event-time">🔬 1:00 PM - 5:00 PM</div>
-          </div>
-        </div>
-
-        <a href="#" class="btn-primary">Ver todos los eventos</a>
-      </div>
-    </aside>
+    <!-- AQUI VA EL INCLUDE DEL SIDEBAR RIGHT -->
+     <?php
+      include_once __DIR__ . '/../../layouts/sidebar_right_coordinador.php';
+     ?>
+    
   </div>
 
-  <!-- Bootstrap and DataTables Scripts -->
+   <!-- Bootstrap and DataTables Scripts -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -351,8 +222,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
 
-  <script src="../../assets/dashboard/js/main-admin.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
 </body>
 
 
 </html>
+
+ 

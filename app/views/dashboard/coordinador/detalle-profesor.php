@@ -1,38 +1,9 @@
-<!doctype html>
-<html lang="es">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SIADEMY • Detalle Profesor</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/dashboard/css/styles-admin.css">
-</head>
+<!-- AQUI VA EL INCLUDE DEL HEADER -->
 
 <body>
   <div class="app" id="appGrid">
     <!-- LEFT SIDEBAR -->
-    <aside class="sidebar" id="leftSidebar">
-      <a class="brand" href="#">
-        <span class="logo"><i class="ri-shield-star-line"></i></span>
-        <span>Siademy</span>
-      </a>
-      <nav class="nav">
-        <a href="admin.html"><i class="ri-home-5-line"></i> Panel</a>
-        <a href="panel-estudiantes.html"><i class="ri-team-line"></i> Estudiantes</a>
-        <a class="active" href="panel-profesores.html"><i class="ri-user-3-line"></i> Profesores</a>
-        <a href="eventos.html"><i class="ri-calendar-event-line"></i> Eventos</a>
-
-        <div class="spacer"></div>
-        <div class="section">Cursos / Asignaturas</div>
-        <a href="cursos.html"><i class="ri-book-2-line"></i> Cursos</a>
-        <a href="asignaturas.html"><i class="ri-booklet-line"></i> Asignaturas</a>
-      </nav>
-    </aside>
+  
 
     <!-- MAIN -->
     <main class="main">

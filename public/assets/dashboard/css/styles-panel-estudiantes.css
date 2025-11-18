@@ -361,6 +361,19 @@
       vertical-align: middle;
     }
 
+    .table-dark td.acciones{
+      display: flex;
+      height: 48px;
+    }
+
+    .table-dark td.acciones button{
+      margin: 0 5px;
+    }
+
+    
+
+    
+
     .table tbody tr:hover {
       background: #1d2340;
     }

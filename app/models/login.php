@@ -20,9 +20,10 @@ require_once __DIR__ . '/../../config/database.php';
                 $resultado->bindParam(':correo', $correo);
                 $resultado->execute();
 
+                // OBTENEMOS EL USUARIO COMO ARREGLO ASOCIATIVO
                 $user = $resultado->fetch(PDO::FETCH_ASSOC);
 
-                // SI EL USUARIO NO ES ENCONTRADO O ESTA INCATIVIO
+                // VALIDAMOS SI EL USUARIO NO EXISTE O ESTA INACTIVO
                 if(!$user){
                     return['error' => 'Usuario no encontrado o inactivo'];
                 }
@@ -42,6 +43,7 @@ require_once __DIR__ . '/../../config/database.php';
                     
                 ];
             }catch(PDOException $e){
+                // CAPTURAMOS ERRORES Y LOS REGISTRAMOS EN EL LOG DEL SERVIDOR
                 error_log("Error en el modelo Login: " . $e->getMessage());
                 return ['error' => 'Error interno del servidor'];
             }
