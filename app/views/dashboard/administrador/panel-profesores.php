@@ -36,7 +36,7 @@
         </div>
         
         <!-- Botón Agregar Estudiante -->
-        <button class="btn-agregar-estudiante" onclick="window.location.href='coordinador/registrar-profesores'">
+        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-profesores'">
           <i class="ri-add-line"></i> Agregar Profesor
         </button>
         
