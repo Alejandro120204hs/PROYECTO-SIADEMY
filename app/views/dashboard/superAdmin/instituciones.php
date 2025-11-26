@@ -1,3 +1,14 @@
+<?php
+
+  // IMPORTAMOS LAS DEPENDENCIAS NECESARIAS
+  require_once BASE_PATH . '/app/controllers/superAdmin/instituciones.php';
+
+  // LLAMAMOS LA FUNCION ESPECIFICA
+  $datos = mostrarInstituciones();
+
+?>
+
+
 <!doctype html>
 <html lang="es">
 
@@ -34,9 +45,11 @@
         </div>
         
         <!-- Botón Agregar Estudiante -->
-        <button class="btn-agregar-estudiante" onclick="window.location.href='<?= BASE_URL ?>/superAdmin-agregar-escuelas'">
+        <button class="btn-agregar-estudiante" onclick="window.location.href='<?= BASE_URL ?>/superAdmin-agregar-instituciones'">
           <i class="ri-add-line"></i> Agregar Escuela
         </button>
+          <a class="btn-pdf" href="<?= BASE_URL ?>/superAdmin-reporte?reporte=instituciones" target="_blank">Generar PDF</a>
+        
         
         <!-- Dropdown Más Nuevo -->
         <div class="dropdown-custom">
@@ -56,10 +69,12 @@
       <div class="datatable-card">
         <table id="tablaEstudiantes" class="table table-dark table-hover">
           <thead>
+            
             <tr>
               <th width="40">
                 <input type="checkbox" class="form-check-input" id="selectAll">
               </th>
+              
               <th>Nombre</th>
               <th>Direccion</th>
               <th>Telefono</th>
@@ -71,34 +86,32 @@
             </tr>
           </thead>
           <tbody>
+            <?php if(!empty($datos)): ?>
+            <?php foreach($datos as $institucion): ?>
             <tr>
               <td>
                 <input type="checkbox" class="form-check-input row-checkbox">
               </td>
-              <td>
-                <div class="student-info">
-                  <div class="student-avatar" style="background: #9b59b6;">SW</div>
-                  <span class="student-name">Samanta William</span>
-                </div>
-              </td>
-              <td>#463436465</td>
-              <td>28 de marzo de 2016</td>
-              <td>Maria William</td>
-              <td>Jatarta</td>
-              <td>
-                <div class="contacts">
-                  <i class="ri-phone-line"></i>
-                  <i class="ri-mail-line"></i>
-                </div>
-              </td>
-              <td>VII A</td>
+              <td><?= $institucion['nombre'] ?></td>
+              <td><?= $institucion['direccion'] ?></td>
+              <td><?= $institucion['telefono'] ?></td>
+              <td><?= $institucion['correo'] ?></td>
+              <td><?= $institucion['estado'] ?></td>
+              <td><?= $institucion['tipo'] ?></td>
+              <td><?= $institucion['jornada'] ?></td>
               <td class="acciones">
-                <button class="btn-action"><a href="detalle-estudiante.html">Ver</a></button>
-                <button class="btn-action"><a href="#">Editar</a></button>
-                <button class="btn-action"><a href="#"><i class="bi bi-trash3-fill"></i></a></button>
+        
+                <button class="btn-action"><a href="<?= BASE_URL ?>/superAdmin-editar-institucion?id=<?= $institucion['id'] ?>">Editar</a></button>
+                <button class="btn-action"><a href="<?= BASE_URL ?>/superAdmin-eliminar-institucion?accion=eliminar&id=<?= $institucion['id'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
               </td>
             </tr>
-           
+
+            <?php endforeach; ?>
+            <?php else: ?>
+           <tr>
+            <td>No hay instituciones registradas</td>
+           </tr>
+           <?php endif; ?>
            
           </tbody>
         </table>

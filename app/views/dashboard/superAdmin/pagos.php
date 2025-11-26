@@ -60,39 +60,41 @@
         </div>
       </div>
 
-        <!-- Filtros -->
+    <!-- Filtros -->
     <div class="filters-grid">
-    <div class="filter-group">
+      <div class="filter-group">
         <label>Estado de Pago</label>
         <select class="form-select">
-        <option>Todos los estados</option>
-        <option>Pagado</option>
-        <option>Pendiente</option>
-        <option>Vencido</option>
-        <option>Rechazado</option>
+          <option>Todos los estados</option>
+          <option>Pagado</option>
+          <option>Pendiente</option>
+          <option>Vencido</option>
+          <option>Rechazado</option>
         </select>
-    </div>
-    <div class="filter-group">
+      </div>
+      <div class="filter-group">
         <label>Plan</label>
-        <select class="form-select">
-        <option>Todos los planes</option>
-        <option>Premium</option>
-        <option>Básico</option>
+        <select class="form-select" id="planFilter">
+          <option>Todas las periodicidades</option>
+          <option>Mensual</option>
+          <option>Trimestral</option>
+          <option>Semestral</option>
+          <option>Anual</option>
         </select>
-    </div>
-    <div class="filter-group">
+      </div>
+      <div class="filter-group">
         <label>Fecha</label>
         <select class="form-select">
-        <option>Últimos 30 días</option>
-        <option>Este mes</option>
-        <option>Mes anterior</option>
-        <option>Personalizado</option>
+          <option>Últimos 30 días</option>
+          <option>Este mes</option>
+          <option>Mes anterior</option>
+          <option>Personalizado</option>
         </select>
-    </div>
-    <button class="filter-btn">
+      </div>
+      <button class="filter-btn">
         <i class="ri-filter-line"></i>
         <span>Aplicar Filtros</span>
-    </button>
+      </button>
     </div>
       
 
@@ -129,131 +131,132 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <strong>REF-001-2024</strong>
-                  <div class="muted">Colegio San José</div>
-                </td>
-                <td>Colegio San José</td>
-                <td><span class="badge bg-primary">Premium</span></td>
-                <td>2024-10-15</td>
-                <td>2024-11-15</td>
-                <td>
-                  <div class="amount">$2,500</div>
-                  <div class="muted">Mensual</div>
-                </td>
-                <td><span class="badge bg-success">Pagado</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-sm btn-info" title="Ver detalles">
-                      <i class="ri-eye-line"></i> Ver
-                    </button>
-                    <button class="btn btn-sm btn-warning" title="Descargar">
-                      <i class="ri-download-line"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>REF-002-2024</strong>
-                  <div class="muted">Instituto Técnico Nacional</div>
-                </td>
-                <td>Instituto Técnico Nacional</td>
-                <td><span class="badge bg-primary">Premium</span></td>
-                <td>-</td>
-                <td>2024-09-20</td>
-                <td>
-                  <div class="amount">$3,800</div>
-                  <div class="muted">Mensual</div>
-                </td>
-                <td><span class="badge bg-danger">Vencido</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-sm btn-info" title="Ver detalles">
-                      <i class="ri-eye-line"></i> Ver
-                    </button>
-                    <button class="btn btn-sm btn-danger" title="Recordar">
-                      <i class="ri-mail-send-line"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>REF-003-2024</strong>
-                  <div class="muted">Liceo Moderno</div>
-                </td>
-                <td>Liceo Moderno</td>
-                <td><span class="badge bg-secondary">Básico</span></td>
-                <td>2024-10-28</td>
-                <td>2024-11-28</td>
-                <td>
-                  <div class="amount">$1,800</div>
-                  <div class="muted">Mensual</div>
-                </td>
-                <td><span class="badge bg-success">Pagado</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-sm btn-info" title="Ver detalles">
-                      <i class="ri-eye-line"></i> Ver
-                    </button>
-                    <button class="btn btn-sm btn-warning" title="Descargar">
-                      <i class="ri-download-line"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>REF-004-2024</strong>
-                  <div class="muted">Colegio Los Andes</div>
-                </td>
-                <td>Colegio Los Andes</td>
-                <td><span class="badge bg-primary">Premium</span></td>
-                <td>-</td>
-                <td>2024-10-05</td>
-                <td>
-                  <div class="amount">$2,200</div>
-                  <div class="muted">Mensual</div>
-                </td>
-                <td><span class="badge bg-warning">Pendiente</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-sm btn-info" title="Ver detalles">
-                      <i class="ri-eye-line"></i> Ver
-                    </button>
-                    <button class="btn btn-sm btn-danger" title="Recordar">
-                      <i class="ri-mail-send-line"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>REF-005-2024</strong>
-                  <div class="muted">Academia Santa María</div>
-                </td>
-                <td>Academia Santa María</td>
-                <td><span class="badge bg-primary">Premium</span></td>
-                <td>2024-10-20</td>
-                <td>2024-11-20</td>
-                <td>
-                  <div class="amount">$2,800</div>
-                  <div class="muted">Mensual</div>
-                </td>
-                <td><span class="badge bg-success">Pagado</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-sm btn-info" title="Ver detalles">
-                      <i class="ri-eye-line"></i> Ver
-                    </button>
-                    <button class="btn btn-sm btn-warning" title="Descargar">
-                      <i class="ri-download-line"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+             <!-- En tu tabla, actualiza las celdas de PLAN con las nuevas clases -->
+<tr>
+    <td>
+        <strong>REF-001-2024</strong>
+        <div class="muted">Colegio San José</div>
+    </td>
+    <td>Colegio San José</td>
+    <td><span class="badge bg-anual">Anual</span></td>
+    <td>2024-10-15</td>
+    <td>2024-11-15</td>
+    <td>
+        <div class="amount">$2,500</div>
+        <div class="muted">Mensual</div>
+    </td>
+    <td><span class="badge bg-success">Pagado</span></td>
+    <td>
+        <div class="action-buttons">
+            <button class="btn btn-sm btn-info" title="Ver detalles">
+                <i class="ri-eye-line"></i> Ver
+            </button>
+            <button class="btn btn-sm btn-warning" title="Descargar">
+                <i class="ri-download-line"></i>
+            </button>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <strong>REF-002-2024</strong>
+        <div class="muted">Instituto Técnico Nacional</div>
+    </td>
+    <td>Instituto Técnico Nacional</td>
+    <td><span class="badge bg-trimestral">Trimestral</span></td>
+    <td>-</td>
+    <td>2024-09-20</td>
+    <td>
+        <div class="amount">$3,800</div>
+        <div class="muted">Mensual</div>
+    </td>
+    <td><span class="badge bg-danger">Vencido</span></td>
+    <td>
+        <div class="action-buttons">
+            <button class="btn btn-sm btn-info" title="Ver detalles">
+                <i class="ri-eye-line"></i> Ver
+            </button>
+            <button class="btn btn-sm btn-danger" title="Recordar">
+                <i class="ri-mail-send-line"></i>
+            </button>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <strong>REF-003-2024</strong>
+        <div class="muted">Liceo Moderno</div>
+    </td>
+    <td>Liceo Moderno</td>
+    <td><span class="badge bg-semestral">Semestral</span></td>
+    <td>2024-10-28</td>
+    <td>2024-11-28</td>
+    <td>
+        <div class="amount">$1,800</div>
+        <div class="muted">Mensual</div>
+    </td>
+    <td><span class="badge bg-success">Pagado</span></td>
+    <td>
+        <div class="action-buttons">
+            <button class="btn btn-sm btn-info" title="Ver detalles">
+                <i class="ri-eye-line"></i> Ver
+            </button>
+            <button class="btn btn-sm btn-warning" title="Descargar">
+                <i class="ri-download-line"></i>
+            </button>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <strong>REF-004-2024</strong>
+        <div class="muted">Colegio Los Andes</div>
+    </td>
+    <td>Colegio Los Andes</td>
+    <td><span class="badge bg-mensual">Mensual</span></td>
+    <td>-</td>
+    <td>2024-10-05</td>
+    <td>
+        <div class="amount">$2,200</div>
+        <div class="muted">Mensual</div>
+    </td>
+    <td><span class="badge bg-warning">Pendiente</span></td>
+    <td>
+        <div class="action-buttons">
+            <button class="btn btn-sm btn-info" title="Ver detalles">
+                <i class="ri-eye-line"></i> Ver
+            </button>
+            <button class="btn btn-sm btn-danger" title="Recordar">
+                <i class="ri-mail-send-line"></i>
+            </button>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <strong>REF-005-2024</strong>
+        <div class="muted">Academia Santa María</div>
+    </td>
+    <td>Academia Santa María</td>
+    <td><span class="badge bg-anual">Anual</span></td>
+    <td>2024-10-20</td>
+    <td>2024-11-20</td>
+    <td>
+        <div class="amount">$2,800</div>
+        <div class="muted">Mensual</div>
+    </td>
+    <td><span class="badge bg-success">Pagado</span></td>
+    <td>
+        <div class="action-buttons">
+            <button class="btn btn-sm btn-info" title="Ver detalles">
+                <i class="ri-eye-line"></i> Ver
+            </button>
+            <button class="btn btn-sm btn-warning" title="Descargar">
+                <i class="ri-download-line"></i>
+            </button>
+        </div>
+    </td>
+</tr>
             </tbody>
           </table>
         </div>

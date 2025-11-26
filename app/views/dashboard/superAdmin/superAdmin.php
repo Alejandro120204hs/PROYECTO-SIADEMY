@@ -59,157 +59,43 @@
         </div>
       </div>
 
-      <!-- Tabla 1: Estado de Escuelas -->
-      <div class="datatable-card">
-        <h3><i class="ri-shield-check-line"></i> Gestión de Estado de Escuelas</h3>
-        <p class="card-subtitle">Control de acceso al sistema: Activar o bloquear instituciones</p>
-        <div class="table-responsive">
-          <table id="statusTable" class="table table-dark table-hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Escuela</th>
-                <th>Ciudad</th>
-                <th>Estudiantes</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr data-id="001">
-                <td>001</td>
-                <td><strong>Colegio San José</strong></td>
-                <td>Bogotá</td>
-                <td>450</td>
-                <td><span class="badge bg-success">Activo</span></td>
-                <td>
-                  <button class="btn btn-sm btn-danger toggle-status" data-status="active">
-                    <i class="ri-lock-line"></i> Bloquear
-                  </button>
-                </td>
-              </tr>
-              <tr data-id="002">
-                <td>002</td>
-                <td><strong>Instituto Técnico Nacional</strong></td>
-                <td>Medellín</td>
-                <td>780</td>
-                <td><span class="badge bg-success">Activo</span></td>
-                <td>
-                  <button class="btn btn-sm btn-danger toggle-status" data-status="active">
-                    <i class="ri-lock-line"></i> Bloquear
-                  </button>
-                </td>
-              </tr>
-              <tr data-id="003">
-                <td>003</td>
-                <td><strong>Liceo Moderno</strong></td>
-                <td>Cali</td>
-                <td>320</td>
-                <td><span class="badge bg-success">Activo</span></td>
-                <td>
-                  <button class="btn btn-sm btn-danger toggle-status" data-status="active">
-                    <i class="ri-lock-line"></i> Bloquear
-                  </button>
-                </td>
-              </tr>
-              <tr data-id="004">
-                <td>004</td>
-                <td><strong>Colegio Los Andes</strong></td>
-                <td>Barranquilla</td>
-                <td>590</td>
-                <td><span class="badge bg-danger">Bloqueado</span></td>
-                <td>
-                  <button class="btn btn-sm btn-success toggle-status" data-status="blocked">
-                    <i class="ri-lock-unlock-line"></i> Activar
-                  </button>
-                </td>
-              </tr>
-              <tr data-id="005">
-                <td>005</td>
-                <td><strong>Academia Santa María</strong></td>
-                <td>Cartagena</td>
-                <td>410</td>
-                <td><span class="badge bg-success">Activo</span></td>
-                <td>
-                  <button class="btn btn-sm btn-danger toggle-status" data-status="active">
-                    <i class="ri-lock-line"></i> Bloquear
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <!-- Sección de Gráficos - Agregar después de los KPIs -->
+<div class="charts-section">
+    <div class="chart-card">
+        <div class="chart-header">
+            <div class="chart-title-group">
+                <h3>Comparativa de Instituciones Registradas</h3>
+                <p class="card-subtitle">Crecimiento anual - Impacto del aplicativo</p>
+            </div>
+            <div class="chart-controls">
+                <select id="chartType" class="form-select chart-select">
+                    <option value="bar">Gráfico de Barras</option>
+                    <option value="line">Gráfico de Líneas</option>
+                </select>
+            </div>
         </div>
-      </div>
+        <div class="chart-container">
+            <canvas id="institutionsChart"></canvas>
+        </div>
+        <div class="chart-stats">
+            <div class="stat-item">
+                <span class="stat-value success">+45.8%</span>
+                <span class="stat-label">Crecimiento anual</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">24</span>
+                <span class="stat-label">Total instituciones</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value warning">+9</span>
+                <span class="stat-label">Nuevas este año</span>
+            </div>
+        </div>
+    </div>
+</div>
+      
 
-      <!-- Tabla 2: Gestión de Pagos -->
-      <div class="datatable-card">
-        <h3><i class="ri-money-dollar-circle-line"></i> Gestión de Pagos</h3>
-        <p class="card-subtitle">Seguimiento de pagos y transacciones de las instituciones</p>
-        <div class="table-responsive">
-          <table id="paymentsTable" class="table table-dark table-hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Escuela</th>
-                <th>Ciudad</th>
-                <th>Plan</th>
-                <th>Estado de Pago</th>
-                <th>Último Pago</th>
-                <th>Próximo Vencimiento</th>
-                <th>Monto Mensual</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>001</td>
-                <td><strong>Colegio San José</strong></td>
-                <td>Bogotá</td>
-                <td><span class="badge bg-primary">Premium</span></td>
-                <td><span class="badge bg-success">Pagado</span></td>
-                <td>2024-10-15</td>
-                <td>2024-11-15</td>
-                <td>$2,500</td>
-                <td>
-                  <button class="btn btn-sm btn-info">
-                    <i class="ri-eye-line"></i> Ver
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>002</td>
-                <td><strong>Instituto Técnico Nacional</strong></td>
-                <td>Medellín</td>
-                <td><span class="badge bg-primary">Premium</span></td>
-                <td><span class="badge bg-danger">Pendiente</span></td>
-                <td>2024-08-20</td>
-                <td>2024-09-20</td>
-                <td>$3,800</td>
-                <td>
-                  <button class="btn btn-sm btn-warning">
-                    <i class="ri-mail-send-line"></i> Recordar
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>003</td>
-                <td><strong>Liceo Moderno</strong></td>
-                <td>Cali</td>
-                <td><span class="badge bg-secondary">Básico</span></td>
-                <td><span class="badge bg-success">Pagado</span></td>
-                <td>2024-10-28</td>
-                <td>2024-11-28</td>
-                <td>$1,800</td>
-                <td>
-                  <button class="btn btn-sm btn-info">
-                    <i class="ri-eye-line"></i> Ver
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      
 
     </main>
 

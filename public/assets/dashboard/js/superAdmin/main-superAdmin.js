@@ -7,7 +7,11 @@
 
     // Cargar estado desde localStorage
     let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
-    let rightVisible = localStorage.getItem('rightSidebarVisible') !== 'false';
+    let rightVisible = localStorage.getItem('rightSidebarVisible') === 'true';
+
+
+
+
 
     function updateGridState() {
       appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
@@ -98,3 +102,145 @@
         }
       });
     });
+
+
+
+    // Inicializar gráfico de comparativa anual
+function initializeInstitutionsChart() {
+    const ctx = document.getElementById('institutionsChart').getContext('2d');
+    const chartTypeSelect = document.getElementById('chartType');
+    
+    // Datos de comparativa anual
+    const data = {
+        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        datasets: [
+            {
+                label: 'Año Actual',
+                data: [8, 10, 12, 14, 16, 18, 19, 20, 21, 22, 23, 24],
+                backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                borderColor: '#4f46e5',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: false
+            },
+            {
+                label: 'Año Anterior',
+                data: [10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16],
+                backgroundColor: 'rgba(148, 163, 184, 0.6)',
+                borderColor: '#94a3b8',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                tension: 0.4,
+                fill: false
+            }
+        ]
+    };
+
+    // Configuración del gráfico
+    const config = {
+        type: 'bar', // Tipo inicial
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: '#e6e9f4',
+                        font: {
+                            size: 12,
+                            family: "'Poppins', sans-serif"
+                        },
+                        padding: 15,
+                        usePointStyle: true
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(17, 25, 58, 0.95)',
+                    titleColor: '#e6e9f4',
+                    bodyColor: '#a4b1ff',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1,
+                    padding: 12,
+                    cornerRadius: 8,
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y} instituciones`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        color: '#a4b1ff',
+                        font: {
+                            family: "'Poppins', sans-serif"
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        color: '#a4b1ff',
+                        font: {
+                            family: "'Poppins', sans-serif"
+                        },
+                        callback: function(value) {
+                            return value + ' inst';
+                        }
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeOutQuart'
+            }
+        }
+    };
+
+    // Crear el gráfico
+    const chart = new Chart(ctx, config);
+
+    // Cambiar tipo de gráfico
+    chartTypeSelect.addEventListener('change', function() {
+        chart.config.type = this.value;
+        chart.update();
+    });
+}
+
+// Calcular métricas de crecimiento
+function calculateGrowthMetrics() {
+    const currentYearTotal = 24; // Total año actual
+    const previousYearTotal = 16; // Total año anterior
+    
+    const growthPercentage = ((currentYearTotal - previousYearTotal) / previousYearTotal * 100).toFixed(1);
+    const newInstitutions = currentYearTotal - previousYearTotal;
+    
+    console.log(`Crecimiento: +${growthPercentage}%`);
+    console.log(`Nuevas instituciones: +${newInstitutions}`);
+}
+
+// Inicializar cuando el documento esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    initializeInstitutionsChart();
+    calculateGrowthMetrics();
+});
+
+// También inicializar con jQuery para compatibilidad
+$(document).ready(function() {
+    initializeInstitutionsChart();
+});

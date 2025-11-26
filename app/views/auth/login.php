@@ -29,7 +29,7 @@
                     <button type="submit"
                         onclick="window.location.href='../dashboard/admin/admin.html'">Ingresar</button>
                 </form>
-                <a href="ressetpassword.html" class="forgot">¿Olvidaste tu contraseña?</a>
+                <a href="<?= BASE_URL ?>/recuperar-clave" class="forgot">¿Olvidaste tu contraseña?</a>
             </div>
         </div>
 

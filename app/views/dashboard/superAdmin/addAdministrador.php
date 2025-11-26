@@ -1,3 +1,14 @@
+<?php
+
+    // IMPORTAMOS LAS DEPENDECIAS NECESARIAS
+    require_once BASE_PATH . '/app/controllers/superAdmin/instituciones.php';
+
+    // LLAMAMOS LA FUNCION ESPECIFICA
+    $datos = mostrarInstituciones();
+
+?>
+
+
 <!doctype html>
 <html lang="es">
 
@@ -49,7 +60,7 @@
                     <div id="stepIndicator3">Confirmar</div>
                 </div>
 
-                <form id="formWizard">
+                <form id="formWizard" action="<?= BASE_URL ?>/superAdmin-registrar-administrador" method="POST" enctype="multipart/form-data">
 
                     <!-- Paso 1 -->
                     <div class="step active">
@@ -59,17 +70,26 @@
                         </div>
 
                         <div class="row g-3">
+
+                             <div class="col-md-3 poFoto">
+                                <label for="">Foto*</label>
+                                <div
+                                    class=" esPhoto">
+                                    <small>Selecciona un archivo</small>
+                                    <input type="file" class="form-control mt-2"  name="foto" accept=".jpg, .png, .jpeg, .svg, .gif" />
+                                </div>
+                            </div>
                             
 
                             <!-- Datos personales -->
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">Nombres</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="nombres">
                                 </div>
                                 <div class="mb-3">
                                     <label for="">Apellidos</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="apellidos">
                                 </div>
                                 
                                
@@ -77,14 +97,14 @@
                             </div>
 
                             <!-- Apellidos y teléfono -->
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                  <div class="mb-3">
                                     <label for="">Documento</label>
-                                    <input type="text" class="form-control">
+                                    <input type="number" class="form-control" name="documento">
                                 </div>
                                  <div class="mb-3">
                                     <label for="">Edad</label>
-                                    <input type="text" class="form-control">
+                                    <input type="number" class="form-control" name="edad">
                                 </div>
                                 
 
@@ -107,21 +127,28 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">Correo</label>
-                                    <input type="text" class="form-control">
+                                    <input type="email" class="form-control" name="correo">
                                 </div>
                                 <div class="mb-3">
                                     <label for="">Telefono</label>
-                                    <input type="email" class="form-control">
+                                    <input type="number" class="form-control" name="telefono">
                                 </div>
                             </div>
 
                             <div class="col-md-5">
                                 <div class="mb-3">
                                      <label for="selectAcudiente">Institución</label>
-                                    <select id="selectAcudiente" class="form-select" name="acudiente" required>
+                                    <select id="selectAcudiente" class="form-select" name="institucion" required>
                                         <option value="" selected disabled>Escriba el número de documento del acudiente</option>
-                                        
-                                       
+                                        <?php if(!empty($datos)): ?>
+                                        <?php foreach($datos as $institucion): ?>
+                                            <option value="<?= $institucion['id'] ?>">
+                                            <?= $institucion['nombre'] ?> - <?= $institucion['direccion'] ?? '' ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <option disabled>No hay instituciones registrados</option>
+                                        <?php endif; ?>
                                         
                                     </select>
                                 </div>
@@ -144,7 +171,7 @@
 
                         <div class="botones mt-3">
                             <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
-                            <button type="submit" class="btn btn-success">Agregar Estudiante</button>
+                            <button type="submit" class="btn btn-success">Agregar Administrador</button>
                         </div>
                     </div>
 

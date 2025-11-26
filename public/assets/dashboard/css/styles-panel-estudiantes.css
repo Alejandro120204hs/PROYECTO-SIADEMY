@@ -326,6 +326,23 @@
       box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
     }
 
+    .btn-pdf{
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0075F2;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: 0.3s ease;
+}
+
+.btn-pdf:hover{
+    background-color: #005fcc;
+    transform: translateY(-2px);
+}
+
+
     .datatable-card h3 {
       margin: 0 0 20px 0;
       font-size: 22px;

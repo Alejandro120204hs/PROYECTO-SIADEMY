@@ -24,7 +24,7 @@ $(document).ready(function() {
     // FUNCIONALIDAD DE FILTROS CORREGIDA
     const filterBtn = $('.filter-btn');
     const estadoSelect = $('.filters-grid select').eq(0);
-    const planSelect = $('.filters-grid select').eq(1);
+    const planSelect = $('#planFilter');
     const fechaSelect = $('.filters-grid select').eq(2);
     const filterResults = $('<div class="filter-results"></div>');
     
@@ -63,8 +63,8 @@ $(document).ready(function() {
                 );
             }
             
-            // Filtro por PLAN
-            if (plan !== 'Todos los planes') {
+            // Filtro por PERIODICIDAD
+            if (plan !== 'Todas las periodicidades') {
                 $.fn.dataTable.ext.search.push(
                     function(settings, data, dataIndex) {
                         const planCelda = data[2] || ''; // Columna 2 es PLAN
@@ -94,7 +94,7 @@ $(document).ready(function() {
             // Mostrar mensaje de resultados
             let filtrosAplicados = [];
             if (estado !== 'Todos los estados') filtrosAplicados.push('Estado: ' + estado);
-            if (plan !== 'Todos los planes') filtrosAplicados.push('Plan: ' + plan);
+            if (plan !== 'Todas las periodicidades') filtrosAplicados.push('Periodicidad: ' + plan);
             if (fecha !== 'Últimos 30 días') filtrosAplicados.push('Fecha: ' + fecha);
             
             if (filtrosAplicados.length > 0) {
@@ -125,7 +125,7 @@ $(document).ready(function() {
     function limpiarFiltros() {
         // Restablecer selects
         estadoSelect.val('Todos los estados');
-        planSelect.val('Todos los planes');
+        planSelect.val('Todas las periodicidades');
         fechaSelect.val('Últimos 30 días');
         
         // Remover clases activas
@@ -153,6 +153,26 @@ $(document).ready(function() {
     $('#paymentsTable tbody').on('click', 'tr', function() {
         $('#paymentsTable tbody tr').removeClass('selected');
         $(this).addClass('selected');
+        
+        // Aquí puedes agregar lógica para cargar los detalles en el panel derecho
+        const referencia = $(this).find('td:first strong').text();
+        const escuela = $(this).find('td:eq(1)').text();
+        const plan = $(this).find('td:eq(2) .badge').text();
+        const fechaPago = $(this).find('td:eq(3)').text();
+        const vencimiento = $(this).find('td:eq(4)').text();
+        const monto = $(this).find('td:eq(5) .amount').text();
+        const estado = $(this).find('td:eq(6) .badge').text();
+        
+        // Actualizar panel derecho con los datos (esto es un ejemplo)
+        console.log('Pago seleccionado:', {
+            referencia,
+            escuela,
+            plan,
+            fechaPago,
+            vencimiento,
+            monto,
+            estado
+        });
     });
 
     // Efectos hover en botones
@@ -180,4 +200,58 @@ $(document).ready(function() {
             $(this).removeClass('filter-active');
         }
     });
+
+    // Funcionalidad para botones de acción en la tabla
+    $('.action-buttons .btn-info').click(function(e) {
+        e.stopPropagation();
+        const fila = $(this).closest('tr');
+        const referencia = fila.find('td:first strong').text();
+        alert(`Ver detalles del pago: ${referencia}`);
+        // Aquí puedes abrir un modal o cargar más detalles
+    });
+
+    $('.action-buttons .btn-warning').click(function(e) {
+        e.stopPropagation();
+        const fila = $(this).closest('tr');
+        const referencia = fila.find('td:first strong').text();
+        alert(`Descargar comprobante: ${referencia}`);
+        // Aquí puedes implementar la descarga
+    });
+
+    $('.action-buttons .btn-danger').click(function(e) {
+        e.stopPropagation();
+        const fila = $(this).closest('tr');
+        const referencia = fila.find('td:first strong').text();
+        const escuela = fila.find('td:eq(1)').text();
+        
+        if (confirm(`¿Enviar recordatorio de pago a ${escuela} (${referencia})?`)) {
+            alert(`Recordatorio enviado a ${escuela}`);
+            // Aquí puedes implementar el envío del recordatorio
+        }
+    });
+
+    // Funcionalidad para los botones del panel derecho
+    $('.payment-actions .btn-warning').click(function() {
+        alert('Descargando factura...');
+        // Implementar descarga de factura
+    });
+
+    $('.payment-actions .btn-info').click(function() {
+        alert('Mostrando comprobante...');
+        // Implementar visualización de comprobante
+    });
+
+    // Auto-aplicar filtros al cambiar selects (opcional)
+    $('.filters-grid select').change(function() {
+        // Descomenta la siguiente línea si quieres que se apliquen automáticamente
+        // aplicarFiltros();
+    });
+
+    // Inicializar tooltips de Bootstrap si están disponibles
+    if (typeof bootstrap !== 'undefined') {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }
 });

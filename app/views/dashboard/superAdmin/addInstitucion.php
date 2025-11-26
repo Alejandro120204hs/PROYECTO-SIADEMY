@@ -47,7 +47,7 @@
                     <div id="stepIndicator3">Confirmar</div>
                 </div>
 
-                <form id="formWizard">
+                <form id="formWizard" action="<?= BASE_URL ?>/superAdmin-registrar-institucion" method="POST">
 
                     <!-- Paso 1 -->
                     <div class="step active">
@@ -63,22 +63,12 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="">Nombres</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="nombre">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="">Direccion</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                
-                               
-
-                            </div>
-
-                            <!-- Apellidos y teléfono -->
-                            <div class="col-md-6">
-                                 <div class="mb-3">
+                            
+                            <div class="mb-3">
                                     <label for="">Tipo</label>
-                                    <select class="selector">
+                                    <select class="selector" name="tipo">
                                         <option selected>Selecciona el tipo de intitucion</option>
                                         <option value="Publica">Publica</option>
                                         <option value="Privada">Privada</option>
@@ -86,9 +76,16 @@
                                         
                                     </select>
                                 </div>
+                               
+
+                            </div>
+
+                            <!-- Apellidos y teléfono -->
+                            <div class="col-md-6">
+                                 
                                  <div class="mb-3">
                                     <label for="">Jornada</label>
-                                    <select class="selector">
+                                    <select class="selector" name="jornada">
                                         <option selected>Selecciona el tipo de Joornada</option>
                                         <option value="Mañana">Mañana</option>
                                         <option value="Tarde">Tarde</option>
@@ -117,18 +114,18 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">Dirección</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="direccion">
                                 </div>
                                 <div class="mb-3">
                                     <label for="">Telefono</label>
-                                    <input type="email" class="form-control">
+                                    <input type="number" class="form-control" name="telefono">
                                 </div>
                             </div>
 
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">Correo</label>
-                                    <input type="text" class="form-control">
+                                    <input type="email" class="form-control" name="correo">
                                 </div>
                                 
                             </div>
@@ -149,7 +146,7 @@
 
                         <div class="botones mt-3">
                             <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
-                            <button type="submit" class="btn btn-success">Agregar Estudiante</button>
+                            <button type="submit" class="btn btn-success">Agregar institucion</button>
                         </div>
                     </div>
 

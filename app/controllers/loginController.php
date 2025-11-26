@@ -36,9 +36,7 @@
         session_start();
         $_SESSION['user']=[
             'id' => $resultado['id'],
-            'rol' => $resultado['rol'],
-            'nombres' => $resultado['nombres'],
-            'apellidos' => $resultado['apellidos']
+            'rol' => $resultado['rol']
         ];
 
         // REDIRIGIENDO SEGUN EL ROL
@@ -46,9 +44,9 @@
         $mensaje = 'Rol inexistente. Redirigiendo al inicio de sesion....';
 
         switch($resultado['rol']){
-            case 'Coordinador':
-                $redireccionar = '/siademy/coordinador/dashboard';
-                $mensaje = 'Bienvenido Coordinador';
+            case 'Administrador':
+                $redireccionar = '/siademy/administrador/dashboard';
+                $mensaje = 'Bienvenido Administrador';
                 break;
 
             case 'Docente':

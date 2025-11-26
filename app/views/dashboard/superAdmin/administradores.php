@@ -1,3 +1,14 @@
+<?php
+
+  // IMPORTAMOS LAS DEPENDENCIAS NECESARIAS
+  require_once BASE_PATH . '/app/controllers/superAdmin/administradores.php';
+
+  // LLAMAMOS LA FUNCION ESPECIFICA
+  $datos = mostrarAdministradores();
+
+?>
+
+
 <!doctype html>
 <html lang="es">
 
@@ -37,6 +48,8 @@
         <button class="btn-agregar-estudiante" onclick="window.location.href='<?= BASE_URL ?>/superAdmin-agregar-administrador'">
           <i class="ri-add-line"></i> Agregar Administrador
         </button>
+          <a class="btn-pdf" href="<?= BASE_URL ?>/superAdmin-reporte?reporte=administradores" target="_blank">Generar PDF</a>
+
         
         <!-- Dropdown Más Nuevo -->
         <div class="dropdown-custom">
@@ -54,50 +67,50 @@
 
       <!-- Tabla de Estudiantes -->
       <div class="datatable-card">
+
         <table id="tablaEstudiantes" class="table table-dark table-hover">
           <thead>
             <tr>
               <th width="40">
                 <input type="checkbox" class="form-check-input" id="selectAll">
               </th>
-              <th>Nombre</th>
-              <th>Direccion</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
               <th>Telefono</th>
               <th>Correo</th>
               <th>Estado</th>
-              <th>Tipo</th>
-              <th>Jornada</th>
+              <th>Institucion</th>
+              <th>Documento</th>
               <th width="100">Acción</th>
             </tr>
           </thead>
           <tbody>
+              <?php if(!empty($datos)): ?>
+            <?php foreach($datos as $administrador): ?>
             <tr>
               <td>
                 <input type="checkbox" class="form-check-input row-checkbox">
               </td>
-              <td>
-                <div class="student-info">
-                  <div class="student-avatar" style="background: #9b59b6;">SW</div>
-                  <span class="student-name">Samanta William</span>
-                </div>
-              </td>
-              <td>#463436465</td>
-              <td>28 de marzo de 2016</td>
-              <td>Maria William</td>
-              <td>Jatarta</td>
-              <td>
-                <div class="contacts">
-                  <i class="ri-phone-line"></i>
-                  <i class="ri-mail-line"></i>
-                </div>
-              </td>
-              <td>VII A</td>
+              <td><?= $administrador['nombres'] ?></td>
+              <td><?= $administrador['apellidos'] ?></td>
+              <td><?= $administrador['telefono'] ?></td>
+              <td><?= $administrador['correo'] ?></td>
+              <td><?= $administrador['estado'] ?></td>
+              <td><?= $administrador['nombre_institucion'] ?></td>
+              <td><?= $administrador['documento'] ?></td>
               <td class="acciones">
-                <button class="btn-action"><a href="detalle-estudiante.html">Ver</a></button>
-                <button class="btn-action"><a href="#">Editar</a></button>
-                <button class="btn-action"><a href="#"><i class="bi bi-trash3-fill"></i></a></button>
+             
+                <button class="btn-action"><a href="<?= BASE_URL ?>/superAdmin-editar-administrador?id=<?= $administrador['id'] ?>">Editar</a></button>
+                <button class="btn-action"><a href="<?= BASE_URL ?>/superAdmin-eliminar-administrador?accion=eliminar&id=<?= $administrador['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
               </td>
             </tr>
+
+            <?php endforeach; ?>
+            <?php else: ?>
+           <tr>
+            <td>No hay instituciones registradas</td>
+           </tr>
+           <?php endif; ?>
            
            
           </tbody>

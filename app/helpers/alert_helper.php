@@ -109,7 +109,7 @@
                     Swal.fire({
                         icon: '$tipo',
                         title: '$titulo',
-                        text: '$mensaje',
+                        html: `$mensaje`,   // ← CAMBIO IMPORTANTE
                         confirmButtonText: 'Aceptar',
                         background: '#11193a',
                         color: '#e6e9f4',
@@ -127,6 +127,7 @@
                         " . ($redirect ? "window.location.href = '$redirect';" : "window.history.back();") . "
                     });
                 </script>
+
             </body>
         </html>";
     }
