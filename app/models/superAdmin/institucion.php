@@ -17,16 +17,17 @@
         public function registrar($data){
             try{
                 // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL DE REGISTRAR INSTITUCION
-                $insertar = "INSERT INTO institucion(nombre,direccion,telefono,correo,estado,tipo,jornada) VALUES(:nombre,:direccion,:telefono,:correo,'Activo',:tipo,:jornada)";
+                $insertar = "INSERT INTO institucion(nombre,ciudad,direccion,telefono,correo,estado,tipo,logo) VALUES(:nombre,:ciudad,:direccion,:telefono,:correo,'Activo',:tipo,:logo)";
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
                 $resultado = $this -> conexion -> prepare($insertar);
                 $resultado -> bindParam(':nombre', $data['nombre']);
+                $resultado -> bindParam(':ciudad', $data['ciudad']);
                 $resultado -> bindParam(':direccion',$data['direccion']);
                 $resultado -> bindParam(':telefono',$data['telefono']);
                 $resultado -> bindParam(':correo',$data['correo']);
                 $resultado -> bindParam(':tipo',$data['tipo']);
-                $resultado -> bindParam(':jornada',$data['jornada']);
+                $resultado -> bindParam(':logo',$data['logo']);
                 
                 return $resultado -> execute();
 

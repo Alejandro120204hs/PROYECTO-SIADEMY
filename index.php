@@ -200,12 +200,18 @@
                 require BASE_PATH . '/app/views/dashboard/administrador/addDocente.php';
                 break;
 
+            // -----------------------------ADMINISTRADOR(MODULO EVENTOS)-------------------------
+
             case '/administrador-panel-eventos':
                 require BASE_PATH . '/app/views/dashboard/administrador/eventos.php';
                 break;
 
             case '/administrador/registrar-evento':
                 require BASE_PATH . '/app/views/dashboard/administrador/addEvento.php';
+                break;
+
+            case 'administrador/guardar-evento':
+                require BASE_PATH . '/app/controllers/administrador/eventos.php';
                 break;
 
             case '/administrador-panel-asignaturas':

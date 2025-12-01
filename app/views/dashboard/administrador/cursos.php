@@ -29,8 +29,16 @@
           <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
             <i class="ri-menu-2-line"></i>
           </button>
-          <div class="title">Gestión de Cursos</div>
+          <div class="title cursos">Gestión de Cursos</div>
+          
         </div>
+
+        <div class="div"></div>
+
+        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-asignatura'">
+        Agregar Curso
+        </button>
+        
         <div class="search">
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar curso, profesor o materia...">
@@ -106,15 +114,7 @@
               </div>
             </div>
 
-            <div class="course-performance">
-              <div class="performance-label">
-                <span>Promedio General</span>
-                <strong class="grade-good">4.2</strong>
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 84%; background: #10b981;"></div>
-              </div>
-            </div>
+            
 
             <div class="course-alerts">
               <div class="alert-item">
@@ -129,220 +129,9 @@
             </div>
           </div>
 
-          <!-- Course Card 2 -->
-          <div class="course-card">
-            <div class="course-header">
-              <div class="course-badge" style="background: #7c3aed;">7B</div>
-              <div class="course-status status-warning">En Riesgo</div>
-            </div>
-            <h4>Física Mecánica</h4>
-            <p class="course-subtitle">Cinemática y Dinámica</p>
-            
-            <div class="course-stats">
-              <div class="stat">
-                <i class="ri-group-line"></i>
-                <span>32 estudiantes</span>
-              </div>
-              <div class="stat">
-                <i class="ri-user-line"></i>
-                <span>Prof. Ana Rodríguez</span>
-              </div>
-            </div>
+         
 
-            <div class="course-performance">
-              <div class="performance-label">
-                <span>Promedio General</span>
-                <strong class="grade-warning">3.1</strong>
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 62%; background: #f59e0b;"></div>
-              </div>
-            </div>
-
-            <div class="course-alerts">
-              <div class="alert-item alert-critical">
-                <i class="ri-alert-line"></i>
-                <span>8 estudiantes en riesgo</span>
-              </div>
-            </div>
-
-            <div class="course-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Course Card 3 -->
-          <div class="course-card">
-            <div class="course-header">
-              <div class="course-badge" style="background: #06b6d4;">8A</div>
-              <div class="course-status status-success">Activo</div>
-            </div>
-            <h4>Química Orgánica</h4>
-            <p class="course-subtitle">Compuestos y Reacciones</p>
-            
-            <div class="course-stats">
-              <div class="stat">
-                <i class="ri-group-line"></i>
-                <span>38 estudiantes</span>
-              </div>
-              <div class="stat">
-                <i class="ri-user-line"></i>
-                <span>Prof. Luis Torres</span>
-              </div>
-            </div>
-
-            <div class="course-performance">
-              <div class="performance-label">
-                <span>Promedio General</span>
-                <strong class="grade-good">3.9</strong>
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 78%; background: #10b981;"></div>
-              </div>
-            </div>
-
-            <div class="course-alerts">
-              <div class="alert-item">
-                <i class="ri-error-warning-line"></i>
-                <span>2 estudiantes en riesgo</span>
-              </div>
-            </div>
-
-            <div class="course-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Course Card 4 -->
-          <div class="course-card">
-            <div class="course-header">
-              <div class="course-badge" style="background: #f59e0b;">9A</div>
-              <div class="course-status status-danger">Crítico</div>
-            </div>
-            <h4>Programación Java</h4>
-            <p class="course-subtitle">POO y Estructuras de Datos</p>
-            
-            <div class="course-stats">
-              <div class="stat">
-                <i class="ri-group-line"></i>
-                <span>28 estudiantes</span>
-              </div>
-              <div class="stat">
-                <i class="ri-user-line"></i>
-                <span>Prof. Diego Álvarez</span>
-              </div>
-            </div>
-
-            <div class="course-performance">
-              <div class="performance-label">
-                <span>Promedio General</span>
-                <strong class="grade-danger">2.7</strong>
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 54%; background: #ef4444;"></div>
-              </div>
-            </div>
-
-            <div class="course-alerts">
-              <div class="alert-item alert-critical">
-                <i class="ri-alert-line"></i>
-                <span>12 estudiantes en riesgo</span>
-              </div>
-            </div>
-
-            <div class="course-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Course Card 5 -->
-          <div class="course-card">
-            <div class="course-header">
-              <div class="course-badge" style="background: #ec4899;">10A</div>
-              <div class="course-status status-success">Activo</div>
-            </div>
-            <h4>Literatura Universal</h4>
-            <p class="course-subtitle">Siglo XX y Contemporánea</p>
-            
-            <div class="course-stats">
-              <div class="stat">
-                <i class="ri-group-line"></i>
-                <span>30 estudiantes</span>
-              </div>
-              <div class="stat">
-                <i class="ri-user-line"></i>
-                <span>Prof. María González</span>
-              </div>
-            </div>
-
-            <div class="course-performance">
-              <div class="performance-label">
-                <span>Promedio General</span>
-                <strong class="grade-excellent">4.5</strong>
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 90%; background: #10b981;"></div>
-              </div>
-            </div>
-
-            <div class="course-alerts">
-              <div class="alert-item alert-success">
-                <i class="ri-checkbox-circle-line"></i>
-                <span>Sin alertas</span>
-              </div>
-            </div>
-
-            <div class="course-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Course Card 6 -->
-          <div class="course-card">
-            <div class="course-header">
-              <div class="course-badge" style="background: #14b8a6;">11A</div>
-              <div class="course-status status-success">Activo</div>
-            </div>
-            <h4>Inglés Avanzado</h4>
-            <p class="course-subtitle">Nivel B2 - Upper Intermediate</p>
-            
-            <div class="course-stats">
-              <div class="stat">
-                <i class="ri-group-line"></i>
-                <span>26 estudiantes</span>
-              </div>
-              <div class="stat">
-                <i class="ri-user-line"></i>
-                <span>Prof. Patricia Gómez</span>
-              </div>
-            </div>
-
-            <div class="course-performance">
-              <div class="performance-label">
-                <span>Promedio General</span>
-                <strong class="grade-good">4.1</strong>
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 82%; background: #10b981;"></div>
-              </div>
-            </div>
-
-            <div class="course-alerts">
-              <div class="alert-item">
-                <i class="ri-error-warning-line"></i>
-                <span>1 estudiante en riesgo</span>
-              </div>
-            </div>
-
-            <div class="course-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
+          
         </div>
       </section>
 
