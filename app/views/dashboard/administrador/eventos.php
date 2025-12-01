@@ -33,7 +33,7 @@
         <div class="topbar-actions">
           <button class="btn-action" >
             <i class="ri-add-line"></i>
-            <a href="coordinador/registrar-evento"><span>Nuevo Evento</span></a>
+            <a href="administrador/registrar-evento"><span>Nuevo Evento</span></a>
           </button>
         </div>
         <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">

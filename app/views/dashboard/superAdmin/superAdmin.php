@@ -24,7 +24,7 @@
           <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
             <i class="ri-menu-2-line"></i>
           </button>
-          <div class="title">Admin Sistema</div>
+          <div class="title">Super Admin Sistema</div>
         </div>
         <div class="search">
           <i class="ri-search-2-line"></i>

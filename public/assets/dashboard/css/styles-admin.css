@@ -192,6 +192,10 @@ a {
     font-weight: 700;
 }
 
+.title.cursos {
+    margin-right: 90px;
+}
+
 .search {
     margin-left: auto;
     width: min(560px, 55%);
@@ -3487,3 +3491,18 @@ canvas {
         gap: 6px;
     }
 }
+
+.btn-agregar-estudiante {
+      background: #4f46e5;
+      color: white;
+      border: none;
+     padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }

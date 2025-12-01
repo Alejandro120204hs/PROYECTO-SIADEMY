@@ -2,7 +2,7 @@
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
 
   // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
-  require_once BASE_PATH . '/app/controllers/acudiente.php';
+  require_once BASE_PATH . '/app/controllers/administrador/acudiente.php';
 
   // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
   $datos = mostrarAcudientes();
