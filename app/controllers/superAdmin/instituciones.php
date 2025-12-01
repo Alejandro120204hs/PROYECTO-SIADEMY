@@ -151,14 +151,14 @@
             $id = $_POST['id'] ?? '';
             $nombre = $_POST['nombre'] ?? '';
             $tipo = $_POST['tipo'] ?? '';
-            $jornada = $_POST['jornada'] ?? '';
+            $ciudad = $_POST['ciudad'] ?? '';
             $estado = $_POST['estado'] ?? '';
             $direccion = $_POST['direccion'] ?? '';
             $telefono = $_POST['telefono'] ?? '';
             $correo = $_POST['correo'] ?? '';
 
             // VALIDAMOS LOS CAMPOS OBLIGATOTIOS
-            if(empty($nombre) || empty($tipo) || empty($jornada) || empty($jornada) || empty($estado) || empty($direccion) || empty($telefono) || empty($correo)){
+            if(empty($nombre) || empty($tipo) || empty($ciudad) || empty($estado) || empty($direccion) || empty($telefono) || empty($correo)){
                 mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete todos los campos.');
                 exit();
             }
@@ -170,7 +170,7 @@
                 'id' => $id,
                 'nombre' => $nombre,
                 'tipo' => $tipo,
-                'jornada' => $jornada,
+                'ciudad' => $ciudad,
                 'estado' => $estado,
                 'direccion' => $direccion,
                 'telefono' => $telefono,
