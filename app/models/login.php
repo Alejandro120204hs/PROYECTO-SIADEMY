@@ -37,7 +37,8 @@ require_once __DIR__ . '/../../config/database.php';
                 return[
                     'id' => $user['id'],
                     'rol' => $user['rol'],
-                    'correo' => $user['correo']
+                    'correo' => $user['correo'],
+                    'id_institucion' => $user['id_institucion']
                     
                 ];
             }catch(PDOException $e){
