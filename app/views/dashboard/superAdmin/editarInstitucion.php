@@ -78,18 +78,16 @@
                             <!-- Datos personales -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="">Nombres</label>
-                                    <input type="text" class="form-control" name="nombre" value="<?= $institucion['nombre'] ?>">
+                                    <label for="">Nombre</label>
+                                    <input type="text" class="form-control" name="nombre" value="<?= $institucion['nombre'] ?>" tabindex="1">
                                 </div>
                             
                             <div class="mb-3">
-                                    <label for="">Tipo</label>
-                                    <select class="selector" name="tipo">
-                                        <option value="<?= $institucion['tipo'] ?>"><?= $institucion['tipo'] ?></option>
-                                        <option value="Publica">Publica</option>
-                                        <option value="Privada">Privada</option>
-                                        <option value="Rural">Rural</option>
-                                        
+                                    <label for="">Estado</label>
+                                    <select class="selector" name="estado" tabindex="3">
+                                        <option value="<?= $institucion['estado'] ?>"><?= $institucion['estado'] ?></option>
+                                        <option value="Activo">Activo</option>
+                                        <option value="Inactivo">Inactivo</option>
                                     </select>
                                 </div>
                                
@@ -100,24 +98,17 @@
                             <div class="col-md-6">
                                  
                                  <div class="mb-3">
-                                    <label for="">Jornada</label>
-                                    <select class="selector" name="jornada">
-                                        <option value="<?= $institucion['jornada'] ?>"><?= $institucion['jornada'] ?></option>
-                                        <option value="Mañana">Mañana</option>
-                                        <option value="Tarde">Tarde</option>
-                                        <option value="Noche">Noche</option>
-                                        <option value="Diurna">Diurna</option>
+                                    <label for="">Tipo</label>
+                                    <select class="selector" name="tipo" tabindex="2">
+                                        <option value="<?= $institucion['tipo'] ?>"><?= $institucion['tipo'] ?></option>
+                                        <option value="Publica">Publica</option>
+                                        <option value="Privada">Privada</option>
+                                        <option value="Rural">Rural</option>
+                                        
                                     </select>
                                 </div>
 
-                                 <div class="mb-3">
-                                    <label for="">Estado</label>
-                                    <select class="selector" name="estado">
-                                        <option value="<?= $institucion['estado'] ?>"><?= $institucion['estado'] ?></option>
-                                        <option value="Activo">Activo</option>
-                                        <option value="Inactivo">Inactivo</option>
-                                    </select>
-                                </div>
+                                 
                                 
 
                             </div>
@@ -138,19 +129,26 @@
                             <div class="col-md-1"></div>
                             <div class="col-md-5">
                                 <div class="mb-3">
-                                    <label for="">Dirección</label>
-                                    <input type="text" class="form-control" name="direccion" value="<?= $institucion['direccion'] ?>">
+                                    <label for="">Ciudad</label>
+                                    <input type="text" class="form-control" name="ciudad" value="<?= $institucion['ciudad'] ?>">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="">Telefono</label>
-                                    <input type="number" class="form-control" name="telefono" value="<?= $institucion['telefono'] ?>">
+                                
+                               
+                                 <div class="mb-3">
+                                    <label for="">Correo</label>
+                                    <input type="email" class="form-control" name="correo" value="<?= $institucion['correo'] ?>" tabindex="3">
                                 </div>
                             </div>
 
                             <div class="col-md-5">
+                                 <div class="mb-3">
+                                    <label for="">Direccion</label>
+                                    <input type="text" class="form-control" name="direccion" value="<?= $institucion['direccion'] ?>"                                                    tabindex="1">
+                                </div>
+                              
                                 <div class="mb-3">
-                                    <label for="">Correo</label>
-                                    <input type="email" class="form-control" name="correo" value="<?= $institucion['correo'] ?>">
+                                    <label for="">Telefono</label>
+                                    <input type="number" class="form-control" name="telefono" value="<?= $institucion['telefono'] ?>">
                                 </div>
                                 
                             </div>

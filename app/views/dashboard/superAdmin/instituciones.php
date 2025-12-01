@@ -15,7 +15,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SIADEMY • Estudiantes</title>
+  <title>SIADEMY • Instituciones</title>
   <?php 
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
   ?>
