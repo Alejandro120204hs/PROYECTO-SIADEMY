@@ -80,15 +80,32 @@
                                    
 
                                 </div>
+
                                 <div class="mb-3">
-                                    <label for="">Apellidos</label>
-                                    <input type="text" class="form-control" name="apellidos" value="<?= $acudiente['apellidos'] ?>" required>
+                                    <label for="">Tipo de documento</label>
+                                    <select class="form-select" aria-label="Default select example" name="tipo_documento">
+                                    <option value="<?= $acudiente['tipo_documento'] ?>"><?= $acudiente['tipo_documento'] ?></option>
+                                    <option value="CC">CC</option>
+                                    <option value="CE">CE</option>
+                                    <option value="PPT">PPT</option>
+                                </select>
                                 </div>
+                                
                                 <div class="mb-3">
-                                    <label for="">Edad</label>
+                                    <label for="">Fecha de nacimiento</label>
                                     <div class="d-flex gap-2">
-                                        <input type="number" class="form-control" name="edad" value="<?= $acudiente['edad'] ?>" required>
+                                        <input type="date" class="form-control" name="fecha_nacimiento" value="<?= $acudiente['fecha_de_nacimiento'] ?>" required>
                                     </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="">Genero</label>
+                                    <select class="form-select" aria-label="Default select example" name="genero">
+                                    <option value="<?= $acudiente['genero'] ?>"><?= $acudiente['genero'] ?></option>
+                                    <option value="Masculio">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
                                 </div>
                                 
 
@@ -96,8 +113,12 @@
 
                             <!-- Apellidos y teléfono -->
                             <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="">Apellidos</label>
+                                    <input type="text" class="form-control" name="apellidos" value="<?= $acudiente['apellidos'] ?>" required>
+                                </div>
                                <div class="mb-3">
-                                    <label for="">Documento</label>
+                                    <label for="">N° Documento</label>
                                     <input type="text" class="form-control" name="documento" value="<?= $acudiente['documento'] ?>" readonly required>
                                 </div> 
                                 <div class="mb-3">
@@ -135,6 +156,11 @@
                                     <label for="">Email*</label>
                                     <input type="email" class="form-control" name="correo" value="<?= $acudiente['correo'] ?>" required>
                                 </div>
+
+                                 <div class="mb-3">
+                                    <label for="">Ciudad</label>
+                                    <input type="text" class="form-control" name="ciudad" value="<?= $acudiente['ciudad'] ?>" required>
+                                </div>
                                 
                                 
                             </div>
@@ -142,7 +168,12 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">N° Teléfono*</label>
-                                    <input type="tel" class="form-control" name="telefono" value="<?= $acudiente['telefono'] ?>" required>
+                                    <input type="number" class="form-control" name="telefono" value="<?= $acudiente['telefono'] ?>" required>
+                                </div>
+
+                                 <div class="mb-3">
+                                    <label for="">Dirección</label>
+                                    <input type="text" class="form-control" name="direccion" value="<?= $acudiente['direccion'] ?>" required>
                                 </div>
                             </div>
 

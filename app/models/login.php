@@ -39,7 +39,6 @@ require_once __DIR__ . '/../../config/database.php';
                     'rol' => $user['rol'],
                     'correo' => $user['correo'],
                     'id_institucion' => $user['id_institucion']
-                    
                 ];
             }catch(PDOException $e){
                 // CAPTURAMOS ERRORES Y LOS REGISTRAMOS EN EL LOG DEL SERVIDOR

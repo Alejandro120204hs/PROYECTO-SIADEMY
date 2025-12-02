@@ -64,7 +64,7 @@
                                 <div
                                     class=" esPhoto">
                                     <small>Selecciona un archivo</small>
-                                    <input type="file" class="form-control mt-2"  name="foto" accept=".jpg, .png, .jpeg," />
+                                    <input type="file" class="form-control mt-2"  name="foto" accept=".jpg, .png, .jpeg,"  tabindex="1"/>
                                 </div>
                             </div>
 
@@ -72,32 +72,55 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="">Nombres</label>
-                                    <input type="text" class="form-control" name="nombres" required>
+                                    <input type="text" class="form-control" name="nombres" required tabindex="2">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="">Apellidos</label>
-                                    <input type="text" class="form-control" name="apellidos" required>
+                                 <div class="mb-3">
+                                    <label for="">tipo de documento</label>
+                                    <select class="selector" name="tipo_documento" required tabindex="4">
+                                        <option selected>Seleccione un tipo de documento</option>
+                                        <option value="CC">CC</option>
+                                        <option value="CE">CE</option>
+                                        <option value="PPT">PPT</option>
+                                      
+                                    </select>
                                 </div>
+                                
                                 <div class="mb-3">
-                                    <label for="">Edad</label>
+                                    <label for="">Fecha de nacimiento</label>
                                     <div class="d-flex gap-2">
-                                        <input type="number" class="form-control" name="edad" required>
+                                        <input type="date" class="form-control" name="fecha_nacimiento" required tabindex="6">
                                     </div>
                                 </div>
                                 
-
+                                 <div class="mb-3">
+                                    <label for="">Genero</label>
+                                    <select class="selector" name="genero" required tabindex="8">
+                                        <option selected>Seleccione un genero</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="Otro">Otro</option>
+                                      
+                                    </select>
+                                </div>
                             </div>
 
                             <!-- Apellidos y teléfono -->
                             <div class="col-md-4">
-                                <div class="mb-3 parte2">
+                               
+                                <div class="mb-3">
+                                    <label for="">Apellidos</label>
+                                    <input type="text" class="form-control" name="apellidos" required tabindex="3">
+                                </div>
+                                 <div class="mb-3 parte2">
                                     <label for="">N° Documento*</label>
-                                    <input type="number" class="form-control" name="documento" required>
+                                    <input type="number" class="form-control" name="documento" required tabindex="5">
                                 </div>
                                 <div class="mb-3">
                                     <label for="">Parentesco</label>
-                                    <input type="text" class="form-control" name="parentesco" required>
+                                    <input type="text" class="form-control" name="parentesco" required tabindex="7">
                                 </div> 
+
+                               
 
                             </div>
                         </div>
@@ -118,7 +141,12 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">Email*</label>
-                                    <input type="email" class="form-control" name="correo" required>
+                                    <input type="email" class="form-control" name="correo" required tabindex="1">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="">Ciudad</label>
+                                    <input type="text" class="form-control" name="ciudad" required tabindex="3">
                                 </div>
                                 
                                 
@@ -127,7 +155,11 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">N° Teléfono*</label>
-                                    <input type="tel" class="form-control" name="telefono" required>
+                                    <input type="number" class="form-control" name="telefono" required tabindex="2">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Dirección</label>
+                                    <input type="text" class="form-control" name="direccion" required tabindex="4">
                                 </div>
                             </div>
 

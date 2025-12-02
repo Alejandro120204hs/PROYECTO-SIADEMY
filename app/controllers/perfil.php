@@ -5,7 +5,7 @@
     require_once __DIR__ . '/../models/perfil.php';
 
     function mostrarPerfil($id){
-        // INSTANCEAMOS LA CLASE
+        
         $objetoPerfil = new Perfil();
         $usuario = $objetoPerfil -> mostrarPerfilAdmin($id);
         return $usuario;

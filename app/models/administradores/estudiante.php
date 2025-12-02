@@ -15,29 +15,41 @@
         public function registrar($data){
             try{
                 
-                // INSERTAMOS EL ESTUDIANTE
-                $insertar = "INSERT INTO estudiante(nombres,apellidos,documento,correo,telefono,fecha_de_nacimiento,id_acudiente,tipo_documento,clave) VALUES(:nombres,:apellidos,:documento,:correo,:telefono,:fecha_nacimiento,:acudiente,:tipo_documento,:clave)";
+                // INSERTAMOS LOS DATOS EN LA TABLA USUARIO
+                $insertarUsuario = "INSERT INTO usuario(id_institucion,correo,clave,rol,estado) VALUES(:id_institucion,:correo,:clave,'Estudiante','Activo')";
 
-                $resultado = $this->conexion->prepare($insertar);
-                $resultado->bindParam(':nombres', $data['nombres']);
-                $resultado->bindParam(':apellidos', $data['apellidos']);
-                $resultado->bindParam(':documento', $data['documento']);
-                $resultado->bindParam(':correo', $data['correo']);
-                $resultado->bindParam(':telefono', $data['telefono']);
-                $resultado->bindParam(':fecha_nacimiento', $data['fecha_nacimiento']);
-                $resultado->bindParam(':tipo_documento', $data['tipo_documento']);
-                $resultado->bindParam(':acudiente', $data['acudiente']);
+                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                $resultadoUsuario = $this -> conexion -> prepare($insertarUsuario);
+                $resultadoUsuario -> bindParam(':id_institucion',$data['id_institucion']);
+                $resultadoUsuario -> bindParam(':correo',$data['correo']);
+                // SE GENERA LA CLAVE
+                $clave = password_hash($data['documento'],PASSWORD_DEFAULT);
+                $resultadoUsuario -> bindParam(':clave',$clave);
 
-                // SE GENERA LA CONTRASEÑA
-                 $clave = password_hash($data['documento'],PASSWORD_DEFAULT);
-                 $resultado->bindParam(':clave',$clave);
+                $resultadoUsuario->execute();
+                $id_usuario = $this->conexion->lastInsertId();
 
-                return $resultado -> execute();
+                // INSERTAMOS LOS DATOS EN LA TABLA ESTUDIANTE
+                $insertarEstudiante = "INSERT INTO estudiante(id_institucion,id_usuario,nombres,apellidos,documento,telefono,fecha_de_nacimiento,id_acudiente,tipo_documento,foto) VALUES(:id_institucion,:id_usuario,:nombres,:apellidos,:documento,:telefono,:fecha_nacimiento,:acudiente,:tipo_documento,:foto)";
+
+                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUATMOS
+                $resultadoEstudiante = $this -> conexion -> prepare($insertarEstudiante);
+                $resultadoEstudiante -> bindParam(':id_institucion',$data['id_institucion']);
+                $resultadoEstudiante -> bindParam(':id_usuario',$id_usuario);
+                $resultadoEstudiante -> bindParam(':nombres',$data['nombres']);
+                $resultadoEstudiante -> bindParam(':apellidos',$data['apellidos']);
+                $resultadoEstudiante -> bindParam(':documento',$data['documento']);
+                $resultadoEstudiante -> bindParam(':telefono',$data['telefono']);
+                $resultadoEstudiante -> bindParam(':fecha_nacimiento',$data['fecha_nacimiento']);
+                $resultadoEstudiante -> bindParam(':acudiente',$data['acudiente']);
+                $resultadoEstudiante -> bindParam(':tipo_documento',$data['tipo_documento']);
+                $resultadoEstudiante -> bindParam(':foto',$data['foto']);
+
+                return $resultadoEstudiante -> execute();
 
 
             }catch(PDOException $e){
-                error_log("Error en Estudiante::registrar->" . $e->getMessage());
-                return false;
+                die("Error en Estudiante::registrar->" . $e->getMessage());
             }
         }
     }

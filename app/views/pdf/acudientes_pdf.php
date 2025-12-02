@@ -11,48 +11,41 @@
 
 <style>
     body{
-        margin: 30px;
-        font-size: 12px;
+        margin: 30px 0;
+        font-size: 13px;
         color: #1E1E1E;
     }
 
     /* ENCABEZADO */
     .header{
-        display: flex;
-        align-items: center;
-        background: #0A1D56;
-        padding: 15px;
-        border-radius: 8px;
-        color: white;
-        margin-bottom: 25px;
-    }
-
-    .header img{
-        width: 70px;
-        margin-right: 15px;
-    }
-
-    h1{
-        margin: 0;
-        font-size: 22px;
-        font-weight: bold;
-        color: #1E1E1E;
+        width: 100%;
         text-align: center;
-        margin-top: 50px;
+        margin-bottom: 25px;
+        padding: 10px 0;
+        border-bottom: 3px solid #0A1D56;
+    }
+
+    .header h1{
+        margin: 0;
+        font-size: 24px;
+        color: #0A1D56;
+        font-weight: bold;
     }
 
     /* TEXTO DESCRIPTIVO */
     .contenido{
-        margin-bottom: 25px;
+        margin-bottom: 20px;
         line-height: 1.5;
+        text-align: justify;
     }
 
     /* TABLA */
     table{
-        width: 100%;
+        width: 740px;
+        margin-left: -35px;
         border-collapse: collapse;
-        margin-top: 10px;
-        font-size: 12px;
+        margin-top: 20px;
+        table-layout: fixed; /* MUY IMPORTANTE: evita que la tabla crezca fuera del ancho */
     }
 
     thead{
@@ -61,21 +54,28 @@
     }
 
     th, td{
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
+        border: 1px solid #dcdcdc;
+        padding: 7px;
+        text-align: center;
+        word-wrap: break-word; /* permite que textos largos se ajusten */
+        font-size: 12px;
     }
 
     tbody tr:nth-child(even){
-        background: #f2f2f2;
+        background: #f5f5f5;
+    }
+
+    /* Ajuste especial para la columna de la foto */
+    td img{
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 8px;
     }
 
     /* FOOTER */
     .footer{
-        position: fixed;
-        bottom: -10px;
-        left: 0;
-        right: 0;
+        margin-top: 20px;
         text-align: center;
         font-size: 11px;
         color: #555;
@@ -83,6 +83,7 @@
         border-top: 1px solid #ccc;
     }
 </style>
+
 </head>
 <body>
 
@@ -108,10 +109,11 @@
             <th>Nombres</th>
             <th>Apellidos</th>
             <th>Parentesco</th>
+            <th>Tipo de documento</th>
             <th>Documento</th>
             <th>Correo</th>
             <th>Telefono</th>
-            <th>Edad</th>
+            <th>Fecha de nacimiento</th>
             <th>Estado</th>
 
         </tr>
@@ -128,10 +130,11 @@
             <td><?= $ac['nombres'] ?></td>
             <td><?= $ac['apellidos'] ?></td>
             <td><?= $ac['parentesco'] ?></td>
+            <td><?= $ac['tipo_documento'] ?></td>
             <td><?= $ac['documento'] ?></td>
             <td><?= $ac['correo'] ?></td>
             <td><?= $ac['telefono'] ?></td>
-            <td><?= $ac['edad'] ?></td>
+            <td><?= $ac['fecha_de_nacimiento'] ?></td>
             <td><?= $ac['estado'] ?></td>
             
 
