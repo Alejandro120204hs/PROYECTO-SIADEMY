@@ -57,17 +57,22 @@
         // $foto = $_POST['foto'] ?? '';
         $nombres= $_POST['nombres'] ?? '';
         $apellidos = $_POST['apellidos'] ?? '';
-        $edad = $_POST['edad'] ?? '';
+        $fecha_nacimiento = $_POST['fecha_nacimiento'] ?? '';
+        $tipo_documento = $_POST['tipo_documento'] ?? '';
         $documento = $_POST['documento'] ?? '';
         $parentesco = $_POST['parentesco'] ?? '';
+        $genero = $_POST['genero'] ?? '';
         $correo = $_POST['correo'] ?? '';
         $telefono = $_POST['telefono'] ?? '';
+        $ciudad = $_POST['ciudad'] ?? '';
+        $direccion = $_POST['direccion'] ?? '';
+
         
         
 
 
         // VALIDAMOS LOS CAMPOS QUE SON OBLIGATORIOS
-        if(empty($nombres) || empty($apellidos) || empty($edad) || empty($documento) || empty($parentesco) || empty($correo) || empty($telefono)){
+        if(empty($nombres) || empty($apellidos) || empty($fecha_nacimiento) || empty($tipo_documento) || empty($documento) || empty($parentesco) || empty($genero) || empty($correo) || empty($telefono) || empty($ciudad) || empty($direccion)){
             mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete todos los campos.');
             exit();
         }
@@ -129,13 +134,18 @@
         $data = [
             'nombres' => $nombres,
             'apellidos' => $apellidos,
-            'edad' => $edad,
+            'fecha_nacimiento' => $fecha_nacimiento,
+            'tipo_documento' => $tipo_documento,
             'documento' => $documento,
             'parentesco' => $parentesco,
+            'genero' => $genero,
             'correo' => $correo,
             'telefono' => $telefono,
             'foto' => $ruta_img,
-            'id_institucion' => $id_institucion
+            'id_institucion' => $id_institucion,
+            'ciudad' => $ciudad,
+            'direccion' => $direccion,
+
             // 'id_coordinador' => $id_coordinador
             
         ];
@@ -188,14 +198,19 @@
         $id_usuario = $_POST['id_usuario'] ?? '';
         $nombres = $_POST['nombres'] ?? '';
         $apellidos = $_POST['apellidos'] ?? '';
-        $edad = $_POST['edad'] ?? '';
+        $fecha_nacimiento = $_POST['fecha_nacimiento'] ?? '';
+        $tipo_documento = $_POST['tipo_documento'] ?? '';
         $parentesco = $_POST['parentesco'] ?? '';
+        $genero = $_POST['genero'] ?? '';
         $correo = $_POST['correo'] ?? '';
         $telefono = $_POST['telefono'] ?? '';
         $estado = $_POST['estado'] ?? '';
+        $ciudad = $_POST['ciudad'] ?? '';
+        $direccion = $_POST['direccion'] ?? '';
+
 
         // VALLIDAMOS LOS CAMPOS OBLIGATORIOS
-        if(empty($nombres) || empty($apellidos) || empty($edad) || empty($parentesco) || empty($correo) || empty($telefono) || empty($estado)){
+        if(empty($nombres) || empty($apellidos) || empty($fecha_nacimiento) || empty($tipo_documento) || empty($parentesco) || empty($genero) || empty($correo) || empty($telefono) || empty($estado) || empty($ciudad) || empty($direccion)){
              mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete todos los campos.');
             exit();
         }
@@ -208,11 +223,15 @@
             'id_usuario' => $id_usuario,
             'nombres' => $nombres,
             'apellidos' => $apellidos,
-            'edad' => $edad,
+            'fecha_nacimiento' => $fecha_nacimiento,
+            'tipo_documento' => $tipo_documento,
             'parentesco' => $parentesco,
+            'genero' => $genero,
             'correo' => $correo,
             'telefono' => $telefono,
-            'estado' => $estado
+            'estado' => $estado,
+            'ciudad' => $ciudad,
+            'direccion' => $direccion
         ];
 
         // ENVIAMOS LA DATA AL METODO DE ACTUALIZAR DE LA CLASE INSTANCEADA

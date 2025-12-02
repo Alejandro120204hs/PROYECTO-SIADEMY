@@ -90,7 +90,7 @@
               <th>N° Identificación</th>
               <th>Correo</th>
               <th>Telefono</th>
-              <th>Edad</th>
+              <th>Fecha de nacimiento</th>
               <th>estado</th>
               <th width="100">Acción</th>
             </tr>
@@ -110,7 +110,7 @@
               <td><?= $acudiente['documento'] ?></td>
               <td><?= $acudiente['correo'] ?></td>
               <td><?= $acudiente['telefono'] ?></td>
-                 <td><?= $acudiente['edad'] ?></td>
+                 <td><?= $acudiente['fecha_de_nacimiento'] ?></td>
               <td><?= $acudiente['estado'] ?></td>
               
               

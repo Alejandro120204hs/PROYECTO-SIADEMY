@@ -1,8 +1,8 @@
 <?php 
 
     // IMPORTAMOS LAS DEPENDENCIAS NECESARIAS
-    require_once __DIR__ . '/../helpers/alert_helper.php';
-    require_once __DIR__ . '/../models/administradores/estudiante.php';
+    require_once __DIR__ . '/../../helpers/alert_helper.php';
+    require_once __DIR__ . '/../../models/administradores/estudiante.php';
 
     // CAPTURAMOS EN UNA VARIABLE EL METODO O SOLICITUD HECHA AL SERVIDOR
     $method = $_SERVER['REQUEST_METHOD'];
@@ -50,9 +50,54 @@
             exit();
         }
 
+        // CAPTURAMOS EL ID DE LA INSTITUCION DEL ADMIN QUE INICIO SESION
+        session_start();
+        if(!isset($_SESSION['user']['id_institucion'])){
+            mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
+            exit();
+        }
+        $id_institucion = $_SESSION['user']['id_institucion'];
         // CAPTURAMOS EL ID DEL USUARIO QUE INICIA SESION PARA GUARDARLO SOLO SI ES NECESARIO
         // session_start();
         // $id_coordinador = $_SESSION['user']['id'];
+
+        // LOGICA PARA CARGAR IMAGENES
+        $ruta_img = null;
+        // VALIDAMOS SI SE ENVIO O NO LA FOTO DESDE EL FORMULARIO
+        // **************** SI EL USUARIO NO REGISTRO UNA FOTO DEJAR UNA IMAGEN POR DEFECTO
+
+        if(!empty($_FILES['foto']['name'])){
+
+            $file = $_FILES['foto'];
+            
+            // OBTENEMOS LA EXTENSION DEL ARCHIVO
+            $extension = strtolower(pathinfo($file['name'],PATHINFO_EXTENSION));
+
+            // DEFINIMOS LAS EXTENSIONES PERMITIDAS
+            $permitidas = ['png', 'jpg', 'jpeg'];
+
+            // VALIDAMOS SI LA EXTENSION DE LA IMGAEN CARGADA ESTE DENTRO DEL ARREGLO
+            if(!in_array($extension, $permitidas)){
+                mostrarSweetAlert('error', 'Extension no permitidad', 'Cargue una extension permitida (jpg, png, jpeg).');
+                exit();
+            }
+            
+            // VALIDAMOS EL TAMAÑO O PESO MAX 2MB
+            if($file['size'] > 2 * 1024 * 1024){
+                mostrarSweetAlert('error', 'Error al cargar la foto', 'El peso de la foto es superior a 2MB.');
+                exit();
+            }
+            // DEFINIMOS EL NOMBRE DEL ARCHIVO Y LE CONCATENAMOS LA EXTENSION
+            $ruta_img = uniqid('user_') . '.' . $extension;
+            // DEFINIMOS EL DESTINO DONDE MOVEREMOS EL ARCHIVO
+            $destino = BASE_PATH . '/public/uploads/estudiantes/' . $ruta_img;
+            // MOVEMOS EL ARCHIVO AL DESTINO
+            move_uploaded_file($file['tmp_name'], $destino);   
+
+        }else{
+            // AGREGAR LA LOGICA DE LA IMAGEN POR DEFECTO
+            $ruta_img = 'default.png';
+        }
 
         // PROGRAMACION ORIENTADA A OBJETOS
         // INSTANCEAMOS LA CLASE
@@ -65,7 +110,9 @@
             'documento' => $documento,
             'apellidos' => $apellidos,
             'correo' => $correo,
-            'acudiente' => $acudiente
+            'acudiente' => $acudiente,
+            'foto' => $ruta_img,
+            'id_institucion' => $id_institucion
             // 'id_coordinador' => $id_coordinador
             
         ];

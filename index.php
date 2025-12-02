@@ -149,7 +149,7 @@
                 break;
 
             case '/administrador/guardar_estudiante':
-                require BASE_PATH . '/app/controllers/estudiante_controller.php';
+                require BASE_PATH . '/app/controllers/administrador/estudiante_controller.php';
                 break;
 
             case '/administrador/detalle-estudiante':
