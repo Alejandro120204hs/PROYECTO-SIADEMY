@@ -36,7 +36,8 @@
         session_start();
         $_SESSION['user']=[
             'id' => $resultado['id'],
-            'rol' => $resultado['rol']
+            'rol' => $resultado['rol'],
+            'id_institucion' => $resultado['id_institucion']
         ];
 
         // REDIRIGIENDO SEGUN EL ROL

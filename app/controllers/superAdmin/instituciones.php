@@ -41,26 +41,65 @@
             // CAPTURAMOS EN VARIABLES LOS DATOS ENVIAODS A TRAVEZ DEL METODO POST Y LOS NAME DE LOS CAMPOS
             $nombre = $_POST['nombre'] ?? '';
             $tipo = $_POST['tipo'] ?? '';
-            $jornada = $_POST['jornada'] ?? '';
+            $ciudad = $_POST['ciudad'] ?? '';
             $direccion = $_POST['direccion'] ?? '';
             $telefono = $_POST['telefono'] ?? '';
             $correo = $_POST['correo'] ?? '';
 
             // VALIDAMOS LOS CAMPOS QUE SON OBLIGATORIOS
-            if(empty($nombre) || empty($tipo) || empty($jornada) || empty($direccion) || empty($telefono) || empty($correo)){
+            if(empty($nombre) || empty($tipo) || empty($ciudad) || empty($direccion) || empty($telefono) || empty($correo)){
                 mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete los campos');
                 exit();
             }
+
+            // LOGICA PARA CARGAR IMAGENES
+            $ruta_img = null;
+            // VALIDAMOS SI SE ENVIO O NO LA FOTO DESDE EL FORMULARIO
+            // **************** SI EL USUARIO NO REGISTRO UNA FOTO DEJAR UNA IMAGEN POR DEFECTO
+
+            if(!empty($_FILES['logo']['name'])){
+
+                $file = $_FILES['logo'];
+                
+                // OBTENEMOS LA EXTENSION DEL ARCHIVO
+                $extension = strtolower(pathinfo($file['name'],PATHINFO_EXTENSION));
+
+                // DEFINIMOS LAS EXTENSIONES PERMITIDAS
+                $permitidas = ['png', 'jpg', 'jpeg'];
+
+                // VALIDAMOS SI LA EXTENSION DE LA IMGAEN CARGADA ESTE DENTRO DEL ARREGLO
+                if(!in_array($extension, $permitidas)){
+                    mostrarSweetAlert('error', 'Extension no permitidad', 'Cargue una extension permitida (jpg, png, jpeg).');
+                    exit();
+                }
+                
+                // VALIDAMOS EL TAMAÑO O PESO MAX 2MB
+                if($file['size'] > 2 * 1024 * 1024){
+                    mostrarSweetAlert('error', 'Error al cargar la foto', 'El peso de la foto es superior a 2MB.');
+                    exit();
+                }
+                // DEFINIMOS EL NOMBRE DEL ARCHIVO Y LE CONCATENAMOS LA EXTENSION
+                $ruta_img = uniqid('user_') . '.' . $extension;
+                // DEFINIMOS EL DESTINO DONDE MOVEREMOS EL ARCHIVO
+                $destino = BASE_PATH . '/public/uploads/instituciones/' . $ruta_img;
+                // MOVEMOS EL ARCHIVO AL DESTINO
+                move_uploaded_file($file['tmp_name'], $destino);   
+
+                }else{
+                    // AGREGAR LA LOGICA DE LA IMAGEN POR DEFECTO
+                    $ruta_img = 'default.png';
+                }
 
             // PROGRAMACION ORIENTADA A OBJETOS
             $objetoInstitucion = new Institucion();
             $data = [
                 'nombre' => $nombre,
                 'tipo' => $tipo,
-                'jornada' => $jornada,
+                'ciudad' => $ciudad,
                 'direccion' => $direccion,
                 'telefono' => $telefono,
-                'correo' => $correo
+                'correo' => $correo,
+                'logo' => $ruta_img
             ];
 
             // ENVIAMOS LA DATA AL METODO
@@ -112,14 +151,14 @@
             $id = $_POST['id'] ?? '';
             $nombre = $_POST['nombre'] ?? '';
             $tipo = $_POST['tipo'] ?? '';
-            $jornada = $_POST['jornada'] ?? '';
+            $ciudad = $_POST['ciudad'] ?? '';
             $estado = $_POST['estado'] ?? '';
             $direccion = $_POST['direccion'] ?? '';
             $telefono = $_POST['telefono'] ?? '';
             $correo = $_POST['correo'] ?? '';
 
             // VALIDAMOS LOS CAMPOS OBLIGATOTIOS
-            if(empty($nombre) || empty($tipo) || empty($jornada) || empty($jornada) || empty($estado) || empty($direccion) || empty($telefono) || empty($correo)){
+            if(empty($nombre) || empty($tipo) || empty($ciudad) || empty($estado) || empty($direccion) || empty($telefono) || empty($correo)){
                 mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete todos los campos.');
                 exit();
             }
@@ -131,7 +170,7 @@
                 'id' => $id,
                 'nombre' => $nombre,
                 'tipo' => $tipo,
-                'jornada' => $jornada,
+                'ciudad' => $ciudad,
                 'estado' => $estado,
                 'direccion' => $direccion,
                 'telefono' => $telefono,

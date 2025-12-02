@@ -27,10 +27,14 @@
           </button>
           <div class="title">Gestión de Asignaturas</div>
         </div>
+        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-asignatura'">
+        Agregar Asignatura
+        </button>
         <div class="search">
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar asignatura o profesor...">
         </div>
+        
         <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
           <i class="ri-layout-right-2-line"></i>
         </button>

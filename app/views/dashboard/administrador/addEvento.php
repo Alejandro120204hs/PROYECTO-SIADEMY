@@ -49,7 +49,7 @@
                     <div id="stepIndicator3">Confirmar</div>
                 </div>
 
-                <form id="formWizard">
+                <form id="formWizard" action="administrador/guardar-evento" method="POST">
 
                     <!-- Paso 1: Datos del Evento -->
                     <div class="step active">
@@ -61,7 +61,7 @@
                             <!-- Tipo de Evento -->
                             <div class="col-md-6">
                                 <label for="eventType">Tipo de Evento*</label>
-                                <select id="eventType" class="selector" required>
+                                <select id="eventType" class="selector" required name="tipo">
                                     <option selected>Selecciona el tipo de evento</option>
                                     <option value="meetings">Reunión</option>
                                     <option value="exams">Examen</option>
@@ -76,19 +76,19 @@
                             <!-- Nombre del Evento -->
                             <div class="col-md-6">
                                 <label for="eventName">Nombre del Evento*</label>
-                                <input type="text" id="eventName" class="form-control" placeholder="Ej: Reunión de Padres - Grado 7°" required>
+                                <input type="text" id="eventName" class="form-control" placeholder="Ej: Reunión de Padres - Grado 7°" required name="nombre">
                             </div>
 
                             <!-- Descripción -->
                             <div class="col-md-12">
                                 <label for="eventDescription">Descripción*</label>
-                                <textarea id="eventDescription" class="form-control" rows="4" placeholder="Descripción detallada del evento..." required></textarea>
+                                <textarea id="eventDescription" class="form-control" rows="4" placeholder="Descripción detallada del evento..." required name="descripcion"></textarea>
                             </div>
 
                             <!-- Fecha -->
                             <div class="col-md-4">
                                 <label for="eventDate">Fecha del Evento*</label>
-                                <input type="date" id="eventDate" class="form-control" required>
+                                <input type="date" id="eventDate" class="form-control" required name="fecha">
                             </div>
 
                             <!-- Hora de Inicio -->

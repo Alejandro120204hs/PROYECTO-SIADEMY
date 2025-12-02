@@ -16,10 +16,11 @@
             try{
 
                 // INSERTAMOS DATOS EN LA TABLA USUARIO
-                $insertarUsuario = "INSERT INTO usuario(correo,clave,rol,estado)VALUES(:correo,:clave,'Acudiente','Activo')";
+                $insertarUsuario = "INSERT INTO usuario(id_institucion,correo,clave,rol,estado)VALUES(:id_institucion,:correo,:clave,'Acudiente','Activo')";
                 
                 // SE GENERA LA CONTRASEÑA
                 $resultadoUusario = $this->conexion->prepare($insertarUsuario);
+                $resultadoUusario->bindParam(':id_institucion', $data['id_institucion']);
                 $resultadoUusario->bindParam(':correo', $data['correo']);
 
                  $clave = password_hash($data['documento'],PASSWORD_DEFAULT);
@@ -30,12 +31,13 @@
 
 
                 // INSERTAR DATOS EN TABLA ACUDIENTE
-                $insertar = "INSERT INTO acudiente(id_usuario,nombres,parentesco,telefono,documento,apellidos,edad,foto) VALUES(:id_usuario,:nombres,:parentesco,:telefono,:documento,:apellidos,:edad,:foto)";
+                $insertar = "INSERT INTO acudiente(id_institucion,id_usuario,nombres,parentesco,telefono,documento,apellidos,edad,foto) VALUES(:id_institucion,:id_usuario,:nombres,:parentesco,:telefono,:documento,:apellidos,:edad,:foto)";
 
                 
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
                 $resultado = $this->conexion->prepare($insertar);
+                $resultado->bindParam(':id_institucion', $data['id_institucion']);
                 $resultado->bindParam(':id_usuario', $id_usuario);
                 $resultado->bindParam(':nombres', $data['nombres']);
                 $resultado->bindParam(':parentesco', $data['parentesco']);
@@ -57,14 +59,15 @@
             }
         }
 
-        public function listar(){
+        public function listar($id_institucion){
             try{
 
                 // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
-                $consultar = "SELECT acudiente.*, usuario.correo AS correo, usuario.estado AS estado FROM acudiente INNER JOIN usuario ON acudiente.id_usuario = usuario.id  ORDER BY apellidos ASC";
+                $consultar = "SELECT acudiente.*, usuario.correo AS correo, usuario.estado AS estado FROM acudiente INNER JOIN usuario ON acudiente.id_usuario = usuario.id WHERE acudiente.id_institucion = :id_institucion  ORDER BY apellidos ASC";
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
                 $resultado = $this->conexion->prepare($consultar);
+                $resultado -> bindParam(':id_institucion', $id_institucion);
                 $resultado -> execute();
                 return $resultado -> fetchAll();
 

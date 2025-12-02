@@ -97,28 +97,33 @@
 <!-- TABLA GENERADA -->
 <table>
     <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
-            <th>Correo</th>
-            <th>Estado</th>
-            <th>Tipo</th>
-            <th>Jornada</th>
-        </tr>
-    </thead>
+            
+            <tr>
+              <th>Logo</th>
+              <th>Nombre</th>
+              <th>Ciudad</th>
+              <th>Direccion</th>
+              <th>Telefono</th>
+              <th>Correo</th>
+              <th>Tipo</th>
+              <th>Estado</th>
+          
+            </tr>
+          </thead>
    <tbody>
 
     <?php if (!empty($instituciones)): ?>
         <?php foreach ($instituciones as $inst): ?>
         <tr>
-            <td><?= $inst['nombre'] ?></td>
-            <td><?= $inst['direccion'] ?></td>
-            <td><?= $inst['telefono'] ?></td>
-            <td><?= $inst['correo'] ?></td>
-            <td><?= $inst['estado'] ?></td>
-            <td><?= $inst['tipo'] ?></td>
-            <td><?= $inst['jornada'] ?></td>
+             <td><img src="<?= BASE_URL ?>/public/uploads/instituciones/<?= $inst['logo'] ?>" 
+              alt="logo" width="50px" height="50px" style="border-radius: 50%;"></td>
+              <td><?= $inst['nombre'] ?></td>
+              <td><?= $inst['ciudad'] ?></td>
+              <td><?= $inst['direccion'] ?></td>
+              <td><?= $inst['telefono'] ?></td>
+              <td><?= $inst['correo'] ?></td>
+              <td><?= $inst['tipo'] ?></td>
+              <td><?= $inst['estado'] ?></td>
         </tr>
         <?php endforeach; ?>
 
