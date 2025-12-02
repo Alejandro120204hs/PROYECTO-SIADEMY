@@ -31,7 +31,7 @@
 
 
                 // INSERTAR DATOS EN TABLA ACUDIENTE
-                $insertar = "INSERT INTO acudiente(id_institucion,id_usuario,nombres,parentesco,telefono,documento,apellidos,edad,foto) VALUES(:id_institucion,:id_usuario,:nombres,:parentesco,:telefono,:documento,:apellidos,:edad,:foto)";
+                $insertar = "INSERT INTO acudiente(id_institucion,id_usuario,nombres,parentesco,genero,telefono,tipo_documento,documento,apellidos,fecha_de_nacimiento,foto,ciudad,direccion) VALUES(:id_institucion,:id_usuario,:nombres,:parentesco,:genero,:telefono,:tipo_documento,:documento,:apellidos,:fecha_nacimiento,:foto,:ciudad,:direccion)";
 
                 
 
@@ -41,11 +41,16 @@
                 $resultado->bindParam(':id_usuario', $id_usuario);
                 $resultado->bindParam(':nombres', $data['nombres']);
                 $resultado->bindParam(':parentesco', $data['parentesco']);
+                $resultado->bindParam(':genero', $data['genero']);
                 $resultado->bindParam(':telefono', $data['telefono']);
+                $resultado->bindParam(':tipo_documento', $data['tipo_documento']);
                 $resultado->bindParam(':documento', $data['documento']);
                 $resultado->bindParam(':apellidos', $data['apellidos']);
-                $resultado->bindParam(':edad', $data['edad']);
+                $resultado->bindParam(':fecha_nacimiento', $data['fecha_nacimiento']);
                 $resultado->bindParam(':foto', $data['foto']);
+                $resultado->bindParam(':ciudad', $data['ciudad']);
+                $resultado->bindParam(':direccion', $data['direccion']);
+
 
 
              
@@ -110,16 +115,21 @@
 
 
                 // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
-                $actualizar = "UPDATE acudiente SET nombres=:nombres, parentesco=:parentesco, telefono=:telefono, apellidos=:apellidos, edad=:edad WHERE id_usuario = :id_usuario";
+                $actualizar = "UPDATE acudiente SET nombres=:nombres, parentesco=:parentesco, genero=:genero, telefono=:telefono, tipo_documento=:tipo_documento, apellidos=:apellidos, fecha_de_nacimiento=:fecha_nacimiento, ciudad=:ciudad, direccion=:direccion WHERE id_usuario = :id_usuario";
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
                 $resultado2 = $this->conexion->prepare($actualizar);
                 $resultado2->bindParam(':id_usuario',$data['id_usuario']);
                 $resultado2->bindParam(':nombres',$data['nombres']);
                 $resultado2->bindParam(':parentesco',$data['parentesco']);
+                $resultado2->bindParam(':genero',$data['genero']);
                 $resultado2->bindParam(':telefono',$data['telefono']);
+                $resultado2->bindParam(':tipo_documento',$data['tipo_documento']);
                 $resultado2->bindParam(':apellidos',$data['apellidos']);
-                $resultado2->bindParam(':edad',$data['edad']);
+                $resultado2->bindParam(':fecha_nacimiento',$data['fecha_nacimiento']);
+                $resultado2->bindParam(':ciudad',$data['ciudad']);
+                $resultado2->bindParam(':direccion',$data['direccion']);
+
               
 
                 $resultadoAdministrador = $resultado2 -> execute();

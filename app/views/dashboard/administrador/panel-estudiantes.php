@@ -1,5 +1,6 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
+  
 ?>
 
 <?php
@@ -81,6 +82,7 @@
                 <input type="checkbox" class="form-check-input" id="selectAll">
               </th>
               <th>Nombres</th>
+              <th>Apellidos</th>
               <th>N° Identificación</th>
               <th>Fecha Nacimiento</th>
               <th>Nombre Pariente</th>
@@ -95,12 +97,8 @@
               <td>
                 <input type="checkbox" class="form-check-input row-checkbox">
               </td>
-              <td>
-                <div class="student-info">
-                  <div class="student-avatar" style="background: #9b59b6;">SW</div>
-                  <span class="student-name">Samanta William</span>
-                </div>
-              </td>
+              <td>Alejo</td>
+              <td>hernadexz</td>
               <td>#463436465</td>
               <td>28 de marzo de 2016</td>
               <td>Maria William</td>

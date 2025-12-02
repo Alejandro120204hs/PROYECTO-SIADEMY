@@ -54,7 +54,7 @@
         public function listar(){
             try{
                 // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL PARA LISTAR LOS ADMINISTRADORES
-                $consultar = "SELECT administrador.*, usuario.correo AS correo, usuario.estado AS estado, institucion.nombre AS nombre_institucion FROM administrador INNER JOIN usuario ON administrador.id_usuario = usuario.id INNER JOIN institucion ON administrador.id_institucion = institucion.id";
+                $consultar = "SELECT administrador.*, usuario.correo AS correo, usuario.estado AS estado, institucion.nombre AS nombre_institucion, institucion.logo AS logo FROM administrador INNER JOIN usuario ON administrador.id_usuario = usuario.id INNER JOIN institucion ON administrador.id_institucion = institucion.id";
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
                 $resultado = $this -> conexion -> prepare($consultar);
