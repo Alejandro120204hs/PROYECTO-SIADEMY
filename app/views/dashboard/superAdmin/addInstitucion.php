@@ -47,7 +47,7 @@
                     <div id="stepIndicator3">Confirmar</div>
                 </div>
 
-                <form id="formWizard" action="<?= BASE_URL ?>/superAdmin-registrar-institucion" method="POST">
+                <form id="formWizard" action="<?= BASE_URL ?>/superAdmin-registrar-institucion" method="POST" enctype="multipart/form-data">
 
                     <!-- Paso 1 -->
                     <div class="step active">
@@ -58,17 +58,33 @@
 
                         <div class="row g-3">
                             
+                        <div class="col-md-3 poFoto">
+                                <label for="">Logo</label>
+                                <div
+                                    class=" esPhoto">
+                                    <small>Selecciona un archivo</small>
+                                    <input type="file" class="form-control mt-2"  name="logo" accept=".jpg, .png, .jpeg,"  tabindex="1" />
+                                </div>
+                            </div>
 
                             <!-- Datos personales -->
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="">Nombres</label>
-                                    <input type="text" class="form-control" name="nombre">
+                                    <label for="">Nombre</label>
+                                    <input type="text" class="form-control" name="nombre"  tabindex="2">
                                 </div>
                             
+                            
+                               
+
+                            </div>
+
+                            <!-- Apellidos y teléfono -->
+                            <div class="col-md-4">
+
                             <div class="mb-3">
                                     <label for="">Tipo</label>
-                                    <select class="selector" name="tipo">
+                                    <select class="selector" name="tipo"  tabindex="3">
                                         <option selected>Selecciona el tipo de intitucion</option>
                                         <option value="Publica">Publica</option>
                                         <option value="Privada">Privada</option>
@@ -76,23 +92,8 @@
                                         
                                     </select>
                                 </div>
-                               
-
-                            </div>
-
-                            <!-- Apellidos y teléfono -->
-                            <div class="col-md-6">
                                  
-                                 <div class="mb-3">
-                                    <label for="">Jornada</label>
-                                    <select class="selector" name="jornada">
-                                        <option selected>Selecciona el tipo de Joornada</option>
-                                        <option value="Mañana">Mañana</option>
-                                        <option value="Tarde">Tarde</option>
-                                        <option value="Noche">Noche</option>
-                                        <option value="Diurna">Diurna</option>
-                                    </select>
-                                </div>
+                                 
                                 
 
                             </div>
@@ -112,20 +113,28 @@
                         <div class="row g-3">
                             <div class="col-md-1"></div>
                             <div class="col-md-5">
-                                <div class="mb-3">
-                                    <label for="">Dirección</label>
-                                    <input type="text" class="form-control" name="direccion">
+                                 <div class="mb-3">
+                                    <label for="">Ciudad</label>
+                                    <input type="text" class="form-control" name="ciudad" tabindex="1">
                                 </div>
+                              
                                 <div class="mb-3">
-                                    <label for="">Telefono</label>
-                                    <input type="number" class="form-control" name="telefono">
+                                    <label for="">Correo</label>
+                                    <input type="email" class="form-control" name="correo" tabindex="3">
                                 </div>
+                                
                             </div>
 
                             <div class="col-md-5">
+                                  <div class="mb-3">
+                                    <label for="">Dirección</label>
+                                    <input type="text" class="form-control" name="direccion" tabindex="2">
+                                </div>
+                                
+
                                 <div class="mb-3">
-                                    <label for="">Correo</label>
-                                    <input type="email" class="form-control" name="correo">
+                                    <label for="">Telefono</label>
+                                    <input type="number" class="form-control" name="telefono" tabindex="4">
                                 </div>
                                 
                             </div>

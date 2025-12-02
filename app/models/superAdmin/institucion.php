@@ -17,16 +17,17 @@
         public function registrar($data){
             try{
                 // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL DE REGISTRAR INSTITUCION
-                $insertar = "INSERT INTO institucion(nombre,direccion,telefono,correo,estado,tipo,jornada) VALUES(:nombre,:direccion,:telefono,:correo,'Activo',:tipo,:jornada)";
+                $insertar = "INSERT INTO institucion(nombre,ciudad,direccion,telefono,correo,estado,tipo,logo) VALUES(:nombre,:ciudad,:direccion,:telefono,:correo,'Activo',:tipo,:logo)";
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
                 $resultado = $this -> conexion -> prepare($insertar);
                 $resultado -> bindParam(':nombre', $data['nombre']);
+                $resultado -> bindParam(':ciudad', $data['ciudad']);
                 $resultado -> bindParam(':direccion',$data['direccion']);
                 $resultado -> bindParam(':telefono',$data['telefono']);
                 $resultado -> bindParam(':correo',$data['correo']);
                 $resultado -> bindParam(':tipo',$data['tipo']);
-                $resultado -> bindParam(':jornada',$data['jornada']);
+                $resultado -> bindParam(':logo',$data['logo']);
                 
                 return $resultado -> execute();
 
@@ -84,21 +85,21 @@
         public function actualizar($data){
             try{
                 // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL PARA ACTUALIAR LA INSTITUCION
-                $actualizar = "UPDATE institucion SET nombre=:nombre, tipo=:tipo, jornada=:jornada, estado=:estado, direccion=:direccion, telefono=:telefono, correo=:correo WHERE id=:id";
+                $actualizar = "UPDATE institucion SET nombre=:nombre, ciudad=:ciudad, direccion=:direccion, telefono=:telefono, correo=:correo,estado=:estado, tipo=:tipo WHERE id=:id";
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
                 $resultado = $this -> conexion -> prepare($actualizar);
                 $resultado -> bindParam(':id',$data['id']);
                 $resultado -> bindParam(':nombre',$data['nombre']);
-                $resultado -> bindParam(':tipo',$data['tipo']);
-                $resultado -> bindParam(':jornada',$data['jornada']);
-                $resultado -> bindParam(':estado',$data['estado']);
+                $resultado -> bindParam(':ciudad',$data['ciudad']);
                 $resultado -> bindParam(':direccion',$data['direccion']);
                 $resultado -> bindParam('telefono',$data['telefono']);
-                $resultado ->bindParam('correo',$data['correo']);
+                $resultado ->bindParam(':correo',$data['correo']);
+                $resultado -> bindParam(':estado',$data['estado']);
+                $resultado -> bindParam(':tipo',$data['tipo']);
                 return $resultado -> execute();
             }catch(PDOException $e){
-                die("Error en Institucion::consultar->" . $e->getMessage());
+                die("Error en Institucion::editar->" . $e->getMessage());
                 return false;
             }
         }

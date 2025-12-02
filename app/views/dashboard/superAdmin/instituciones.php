@@ -15,7 +15,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SIADEMY • Estudiantes</title>
+  <title>SIADEMY • Instituciones</title>
   <?php 
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
   ?>
@@ -37,7 +37,7 @@
           <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
             <i class="ri-menu-2-line"></i>
           </button>
-          <div class="title">Escuelas</div>
+          <div class="title">Instituciones</div>
         </div>
         <div class="search">
           <i class="ri-search-2-line"></i>
@@ -46,7 +46,7 @@
         
         <!-- Botón Agregar Estudiante -->
         <button class="btn-agregar-estudiante" onclick="window.location.href='<?= BASE_URL ?>/superAdmin-agregar-instituciones'">
-          <i class="ri-add-line"></i> Agregar Escuela
+          <i class="ri-add-line"></i> Agregar Institución
         </button>
           <a class="btn-pdf" href="<?= BASE_URL ?>/superAdmin-reporte?reporte=instituciones" target="_blank">Generar PDF</a>
         
@@ -74,14 +74,14 @@
               <th width="40">
                 <input type="checkbox" class="form-check-input" id="selectAll">
               </th>
-              
+              <th>Logo</th>
               <th>Nombre</th>
+              <th>Ciudad</th>
               <th>Direccion</th>
               <th>Telefono</th>
               <th>Correo</th>
-              <th>Estado</th>
               <th>Tipo</th>
-              <th>Jornada</th>
+              <th>Estado</th>
               <th width="100">Acción</th>
             </tr>
           </thead>
@@ -92,13 +92,16 @@
               <td>
                 <input type="checkbox" class="form-check-input row-checkbox">
               </td>
+              <td><img src="<?= BASE_URL ?>/public/uploads/instituciones/<?= $institucion['logo'] ?>" 
+              alt="logo" width="50px" height="50px" style="border-radius: 50%;"></td>
               <td><?= $institucion['nombre'] ?></td>
+              <td><?= $institucion['ciudad'] ?></td>
               <td><?= $institucion['direccion'] ?></td>
               <td><?= $institucion['telefono'] ?></td>
               <td><?= $institucion['correo'] ?></td>
-              <td><?= $institucion['estado'] ?></td>
               <td><?= $institucion['tipo'] ?></td>
-              <td><?= $institucion['jornada'] ?></td>
+              <td><?= $institucion['estado'] ?></td>
+
               <td class="acciones">
         
                 <button class="btn-action"><a href="<?= BASE_URL ?>/superAdmin-editar-institucion?id=<?= $institucion['id'] ?>">Editar</a></button>

@@ -1,3 +1,9 @@
+<?php
+    // Inicia sesión si no está activa
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -101,12 +107,12 @@
             <th>Foto</th>
             <th>Nombres</th>
             <th>Apellidos</th>
+            <th>Parentesco</th>
             <th>Documento</th>
             <th>Correo</th>
-            <th>Estado</th>
             <th>Telefono</th>
-            <th>Parentesco</th>
             <th>Edad</th>
+            <th>Estado</th>
 
         </tr>
     </thead>
@@ -121,19 +127,20 @@
 
             <td><?= $ac['nombres'] ?></td>
             <td><?= $ac['apellidos'] ?></td>
+            <td><?= $ac['parentesco'] ?></td>
             <td><?= $ac['documento'] ?></td>
             <td><?= $ac['correo'] ?></td>
-            <td><?= $ac['estado'] ?></td>
             <td><?= $ac['telefono'] ?></td>
-            <td><?= $ac['parentesco'] ?></td>
             <td><?= $ac['edad'] ?></td>
+            <td><?= $ac['estado'] ?></td>
+            
 
         </tr>
         <?php endforeach; ?>
 
     <?php else: ?>
         <tr>
-            <td colspan="7" style="text-align:center;">No hay administradores registradas</td>
+            <td colspan="7" style="text-align:center;">No hay acudientes registradas</td>
         </tr>
     <?php endif; ?>
 

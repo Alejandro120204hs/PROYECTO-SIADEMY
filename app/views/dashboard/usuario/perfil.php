@@ -1,5 +1,5 @@
 <?php 
-  require_once BASE_PATH . '/app/helpers/session_coordinador.php';
+  require_once BASE_PATH . '/app/helpers/session_administrador.php';
 
   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
     require_once BASE_PATH . '/app/controllers/perfil.php';

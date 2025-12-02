@@ -15,10 +15,12 @@
         public function registrar($data){
             try{
                 // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL PARA REGISTRAR EL ADMINISTRADOR
-                $insertarUsuario = "INSERT INTO usuario(correo,clave,rol,estado) VALUES(:correo,:clave,'Administrador','Activo')";
+                $insertarUsuario = "INSERT INTO usuario(id_institucion,correo,clave,rol,estado) VALUES(:institucion,:correo,:clave,'Administrador','Activo')";
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
                 $resultado = $this -> conexion -> prepare($insertarUsuario);
+                $resultado -> bindParam(':institucion',$data['institucion']);
+
                 $resultado -> bindParam(':correo',$data['correo']);
 
                 $clave = password_hash($data['documento'],PASSWORD_DEFAULT);

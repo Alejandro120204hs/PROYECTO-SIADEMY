@@ -72,6 +72,14 @@
             exit();
         }
 
+         // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
+        session_start();
+        if(!isset($_SESSION['user']['id_institucion'])){
+            mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
+            exit();
+        }
+        $id_institucion = $_SESSION['user']['id_institucion'];
+
         // CAPTURAMOS EL ID DEL USUARIO QUE INICIA SESION PARA GUARDARLO SOLO SI ES NECESARIO
         // session_start();
         // $id_coordinador = $_SESSION['user']['id'];
@@ -126,7 +134,8 @@
             'parentesco' => $parentesco,
             'correo' => $correo,
             'telefono' => $telefono,
-            'foto' => $ruta_img
+            'foto' => $ruta_img,
+            'id_institucion' => $id_institucion
             // 'id_coordinador' => $id_coordinador
             
         ];
@@ -147,10 +156,20 @@
 
     }
 
-    function mostrarAcudientes(){
-        // INSTANCEAMOS LA CLASE
+    function mostrarAcudientes(){   
+        // VERIFICAMOS SI LA SESIÓN YA ESTÁ INICIADA
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
+        $id_institucion = $_SESSION['user']['id_institucion'];
+
+        // INSTANCEAMOS LA CLASE ACUDIENTE
         $resultado = new Acudiente();
-        $acudientes = $resultado -> listar();
+
+        // LISTAMOS SOLO LOS ACUDIENTES DE ESA INSTITUCIÓN
+        $acudientes = $resultado->listar($id_institucion);
 
         return $acudientes;
     }

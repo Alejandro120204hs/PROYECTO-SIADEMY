@@ -86,12 +86,12 @@
               <th>Foto</th>
               <th>Nombres</th>
               <th>Apellidos</th>
+              <th>Parentesco</th>
               <th>N° Identificación</th>
               <th>Correo</th>
-              <th>estado</th>
               <th>Telefono</th>
-              <th>Parentesco</th>
               <th>Edad</th>
+              <th>estado</th>
               <th width="100">Acción</th>
             </tr>
           </thead>
@@ -106,12 +106,15 @@
          alt="foto" width="50px" height="50px" style="border-radius: 50%;"></td>
               <td><?= $acudiente['nombres'] ?></td>
               <td><?= $acudiente['apellidos'] ?></td>
+              <td><?= $acudiente['parentesco'] ?></td>
               <td><?= $acudiente['documento'] ?></td>
               <td><?= $acudiente['correo'] ?></td>
-              <td><?= $acudiente['estado'] ?></td>
               <td><?= $acudiente['telefono'] ?></td>
-              <td><?= $acudiente['parentesco'] ?></td>
-              <td><?= $acudiente['edad'] ?></td>
+                 <td><?= $acudiente['edad'] ?></td>
+              <td><?= $acudiente['estado'] ?></td>
+              
+              
+           
               <td class="acciones">
                 <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/detalle-acudiente">Ver</a></button>
                 <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/editar-acudiente?id=<?= $acudiente['id'] ?>">Editar</a></button>
