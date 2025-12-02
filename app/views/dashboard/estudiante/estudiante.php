@@ -18,68 +18,9 @@
 <body>
   <div class="app" id="appGrid">
     <!-- LEFT SIDEBAR -->
-    <aside class="sidebar" id="leftSidebar">
-      <a class="brand" href="#">
-        <span class="logo"><i class="ri-shield-star-line"></i></span>
-        <span>Siademy</span>
-      </a>
-<nav class="nav">
-  <a class="active" href="#">
-    <i class="ri-home-5-line"></i> Panel
-  </a>
-  
-  <a href="materias.html">
-    <i class="ri-book-2-line"></i> Mis Materias
-    <span class="badge">6</span> <!-- COUNT de estudiante_materia -->
-  </a>
-  
-  <a href="actividades.php">
-    <i class="ri-task-line"></i> Actividades
-    <span class="badge bg-warning">3</span> <!-- Pendientes -->
-  </a>
-  
-  <a href="calificaciones.php">
-    <i class="ri-bar-chart-line"></i> Calificaciones
-  </a>
-  
-  <a href="asistencia.php">
-    <i class="ri-calendar-check-line"></i> Asistencia
-    <span class="badge bg-success">92%</span>
-  </a>
-  
-  <div class="spacer"></div>
-  <div class="section">Académico</div>
-  
-  <a href="profesores.php">
-    <i class="ri-user-3-line"></i> Mis Profesores
-  </a>
-  
-  <a href="recursos.php">
-    <i class="ri-folder-2-line"></i> Recursos
-  </a>
-  
-  <a href="mensajes.php">
-    <i class="ri-message-3-line"></i> Mensajes
-    <span class="badge bg-danger">2</span> <!-- No leídos -->
-  </a>
-  
-  <a href="anuncios.php">
-    <i class="ri-megaphone-line"></i> Anuncios
-  </a>
-  
-  <div class="spacer"></div>
-  <div class="section">Seguimiento</div>
-  
-  <a href="progreso.php">
-    <i class="ri-line-chart-line"></i> Mi Progreso
-  </a>
-  
-  <a href="alertas.php">
-    <i class="ri-alert-line"></i> Alertas
-    <span class="badge bg-danger">2</span> <!-- Materias en riesgo -->
-  </a>
-</nav>
-    </aside>
+    <?php
+    include_once __DIR__ . '/../../layouts/sidebar_estudiante.php'
+    ?>
 
     <!-- MAIN -->
     <main class="main">
@@ -368,7 +309,8 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="../../assets/dashboard/js/main-estudiante.js"></script>
+
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-estudiante.js"></script>
 </body>
 
 </html>
