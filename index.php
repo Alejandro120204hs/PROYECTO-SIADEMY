@@ -232,6 +232,22 @@
                 require BASE_PATH . '/app/views/dashboard/estudiante/estudiante.php';
                 break;
 
+             case '/estudiante-panel-materias':
+                require BASE_PATH . '/app/views/dashboard/estudiante/materias.php';
+                break;
+
+            case '/estudiante-panel-actividades':
+                require BASE_PATH . '/app/views/dashboard/estudiante/actividades.php';
+                break;
+
+            case '/estudiante-panel-calificaciones':
+                require BASE_PATH . '/app/views/dashboard/estudiante/calificaciones.php';
+                break;
+
+            case '/estudiante-panel-profesores':
+                require BASE_PATH . '/app/views/dashboard/estudiante/misProfesores.php';
+                break;
+
             // ---------------------------------------ROL:  ACUDIENTE----------------------------------------
             case '/acudiente/dashboard':
                 require BASE_PATH . '/app/views/dashboard/acudiente/acudiente.php';
