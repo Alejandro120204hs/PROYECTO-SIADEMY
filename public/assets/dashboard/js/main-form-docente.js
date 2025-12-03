@@ -101,9 +101,9 @@ function nextStep() {
 function prevStep() {
     if (currentStep > 0) currentStep--;
     showStep(currentStep);
-}
+};
 
-document.getElementById("formWizard").addEventListener("submit", function (e) {
-    e.preventDefault();
-    alert("Profesor agregado con éxito");
-});
+// document.getElementById("formWizard").addEventListener("submit", function (e) {
+//     e.preventDefault();
+//     alert("Profesor agregado con éxito");
+// });
