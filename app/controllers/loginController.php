@@ -69,6 +69,10 @@
             case 'superAdmin':
                 $redireccionar = '/siademy/super-admin/dashboard';
                 $mensaje = 'Bienvenido super admin';
+
+            case 'Secretaria':
+                $redireccionar = '/siademy/secretaria-academica/dashboard';
+                $mensaje = 'Bienvenido Secretaría Academica';
         }
 
         mostrarSweetAlert('success', 'Ingreso exitoso', $mensaje, $redireccionar);
