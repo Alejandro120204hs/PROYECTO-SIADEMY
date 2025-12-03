@@ -48,7 +48,7 @@
                     <div id="stepIndicator3">Confirmar</div>
                 </div>
 
-                <form id="formWizard" action="<?= BASE_URL ?>/administrador/guardar-asignatura" method="POST" enctype="multipart/form-data">
+                <form id="formWizard" action="<?= BASE_URL ?>/administrador/guardar_asignatura" method="POST" enctype="multipart/form-data">
 
                     <!-- Paso 1 -->
                     <div class="step active">
