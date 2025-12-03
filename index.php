@@ -156,6 +156,18 @@
                 require BASE_PATH . '/app/views/dashboard/administrador/detalle-estudiante.php';
                 break;
 
+            case '/administrador/eliminar-estudiante':
+                require BASE_PATH . '/app/controllers/administrador/estudiante_controller.php';
+                break;
+
+            case '/administrador/editar-estudiante':
+                require BASE_PATH . '/app/views/dashboard/administrador/editarEstudiante.php';
+                break;
+
+            case '/administrador/actualizar_estudiante':
+                require BASE_PATH . '/app/controllers/administrador/estudiante_controller.php';
+                break;
+
             
 
 
