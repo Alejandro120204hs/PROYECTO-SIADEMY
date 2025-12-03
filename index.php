@@ -222,6 +222,27 @@
                 require BASE_PATH . '/app/views/dashboard/administrador/cursos.php';
                 break;
 
+
+            // -----------------------------ADMINISTRADOR(MODULO ASIGNATURAS)-------------------------
+
+            case '/administrador/registrar-asignatura':
+                require BASE_PATH . '/app/views/dashboard/administrador/addAsignatura.php';
+                break;       
+                
+
+            case '/administrador/guardar_asignatura':
+                require BASE_PATH . '/app/controllers/administrador/asignatura.php';
+                break;
+
+            case '/administrador/editar-asignatura':
+                require BASE_PATH . '/app/views/dashboard/administrador/editar-acudiente.php';
+                break;
+
+            case '/administrador/eliminar-asignatura':
+                require BASE_PATH . '/app/controllers/administrador/acudiente.php';
+                break;
+                
+
             // --------------------------------------ROL: DOCENTE---------------------------------------------
             case '/docente/dashboard':
                 require BASE_PATH . '/app/views/dashboard/docente/docente.php';
