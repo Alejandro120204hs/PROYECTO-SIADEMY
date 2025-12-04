@@ -80,10 +80,10 @@ function registrarAsignatura(){
 
         // SI LA RESPUESTA DEL MODELO ES VERDADERA CONFIRMAMOS EL REGISTRO Y REDIRECCIONAMOS, SI ES FALSA NOTIFICAMOS Y REDIRECCIONAMOS
         if($resultado === true){
-            mostrarSweetAlert('success', 'Registro de acudiente exitoso', 'Se ha creado un nuevo acudiente. Redirigiendo...', '/siademy/administrador-panel-acudientes');
+            mostrarSweetAlert('success', 'Registro de asignatura exitoso', 'Se ha creado una nueva asignatura. Redirigiendo...', '/siademy/administrador-panel-asignaturas');
             exit();
         }else{
-            mostrarSweetAlert('error', 'Error al registrar', 'No se pudo registrar el acudiente, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-acudientes');
+            mostrarSweetAlert('error', 'Error al registrar', 'No se pudo registrar la asignatura, intente nuevamente.  Redirigiendo...', '/siademy/administrador/registrar-asignatura');
             exit();
         }
         exit();
