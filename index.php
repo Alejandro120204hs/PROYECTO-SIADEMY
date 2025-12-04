@@ -215,6 +215,14 @@
             case '/administrador/guardar_docente':
                 require BASE_PATH . '/app/controllers/administrador/docente.php';
                 break;    
+            
+            case '/administrador/editar-docente':
+                require BASE_PATH . '/app/views/dashboard/administrador/editar-docente.php';
+                break;  
+                
+            case '/administrador/actualizar-docente':
+                require BASE_PATH . '/app/controllers/administrador/docente.php';
+                break;    
 
             // -----------------------------ADMINISTRADOR(MODULO EVENTOS)-------------------------
 
