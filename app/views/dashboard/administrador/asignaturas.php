@@ -1,3 +1,16 @@
+<?php 
+  require_once BASE_PATH . '/app/helpers/session_administrador.php';
+  // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
+  require_once BASE_PATH . '/app/controllers/administrador/asignatura.php';
+
+  // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
+  $asignaturas = mostrarAsignaturas();
+?>
+
+
+
+
+
 <!doctype html>
 <html lang="es">
 
@@ -79,16 +92,20 @@
 
         <div class="subjects-grid">
           <!-- Subject Card 1 -->
+
+          <?php if(!empty($asignaturas)): ?>
+          <?php foreach($asignaturas as $asignaturas): ?>
+
           <div class="subject-card">
             <div class="subject-header">
               <div class="subject-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                 <i class="ri-calculator-line"></i>
               </div>
-              <div class="subject-status status-active">Activa</div>
+              <div class="subject-status status-active"><?= $asignaturas['estado'] ?></div>
             </div>
             
-            <h4>Matemáticas</h4>
-            <p class="subject-area">Ciencias Exactas</p>
+            <h4><?= $asignaturas['nombre'] ?></h4>
+            <p class="subject-area"><?= $asignaturas['nombre'] ?></p>
             
             <div class="subject-info">
               <div class="info-item">
@@ -123,52 +140,12 @@
               <button class="btn-icon"><i class="ri-more-2-line"></i></button>
             </div>
           </div>
+              <?php endforeach; ?>
+              <?php else: ?>
 
-          <!-- Subject Card 7 -->
-          <div class="subject-card">
-            <div class="subject-header">
-              <div class="subject-icon" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
-                <i class="ri-book-2-line"></i>
-              </div>
-              <div class="subject-status status-review">Inactiva</div>
-            </div>
-            
-            <h4>Filosofía</h4>
-            <p class="subject-area">Humanidades</p>
-            
-            <div class="subject-info">
-              <div class="info-item">
-                <i class="ri-user-line"></i>
-                <div>
-                  <span class="info-label">Profesores</span>
-                  <strong>2</strong>
-                </div>
-              </div>
-              <div class="info-item">
-                <i class="ri-time-line"></i>
-                <div>
-                  <span class="info-label">Horas/Semana</span>
-                  <strong>2</strong>
-                </div>
-              </div>
-            </div>
-
-            <div class="subject-stats">
-              <div class="stat-box">
-                <span class="stat-label">Promedio</span>
-                <strong class="stat-value grade-good">3.9</strong>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Estudiantes</span>
-                <strong class="stat-value">280</strong>
-              </div>
-            </div>
-
-            <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
+                  <h3>No hay asignaturas registrados</h3>
+                
+              <?php endif; ?>
 
 
         </div>

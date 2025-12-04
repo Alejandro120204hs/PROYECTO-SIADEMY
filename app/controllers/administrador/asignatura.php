@@ -96,7 +96,21 @@ function registrarAsignatura(){
 }
 
 function mostrarAsignaturas(){
+    // VERIFICAMOS SI LA SESIÓN YA ESTÁ INICIADA
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
+    // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
+    $id_institucion = $_SESSION['user']['id_institucion'];
+
+    // INSTANCEAMOS LA CLASE ACUDIENTE
+    $resultado = new Asignatura();
+
+    // LISTAMOS SOLO LOS ACUDIENTES DE ESA INSTITUCIÓN
+    $asignaturas = $resultado->listar($id_institucion);
+
+    return $asignaturas;
 }
 
 function mostrarAsignaturaId($id){
