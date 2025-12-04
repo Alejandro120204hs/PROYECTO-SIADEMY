@@ -22,6 +22,7 @@
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
   ?>
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
+  
 </head>
 
 <body>
@@ -105,7 +106,7 @@
             </div>
             
             <h4><?= $asignaturas['nombre'] ?></h4>
-            <p class="subject-area"><?= $asignaturas['nombre'] ?></p>
+            <p class="subject-area"><?= $asignaturas['descripcion'] ?></p>
             
             <div class="subject-info">
               <div class="info-item">
@@ -136,8 +137,12 @@
             </div>
 
             <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
+              <button class="btn-secondary"><i class="bi bi-eye"></i></button>
+              <button class="btn-secondary"><i class="bi bi-pencil-square"></i></button>
+              <button class="btn-secondary"><i class="bi bi-trash3-fill"></i></button>
+
+              
+      
             </div>
           </div>
               <?php endforeach; ?>
@@ -273,6 +278,7 @@
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
+ 
 </body>
 
 </html>
