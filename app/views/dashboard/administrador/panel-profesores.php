@@ -81,13 +81,12 @@
                 <th>Foto</th>
                 <th>Nombres</th>
                 <th>Apellidos</th>
-                <th>Tipo-documento</th>
-                <th>Documento</th>
+                <th>N°-documento</th>
                 <th>Correo</th>                
                 <th>Teléfono</th>
                 <th>Ciudad</th>
                 <th>Estado</th>
-                <th width="100">Acción</th>
+                <th width="100">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -101,16 +100,16 @@
                alt="foto" width="50px" height="50px" style="border-radius: 50%;"></td>
               <td><?= $docente['nombres'] ?></td>
               <td><?= $docente['apellidos'] ?></td>
-              <td><?= $docente['tipo_documento'] ?></td>
-              <td><?= $docente['documento'] ?></td>
+              <td><?= $docente['tipo_documento'],-$docente['documento']?></td>
               <td><?= $docente['correo'] ?></td>
               <td><?= $docente['telefono'] ?></td>
               <td><?= $docente['ciudad'] ?></td>
               <td><?= $docente['estado'] ?></td>
               
-              <td>
-                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
-                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
+              <td class="acciones">
+                  <button class="btn-action"><a href="">Ver</a></button>
+                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/editar-estudiante?id=<?= $estudiante['id'] ?>">Editar</a></button>
+                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/eliminar-estudiante?accion=eliminar&id=<?= $estudiante['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
               </td>
             </tr>
               <?php endforeach; ?>
