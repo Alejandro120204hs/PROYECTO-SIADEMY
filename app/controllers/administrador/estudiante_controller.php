@@ -9,20 +9,31 @@
 
     switch($method){
         case 'POST':
-            registrarEstudiante();
+            $accion = $_POST['accion'] ?? '';
+            if($accion == 'actualizar'){
+                actualizarEstudiante();
+            }else{
+                registrarEstudiante();
+            }
+            
             break;
         
         case 'GET':
-            mostrarEstudiantes();
+            $accion = $_GET['accion'] ?? '';
+            if($accion == 'eliminar'){
+                 eliminarEstudiante($_GET['id']);
+            }
+
+            if(isset($_GET['id'])){
+                // SE LLENA EL FORMULARIO DE EDITAR
+                mostrarEstudianteId($_GET['id']);
+            }else{
+                 mostrarEstudiantes();
+            }
+           
             break;
 
-        case 'PUT':
-            actualizarEstudiante();
-            break;
-
-        case 'DELETE':
-            eliminarEstudiante();
-            break;
+    
         default;
             http_response_code(405);
             echo"Metodo no permitido";
@@ -41,11 +52,16 @@
         $apellidos = $_POST['apellidos'] ?? '';
         $correo = $_POST['correo'] ?? '';
         $acudiente = $_POST['acudiente'] ?? '';
+        $genero = $_POST['genero'] ?? '';
+        $ciudad = $_POST['ciudad'] ?? '';
+        $direccion = $_POST['direccion'] ?? '';
+
+
         
 
 
         // VALIDAMOS LOS CAMPOS QUE SON OBLIGATORIOS
-        if(empty($tipo_documento) || empty($nombres) || empty($fecha_nacimiento) || empty($telefono) || empty($documento) || empty($apellidos) || empty($correo) || empty($acudiente)){
+        if(empty($tipo_documento) || empty($nombres) || empty($fecha_nacimiento) || empty($telefono) || empty($documento) || empty($apellidos) || empty($correo) || empty($acudiente) || empty($genero) || empty($ciudad) || empty($direccion)){
             mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete todos los campos.');
             exit();
         }
@@ -112,7 +128,12 @@
             'correo' => $correo,
             'acudiente' => $acudiente,
             'foto' => $ruta_img,
-            'id_institucion' => $id_institucion
+            'id_institucion' => $id_institucion,
+            'genero' => $genero,
+            'ciudad' => $ciudad,
+            'direccion' => $direccion
+
+
             // 'id_coordinador' => $id_coordinador
             
         ];
@@ -134,15 +155,98 @@
     }
 
     function mostrarEstudiantes(){
+        // VERIFICAMOS SI LA SESIÓN YA ESTÁ INICIADA
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-    }   
+        // CAPTURAMOS EL ID DE LA INSTITUCION DEL ADMIN LOGUEADO
+        $id_institucion = $_SESSION['user']['id_institucion'];
+
+        // INSTANCEAMOS LA CLASE
+        $objetoEstudiante = new Estudiante();
+        $resultado = $objetoEstudiante->listar($id_institucion);
+        return $resultado;
+    }
+    
+    function mostrarEstudianteId($id){
+        // INSTANCEAMOS LA CLASE
+        $objetoEstudiante = new Estudiante();
+        $resultado = $objetoEstudiante -> listarId($id);
+
+        return $resultado;
+    }
     
     function actualizarEstudiante(){
+        // CAPTURAMOS EN VARIABLES LOS DATOS ENVIADOS A TRAVEZ DEL METODO POST Y LOS NAME DE LOS CAMPOS
+        $id = $_POST['id'] ?? '';
+        $id_usuario = $_POST['id_usuario'] ?? '';
+        $nombres = $_POST['nombres'] ?? '';
+        $tipo_documento = $_POST['tipo_documento'] ?? '';
+        $fecha_nacimiento = $_POST['fecha_nacimiento'] ?? '';
+        $estado = $_POST['estado'] ?? '';
+        $apellidos = $_POST['apellidos'] ?? '';
+        $documento = $_POST['documento'] ?? '';
+        $genero = $_POST['genero'] ?? '';
+        $correo = $_POST['correo'] ?? '';
+        $ciudad = $_POST['ciudad'] ?? '';
+        $acudiente = $_POST['acudiente'] ?? '';
+        $telefono = $_POST['telefono'] ?? '';
+        $direccion = $_POST['direccion'] ?? '';
 
+        // VALIDAMOS LOS CAMPOS OBLIGATORIOS
+        if(empty($nombres) || empty($tipo_documento) || empty($fecha_nacimiento) || empty($estado) || empty($apellidos) || empty($documento) || empty($genero) || empty($correo) || empty($ciudad) || empty($acudiente) || empty($telefono) || empty($direccion)){
+            mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete todos los campos.');
+            exit();
+        }
+
+        // PROGRAMACION ORIENTADA A OBJETOS
+        // ACCEDEMOS A LA CLASE
+        $objetoEstudiante = new Estudiante();
+        $data = [
+            'id' => $id,
+            'id_usuario' => $id_usuario,
+            'nombres' => $nombres,
+            'tipo_documento' => $tipo_documento,
+            'fecha_nacimiento' => $fecha_nacimiento,
+            'estado' => $estado,
+            'apellidos' => $apellidos,
+            'documento' => $documento,
+            'genero' => $genero,
+            'correo' => $correo,
+            'ciudad' => $ciudad,
+            'acudiente' => $acudiente,
+            'telefono' => $telefono,
+            'direccion' => $direccion
+        ];
+
+        // ENVIAMOS LA DATA AL OBJETO DE ACTUALIZAR
+        $resultado = $objetoEstudiante -> actulizar($data);
+
+        // MENSAJES DE RESPUESTA
+        if($resultado === true){
+            mostrarSweetAlert('success', 'Modificacion de estudiante exitoso', 'Se ha modificado el  estudiante. Redirigiendo...', '/siademy/administrador-panel-estudiantes');
+            exit();
+        }else{
+            mostrarSweetAlert('error', 'Error al modificar', 'No se pudo modificar el estudiante, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-estudiantes');
+            exit();
+        }
+        exit();
     }
 
-    function eliminarEstudiante(){
+    function eliminarEstudiante($id){
+        // INSTANCEAMOS LA CLASE
+        $objetoEstudiante = new Estudiante();
+        $resultado = $objetoEstudiante -> eliminar($id);
 
+          // MENSAJESDE RESPUESTA
+        if($resultado === true){
+            mostrarSweetAlert('success', 'Eliminación de estudiante exitosa', 'Se ha eliminado un estudianre. Redirigiendo...', '/siademy/administrador-panel-estudiantes');
+            exit();
+        }else{
+            mostrarSweetAlert('error', 'Error al eliminar', 'No se pudo eliminar el estudiante, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-estudiantes');
+            exit();
+        }
     }
 
 ?>
