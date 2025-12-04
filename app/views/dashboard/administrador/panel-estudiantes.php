@@ -59,6 +59,8 @@
         <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-estudiante'">
           <i class="ri-add-line"></i> Agregar Estudiante
         </button>
+          <a class="btn-pdf" href="<?= BASE_URL ?>/administrador-reporte?reporte=estudiantes" target="_blank">Generar PDF</a>
+
         
         <!-- Dropdown Más Nuevo -->
         <div class="dropdown-custom">
