@@ -5,8 +5,6 @@
 
   // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
   $datos = mostrarAcudientes();
-
-
 ?>
 
 <?php
