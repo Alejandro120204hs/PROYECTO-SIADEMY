@@ -293,6 +293,13 @@
             case '/super-admin/dashboard':
                 require BASE_PATH . '/app/views/dashboard/superAdmin/superAdmin.php';
                 break;
+
+            // -----------------------------------ROL: SECRETARÍA------------------------------------------
+            case '/secretaria-academica/dashboard':
+                require BASE_PATH . '/app/views/dashboard/secretariaAcademica/secretariaAcademica.php';
+                break;
+
+
             // FIN RUTAS LOGIN
             default: 
                 http_response_code(404);
