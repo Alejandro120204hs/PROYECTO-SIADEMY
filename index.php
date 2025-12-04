@@ -251,7 +251,11 @@
                 break;
 
             case '/administrador/editar-asignatura':
-                require BASE_PATH . '/app/views/dashboard/administrador/editar-acudiente.php';
+                require BASE_PATH . '/app/views/dashboard/administrador/editarAsignatura.php';
+                break;
+
+            case '/administrador/actualizar-asignatura':
+                require BASE_PATH . '/app/controllers/administrador/asignatura.php';
                 break;
 
             case '/administrador/eliminar-asignatura':
