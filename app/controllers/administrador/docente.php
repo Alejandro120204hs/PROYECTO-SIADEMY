@@ -156,23 +156,29 @@
 
         }
 
-        function mostrarDocentes(){   
-            // VERIFICAMOS SI LA SESIÓN YA ESTÁ INICIADA
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
+            function mostrarDocentes(){   
+                // VERIFICAMOS SI LA SESIÓN YA ESTÁ INICIADA
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
 
-            // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
-            $id_institucion = $_SESSION['user']['id_institucion'];
+                // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
+                $id_institucion = $_SESSION['user']['id_institucion'];
 
-            // INSTANCEAMOS LA CLASE ACUDIENTE
-            $resultado = new Docente();
+                // INSTANCEAMOS LA CLASE ACUDIENTE
+                $resultado = new Docente();
 
-            // LISTAMOS SOLO LOS ACUDIENTES DE ESA INSTITUCIÓN
-            $docentes = $resultado->listar($id_institucion);
+                // LISTAMOS SOLO LOS ACUDIENTES DE ESA INSTITUCIÓN
+                $docentes = $resultado->listar($id_institucion);
 
-            return $docentes;
+                return $docentes;
         }
 
+            function mostrarDocente($id){
 
+            }
+
+            function actualizarDocente(){
+                
+            }
 ?>
