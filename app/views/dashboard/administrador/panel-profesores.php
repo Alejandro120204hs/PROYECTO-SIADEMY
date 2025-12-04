@@ -1,5 +1,21 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
+   // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
+  require_once BASE_PATH . '/app/controllers/administrador/Docente.php';
+
+  // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
+  $datos = mostrarDocentes();
+?>
+
+<?php
+
+    //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
 ?>
 <!doctype html>
 <html lang="es">
@@ -48,9 +64,9 @@
         </div>
         
         <div class="user">
-          <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-          <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-          <div class="avatar" title="Diego A.">DA</div>
+          <?php
+          include_once __DIR__ . '/../../layouts/boton_perfil.php'
+          ?>
         </div>
       </div>
 
@@ -62,173 +78,48 @@
               <th width="40">
                 <input type="checkbox" class="form-check-input" id="selectAll">
               </th>
-              <th>Nombres</th>
-              <th>N° Identificación</th>
-              <th>Fecha Nacimiento</th>
-              <th>Nombre Pariente</th>
-              <th>Ciudad</th>
-              <th>Contactos</th>
-              <th>Materia</th>
-              <th width="100">Acción</th>
+                <th>Foto</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Tipo-documento</th>
+                <th>Documento</th>
+                <th>Correo</th>                
+                <th>Teléfono</th>
+                <th>Ciudad</th>
+                <th>Estado</th>
+                <th width="100">Acción</th>
             </tr>
           </thead>
           <tbody>
+             <?php if(!empty($datos)): ?>
+            <?php foreach($datos as $docente): ?>
             <tr>
               <td>
                 <input type="checkbox" class="form-check-input row-checkbox">
               </td>
-              <td>
-                <div class="student-info">
-                  <div class="student-avatar" style="background: #9b59b6;">SW</div>
-                  <span class="student-name">Samanta William</span>
-                </div>
-              </td>
-              <td>#463436465</td>
-              <td>28 de marzo de 2016</td>
-              <td>Maria William</td>
-              <td>Jatarta</td>
-              <td>
-                <div class="contacts">
-                  <i class="ri-phone-line"></i>
-                  <i class="ri-mail-line"></i>
-                </div>
-              </td>
-              <td>VII A</td>
+              <td><img src="<?= BASE_URL ?>/public/uploads/docentes/<?= $docente['foto'] ?>" 
+               alt="foto" width="50px" height="50px" style="border-radius: 50%;"></td>
+              <td><?= $docente['nombres'] ?></td>
+              <td><?= $docente['apellidos'] ?></td>
+              <td><?= $docente['tipo_documento'] ?></td>
+              <td><?= $docente['documento'] ?></td>
+              <td><?= $docente['correo'] ?></td>
+              <td><?= $docente['telefono'] ?></td>
+              <td><?= $docente['ciudad'] ?></td>
+              <td><?= $docente['estado'] ?></td>
+              
               <td>
                 <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
                 <button class="btn-more"><i class="ri-more-2-fill"></i></button>
               </td>
             </tr>
-            <tr>
-              <td>
-                <input type="checkbox" class="form-check-input row-checkbox">
-              </td>
-              <td>
-                <div class="student-info">
-                  <div class="student-avatar" style="background: #9b59b6;">TS</div>
-                  <span class="student-name">Tony Soap</span>
-                </div>
-              </td>
-              <td>#213423423</td>
-              <td>05 de julio de 2014</td>
-              <td>James Soap</td>
-              <td>Jatarta</td>
-              <td>
-                <div class="contacts">
-                  <i class="ri-phone-line"></i>
-                  <i class="ri-mail-line"></i>
-                </div>
-              </td>
-              <td>VII B</td>
-              <td>
-                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
-                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" class="form-check-input row-checkbox">
-              </td>
-              <td>
-                <div class="student-info">
-                  <div class="student-avatar" style="background: #9b59b6;">KH</div>
-                  <span class="student-name">Karen Hope</span>
-                </div>
-              </td>
-              <td>#43209847</td>
-              <td>20 de marzo de 2015</td>
-              <td>Justin Hope</td>
-              <td>Jatarta</td>
-              <td>
-                <div class="contacts">
-                  <i class="ri-phone-line"></i>
-                  <i class="ri-mail-line"></i>
-                </div>
-              </td>
-              <td>VII C</td>
-              <td>
-                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
-                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" class="form-check-input row-checkbox">
-              </td>
-              <td>
-                <div class="student-info">
-                  <div class="student-avatar" style="background: #9b59b6;">JN</div>
-                  <span class="student-name">Jordan Nico</span>
-                </div>
-              </td>
-              <td>#852910385</td>
-              <td>26 de diciembre de 2016</td>
-              <td>Amanda Nico</td>
-              <td>Jatarta</td>
-              <td>
-                <div class="contacts">
-                  <i class="ri-phone-line"></i>
-                  <i class="ri-mail-line"></i>
-                </div>
-              </td>
-              <td>VII A</td>
-              <td>
-                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
-                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" class="form-check-input row-checkbox">
-              </td>
-              <td>
-                <div class="student-info">
-                  <div class="student-avatar" style="background: #9b59b6;">NA</div>
-                  <span class="student-name">Nadila Adja</span>
-                </div>
-              </td>
-              <td>#462390130</td>
-              <td>26 de marzo de 2014</td>
-              <td>Jack Adja</td>
-              <td>Jatarta</td>
-              <td>
-                <div class="contacts">
-                  <i class="ri-phone-line"></i>
-                  <i class="ri-mail-line"></i>
-                </div>
-              </td>
-              <td>VII A</td>
-              <td>
-                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
-                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input type="checkbox" class="form-check-input row-checkbox">
-              </td>
-              <td>
-                <div class="student-info">
-                  <div class="student-avatar" style="background: #9b59b6;">JA</div>
-                  <span class="student-name">Johnny Ahmad</span>
-                </div>
-              </td>
-              <td>#423523464</td>
-              <td>27 de marzo de 2015</td>
-              <td>Donny Ahmad</td>
-              <td>Jatarta</td>
-              <td>
-                <div class="contacts">
-                  <i class="ri-phone-line"></i>
-                  <i class="ri-mail-line"></i>
-                </div>
-              </td>
-              <td>VII A</td>
-              <td>
-                <button class="btn-action"><a href="detalle-profesor.html">Ver</a></button>
-                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
-              </td>
-            </tr>
+              <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td>No hay acudientes registrados</td>
+                </tr>
+              <?php endif; ?>
+ 
           </tbody>
         </table>
       </div>

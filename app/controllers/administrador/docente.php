@@ -33,7 +33,7 @@
                 mostrarAcudienteId($_GET['id']);
             }else{
                 // LLENA LA TABLA DE ACUDIENTES
-                mostrarAcudientes();
+                mostrarDocentes();
             }
             
             break;            
@@ -143,7 +143,7 @@
 
                     // SI LA RESPUESTA DEL MODELO ES VERDADERA CONFIRMAMOS EL REGISTRO Y REDIRECCIONAMOS, SI ES FALSA NOTIFICAMOS Y REDIRECCIONAMOS
                     if($resultado === true){
-                        mostrarSweetAlert('success', 'Registro de docente exitoso', 'Se ha creado un nuevo docente. Redirigiendo...', '/siademy/administrador-panel-docentes');
+                        mostrarSweetAlert('success', 'Registro de docente exitoso', 'Se ha creado un nuevo docente. Redirigiendo...', '/siademy/administrador-panel-profesores');
                         exit();
                     }else{
                         mostrarSweetAlert('error', 'Error al registrar', 'No se pudo registrar el docente, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-docentes');
@@ -154,6 +154,24 @@
 
 
 
+        }
+
+        function mostrarDocentes(){   
+            // VERIFICAMOS SI LA SESIÓN YA ESTÁ INICIADA
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
+            $id_institucion = $_SESSION['user']['id_institucion'];
+
+            // INSTANCEAMOS LA CLASE ACUDIENTE
+            $resultado = new Docente();
+
+            // LISTAMOS SOLO LOS ACUDIENTES DE ESA INSTITUCIÓN
+            $docentes = $resultado->listar($id_institucion);
+
+            return $docentes;
         }
 
 
