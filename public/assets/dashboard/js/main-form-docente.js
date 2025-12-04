@@ -85,7 +85,9 @@ const steps = document.querySelectorAll(".step");
 const indicators = [
     document.getElementById("stepIndicator1"),
     document.getElementById("stepIndicator2"),
-    document.getElementById("stepIndicator3")
+    document.getElementById("stepIndicator3"),
+    document.getElementById("stepIndicator4")
+
 ];
 
 function showStep(index) {
