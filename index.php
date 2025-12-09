@@ -299,6 +299,14 @@
                 require BASE_PATH . '/app/views/dashboard/secretariaAcademica/secretariaAcademica.php';
                 break;
 
+            case '/secretaria-panel-matriculas':
+                require BASE_PATH . '/app/views/dashboard/secretariaAcademica/matriculas.php';
+                break;
+
+            case '/secretaria-panel-estudiantes':
+                require BASE_PATH . '/app/views/dashboard/secretariaAcademica/estudiantesM.php';
+                break;
+
 
             // FIN RUTAS LOGIN
             default: 
