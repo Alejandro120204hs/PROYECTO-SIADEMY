@@ -108,14 +108,14 @@
               
               <td class="acciones">
                   <button class="btn-action"><a href="">Ver</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/editar-estudiante?id=<?= $estudiante['id'] ?>">Editar</a></button>
+                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/editar-docente?id=<?= $docente['id'] ?>">Editar</a></button>
                 <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/eliminar-estudiante?accion=eliminar&id=<?= $estudiante['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
               </td>
             </tr>
               <?php endforeach; ?>
               <?php else: ?>
                 <tr>
-                  <td>No hay acudientes registrados</td>
+                  <td>No hay docentes registrados</td>
                 </tr>
               <?php endif; ?>
  

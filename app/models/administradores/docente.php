@@ -62,12 +62,12 @@
 
 
             }catch(PDOException $e){
-                die("Error en Estudiante::registrar->" . $e->getMessage());
+                die("Error en Docente::registrar->" . $e->getMessage());
             }
         }
 
 
-            public function listar($id_institucion){
+        public function listar($id_institucion){
 
             try{
 
@@ -81,9 +81,27 @@
                 return $resultado -> fetchAll();
 
             }catch(PDOException $e){
-                error_log("Error en Acudiente::listar->" . $e->getMessage());
+                error_log("Error en Docente::listar->" . $e->getMessage());
                 return[];
             }
         }
+
+            public function listarId($id){
+
+                try{
+                   
+                $consultar = "SELECT docente.*, usuario.correo AS correo, usuario.estado AS estado FROM docente INNER JOIN usuario ON docente.id_usuario = usuario.id WHERE docente.id = :id LIMIT 1";
+
+                    // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                    $resultado = $this -> conexion -> prepare($consultar);
+                    $resultado -> bindParam(':id',$id);
+                    $resultado -> execute();
+                    return $resultado -> fetch();
+
+                }catch(PDOException $e){
+                    die("Error en Docente::listar->" . $e->getMessage());
+                    return [];
+                }
+            }
     }
         ?>

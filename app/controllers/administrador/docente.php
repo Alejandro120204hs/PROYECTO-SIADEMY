@@ -30,7 +30,7 @@
             // EDITAR ACUDIENTE
             if(isset($_GET['id'])){
                 // LLENA EL FORMULARIO DE EDITAR
-                mostrarAcudienteId($_GET['id']);
+                mostrarDocenteId($_GET['id']);
             }else{
                 // LLENA LA TABLA DE ACUDIENTES
                 mostrarDocentes();
@@ -174,11 +174,75 @@
                 return $docentes;
         }
 
-            function mostrarDocente($id){
+            function mostrarDocenteId($id){
+            // INSTANCEAMOS LA CLASE
+                $objetoDocente = new Docente();
+                $resultado = $objetoDocente -> listarId($id);
 
+                return $resultado;
             }
 
-            function actualizarDocente(){
-                
+           function actualizarDocente(){
+
+            // CAPTURAMOS EN VARIABLES LOS DATOS ENVIADOS A TARAVEZ DEL METODO POST Y LOS NAME DE LOS CAMPOS
+            $id = $_POST['id'] ?? '';
+            $id_usuario = $_POST['id_usuario'] ?? '';
+            $nombres = $_POST['nombres'] ?? '';
+            $apellidos = $_POST['apellidos'] ?? '';
+            $tipo_documento = $_POST['tipo_documento'] ?? '';
+            $documento = $_POST['documento'] ?? '';
+            $fecha_nacimiento = $_POST['fecha_nacimiento']?? '';
+            $genero = $_POST['genero'] ?? '';
+            $correo = $_POST['correo'] ?? '';
+            $telefono = $_POST['telefono'] ?? '';
+            $ciudad = $_POST['ciudad'] ?? '';
+            $direccion = $_POST['direccion'] ?? '';
+            $profesion = $_POST['profesion'] ?? '';
+            $fecha_ingreso = $_POST['fecha_ingreso'] ?? '';
+            $tipo_contrato = $_POST['tipo_contrato'] ?? '';
+            $fecha_fin_contrato = $_POST['fecha_fin_contrato'] ?? '';
+
+
+             //  VALIDAMOS LOS CAMPOS QUE SON OBLIGATORIOS
+            if(empty($nombres) || empty($apellidos) || empty($fecha_nacimiento) || empty($tipo_documento) || empty($documento) || empty($profesion) || empty($genero) || empty($correo) || empty($telefono) || empty($ciudad) || empty($direccion) || empty($fecha_ingreso) || empty($tipo_contrato) || empty($fecha_fin_contrato)){
+            mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete todos los campos.');
+            exit();
             }
+
+            // PROGRAMACION ORIENTADA A OBJETOS
+            // INSTANCEAMOS LA CLASE
+            $objetoDocente = new Docente();
+            $data = [
+                'id' => $id,
+                'id_usuario' => $id_usuario,
+                'nombres' => $nombres,
+                'apellidos' => $apellidos,
+                'fecha_nacimiento' => $fecha_nacimiento,
+                'tipo_documento' => $tipo_documento,
+                'documento' => $documento,
+                'genero' => $genero,
+                'correo' => $correo,
+                'telefono' => $telefono,
+                'ciudad' => $ciudad,
+                'direccion' => $direccion,
+                'profesion' => $profesion,
+                'fecha_ingreso' => $fecha_ingreso,
+                'tipo_contrato' => $tipo_contrato,
+                'fecha_fin_contrato' => $fecha_fin_contrato
+
+            ];
+
+            // ENVIAMOS LA DATA AL METODO DE ACTUALIZAR DE LA CLASE INSTANCEADA
+            $resultado = $objetoDocente -> actualizar($data);
+
+            // MENSAJES DE RESPUESTA
+            if($resultado === true){
+                mostrarSweetAlert('success', 'Modificacion de acudiente exitoso', 'Se ha modificado el  acudiente. Redirigiendo...', '/siademy/administrador-panel-acudientes');
+                exit();
+            }else{
+                mostrarSweetAlert('error', 'Error al modificar', 'No se pudo modificar el acudiente, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-acudientes');
+                exit();
+            }
+            exit();
+    }
 ?>
