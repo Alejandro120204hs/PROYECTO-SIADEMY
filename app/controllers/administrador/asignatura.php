@@ -115,10 +115,56 @@ function mostrarAsignaturas(){
 
 function mostrarAsignaturaId($id){
 
+    // INSTANCEAMOS LA CLASE
+    $objetoAsignatura = new Asignatura();
+    $asignatura = $objetoAsignatura -> listarAsignaturaId($id);
+
+    return $asignatura;    
+
 }
 
 function actualizarAsignatura(){
 
+    // CAPTURAMOS EN VARIABLES LOS DATOS ENVIADOS A TARAVEZ DEL METODO POST Y LOS NAME DE LOS CAMPOS
+
+    $id = $_POST['id'] ?? '';
+    $nombre = $_POST['nombre'] ?? '';
+    $descripcion = $_POST['descripcion'] ?? '';
+    $estado = $_POST['estado'] ?? '';
+
+    echo $nombre;
+    echo $descripcion;
+    echo $nombre;
+
+
+   
+    // VALLIDAMOS LOS CAMPOS OBLIGATORIOS
+    if(empty($nombre) || empty($estado)){
+        mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete los campos.');
+        exit();
+    }
+
+    // PROGRAMACION ORIENTADA A OBJETOS
+    // INSTANCEAMOS LA CLASE
+    $objetoAsignatura = new Asignatura();
+    $data = [
+        'id' => $id,
+        'nombre' => $nombre,
+        'descripcion' => $descripcion,
+        'estado' => $estado
+    ];
+
+        // ENVIAMOS LA DATA AL METODO DE ACTUALIZAR DE LA CLASE INSTANCEADA
+        $resultado = $objetoAsignatura -> actualizar($data);
+
+        // MENSAJES DE RESPUESTA
+        if($resultado === true){
+            mostrarSweetAlert('success', 'Modificacion de asignatura exitosa', 'Se ha modificado la asignatura. Redirigiendo...', '/siademy/administrador-panel-asignaturas');
+            exit();
+        }else{
+            mostrarSweetAlert('error', 'Error al modificar', 'No se pudo modificar la asignatura, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-asignaturas');
+            exit();
+        }
 }
 
 function eliminarAsignatura($id){

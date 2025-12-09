@@ -138,11 +138,9 @@
 
             <div class="subject-actions">
               <button class="btn-secondary"><i class="bi bi-eye"></i></button>
-              <button class="btn-secondary"><i class="bi bi-pencil-square"></i></button>
+              <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/editar-asignatura?id=<?= $asignaturas['id'] ?>"><i class="bi bi-pencil-square"></i></a></button>
               <button class="btn-secondary"><i class="bi bi-trash3-fill"></i></button>
 
-              
-      
             </div>
           </div>
               <?php endforeach; ?>
