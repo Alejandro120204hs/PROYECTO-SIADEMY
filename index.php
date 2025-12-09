@@ -271,7 +271,7 @@
                 break;
 
             case '/administrador/eliminar-asignatura':
-                require BASE_PATH . '/app/controllers/administrador/acudiente.php';
+                require BASE_PATH . '/app/controllers/administrador/asignatura.php';
                 break;
                 
 

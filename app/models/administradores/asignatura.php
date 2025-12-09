@@ -37,7 +37,7 @@
             try{
 
                 // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
-                $consultar = "SELECT * FROM asignatura WHERE id_institucion = :id_institucion ORDER BY nombre ASC";
+                $consultar = "SELECT * FROM asignatura WHERE id_institucion = :id_institucion  ORDER BY estado ASC";
 
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
@@ -52,7 +52,6 @@
                 return[];
             }
         }
-
 
         public function listarAsignaturaId($id){
 
@@ -101,8 +100,18 @@
             }
         }
 
+        public function eliminar($id){
+            try{
 
-
+                $actualizar = "UPDATE asignatura SET estado = 'Inactivo' WHERE id = :id";
+                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                $resultado = $this -> conexion -> prepare($actualizar);
+                $resultado -> bindParam(':id',$id);
+                return $resultado -> execute();
+            }catch(PDOException $e){
+                die("Error en Asignatura::eliminar->" . $e->getMessage());
+            }
+        }
     }
 
 
