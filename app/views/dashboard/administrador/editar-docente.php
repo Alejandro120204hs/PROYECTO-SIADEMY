@@ -1,5 +1,17 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
+
+   // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
+  require_once BASE_PATH . '/app/controllers/administrador/docente.php';
+  require_once BASE_PATH . '/app/controllers/administrador/docente.php';
+
+
+  // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
+  $datos = mostrarDocentes();
+  // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+  $id = $_GET['id'];
+  $docente = mostrarDocenteId($id);
+
 ?>
 <!doctype html>
 <html lang="es">
@@ -7,7 +19,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIADEMY • Formulario • Estudiantes</title>
+    <title>SIADEMY • Formulario • Editar • Docente</title>
     <?php 
         include_once __DIR__ . '/../../layouts/header_coordinador.php'
     ?>
@@ -30,7 +42,7 @@
                     <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
                         <i class="ri-menu-2-line"></i>
                     </button>
-                    <div class="title">Agregar Profesor</div>
+                    <div class="title">Editar Profesor</div>
                     
                 </div>
 
@@ -40,7 +52,7 @@
                     <div class="avatar" title="Diego A.">DA</div>
                 </div>
             </div>
-            <div class="subtitulo"><p>Formulario de registro, Completa los siguientes pasos para registrar un Profesor en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>
+            <div class="subtitulo"><p>Formulario de actualizar, Completa los siguientes pasos para editar un Profesor en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>
 
             <!-- Formulario Wizard -->
             <div class="container-fluid py-3">
@@ -52,8 +64,11 @@
                     <div id="stepIndicator4">Confirmar</div>
                 </div>
 
-                <form id="formWizard" action="<?= BASE_URL ?>/administrador/guardar_docente" method="POST" enctype="multipart/form-data">
-
+                <form id="formWizard" action="<?= BASE_URL ?>/administrador/actualizar-docente" method="POST">
+                    <input type="hidden" class="form-control" name="id" value="<?= $docente['id'] ?>" required>
+                    <input type="text" class="form-control" name="id_usuario" value="<?= $docente['id_usuario'] ?>" hidden>
+                    <input type="hidden" class="form-control" name="accion" value="actualizar" required >
+  
                     <!-- Paso 1 -->
                     <div class="step active">
                         <div class="tabla-titulo mb-3">
@@ -62,25 +77,18 @@
                         </div>
 
                         <div class="row g-3">
-                           <div class="col-md-3 poFoto">
-                                <label for="">Foto*</label>
-                                <div
-                                    class=" esPhoto">
-                                    <small>Selecciona un archivo</small>
-                                    <input type="file" class="form-control mt-2"  name="foto" accept=".jpg, .png, .jpeg"  tabindex="1"/>
-                                </div>
-                            </div>
-
+                    
+                        <div class="col-md-1"></div>
                             <!-- Datos personales -->
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">Nombres</label>
-                                    <input type="text" class="form-control" name="nombres" required tabindex="2">
+                                    <input type="text" class="form-control" name="nombres" value="<?= $docente['nombres'] ?>" required tabindex="2">
                                 </div>
                                  <div class="mb-3">
                                     <label for="">tipo de documento</label>
-                                    <select class="selector" name="tipo_documento" required tabindex="4">
-                                        <option selected>Seleccione un tipo de documento</option>
+                                    <select class="selector" name="tipo_documento" value="<?= $docente['tipo_documento'] ?>" required tabindex="4">
+                                        <option value="<?= $docente['tipo_documento'] ?>" selected><?= $docente['tipo_documento'] ?></option>
                                         <option value="CC">CC</option>
                                         <option value="CE">CE</option>
                                         <option value="PPT">PPT</option>
@@ -91,7 +99,7 @@
                                 <div class="mb-3">
                                     <label for="">Fecha de nacimiento</label>
                                     <div class="d-flex gap-2">
-                                        <input type="date" class="form-control" name="fecha_nacimiento" required tabindex="6">
+                                        <input type="date" class="form-control" name="fecha_nacimiento" value="<?= $docente['fecha_nacimiento'] ?>" required tabindex="6">
                                     </div>
                                 </div>
                                 
@@ -99,25 +107,26 @@
                             </div>
 
                             <!-- Apellidos y teléfono -->
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                
                                 <div class="mb-3">
                                     <label for="">Apellidos</label>
-                                    <input type="text" class="form-control" name="apellidos" required tabindex="3">
+                                    <input type="text" class="form-control" name="apellidos" value="<?= $docente['apellidos'] ?>" required tabindex="3">
                                 </div>
                                  <div class="mb-3 parte2">
                                     <label for="">N° Documento*</label>
-                                    <input type="number" class="form-control" name="documento" required tabindex="5">
+                                    <input type="number" class="form-control" name="documento" value="<?= $docente['documento'] ?>" readonly required tabindex="5">
                                 </div>
                             <div class="mb-3">
-                                    <label for="">Genero</label>
+                                   <label for="">Género</label>
                                     <select class="selector" name="genero" required tabindex="8">
-                                        <option selected>Seleccione un genero</option>
+                                        <option value="<?= $docente['genero'] ?>" selected><?= $docente['genero'] ?></option>
                                         <option value="Masculino">Masculino</option>
                                         <option value="Femenino">Femenino</option>
                                         <option value="Otro">Otro</option>
-                                      
                                     </select>
+
+
                                 </div>
 
                             
@@ -140,12 +149,12 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">Email*</label>
-                                    <input type="email" class="form-control" name="correo" required tabindex="1">
+                                    <input type="email" class="form-control" name="correo" value="<?= $docente['correo'] ?>" required tabindex="1">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="">Ciudad</label>
-                                    <input type="text" class="form-control" name="ciudad" required tabindex="3">
+                                    <input type="text" class="form-control" name="ciudad" value="<?= $docente['ciudad'] ?>" required tabindex="3">
                                 </div>
                                 
                                 
@@ -154,11 +163,11 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">N° Teléfono*</label>
-                                    <input type="number" class="form-control" name="telefono" required tabindex="2">
+                                    <input type="number" class="form-control" name="telefono" value="<?= $docente['telefono'] ?>" required tabindex="2">
                                 </div>
                                 <div class="mb-3">
                                     <label for="">Dirección</label>
-                                    <input type="text" class="form-control" name="direccion" required tabindex="4">
+                                    <input type="text" class="form-control" name="direccion" value="<?= $docente['direccion'] ?>" required tabindex="4">
                                 </div>
                             </div>
 
@@ -180,34 +189,46 @@
                         </div>
 
                         <div class="row g-3">
-                            <div class="col-md-6">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">
                                 <div class="mb-3">
                                     <label>Profesión</label>
-                                    <input type="text" class="form-control" name="profesion" required tabindex="1">
+                                    <input type="text" class="form-control" name="profesion" value="<?= $docente['profesion'] ?>" required tabindex="1">
                                 </div>
 
                                 <div class="mb-3">
                                     <label>Tipo de contrato</label>
                                     <select class="selector" name="tipo_contrato" required tabindex="3">
-                                        <option>Seleccionar...</option>
+                                        <option value="<?= $docente['tipo_contrato'] ?>" selected><?= $docente['tipo_contrato'] ?></option>
                                         <option value="Fijo">Fijo</option>
                                         <option value="Indefinido">Indefinido</option>
                                         <option value="Prestación de Servicios">Prestación de servicios</option>
                                     </select>
+                                     <div class="mb-3">
+                                    <label for="">Estado</label>
+                                    <select class="form-select" aria-label="Default select example" name="estado">
+                                    <option value="<?= $docente['estado'] ?>"><?= $docente['estado'] ?></option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                </select>
+                                </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <div class="mb-3">
                                     <label>Fecha ingreso</label>
-                                    <input type="date" class="form-control" name="fecha_ingreso" required tabindex="2">
+                                    <input type="date" class="form-control" name="fecha_ingreso" value="<?= $docente['fecha_ingreso'] ?>" required tabindex="2">
                                 </div>
 
                                 <div class="mb-3">
                                     <label>Fecha fin contrato</label>
-                                    <input type="date" class="form-control" name="fecha_fin_contrato" tabindex="4">
+                                    <input type="date" class="form-control" name="fecha_fin_contrato" value="<?= $docente['fecha_fin_contrato'] ?>" tabindex="4">
                                 </div>
+                                
                             </div>
+                            
+                            
                         </div>
 
                         <div class="botones mt-3">
@@ -226,7 +247,7 @@
 
                         <div class="botones mt-3">
                             <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
-                            <button type="submit" class="btn btn-success">Agregar Profesor</button>
+                            <button type="submit" class="btn btn-success">Actualizar Profesor</button>
                         </div>
                     </div>
 

@@ -215,6 +215,18 @@
             case '/administrador/guardar_docente':
                 require BASE_PATH . '/app/controllers/administrador/docente.php';
                 break;    
+            
+            case '/administrador/editar-docente':
+                require BASE_PATH . '/app/views/dashboard/administrador/editar-docente.php';
+                break;  
+                
+            case '/administrador/actualizar-docente':
+                require BASE_PATH . '/app/controllers/administrador/docente.php';
+                break;    
+             
+            case '/administrador/eliminar-docente':
+                require BASE_PATH . '/app/controllers/administrador/docente.php';
+                break;    
 
             // -----------------------------ADMINISTRADOR(MODULO EVENTOS)-------------------------
 
@@ -234,9 +246,7 @@
                 require BASE_PATH . '/app/views/dashboard/administrador/asignaturas.php';
                 break;
 
-            case '/administrador-panel-cursos':
-                require BASE_PATH . '/app/views/dashboard/administrador/cursos.php';
-                break;
+            
 
 
             // -----------------------------ADMINISTRADOR(MODULO ASIGNATURAS)-------------------------
@@ -251,12 +261,29 @@
                 break;
 
             case '/administrador/editar-asignatura':
-                require BASE_PATH . '/app/views/dashboard/administrador/editar-acudiente.php';
+                require BASE_PATH . '/app/views/dashboard/administrador/editarAsignatura.php';
+                break;
+
+            case '/administrador/actualizar-asignatura':
+                require BASE_PATH . '/app/controllers/administrador/asignatura.php';
                 break;
 
             case '/administrador/eliminar-asignatura':
-                require BASE_PATH . '/app/controllers/administrador/acudiente.php';
+                require BASE_PATH . '/app/controllers/administrador/asignatura.php';
                 break;
+
+            // -------------------------------ADMINISTRADOR(MODULO CURSOS)-------------------------
+            case '/administrador-panel-cursos':
+                require BASE_PATH . '/app/views/dashboard/administrador/cursos.php';
+                break;
+            case '/administrador/registrar-curso':
+                require BASE_PATH . '/app/views/dashboard/administrador/addCurso.php';
+                break;
+
+            case '/administrador/guardar-curso':
+                require BASE_PATH . '/app/controllers/administrador/curso.php';
+                break;
+                
                 
 
             // --------------------------------------ROL: DOCENTE---------------------------------------------

@@ -64,23 +64,23 @@
             }
         }
 
-            public function listar($id_institucion){
-                try{
+        public function listar($id_institucion){
+            try{
 
-                    // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
-                    $consultar = "SELECT acudiente.*, usuario.correo AS correo, usuario.estado AS estado FROM acudiente INNER JOIN usuario ON acudiente.id_usuario = usuario.id WHERE acudiente.id_institucion = :id_institucion  ORDER BY apellidos ASC";
+                // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
+                $consultar = "SELECT acudiente.*, usuario.correo AS correo, usuario.estado AS estado FROM acudiente INNER JOIN usuario ON acudiente.id_usuario = usuario.id WHERE acudiente.id_institucion = :id_institucion  ORDER BY apellidos ASC";
 
-                    // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
-                    $resultado = $this->conexion->prepare($consultar);
-                    $resultado -> bindParam(':id_institucion', $id_institucion);
-                    $resultado -> execute();
-                    return $resultado -> fetchAll();
+                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                $resultado = $this->conexion->prepare($consultar);
+                $resultado -> bindParam(':id_institucion', $id_institucion);
+                $resultado -> execute();
+                return $resultado -> fetchAll();
 
-                }catch(PDOException $e){
-                    error_log("Error en Acudiente::listar->" . $e->getMessage());
-                    return[];
-                }
+            }catch(PDOException $e){
+                error_log("Error en Acudiente::listar->" . $e->getMessage());
+                return[];
             }
+        }
 
         public function listarAcudienteId($id){
             try{

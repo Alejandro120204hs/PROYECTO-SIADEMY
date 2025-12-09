@@ -37,7 +37,7 @@
             try{
 
                 // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
-                $consultar = "SELECT nombre, descripcion, estado FROM asignatura WHERE id_institucion = :id_institucion ORDER BY nombre ASC";
+                $consultar = "SELECT * FROM asignatura WHERE id_institucion = :id_institucion  ORDER BY estado ASC";
 
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
@@ -48,13 +48,70 @@
 
 
             }catch(PDOException $e){
-                error_log("Error en Acudiente::listar->" . $e->getMessage());
+                error_log("Error en Asignatura::listar->" . $e->getMessage());
+                return[];
+            }
+        }
+
+        public function listarAsignaturaId($id){
+
+            try{
+                // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
+                $consultar = "SELECT * FROM asignatura WHERE id = :id LIMIT 1";
+
+                // PREPARAR Y EJECUTAR
+                $resultado = $this->conexion->prepare($consultar);
+                $resultado->bindParam(':id', $id, PDO::PARAM_INT);
+                $resultado->execute();
+
+                return $resultado->fetch();
+
+            }catch(PDOException $e){
+                error_log("Error en Asignatura::listar->" . $e->getMessage());
                 return[];
             }
         }
 
 
+        public function actualizar($data){
+            try{
+                // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
 
+                $actualizar = "UPDATE asignatura SET nombre=:nombre, descripcion=:descripcion, estado=:estado WHERE id = :id";
+
+                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                $resultado = $this->conexion->prepare($actualizar);
+                $resultado->bindParam(':id',$data['id']);
+                $resultado->bindParam(':nombre',$data['nombre']);
+                $resultado->bindParam(':descripcion',$data['descripcion']);
+                $resultado->bindParam(':estado',$data['estado']);
+
+                $resultado -> execute();
+
+                 if($resultado){
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }catch(PDOException $e){
+                error_log("Error en Asignatura::actualizar->" . $e->getMessage());
+                return false;
+            }
+        }
+
+        public function eliminar($id){
+            try{
+
+                $actualizar = "UPDATE asignatura SET estado = 'Inactivo' WHERE id = :id";
+                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                $resultado = $this -> conexion -> prepare($actualizar);
+                $resultado -> bindParam(':id',$id);
+                return $resultado -> execute();
+            }catch(PDOException $e){
+                die("Error en Asignatura::eliminar->" . $e->getMessage());
+            }
+        }
     }
 
 
