@@ -1,5 +1,10 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
+  require_once BASE_PATH . '/app/controllers/administrador/curso.php';
+
+  // LLAMAMOS LA FUNCION
+  $datos = mostrarCursos();
+  
 ?>
 
 <!doctype html>
@@ -35,7 +40,7 @@
 
         <div class="div"></div>
 
-        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-asignatura'">
+        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-curso'">
         Agregar Curso
         </button>
         
@@ -95,22 +100,25 @@
 
         <div class="courses-grid">
           <!-- Course Card 1 -->
+           <?php if(!empty($datos)): ?>
+            <?php foreach($datos as $curso): ?>
           <div class="course-card">
+            
             <div class="course-header">
-              <div class="course-badge" style="background: #4f46e5;">7A</div>
-              <div class="course-status status-success">Activo</div>
+              <div class="course-badge" style="background: #4f46e5;"><?= $curso['grado'] ?>°</div>
+              <div class="course-status status-success"><?= $curso['estado'] ?></div>
             </div>
-            <h4>Matemáticas Avanzadas</h4>
-            <p class="course-subtitle">Álgebra y Geometría</p>
+            <h4>Curso - <?= $curso['curso'] ?></h4>
+            <p class="course-subtitle"><?= $curso['nivel_academico'] ?></p>
             
             <div class="course-stats">
               <div class="stat">
                 <i class="ri-group-line"></i>
-                <span>35 estudiantes</span>
+                <span>35 estudiantes</span> <span class="cupo">Cupo Maximo: <?= $curso['cupo_maximo'] ?> <i class="ri-group-line"></i></span>
               </div>
               <div class="stat">
                 <i class="ri-user-line"></i>
-                <span>Prof. Carlos Méndez</span>
+                <span>Prof. <?= $curso['nombres_docente']. ' ' .$curso['apellidos_docente'] ?></span>
               </div>
             </div>
 
@@ -124,10 +132,18 @@
             </div>
 
             <div class="course-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon" title="Más opciones"><i class="ri-more-2-line"></i></button>
+              <button class="btn-secondary"><i class="bi bi-eye"></i></button>
+              <button class="btn-secondary"><i class="bi bi-pencil-square"></i></button>
+              <button class="btn-secondary"><i class="bi bi-trash3-fill"></i></button>
+
             </div>
+
+            
           </div>
+          <?php endforeach; ?>
+              <?php else: ?>
+                <h2>No hay cursos registrados</h2>
+              <?php endif; ?>
 
          
 
