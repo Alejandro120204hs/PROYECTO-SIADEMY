@@ -104,7 +104,7 @@ function mostrarAsignaturas(){
     // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
     $id_institucion = $_SESSION['user']['id_institucion'];
 
-    // INSTANCEAMOS LA CLASE ACUDIENTE
+    // INSTANCEAMOS LA CLASE ASIGNATURA
     $resultado = new Asignatura();
 
     // LISTAMOS SOLO LOS ACUDIENTES DE ESA INSTITUCIÓN
@@ -168,7 +168,19 @@ function actualizarAsignatura(){
 }
 
 function eliminarAsignatura($id){
+        // INSTANCEAMOS LA CLASE
+        $objetoAsignatura = new Asignatura();
+        $resultado = $objetoAsignatura -> eliminar($id);
 
+
+         // MENSAJESDE RESPUESTA
+        if($resultado === true){
+            mostrarSweetAlert('success', 'Eliminación de asignatura exitosa', 'Se ha eliminado una asignatura. Redirigiendo...', '/siademy/administrador-panel-asignaturas');
+            exit();
+        }else{
+            mostrarSweetAlert('error', 'Error al eliminar', 'No se pudo eliminar la asignatura, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-asignaturas');
+            exit();
+        }
 }
 
 ?>
