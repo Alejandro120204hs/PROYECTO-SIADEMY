@@ -24,7 +24,7 @@
             $accion = $_GET['accion'] ?? '';
             // ELIMINAR ACUDIENTE
             if($accion === 'eliminar'){
-               eliminarAcudiente($_GET['id']); 
+               eliminarDocente($_GET['id']); 
             }
 
             // EDITAR ACUDIENTE
@@ -190,7 +190,6 @@
             $nombres = $_POST['nombres'] ?? '';
             $apellidos = $_POST['apellidos'] ?? '';
             $tipo_documento = $_POST['tipo_documento'] ?? '';
-            $documento = $_POST['documento'] ?? '';
             $fecha_nacimiento = $_POST['fecha_nacimiento']?? '';
             $genero = $_POST['genero'] ?? '';
             $correo = $_POST['correo'] ?? '';
@@ -198,13 +197,14 @@
             $ciudad = $_POST['ciudad'] ?? '';
             $direccion = $_POST['direccion'] ?? '';
             $profesion = $_POST['profesion'] ?? '';
+            $estado = $_POST['estado'] ?? '';
             $fecha_ingreso = $_POST['fecha_ingreso'] ?? '';
             $tipo_contrato = $_POST['tipo_contrato'] ?? '';
             $fecha_fin_contrato = $_POST['fecha_fin_contrato'] ?? '';
 
 
              //  VALIDAMOS LOS CAMPOS QUE SON OBLIGATORIOS
-            if(empty($nombres) || empty($apellidos) || empty($fecha_nacimiento) || empty($tipo_documento) || empty($documento) || empty($profesion) || empty($genero) || empty($correo) || empty($telefono) || empty($ciudad) || empty($direccion) || empty($fecha_ingreso) || empty($tipo_contrato) || empty($fecha_fin_contrato)){
+            if(empty($nombres) || empty($apellidos) || empty($fecha_nacimiento) || empty($tipo_documento) || empty($estado) || empty($profesion) || empty($genero) || empty($correo) || empty($telefono) || empty($ciudad) || empty($direccion) || empty($fecha_ingreso) || empty($tipo_contrato) || empty($fecha_fin_contrato)){
             mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete todos los campos.');
             exit();
             }
@@ -219,13 +219,13 @@
                 'apellidos' => $apellidos,
                 'fecha_nacimiento' => $fecha_nacimiento,
                 'tipo_documento' => $tipo_documento,
-                'documento' => $documento,
                 'genero' => $genero,
                 'correo' => $correo,
                 'telefono' => $telefono,
                 'ciudad' => $ciudad,
                 'direccion' => $direccion,
                 'profesion' => $profesion,
+                'estado' => $estado,
                 'fecha_ingreso' => $fecha_ingreso,
                 'tipo_contrato' => $tipo_contrato,
                 'fecha_fin_contrato' => $fecha_fin_contrato
@@ -237,12 +237,30 @@
 
             // MENSAJES DE RESPUESTA
             if($resultado === true){
-                mostrarSweetAlert('success', 'Modificacion de acudiente exitoso', 'Se ha modificado el  acudiente. Redirigiendo...', '/siademy/administrador-panel-acudientes');
+                mostrarSweetAlert('success', 'Modificacion de acudiente exitoso', 'Se ha modificado el  acudiente. Redirigiendo...', '/siademy/administrador-panel-profesores');
                 exit();
             }else{
-                mostrarSweetAlert('error', 'Error al modificar', 'No se pudo modificar el acudiente, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-acudientes');
+                mostrarSweetAlert('error', 'Error al modificar', 'No se pudo modificar el acudiente, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-profesores');
                 exit();
             }
             exit();
+
+
+            
     }
+
+    function eliminarDocente($id){
+            // INSTANCEAMOS LA CLASE
+            $objetoDocente = new Docente();
+            $resultado = $objetoDocente -> eliminar($id);
+
+            // MENSAJESDE RESPUESTA
+            if($resultado === true){
+                mostrarSweetAlert('success', 'Eliminación de docente exitosa', 'Se ha eliminado un docente. Redirigiendo...', '/siademy/administrador-panel-profesores');
+                exit();
+            }else{
+                mostrarSweetAlert('error', 'Error al eliminar', 'No se pudo eliminar el docente, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-profesores');
+                exit();
+            }
+            }       
 ?>

@@ -115,7 +115,7 @@
                                 </div>
                                  <div class="mb-3 parte2">
                                     <label for="">N° Documento*</label>
-                                    <input type="number" class="form-control" name="documento" value="<?= $docente['documento'] ?>" required tabindex="5">
+                                    <input type="number" class="form-control" name="documento" value="<?= $docente['documento'] ?>" readonly required tabindex="5">
                                 </div>
                             <div class="mb-3">
                                    <label for="">Género</label>
@@ -204,6 +204,14 @@
                                         <option value="Indefinido">Indefinido</option>
                                         <option value="Prestación de Servicios">Prestación de servicios</option>
                                     </select>
+                                     <div class="mb-3">
+                                    <label for="">Estado</label>
+                                    <select class="form-select" aria-label="Default select example" name="estado">
+                                    <option value="<?= $docente['estado'] ?>"><?= $docente['estado'] ?></option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                </select>
+                                </div>
                                 </div>
                             </div>
 
@@ -217,7 +225,10 @@
                                     <label>Fecha fin contrato</label>
                                     <input type="date" class="form-control" name="fecha_fin_contrato" value="<?= $docente['fecha_fin_contrato'] ?>" tabindex="4">
                                 </div>
+                                
                             </div>
+                            
+                            
                         </div>
 
                         <div class="botones mt-3">

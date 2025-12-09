@@ -223,6 +223,10 @@
             case '/administrador/actualizar-docente':
                 require BASE_PATH . '/app/controllers/administrador/docente.php';
                 break;    
+             
+            case '/administrador/eliminar-docente':
+                require BASE_PATH . '/app/controllers/administrador/docente.php';
+                break;    
 
             // -----------------------------ADMINISTRADOR(MODULO EVENTOS)-------------------------
 
