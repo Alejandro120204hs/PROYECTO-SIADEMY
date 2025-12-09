@@ -55,6 +55,9 @@
       grid-template-columns: 0 1fr 0;
     }
 
+
+
+   
     /* LEFT SIDEBAR */
     .sidebar {
       background: linear-gradient(180deg, #161821 0%, #101117 100%);

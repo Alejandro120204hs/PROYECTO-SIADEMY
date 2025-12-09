@@ -103,5 +103,70 @@
                     return [];
                 }
             }
+
+
+            public function actualizar($data){
+            try{
+
+                // ACTUALIZAR USUARIO
+                $actualizarUsuario = "UPDATE usuario SET correo=:correo, estado=:estado WHERE id=:id_usuario";
+
+                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                $resultado = $this -> conexion -> prepare($actualizarUsuario);
+                $resultado -> bindParam(':correo',$data['correo']);
+                $resultado -> bindParam(':estado',$data['estado']); 
+                $resultado -> bindParam(':id_usuario',$data['id_usuario']);
+
+                $resultadoUsuario = $resultado -> execute();
+
+
+                // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
+                $actualizar = "UPDATE docente SET nombres=:nombres, apellidos=:apellidos, tipo_documento=:tipo_documento, fecha_nacimiento=:fecha_nacimiento, genero=:genero, telefono=:telefono, direccion=:direccion, ciudad=:ciudad, profesion=:profesion, tipo_contrato=:tipo_contrato, fecha_ingreso=:fecha_ingreso, fecha_fin_contrato=:fecha_fin_contrato WHERE id_usuario = :id_usuario";
+
+                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                    $resultado2 = $this->conexion->prepare($actualizar);
+                    $resultado2->bindParam(':id_usuario',$data['id_usuario']);
+                    $resultado2->bindParam(':nombres', $data['nombres']);
+                    $resultado2->bindParam(':apellidos', $data['apellidos']);
+                    $resultado2->bindParam(':tipo_documento', $data['tipo_documento']);
+                    $resultado2->bindParam(':fecha_nacimiento', $data['fecha_nacimiento']);
+                    $resultado2->bindParam(':genero', $data['genero']);
+                    $resultado2->bindParam(':telefono', $data['telefono']);
+                    $resultado2->bindParam(':direccion', $data['direccion']);
+                    $resultado2->bindParam(':ciudad', $data['ciudad']);
+                    $resultado2->bindParam(':profesion', $data['profesion']);
+                    $resultado2->bindParam(':tipo_contrato', $data['tipo_contrato']);
+                    $resultado2->bindParam(':fecha_ingreso', $data['fecha_ingreso']);
+                    $resultado2->bindParam(':fecha_fin_contrato', $data['fecha_fin_contrato']);
+
+                    $resultadoAdministrador = $resultado2 -> execute();
+
+                 // EJECUTAMOS EL ACTUALIZAR
+
+                 if($resultadoUsuario && $resultadoAdministrador){
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }catch(PDOException $e){
+                error_log("Error en Docente::actualizar->" . $e->getMessage());
+                return false;
+            }
+        }
+
+        public function eliminar($id){
+            try{
+
+                $actualizar = "UPDATE usuario SET estado = 'Inactivo' WHERE id=:id";
+                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                $resultado = $this -> conexion -> prepare($actualizar);
+                $resultado -> bindParam(':id',$id);
+                return $resultado -> execute();
+            }catch(PDOException $e){
+                die("Error en Docente::actualizar->" . $e->getMessage());
+
+            }
+        }
     }
         ?>

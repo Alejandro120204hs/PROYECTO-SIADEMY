@@ -84,6 +84,7 @@
       <!-- SUBJECTS GRID -->
       <section class="subjects-section">
         <div class="subjects-header">
+          
           <h3>Asignaturas Activas (18)</h3>
           <div class="view-toggle">
             <button class="view-btn active" data-view="grid"><i class="ri-grid-line"></i></button>
@@ -102,7 +103,7 @@
               <div class="subject-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                 <i class="ri-calculator-line"></i>
               </div>
-              <div class="subject-status status-active"><?= $asignaturas['estado'] ?></div>
+              <div class="subject-status status-active <?= $asignaturas['estado'] ?>"><?= $asignaturas['estado'] ?></div>
             </div>
             
             <h4><?= $asignaturas['nombre'] ?></h4>
@@ -139,7 +140,7 @@
             <div class="subject-actions">
               <button class="btn-secondary"><i class="bi bi-eye"></i></button>
               <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/editar-asignatura?id=<?= $asignaturas['id'] ?>"><i class="bi bi-pencil-square"></i></a></button>
-              <button class="btn-secondary"><i class="bi bi-trash3-fill"></i></button>
+              <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/eliminar-asignatura?accion=eliminar&id=<?= $asignaturas['id'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
 
             </div>
           </div>

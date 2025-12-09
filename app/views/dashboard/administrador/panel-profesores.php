@@ -106,10 +106,10 @@
               <td><?= $docente['ciudad'] ?></td>
               <td><?= $docente['estado'] ?></td>
               
-              <td class="acciones">
+              <td class="acciones p">
                   <button class="btn-action"><a href="">Ver</a></button>
                 <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/editar-docente?id=<?= $docente['id'] ?>">Editar</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/eliminar-estudiante?accion=eliminar&id=<?= $estudiante['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
+                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/eliminar-docente?accion=eliminar&id=<?= $docente['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
               </td>
             </tr>
               <?php endforeach; ?>
@@ -132,7 +132,7 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-  <script src="../../assets/dashboard/js/main-panel-estudiantes.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-panel-estudiantes.js"></script>
 </body>
 
 </html>

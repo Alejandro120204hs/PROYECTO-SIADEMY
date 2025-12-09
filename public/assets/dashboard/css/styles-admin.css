@@ -1008,6 +1008,13 @@ canvas {
     font-size: 13px;
 }
 
+.stat span.cupo {
+    margin-left: 90px;
+  
+}
+
+
+
 .stat i {
     color: #6366f1;
     font-size: 16px;
@@ -1404,11 +1411,18 @@ canvas {
     letter-spacing: 0.5px;
 }
 
+.subject-status.status-active.Inactivo{
+    background: rgba(238, 126, 126, 0.527);
+    color: rgb(236, 56, 56);
+    border-color: red;
+}
+
 .status-active {
     background: rgba(16, 185, 129, .15);
     color: #10b981;
     border: 1px solid rgba(16, 185, 129, .3);
 }
+
 
 .status-review {
     background: rgba(245, 158, 11, .15);

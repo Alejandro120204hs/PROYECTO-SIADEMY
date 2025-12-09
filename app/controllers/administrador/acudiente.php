@@ -38,13 +38,6 @@
             
             break;
 
-        // case 'PUT':
-        //     actualizarAcudiente();
-        //     break;
-
-        // case 'DELETE':
-        //     eliminarAcudiente();
-        //     break;
         default;
             http_response_code(405);
             echo"Metodo no permitido";
