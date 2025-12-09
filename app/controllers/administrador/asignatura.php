@@ -132,9 +132,9 @@ function actualizarAsignatura(){
     $descripcion = $_POST['descripcion'] ?? '';
     $estado = $_POST['estado'] ?? '';
 
-    echo $nombre;
-    echo $descripcion;
-    echo $nombre;
+    // echo $nombre;
+    // echo $descripcion;
+    // echo $nombre;
 
 
    

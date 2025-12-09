@@ -88,7 +88,11 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="">Estado</label>
-                                    <input type="text" class="form-control" name="estado" value="<?= $asignatura['estado'] ?>" tabindex="3">
+                                    <select class="form-select" aria-label="Default select example" name="estado">
+                                    <option value="<?= $asignatura['estado'] ?>"><?= $asignatura['estado'] ?></option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                </select>
                                 </div>
                             </div>                            
                         </div>
