@@ -383,10 +383,21 @@
       height: 72px;
     }
 
+    .table-dark td.acciones.p{
+      display: flex;
+      height: 84px;
+    }
+
     .table-dark td.acciones button{
       margin: 0 5px;
       height: 50px;
       margin-top: 10px;
+    }
+
+    .table-dark td.acciones.p button{
+      margin: 0 5px;
+      height: 50px;
+      margin-top: 20px;
     }
 .table-dark td.dos-lineas {
   max-width: 180px;
