@@ -156,6 +156,18 @@
                 require BASE_PATH . '/app/views/dashboard/administrador/detalle-estudiante.php';
                 break;
 
+            case '/administrador/eliminar-estudiante':
+                require BASE_PATH . '/app/controllers/administrador/estudiante_controller.php';
+                break;
+
+            case '/administrador/editar-estudiante':
+                require BASE_PATH . '/app/views/dashboard/administrador/editarEstudiante.php';
+                break;
+
+            case '/administrador/actualizar_estudiante':
+                require BASE_PATH . '/app/controllers/administrador/estudiante_controller.php';
+                break;
+
             
 
 
@@ -200,6 +212,18 @@
                 require BASE_PATH . '/app/views/dashboard/administrador/addDocente.php';
                 break;
 
+            case '/administrador/guardar_docente':
+                require BASE_PATH . '/app/controllers/administrador/docente.php';
+                break;    
+            
+            case '/administrador/editar-docente':
+                require BASE_PATH . '/app/views/dashboard/administrador/editar-docente.php';
+                break;  
+                
+            case '/administrador/actualizar-docente':
+                require BASE_PATH . '/app/controllers/administrador/docente.php';
+                break;    
+
             // -----------------------------ADMINISTRADOR(MODULO EVENTOS)-------------------------
 
             case '/administrador-panel-eventos':
@@ -221,6 +245,31 @@
             case '/administrador-panel-cursos':
                 require BASE_PATH . '/app/views/dashboard/administrador/cursos.php';
                 break;
+
+
+            // -----------------------------ADMINISTRADOR(MODULO ASIGNATURAS)-------------------------
+
+            case '/administrador/registrar-asignatura':
+                require BASE_PATH . '/app/views/dashboard/administrador/addAsignatura.php';
+                break;       
+                
+
+            case '/administrador/guardar_asignatura':
+                require BASE_PATH . '/app/controllers/administrador/asignatura.php';
+                break;
+
+            case '/administrador/editar-asignatura':
+                require BASE_PATH . '/app/views/dashboard/administrador/editarAsignatura.php';
+                break;
+
+            case '/administrador/actualizar-asignatura':
+                require BASE_PATH . '/app/controllers/administrador/asignatura.php';
+                break;
+
+            case '/administrador/eliminar-asignatura':
+                require BASE_PATH . '/app/controllers/administrador/acudiente.php';
+                break;
+                
 
             // --------------------------------------ROL: DOCENTE---------------------------------------------
             case '/docente/dashboard':
@@ -256,6 +305,13 @@
             case '/super-admin/dashboard':
                 require BASE_PATH . '/app/views/dashboard/superAdmin/superAdmin.php';
                 break;
+
+            // -----------------------------------ROL: SECRETARÍA------------------------------------------
+            case '/secretaria-academica/dashboard':
+                require BASE_PATH . '/app/views/dashboard/secretariaAcademica/secretariaAcademica.php';
+                break;
+
+
             // FIN RUTAS LOGIN
             default: 
                 http_response_code(404);

@@ -130,9 +130,9 @@
                 $resultado2->bindParam(':ciudad',$data['ciudad']);
                 $resultado2->bindParam(':direccion',$data['direccion']);
 
-              
-
                 $resultadoAdministrador = $resultado2 -> execute();
+
+                 // EJECUTAMOS EL ACTUALIZAR
 
                  if($resultadoUsuario && $resultadoAdministrador){
                     return true;

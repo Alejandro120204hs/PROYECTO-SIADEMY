@@ -23,10 +23,10 @@
         <span>Siademy</span>
       </a>
       <nav class="nav">
-        <a class="active" href="#"><i class="ri-home-5-line"></i> Panel</a>
-        <a href="cursos.html"><i class="ri-team-line"></i> Cursos</a>
+        <a class="active" href="docente.php"><i class="ri-home-5-line"></i> Panel</a>
+        <a href="cursos.php"><i class="ri-team-line"></i> Cursos</a>
           
-        <a href="eventos.html"><i class="ri-calendar-event-line"></i> Eventos</a>
+        <a href="eventos.php"><i class="ri-calendar-event-line"></i> Eventos</a>
 
     
       </nav>

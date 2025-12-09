@@ -72,11 +72,11 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="">Nombres</label>
-                                    <input type="text" class="form-control" name="nombres" required tabindex="2">
+                                    <input type="text" class="form-control" name="nombres"  tabindex="2">
                                 </div>
                                  <div class="mb-3">
                                     <label for="">tipo de documento</label>
-                                    <select class="selector" name="tipo_documento" required tabindex="4">
+                                    <select class="selector" name="tipo_documento"  tabindex="4">
                                         <option selected>Seleccione un tipo de documento</option>
                                         <option value="CC">CC</option>
                                         <option value="CE">CE</option>
@@ -88,13 +88,13 @@
                                 <div class="mb-3">
                                     <label for="">Fecha de nacimiento</label>
                                     <div class="d-flex gap-2">
-                                        <input type="date" class="form-control" name="fecha_nacimiento" required tabindex="6">
+                                        <input type="date" class="form-control" name="fecha_nacimiento"  tabindex="6">
                                     </div>
                                 </div>
                                 
                                  <div class="mb-3">
                                     <label for="">Genero</label>
-                                    <select class="selector" name="genero" required tabindex="8">
+                                    <select class="selector" name="genero"  tabindex="8">
                                         <option selected>Seleccione un genero</option>
                                         <option value="Masculino">Masculino</option>
                                         <option value="Femenino">Femenino</option>
@@ -109,15 +109,15 @@
                                
                                 <div class="mb-3">
                                     <label for="">Apellidos</label>
-                                    <input type="text" class="form-control" name="apellidos" required tabindex="3">
+                                    <input type="text" class="form-control" name="apellidos"  tabindex="3">
                                 </div>
                                  <div class="mb-3 parte2">
                                     <label for="">N° Documento*</label>
-                                    <input type="number" class="form-control" name="documento" required tabindex="5">
+                                    <input type="number" class="form-control" name="documento"  tabindex="5">
                                 </div>
                                 <div class="mb-3">
                                     <label for="">Parentesco</label>
-                                    <input type="text" class="form-control" name="parentesco" required tabindex="7">
+                                    <input type="text" class="form-control" name="parentesco"  tabindex="7">
                                 </div> 
 
                                

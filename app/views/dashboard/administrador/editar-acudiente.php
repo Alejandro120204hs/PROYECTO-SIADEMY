@@ -58,9 +58,9 @@
                 </div>
 
                 <form id="formWizard" action="<?= BASE_URL ?>/administrador/actualizar_acudiente" method="POST">
-                     <input type="hidden" class="form-control" name="id" value="<?= $acudiente['id'] ?>" required>
-                <input type="text" class="form-control" name="id_usuario" value="<?= $acudiente['id_usuario'] ?>" hidden>
-                     <input type="hidden" class="form-control" name="accion" value="actualizar" required >
+                    <input type="hidden" class="form-control" name="id" value="<?= $acudiente['id'] ?>" required>
+                    <input type="text" class="form-control" name="id_usuario" value="<?= $acudiente['id_usuario'] ?>" hidden>
+                    <input type="hidden" class="form-control" name="accion" value="actualizar" required >
 
                     <!-- Paso 1 -->
                     <div class="step active">
@@ -73,7 +73,9 @@
                            
 
                             <!-- Datos personales -->
-                            <div class="col-md-6">
+                             <div class="col-md-1"></div>
+
+                            <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">Nombres</label>
                                     <input type="text" class="form-control" name="nombres" value="<?= $acudiente['nombres'] ?>" required>
@@ -112,7 +114,7 @@
                             </div>
 
                             <!-- Apellidos y teléfono -->
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">Apellidos</label>
                                     <input type="text" class="form-control" name="apellidos" value="<?= $acudiente['apellidos'] ?>" required>

@@ -1,5 +1,10 @@
 <?php 
+  // ENLAZAMOS LAS DEPENDENCIAS NECESARIAS
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
+  require_once BASE_PATH . '/app/controllers/administrador/estudiante_controller.php';
+
+  // LLAMAMOS LA FUNCION
+  $datos = mostrarEstudiantes();
   
 ?>
 
@@ -22,13 +27,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SIADEMY • Estudiantes</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <?php 
+    include_once __DIR__ . '/../../layouts/header_coordinador.php'
+  ?>
   <link rel="stylesheet" href="public/assets/dashboard/css/styles-panel-estudiantes.css">
 
 </head>
@@ -58,6 +59,8 @@
         <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-estudiante'">
           <i class="ri-add-line"></i> Agregar Estudiante
         </button>
+          <a class="btn-pdf" href="<?= BASE_URL ?>/administrador-reporte?reporte=estudiantes" target="_blank">Generar PDF</a>
+
         
         <!-- Dropdown Más Nuevo -->
         <div class="dropdown-custom">
@@ -81,40 +84,52 @@
               <th width="40">
                 <input type="checkbox" class="form-check-input" id="selectAll">
               </th>
+              <th>Foto</th>
+              <th>Genero</th>
               <th>Nombres</th>
               <th>Apellidos</th>
               <th>N° Identificación</th>
-              <th>Fecha Nacimiento</th>
-              <th>Nombre Pariente</th>
-              <th>Ciudad</th>
-              <th>Contactos</th>
-              <th>Grado</th>
+              <th>Correo</th>
+              <th>Telefono</th>
+              <th>Acudiente</th>
+              <th>Fecha de nacimineto</th>
+            
+              <th>Estado</th>
               <th width="100">Acción</th>
             </tr>
           </thead>
           <tbody>
+            <?php if(!empty($datos)): ?>
+            <?php foreach($datos as $estudiante): ?>
             <tr>
               <td>
                 <input type="checkbox" class="form-check-input row-checkbox">
               </td>
-              <td>Alejo</td>
-              <td>hernadexz</td>
-              <td>#463436465</td>
-              <td>28 de marzo de 2016</td>
-              <td>Maria William</td>
-              <td>Jatarta</td>
-              <td>
-                <div class="contacts">
-                  <i class="ri-phone-line"></i>
-                  <i class="ri-mail-line"></i>
-                </div>
-              </td>
-              <td>VII A</td>
-              <td>
-                <button class="btn-action"><a href="administrador/detalle-estudiante">Ver</a></button>
-                <button class="btn-more"><i class="ri-more-2-fill"></i></button>
+              <td><img src="<?= BASE_URL ?>/public/uploads/estudiantes/<?= $estudiante['foto'] ?>" 
+         alt="foto" width="50px" height="50px" style="border-radius: 50%;"></td>
+              <td><?= $estudiante['genero'] ?></td>
+              <td><?= $estudiante['nombres'] ?></td>
+              <td><?= $estudiante['apellidos'] ?></td>
+              <td><?= $estudiante['documento'] ?></td>
+              <td><?= $estudiante['correo'] ?></td>
+              <td><?= $estudiante['telefono'] ?></td>
+              <td class="dos-lineas"><?= $estudiante['nombres_acudiente']. ' ' .$estudiante['apellidos_acudiente']?></td>
+              <td><?= $estudiante['fecha_de_nacimiento'] ?></td>
+              <td><?= $estudiante['estado'] ?></td>
+              <td class="acciones">
+                  <button class="btn-action"><a href="">Ver</a></button>
+                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/editar-estudiante?id=<?= $estudiante['id'] ?>">Editar</a></button>
+                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/eliminar-estudiante?accion=eliminar&id=<?= $estudiante['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
+
               </td>
             </tr>
+
+            <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td>No hay estudiantes registrados</td>
+                </tr>
+              <?php endif; ?>
           
           </tbody>
         </table>

@@ -1,3 +1,16 @@
+<?php 
+  require_once BASE_PATH . '/app/helpers/session_administrador.php';
+  // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
+  require_once BASE_PATH . '/app/controllers/administrador/asignatura.php';
+
+  // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
+  $asignaturas = mostrarAsignaturas();
+?>
+
+
+
+
+
 <!doctype html>
 <html lang="es">
 
@@ -9,6 +22,7 @@
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
   ?>
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
+  
 </head>
 
 <body>
@@ -63,13 +77,6 @@
             <strong>3.8</strong>
           </div>
         </div>
-        <div class="kpi">
-          <div class="icon"><i class="ri-time-line"></i></div>
-          <div>
-            <small>Horas Semanales</small>
-            <strong>240</strong>
-          </div>
-        </div>
       </div>
 
    
@@ -86,16 +93,20 @@
 
         <div class="subjects-grid">
           <!-- Subject Card 1 -->
+
+          <?php if(!empty($asignaturas)): ?>
+          <?php foreach($asignaturas as $asignaturas): ?>
+
           <div class="subject-card">
             <div class="subject-header">
               <div class="subject-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                 <i class="ri-calculator-line"></i>
               </div>
-              <div class="subject-status status-active">Activa</div>
+              <div class="subject-status status-active"><?= $asignaturas['estado'] ?></div>
             </div>
             
-            <h4>Matemáticas</h4>
-            <p class="subject-area">Ciencias Exactas</p>
+            <h4><?= $asignaturas['nombre'] ?></h4>
+            <p class="subject-area"><?= $asignaturas['descripcion'] ?></p>
             
             <div class="subject-info">
               <div class="info-item">
@@ -126,378 +137,19 @@
             </div>
 
             <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
+              <button class="btn-secondary"><i class="bi bi-eye"></i></button>
+              <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/editar-asignatura?id=<?= $asignaturas['id'] ?>"><i class="bi bi-pencil-square"></i></a></button>
+              <button class="btn-secondary"><i class="bi bi-trash3-fill"></i></button>
+
             </div>
           </div>
+              <?php endforeach; ?>
+              <?php else: ?>
 
-          <!-- Subject Card 2 -->
-          <div class="subject-card">
-            <div class="subject-header">
-              <div class="subject-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                <i class="ri-microscope-line"></i>
-              </div>
-              <div class="subject-status status-active">Activa</div>
-            </div>
-            
-            <h4>Física</h4>
-            <p class="subject-area">Ciencias Naturales</p>
-            
-            <div class="subject-info">
-              <div class="info-item">
-                <i class="ri-user-line"></i>
-                <div>
-                  <span class="info-label">Profesores</span>
-                  <strong>3</strong>
-                </div>
-              </div>
-              <div class="info-item">
-                <i class="ri-time-line"></i>
-                <div>
-                  <span class="info-label">Horas/Semana</span>
-                  <strong>4</strong>
-                </div>
-              </div>
-            </div>
+                  <h3>No hay asignaturas registrados</h3>
+                
+              <?php endif; ?>
 
-            <div class="subject-stats">
-              <div class="stat-box">
-                <span class="stat-label">Promedio</span>
-                <strong class="stat-value grade-warning">3.2</strong>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Estudiantes</span>
-                <strong class="stat-value">680</strong>
-              </div>
-            </div>
-
-            <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Subject Card 3 -->
-          <div class="subject-card">
-            <div class="subject-header">
-              <div class="subject-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                <i class="ri-flask-line"></i>
-              </div>
-              <div class="subject-status status-active">Activa</div>
-            </div>
-            
-            <h4>Química</h4>
-            <p class="subject-area">Ciencias Naturales</p>
-            
-            <div class="subject-info">
-              <div class="info-item">
-                <i class="ri-user-line"></i>
-                <div>
-                  <span class="info-label">Profesores</span>
-                  <strong>2</strong>
-                </div>
-              </div>
-              <div class="info-item">
-                <i class="ri-time-line"></i>
-                <div>
-                  <span class="info-label">Horas/Semana</span>
-                  <strong>4</strong>
-                </div>
-              </div>
-            </div>
-
-            <div class="subject-stats">
-              <div class="stat-box">
-                <span class="stat-label">Promedio</span>
-                <strong class="stat-value grade-good">3.7</strong>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Estudiantes</span>
-                <strong class="stat-value">620</strong>
-              </div>
-            </div>
-
-            <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Subject Card 4 -->
-          <div class="subject-card">
-            <div class="subject-header">
-              <div class="subject-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-                <i class="ri-earth-line"></i>
-              </div>
-              <div class="subject-status status-active">Activa</div>
-            </div>
-            
-            <h4>Biología</h4>
-            <p class="subject-area">Ciencias Naturales</p>
-            
-            <div class="subject-info">
-              <div class="info-item">
-                <i class="ri-user-line"></i>
-                <div>
-                  <span class="info-label">Profesores</span>
-                  <strong>3</strong>
-                </div>
-              </div>
-              <div class="info-item">
-                <i class="ri-time-line"></i>
-                <div>
-                  <span class="info-label">Horas/Semana</span>
-                  <strong>3</strong>
-                </div>
-              </div>
-            </div>
-
-            <div class="subject-stats">
-              <div class="stat-box">
-                <span class="stat-label">Promedio</span>
-                <strong class="stat-value grade-excellent">4.3</strong>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Estudiantes</span>
-                <strong class="stat-value">720</strong>
-              </div>
-            </div>
-
-            <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Subject Card 5 -->
-          <div class="subject-card">
-            <div class="subject-header">
-              <div class="subject-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                <i class="ri-book-open-line"></i>
-              </div>
-              <div class="subject-status status-active">Activa</div>
-            </div>
-            
-            <h4>Lengua Castellana</h4>
-            <p class="subject-area">Humanidades</p>
-            
-            <div class="subject-info">
-              <div class="info-item">
-                <i class="ri-user-line"></i>
-                <div>
-                  <span class="info-label">Profesores</span>
-                  <strong>5</strong>
-                </div>
-              </div>
-              <div class="info-item">
-                <i class="ri-time-line"></i>
-                <div>
-                  <span class="info-label">Horas/Semana</span>
-                  <strong>5</strong>
-                </div>
-              </div>
-            </div>
-
-            <div class="subject-stats">
-              <div class="stat-box">
-                <span class="stat-label">Promedio</span>
-                <strong class="stat-value grade-good">4.0</strong>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Estudiantes</span>
-                <strong class="stat-value">932</strong>
-              </div>
-            </div>
-
-            <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Subject Card 6 -->
-          <div class="subject-card">
-            <div class="subject-header">
-              <div class="subject-icon" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
-                <i class="ri-global-line"></i>
-              </div>
-              <div class="subject-status status-active">Activa</div>
-            </div>
-            
-            <h4>Inglés</h4>
-            <p class="subject-area">Idiomas</p>
-            
-            <div class="subject-info">
-              <div class="info-item">
-                <i class="ri-user-line"></i>
-                <div>
-                  <span class="info-label">Profesores</span>
-                  <strong>4</strong>
-                </div>
-              </div>
-              <div class="info-item">
-                <i class="ri-time-line"></i>
-                <div>
-                  <span class="info-label">Horas/Semana</span>
-                  <strong>4</strong>
-                </div>
-              </div>
-            </div>
-
-            <div class="subject-stats">
-              <div class="stat-box">
-                <span class="stat-label">Promedio</span>
-                <strong class="stat-value grade-good">3.6</strong>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Estudiantes</span>
-                <strong class="stat-value">932</strong>
-              </div>
-            </div>
-
-            <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Subject Card 7 -->
-          <div class="subject-card">
-            <div class="subject-header">
-              <div class="subject-icon" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
-                <i class="ri-book-2-line"></i>
-              </div>
-              <div class="subject-status status-review">En Revisión</div>
-            </div>
-            
-            <h4>Filosofía</h4>
-            <p class="subject-area">Humanidades</p>
-            
-            <div class="subject-info">
-              <div class="info-item">
-                <i class="ri-user-line"></i>
-                <div>
-                  <span class="info-label">Profesores</span>
-                  <strong>2</strong>
-                </div>
-              </div>
-              <div class="info-item">
-                <i class="ri-time-line"></i>
-                <div>
-                  <span class="info-label">Horas/Semana</span>
-                  <strong>2</strong>
-                </div>
-              </div>
-            </div>
-
-            <div class="subject-stats">
-              <div class="stat-box">
-                <span class="stat-label">Promedio</span>
-                <strong class="stat-value grade-good">3.9</strong>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Estudiantes</span>
-                <strong class="stat-value">280</strong>
-              </div>
-            </div>
-
-            <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Subject Card 8 -->
-          <div class="subject-card">
-            <div class="subject-header">
-              <div class="subject-icon" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
-                <i class="ri-code-line"></i>
-              </div>
-              <div class="subject-status status-active">Activa</div>
-            </div>
-            
-            <h4>Programación</h4>
-            <p class="subject-area">Tecnología</p>
-            
-            <div class="subject-info">
-              <div class="info-item">
-                <i class="ri-user-line"></i>
-                <div>
-                  <span class="info-label">Profesores</span>
-                  <strong>3</strong>
-                </div>
-              </div>
-              <div class="info-item">
-                <i class="ri-time-line"></i>
-                <div>
-                  <span class="info-label">Horas/Semana</span>
-                  <strong>3</strong>
-                </div>
-              </div>
-            </div>
-
-            <div class="subject-stats">
-              <div class="stat-box">
-                <span class="stat-label">Promedio</span>
-                <strong class="stat-value grade-warning">3.4</strong>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Estudiantes</span>
-                <strong class="stat-value">450</strong>
-              </div>
-            </div>
-
-            <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
-
-          <!-- Subject Card 9 -->
-          <div class="subject-card">
-            <div class="subject-header">
-              <div class="subject-icon" style="background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);">
-                <i class="ri-paint-brush-line"></i>
-              </div>
-              <div class="subject-status status-active">Activa</div>
-            </div>
-            
-            <h4>Artes Plásticas</h4>
-            <p class="subject-area">Artes</p>
-            
-            <div class="subject-info">
-              <div class="info-item">
-                <i class="ri-user-line"></i>
-                <div>
-                  <span class="info-label">Profesores</span>
-                  <strong>2</strong>
-                </div>
-              </div>
-              <div class="info-item">
-                <i class="ri-time-line"></i>
-                <div>
-                  <span class="info-label">Horas/Semana</span>
-                  <strong>2</strong>
-                </div>
-              </div>
-            </div>
-
-            <div class="subject-stats">
-              <div class="stat-box">
-                <span class="stat-label">Promedio</span>
-                <strong class="stat-value grade-excellent">4.5</strong>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Estudiantes</span>
-                <strong class="stat-value">932</strong>
-              </div>
-            </div>
-
-            <div class="subject-actions">
-              <button class="btn-secondary"><i class="ri-eye-line"></i> Ver detalles</button>
-              <button class="btn-icon"><i class="ri-more-2-line"></i></button>
-            </div>
-          </div>
 
         </div>
       </section>
@@ -624,6 +276,7 @@
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
+ 
 </body>
 
 </html>
