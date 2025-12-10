@@ -4,16 +4,16 @@
         <span>Siademy</span>
     </a>
     <nav class="nav">
-        <a class="active" href="panel-secretaria.html">
+        <a class="active" href="<?= BASE_URL ?>/secretaria-academica/dashboard">
             <i class="ri-dashboard-line"></i> Panel Principal
         </a>
 
-        <a href="matriculas.html">
+        <a href="<?= BASE_URL ?>/secretaria-panel-matriculas">
             <i class="ri-user-add-line"></i> Matrículas
             <span class="badge bg-warning">12</span>
         </a>
 
-        <a href="estudiantes.html">
+        <a href="<?= BASE_URL ?>/secretaria-panel-estudiantes">
             <i class="ri-team-line"></i> Estudiantes
             <span class="badge">450</span>
         </a>

@@ -4,15 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIADEMY • Panel Secretaría Académica</title>
+    <title>SIADEMY • Gestión de Matrículas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
-    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-secretaría.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-matriculas.css">
+
 </head>
 
 <body>
@@ -29,11 +29,11 @@
                     <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
                         <i class="ri-menu-2-line"></i>
                     </button>
-                    <div class="title">Panel Secretaría</div>
+                    <div class="title">Gestión de Matrículas</div>
                 </div>
                 <div class="search">
                     <i class="ri-search-2-line"></i>
-                    <input type="text" placeholder="Buscar estudiante, grupo...">
+                    <input type="text" id="globalSearch" placeholder="Buscar estudiante, documento...">
                 </div>
                 <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
                     <i class="ri-layout-right-2-line"></i>
@@ -41,276 +41,303 @@
             </div>
 
             <!-- STATS CARDS -->
-            <div class="kpis">
-                <div class="kpi-card">
-                    <div class="kpi-icon blue">
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="stat-icon">
                         <i class="ri-user-add-line"></i>
                     </div>
-                    <div class="kpi-content">
-                        <div class="kpi-value">12</div>
-                        <div class="kpi-label">Matrículas Pendientes</div>
-                        <div class="kpi-trend up">
-                            <i class="ri-arrow-up-line"></i>
-                            <span>+3 esta semana</span>
-                        </div>
+                    <div class="stat-content">
+                        <h3>12</h3>
+                        <p>Pendientes</p>
+                        <small>Por revisar</small>
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon green">
-                        <i class="ri-team-line"></i>
+                <div class="stat-card green">
+                    <div class="stat-icon">
+                        <i class="ri-checkbox-circle-line"></i>
                     </div>
-                    <div class="kpi-content">
-                        <div class="kpi-value">450</div>
-                        <div class="kpi-label">Estudiantes Activos</div>
-                        <div class="kpi-trend up">
-                            <i class="ri-arrow-up-line"></i>
-                            <span>+8 este mes</span>
-                        </div>
+                    <div class="stat-content">
+                        <h3>38</h3>
+                        <p>Aprobadas</p>
+                        <small>Este mes</small>
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon orange">
-                        <i class="ri-file-list-3-line"></i>
+                <div class="stat-card orange">
+                    <div class="stat-icon">
+                        <i class="ri-time-line"></i>
                     </div>
-                    <div class="kpi-content">
-                        <div class="kpi-value">8</div>
-                        <div class="kpi-label">Certificados Solicitados</div>
-                        <div class="kpi-trend">
-                            <i class="ri-time-line"></i>
-                            <span>Pendientes de firma</span>
-                        </div>
+                    <div class="stat-content">
+                        <h3>5</h3>
+                        <p>En Revisión</p>
+                        <small>Documentos</small>
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon purple">
-                        <i class="ri-group-line"></i>
+                <div class="stat-card red">
+                    <div class="stat-icon">
+                        <i class="ri-close-circle-line"></i>
                     </div>
-                    <div class="kpi-content">
-                        <div class="kpi-value">18</div>
-                        <div class="kpi-label">Grados Activos</div>
-                        <div class="kpi-trend">
-                            <i class="ri-information-line"></i>
-                            <span>6 grados</span>
-                        </div>
+                    <div class="stat-content">
+                        <h3>2</h3>
+                        <p>Rechazadas</p>
+                        <small>Último mes</small>
                     </div>
                 </div>
             </div>
 
-            <!-- ACCIONES RÁPIDAS -->
-            <section class="quick-actions-section">
-                <h3>Acciones Rápidas</h3>
-                <div class="quick-actions-grid">
-                    <button class="action-btn blue" onclick="openMatriculaModal()">
-                        <i class="ri-user-add-line"></i>
-                        <span>Matrícular Estudiante</span>
-                    </button>
-                    <button class="action-btn green">
-                        <i class="ri-file-list-3-line"></i>
-                        <span>Generar Documento</span>
-                    </button>
-                    <button class="action-btn orange">
-                        <i class="ri-user-search-line"></i>
-                        <span>Gestión Académica</span>
-                    </button>
-                    <button class="action-btn purple">
-                        <i class="ri-bar-chart-line"></i>
-                        <span>Ver Reportes</span>
-                    </button>
-                    <button class="action-btn red">
-                        <i class="ri-task-line"></i>
-                        <span>Solicitudes Academicas</span>
-                    </button>
+            <!-- FILTROS Y ACCIONES -->
+            <div class="toolbar">
+                <div class="filter-tabs">
+                    <button class="tab-btn active" data-filter="todas">Todas (57)</button>
+                    <button class="tab-btn" data-filter="pendientes">Pendientes (12)</button>
+                    <button class="tab-btn" data-filter="revision">En Revisión (5)</button>
+                    <button class="tab-btn" data-filter="aprobadas">Aprobadas (38)</button>
+                    <button class="tab-btn" data-filter="rechazadas">Rechazadas (2)</button>
                 </div>
-            </section>
-
-            <!-- DATATABLE: SOLICITUDES PENDIENTES -->
-            <section class="datatable-card">
-                <div class="card-header-custom">
-                    <h3>Solicitudes de Matrícula Pendientes</h3>
-                    <button class="btn-export">
+                <div class="toolbar-actions">
+                    <button class="btn-action" onclick="openMatriculaModal()">
+                        <i class="ri-add-line"></i>
+                        Nueva Matrícula
+                    </button>
+                    <button class="btn-action secondary">
                         <i class="ri-download-line"></i>
                         Exportar
                     </button>
                 </div>
+            </div>
 
+            <!-- DATATABLE -->
+            <section class="table-card">
                 <div class="table-responsive">
                     <table id="matriculasTable" class="table table-dark table-hover align-middle" style="width:100%">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Estudiante</th>
+                                <th>Documento</th>
                                 <th>Grado</th>
-                                <th>Fecha Solicitud</th>
                                 <th>Acudiente</th>
                                 <th>Teléfono</th>
+                                <th>Fecha Solicitud</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><strong>#2024-001</strong></td>
+                            <!-- PENDIENTES -->
+                            <tr data-status="pendiente">
+                                <td><strong>#2024-045</strong></td>
                                 <td>
-                                    <div class="student-info">
-                                        <div class="avatar-sm">JM</div>
+                                    <div class="student-cell">
+                                        <div class="avatar">JM</div>
                                         <div>
                                             <strong>Juan Martínez Pérez</strong>
-                                            <small class="d-block text-muted">CC: 1234567890</small>
+                                            <small>Nuevo ingreso</small>
                                         </div>
                                     </div>
                                 </td>
-                                <td>7° A</td>
-                                <td>15 Nov 2024</td>
+                                <td>1234567890</td>
+                                <td><span class="badge-grade">7° A</span></td>
                                 <td>María Pérez</td>
                                 <td>+57 300 123 4567</td>
+                                <td>15 Nov 2024</td>
                                 <td class="text-center">
-                                    <span class="badge-status pending">Pendiente</span>
+                                    <span class="status-badge pending">
+                                        <i class="ri-time-line"></i> Pendiente
+                                    </span>
                                 </td>
                                 <td class="text-center">
-                                    <div class="action-buttons">
-                                        <button class="btn-action approve" title="Aprobar">
+                                    <div class="action-btns">
+                                        <button class="btn-icon approve" title="Aprobar">
                                             <i class="ri-check-line"></i>
                                         </button>
-                                        <button class="btn-action view" title="Ver">
+                                        <button class="btn-icon view" title="Ver" onclick="openDetalleModal(1)">
                                             <i class="ri-eye-line"></i>
                                         </button>
-                                        <button class="btn-action reject" title="Rechazar">
+                                        <button class="btn-icon edit" title="Editar">
+                                            <i class="ri-edit-line"></i>
+                                        </button>
+                                        <button class="btn-icon reject" title="Rechazar">
                                             <i class="ri-close-line"></i>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
 
-                            <tr>
-                                <td><strong>#2024-002</strong></td>
+                            <tr data-status="pendiente">
+                                <td><strong>#2024-046</strong></td>
                                 <td>
-                                    <div class="student-info">
-                                        <div class="avatar-sm" style="background: #10b981">AG</div>
+                                    <div class="student-cell">
+                                        <div class="avatar" style="background: #10b981">AG</div>
                                         <div>
                                             <strong>Ana García López</strong>
-                                            <small class="d-block text-muted">CC: 9876543210</small>
+                                            <small>Nuevo ingreso</small>
                                         </div>
                                     </div>
                                 </td>
-                                <td>8° B</td>
-                                <td>16 Nov 2024</td>
+                                <td>9876543210</td>
+                                <td><span class="badge-grade">8° B</span></td>
                                 <td>Carlos López</td>
                                 <td>+57 300 234 5678</td>
+                                <td>16 Nov 2024</td>
                                 <td class="text-center">
-                                    <span class="badge-status pending">Pendiente</span>
+                                    <span class="status-badge pending">
+                                        <i class="ri-time-line"></i> Pendiente
+                                    </span>
                                 </td>
                                 <td class="text-center">
-                                    <div class="action-buttons">
-                                        <button class="btn-action approve" title="Aprobar">
+                                    <div class="action-btns">
+                                        <button class="btn-icon approve" title="Aprobar">
                                             <i class="ri-check-line"></i>
                                         </button>
-                                        <button class="btn-action view" title="Ver">
+                                        <button class="btn-icon view" title="Ver" onclick="openDetalleModal(2)">
                                             <i class="ri-eye-line"></i>
                                         </button>
-                                        <button class="btn-action reject" title="Rechazar">
+                                        <button class="btn-icon edit" title="Editar">
+                                            <i class="ri-edit-line"></i>
+                                        </button>
+                                        <button class="btn-icon reject" title="Rechazar">
                                             <i class="ri-close-line"></i>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
 
-                            <tr>
-                                <td><strong>#2024-003</strong></td>
+                            <!-- EN REVISIÓN -->
+                            <tr data-status="revision">
+                                <td><strong>#2024-043</strong></td>
                                 <td>
-                                    <div class="student-info">
-                                        <div class="avatar-sm" style="background: #f59e0b">LR</div>
+                                    <div class="student-cell">
+                                        <div class="avatar" style="background: #f59e0b">LR</div>
                                         <div>
                                             <strong>Luis Rodríguez Gómez</strong>
-                                            <small class="d-block text-muted">CC: 5678901234</small>
+                                            <small>Transferencia</small>
                                         </div>
                                     </div>
                                 </td>
-                                <td>9° A</td>
-                                <td>17 Nov 2024</td>
+                                <td>5678901234</td>
+                                <td><span class="badge-grade">9° A</span></td>
                                 <td>Sandra Gómez</td>
                                 <td>+57 300 345 6789</td>
+                                <td>13 Nov 2024</td>
                                 <td class="text-center">
-                                    <span class="badge-status review">Revisión</span>
+                                    <span class="status-badge review">
+                                        <i class="ri-file-search-line"></i> En Revisión
+                                    </span>
                                 </td>
                                 <td class="text-center">
-                                    <div class="action-buttons">
-                                        <button class="btn-action approve" title="Aprobar">
+                                    <div class="action-btns">
+                                        <button class="btn-icon approve" title="Aprobar">
                                             <i class="ri-check-line"></i>
                                         </button>
-                                        <button class="btn-action view" title="Ver">
+                                        <button class="btn-icon view" title="Ver" onclick="openDetalleModal(3)">
                                             <i class="ri-eye-line"></i>
                                         </button>
-                                        <button class="btn-action reject" title="Rechazar">
+                                        <button class="btn-icon edit" title="Editar">
+                                            <i class="ri-edit-line"></i>
+                                        </button>
+                                        <button class="btn-icon reject" title="Rechazar">
                                             <i class="ri-close-line"></i>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
 
-                            <tr>
-                                <td><strong>#2024-004</strong></td>
+                            <!-- APROBADAS -->
+                            <tr data-status="aprobada">
+                                <td><strong>#2024-038</strong></td>
                                 <td>
-                                    <div class="student-info">
-                                        <div class="avatar-sm" style="background: #8b5cf6">MT</div>
+                                    <div class="student-cell">
+                                        <div class="avatar" style="background: #8b5cf6">MT</div>
                                         <div>
                                             <strong>María Torres Silva</strong>
-                                            <small class="d-block text-muted">CC: 3456789012</small>
+                                            <small>Renovación</small>
                                         </div>
                                     </div>
                                 </td>
-                                <td>10° B</td>
-                                <td>18 Nov 2024</td>
+                                <td>3456789012</td>
+                                <td><span class="badge-grade">10° B</span></td>
                                 <td>Pedro Silva</td>
                                 <td>+57 300 456 7890</td>
+                                <td>10 Nov 2024</td>
                                 <td class="text-center">
-                                    <span class="badge-status pending">Pendiente</span>
+                                    <span class="status-badge approved">
+                                        <i class="ri-checkbox-circle-line"></i> Aprobada
+                                    </span>
                                 </td>
                                 <td class="text-center">
-                                    <div class="action-buttons">
-                                        <button class="btn-action approve" title="Aprobar">
-                                            <i class="ri-check-line"></i>
-                                        </button>
-                                        <button class="btn-action view" title="Ver">
+                                    <div class="action-btns">
+                                        <button class="btn-icon view" title="Ver" onclick="openDetalleModal(4)">
                                             <i class="ri-eye-line"></i>
                                         </button>
-                                        <button class="btn-action reject" title="Rechazar">
-                                            <i class="ri-close-line"></i>
+                                        <button class="btn-icon print" title="Imprimir">
+                                            <i class="ri-printer-line"></i>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
 
-                            <tr>
-                                <td><strong>#2024-005</strong></td>
+                            <tr data-status="aprobada">
+                                <td><strong>#2024-039</strong></td>
                                 <td>
-                                    <div class="student-info">
-                                        <div class="avatar-sm" style="background: #ef4444">CR</div>
+                                    <div class="student-cell">
+                                        <div class="avatar" style="background: #ef4444">CR</div>
                                         <div>
                                             <strong>Carlos Ramírez Díaz</strong>
-                                            <small class="d-block text-muted">CC: 7890123456</small>
+                                            <small>Renovación</small>
                                         </div>
                                     </div>
                                 </td>
-                                <td>11° A</td>
-                                <td>19 Nov 2024</td>
+                                <td>7890123456</td>
+                                <td><span class="badge-grade">11° A</span></td>
                                 <td>Laura Díaz</td>
                                 <td>+57 300 567 8901</td>
+                                <td>11 Nov 2024</td>
                                 <td class="text-center">
-                                    <span class="badge-status pending">Pendiente</span>
+                                    <span class="status-badge approved">
+                                        <i class="ri-checkbox-circle-line"></i> Aprobada
+                                    </span>
                                 </td>
                                 <td class="text-center">
-                                    <div class="action-buttons">
-                                        <button class="btn-action approve" title="Aprobar">
-                                            <i class="ri-check-line"></i>
-                                        </button>
-                                        <button class="btn-action view" title="Ver">
+                                    <div class="action-btns">
+                                        <button class="btn-icon view" title="Ver" onclick="openDetalleModal(5)">
                                             <i class="ri-eye-line"></i>
                                         </button>
-                                        <button class="btn-action reject" title="Rechazar">
-                                            <i class="ri-close-line"></i>
+                                        <button class="btn-icon print" title="Imprimir">
+                                            <i class="ri-printer-line"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- RECHAZADA -->
+                            <tr data-status="rechazada">
+                                <td><strong>#2024-030</strong></td>
+                                <td>
+                                    <div class="student-cell">
+                                        <div class="avatar" style="background: #6b7280">PS</div>
+                                        <div>
+                                            <strong>Pedro Sánchez Ruiz</strong>
+                                            <small>Nuevo ingreso</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>2345678901</td>
+                                <td><span class="badge-grade">6° A</span></td>
+                                <td>Carmen Ruiz</td>
+                                <td>+57 300 678 9012</td>
+                                <td>05 Nov 2024</td>
+                                <td class="text-center">
+                                    <span class="status-badge rejected">
+                                        <i class="ri-close-circle-line"></i> Rechazada
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="action-btns">
+                                        <button class="btn-icon view" title="Ver" onclick="openDetalleModal(6)">
+                                            <i class="ri-eye-line"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -319,15 +346,6 @@
                     </table>
                 </div>
             </section>
-
-            <!-- GRÁFICO DE ESTADÍSTICAS -->
-            <section class="chart-section">
-                <h3>Estadísticas de Matrículas 2024</h3>
-                <div class="chart-container">
-                    <canvas id="matriculasChart"></canvas>
-                </div>
-            </section>
-
         </main>
 
         <!-- RIGHT SIDEBAR -->
@@ -338,113 +356,91 @@
                 <div class="avatar" title="Secretaría">SA</div>
             </div>
 
-            <div class="panel-title">Tareas del Día</div>
-            <p class="muted">Actividades programadas</p>
+            <div class="panel-title">Grados Disponibles</div>
+            <p class="muted">Cupos disponibles por grado</p>
 
-            <div class="task-list">
-                <div class="task-item urgent">
-                    <div class="task-checkbox">
-                        <input type="checkbox" id="task1">
-                        <label for="task1"></label>
+            <div class="cupos-list">
+                <div class="cupo-item">
+                    <div class="cupo-grade">6° A</div>
+                    <div class="cupo-info">
+                        <strong>35/40</strong>
+                        <small>5 cupos</small>
                     </div>
-                    <div class="task-content">
-                        <strong>Revisar matrículas pendientes</strong>
-                        <small>12 solicitudes sin revisar</small>
+                    <div class="cupo-bar">
+                        <div class="cupo-progress" style="width: 87.5%"></div>
                     </div>
                 </div>
 
-                <div class="task-item">
-                    <div class="task-checkbox">
-                        <input type="checkbox" id="task2">
-                        <label for="task2"></label>
+                <div class="cupo-item">
+                    <div class="cupo-grade">7° A</div>
+                    <div class="cupo-info">
+                        <strong>38/40</strong>
+                        <small>2 cupos</small>
                     </div>
-                    <div class="task-content">
-                        <strong>Generar certificados</strong>
-                        <small>8 certificados solicitados</small>
-                    </div>
-                </div>
-
-                <div class="task-item">
-                    <div class="task-checkbox">
-                        <input type="checkbox" id="task3">
-                        <label for="task3"></label>
-                    </div>
-                    <div class="task-content">
-                        <strong>Actualizar horarios</strong>
-                        <small>Grado 7° A y 7° B</small>
+                    <div class="cupo-bar">
+                        <div class="cupo-progress warning" style="width: 95%"></div>
                     </div>
                 </div>
 
-                <div class="task-item">
-                    <div class="task-checkbox">
-                        <input type="checkbox" id="task4">
-                        <label for="task4"></label>
+                <div class="cupo-item">
+                    <div class="cupo-grade">8° B</div>
+                    <div class="cupo-info">
+                        <strong>32/40</strong>
+                        <small>8 cupos</small>
                     </div>
-                    <div class="task-content">
-                        <strong>Enviar reportes mensuales</strong>
-                        <small>Vence hoy a las 5:00 PM</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel-title" style="margin-top:24px">Alertas Importantes</div>
-            <p class="muted">Requieren atención</p>
-
-            <div class="alert-list">
-                <div class="alert-item urgent">
-                    <div class="alert-icon">
-                        <i class="ri-alarm-warning-line"></i>
-                    </div>
-                    <div class="alert-content">
-                        <strong>Documentos incompletos</strong>
-                        <small>5 estudiantes con documentación pendiente</small>
+                    <div class="cupo-bar">
+                        <div class="cupo-progress" style="width: 80%"></div>
                     </div>
                 </div>
 
-                <div class="alert-item warning">
-                    <div class="alert-icon">
-                        <i class="ri-time-line"></i>
+                <div class="cupo-item">
+                    <div class="cupo-grade">10° A</div>
+                    <div class="cupo-info">
+                        <strong>40/40</strong>
+                        <small>Completo</small>
                     </div>
-                    <div class="alert-content">
-                        <strong>Cupos limitados</strong>
-                        <small>Grado 10° solo 3 cupos disponibles</small>
-                    </div>
-                </div>
-
-                <div class="alert-item info">
-                    <div class="alert-icon">
-                        <i class="ri-information-line"></i>
-                    </div>
-                    <div class="alert-content">
-                        <strong>Reunión programada</strong>
-                        <small>Mañana 10:00 AM - Coordinación</small>
+                    <div class="cupo-bar">
+                        <div class="cupo-progress full" style="width: 100%"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="panel-title" style="margin-top:24px">Acceso Rápido</div>
-            <p class="muted">Enlaces frecuentes</p>
+            <div class="panel-title" style="margin-top:24px">Documentos Requeridos</div>
+            <p class="muted">Checklist de matrícula</p>
 
-            <div class="quick-links">
-                <a href="#" class="quick-link">
-                    <i class="ri-file-list-3-line"></i>
-                    <span>Lista de Estudiantes</span>
-                </a>
-                <a href="#" class="quick-link">
-                    <i class="ri-calendar-line"></i>
-                    <span>Calendario Académico</span>
-                </a>
-                <a href="#" class="quick-link">
-                    <i class="ri-printer-line"></i>
-                    <span>Imprimir Planillas</span>
-                </a>
-                <a href="#" class="quick-link">
-                    <i class="ri-folder-line"></i>
-                    <span>Archivo Digital</span>
-                </a>
+            <div class="checklist">
+                <div class="checklist-item">
+                    <i class="ri-checkbox-circle-line"></i>
+                    <span>Registro civil</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="ri-checkbox-circle-line"></i>
+                    <span>Documento de identidad</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="ri-checkbox-circle-line"></i>
+                    <span>Certificado de estudios</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="ri-checkbox-circle-line"></i>
+                    <span>Carnet de vacunas</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="ri-checkbox-circle-line"></i>
+                    <span>Foto 3x4</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="ri-checkbox-circle-line"></i>
+                    <span>Paz y salvo anterior</span>
+                </div>
             </div>
 
-            <button class="btn-primary">Ver Todas las Tareas</button>
+            <button class="btn-primary">Descargar Checklist</button>
+
+            <div class="info-card">
+                <h4><i class="ri-information-line"></i> Información</h4>
+                <p>Las matrículas están abiertas hasta el 30 de diciembre. Recuerda validar todos los documentos antes de aprobar.</p>
+            </div>
         </aside>
     </div>
 
@@ -723,13 +719,28 @@
         </div>
     </div>
 
+    <!-- MODAL DETALLE -->
+    <div class="modal-overlay" id="detalleModal">
+        <div class="modal-dialog large">
+            <div class="modal-header">
+                <h3><i class="ri-file-info-line"></i> Detalle de Matrícula</h3>
+                <button class="modal-close" onclick="closeDetalleModal()">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="modal-body detalle" id="detalleContent">
+                <!-- Contenido dinámico -->
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-secretaría.js"></script>
+    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/secretaría/matriculas.js"></script>
+
 </body>
 
 </html>

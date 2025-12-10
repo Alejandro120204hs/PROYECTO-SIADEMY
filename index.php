@@ -131,7 +131,7 @@
                 require BASE_PATH . '/app/views/dashboard/superAdmin/pagos.php';
                 break;
 
-         
+        
 
             // -----------------------------ROL: ADMINISTRADOR--------------------------------------------------------------
 
@@ -283,6 +283,19 @@
             case '/administrador/guardar-curso':
                 require BASE_PATH . '/app/controllers/administrador/curso.php';
                 break;
+
+            case '/administrador/eliminar-curso':
+                require BASE_PATH . '/app/controllers/administrador/curso.php';
+                break;
+
+            case '/administrador/editar-curso':
+                require BASE_PATH . '/app/views/dashboard/administrador/editarCurso.php';
+                break;
+
+            case '/administrador/actualizar-curso':
+                require BASE_PATH . '/app/controllers/administrador/curso.php';
+                break;
+
                 
                 
 
@@ -324,6 +337,14 @@
             // -----------------------------------ROL: SECRETARÍA------------------------------------------
             case '/secretaria-academica/dashboard':
                 require BASE_PATH . '/app/views/dashboard/secretariaAcademica/secretariaAcademica.php';
+                break;
+
+            case '/secretaria-panel-matriculas':
+                require BASE_PATH . '/app/views/dashboard/secretariaAcademica/matriculas.php';
+                break;
+
+            case '/secretaria-panel-estudiantes':
+                require BASE_PATH . '/app/views/dashboard/secretariaAcademica/estudiantesM.php';
                 break;
 
 
