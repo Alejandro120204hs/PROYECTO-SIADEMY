@@ -57,6 +57,59 @@
                 return[];
             }
         }
+
+        public function eliminar($id){
+            try{
+                // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL PARA ELIMINAR EL CURSO
+                $eliminar = "UPDATE curso SET estado = 'Inactivo' WHERE id=:id";
+                $resultado = $this -> conexion -> prepare($eliminar);
+                $resultado -> bindParam(':id',$id);
+
+                return $resultado -> execute();
+
+            }catch(PDOException $e){
+                die("Error en Estudiante::registrar->" . $e->getMessage());
+            }
+        }
+
+        public function listarCursoId($id){
+            try{
+                // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL PARA MOSTRAR EL CURSO POR ID
+                $consultar = "SELECT curso.*, nivel_academico.nombre  AS nivel_academico, docente.nombres AS nombres_docente, docente.apellidos AS apellidos_docente FROM curso INNER JOIN nivel_academico ON curso.id_nivel_academico = nivel_academico.id INNER JOIN docente ON curso.id_docente = docente.id WHERE curso.id = :id LIMIT 1";
+
+                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                $resultado = $this -> conexion -> prepare($consultar);
+                $resultado -> bindParam(':id',$id);
+                $resultado -> execute();
+                return $resultado -> fetch();
+            }catch(PDOException $e){
+                die("Error en Curso::listarCursoId->" . $e->getMessage());
+                return[];
+            }
+        }
+
+        public function actualizar($data){
+            try{
+                // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL PARA ACTUALIZAR EL CURSO
+                $actualizar = "UPDATE curso SET grado=:grado, id_docente=:docente, cupo_maximo=:cupo, estado=:estado, curso=:curso, id_nivel_academico=:nivel, jornada=:jornada WHERE id=:id";
+
+                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
+                $resultado = $this -> conexion -> prepare($actualizar);
+                $resultado -> bindParam(':grado',$data['grado']);
+                $resultado -> bindParam(':docente',$data['docente']);
+                $resultado -> bindParam(':cupo',$data['cupo']);
+                $resultado -> bindParam(':estado',$data['estado']);
+                $resultado -> bindParam(':curso',$data['curso']);
+                $resultado -> bindParam(':nivel',$data['nivel']);
+                $resultado -> bindParam(':jornada',$data['jornada']);
+                $resultado -> bindParam(':id',$data['id']);
+
+                return $resultado -> execute();
+
+            }catch(PDOException $e){
+                die("Error en Curso::actualizar->" . $e->getMessage());
+            }
+        }
     }
 
 ?>

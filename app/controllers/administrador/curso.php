@@ -116,15 +116,71 @@
         }
 
         function mostrarCursoId($id){
+             // INSTANCEAMOS LA CLASE
+            $objetoCurso = new Curso();
+            $resultado = $objetoCurso -> listarCursoId($id);
+
+            return $resultado;    
 
         }
 
         function actualizarCurso(){
+            // CAPTURAMOS EN VARIBALES LOS DATOS ENVIADOS A TRAVEZ DEL METODO POST Y LOS NAME DE LOS CAMPOS
+            $id = $_POST['id'] ?? '';
+            $grado = $_POST['grado'] ?? ''; 
+            $docente = $_POST['docente'] ?? '';
+            $cupo = $_POST['cupo'] ?? '';
+            $estado = $_POST['estado'] ?? '';
+            $curso = $_POST['curso'] ?? '';
+            $nivel = $_POST['nivel'] ?? '';
+            $jornada = $_POST['jornada'] ?? '';
+
+            // VALIDAMOS LOS CAMPOS OBLIGATORIOS
+            if(empty($grado) || empty($docente) || empty($cupo) || empty($estado) || empty($curso) || empty($nivel) || empty($jornada)){
+                   mostrarSweetAlert('error', 'Campos vacios', 'Por favor complete todos los campos.');
+                exit();
+            }
+
+            // PROGRAMACION ORIENTADA A OBJETOS
+            // INSTANCEAMOS LA CLASE
+            $objetoCurso = new Curso();
+            $data = [
+                'id' => $id,
+                'grado' => $grado,
+                'docente' => $docente,
+                'cupo' => $cupo,
+                'estado' => $estado,
+                'curso' => $curso,
+                'nivel' => $nivel,
+                'jornada' => $jornada
+            ];
+
+            $resultado = $objetoCurso -> actualizar($data);
+            // MENSAJES DE RESPUESTA
+            if($resultado === true){
+                mostrarSweetAlert('success', 'Actualización de curso exitoso', 'Se ha actualizado un curso. Redirigiendo...', '/siademy/administrador-panel-cursos');
+                exit();
+            }else{
+                mostrarSweetAlert('error', 'Error al actualizar', 'No se pudo actualizar el curso, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-cursos');
+                exit();
+            }
+
 
         }
 
         function eliminarCurso($id){
+            // INSTANCEAMOS LA CLASE
+            $objetoCurso = new Curso();
+            $resultado = $objetoCurso -> eliminar($id);
 
+            // MENSAJESDE RESPUESTA
+            if($resultado === true){
+                mostrarSweetAlert('success', 'Eliminación de curso exitoso', 'Se ha eliminado un curso. Redirigiendo...', '/siademy/administrador-panel-cursos');
+                exit();
+            }else{
+                mostrarSweetAlert('error', 'Error al eliminar', 'No se pudo eliminar el curso, intente nuevamente.  Redirigiendo...', '/siademy/administrador-panel-cursos');
+                exit();
+            }
         }
 
         
