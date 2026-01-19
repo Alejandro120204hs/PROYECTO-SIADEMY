@@ -10,25 +10,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/dashboard/css/styles-docente.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
 </head>
 
 <body>
   <div class="app" id="appGrid">
     <!-- LEFT SIDEBAR -->
-    <aside class="sidebar" id="leftSidebar">
-      <a class="brand" href="#">
-        <span class="logo"><i class="ri-shield-star-line"></i></span>
-        <span>Siademy</span>
-      </a>
-      <nav class="nav">
-        <a href="docente.html"><i class="ri-home-5-line"></i> Panel</a>
-        <a href="cursos.html"><i class="ri-team-line"></i> Cursos</a>
-        <a class="active" href="eventos.html"><i class="ri-calendar-event-line"></i> Eventos</a>
-     
-      
-      </nav>
-    </aside>
+    <?php 
+      include_once __DIR__ . '/../../layouts/sidebar_docente.php'
+    ?>
 
     <!-- MAIN -->
     <main class="main">
