@@ -296,12 +296,21 @@
                 require BASE_PATH . '/app/controllers/administrador/curso.php';
                 break;
 
+
                 
                 
 
             // --------------------------------------ROL: DOCENTE---------------------------------------------
             case '/docente/dashboard':
                 require BASE_PATH . '/app/views/dashboard/docente/docente.php';
+                break;
+
+            case '/docente-cursos':
+                require BASE_PATH . '/app/views/dashboard/docente/cursos.php';
+                break;
+
+            case '/docente-eventos':
+                require BASE_PATH . '/app/views/dashboard/docente/eventos.php';
                 break;
             
             // -----------------------------------ROL: ESTUDIANTE------------------------------------------
