@@ -50,10 +50,9 @@
                 $mensaje = 'Bienvenido Administrador';
                 break;
 
-
             case 'Docente':
                 $redireccionar = '/siademy/docente/dashboard';
-                $mensaje = 'Bienvenido docente academmico';
+                $mensaje = 'Bienvenido docente academico';
                 break;
 
             case 'Estudiante':
