@@ -14,6 +14,7 @@
         <div class="section">Cursos / Asignaturas</div>
          <a href="<?= BASE_URL ?>/administrador-panel-cursos"><i class="ri-book-2-line"></i> Cursos</a>
         <a href="<?= BASE_URL ?>/administrador-panel-asignaturas"><i class="ri-booklet-line"></i> Asignaturas</a>
+        <a href="<?= BASE_URL ?>/administrador-panel-matriculas"><i class="ri-graduation-cap-line"></i> Matrículas</a>
 
       </nav>
     </aside>

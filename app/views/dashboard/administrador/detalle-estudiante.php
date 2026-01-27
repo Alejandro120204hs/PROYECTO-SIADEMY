@@ -494,6 +494,35 @@
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
+  
+  <script>
+    // Tab functionality
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.dataset.tab;
+
+        // Remove active class from all buttons and panes
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabPanes.forEach(pane => pane.classList.remove('active'));
+
+        // Add active class to clicked button and corresponding pane
+        button.classList.add('active');
+        document.getElementById(targetTab).classList.add('active');
+      });
+    });
+
+    // Toggle sidebar
+    document.getElementById('toggleLeft').addEventListener('click', function() {
+      document.querySelector('.sidebar').classList.toggle('collapsed');
+    });
+
+    document.getElementById('toggleRight').addEventListener('click', function() {
+      document.querySelector('.rightbar').classList.toggle('hidden');
+    });
+  </script>
 </body>
 
 </html>

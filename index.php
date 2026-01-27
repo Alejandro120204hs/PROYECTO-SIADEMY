@@ -272,6 +272,11 @@
                 require BASE_PATH . '/app/controllers/administrador/asignatura.php';
                 break;
 
+            // -------------------------------ADMINISTRADOR(ASIGNAR DOCENTES A ASIGNATURAS)-------------------------
+            case '/administrador/asignar-docentes':
+                require BASE_PATH . '/app/controllers/administrador/docente_asignatura.php';
+                break;
+
             // -------------------------------ADMINISTRADOR(MODULO CURSOS)-------------------------
             case '/administrador-panel-cursos':
                 require BASE_PATH . '/app/views/dashboard/administrador/cursos.php';
@@ -296,6 +301,34 @@
                 require BASE_PATH . '/app/controllers/administrador/curso.php';
                 break;
 
+            case '/administrador/detalle-curso':
+                require BASE_PATH . '/app/views/dashboard/administrador/detalle-curso.php';
+                break;
+
+            // -------------------------------ADMINISTRADOR(MODULO MATRÍCULAS)-------------------------
+            case '/administrador-panel-matriculas':
+                require BASE_PATH . '/app/views/dashboard/administrador/matriculas.php';
+                break;
+
+            case '/administrador/registrar-matricula':
+                require BASE_PATH . '/app/views/dashboard/administrador/addMatricula.php';
+                break;
+
+            case '/administrador/guardar-matricula':
+                require BASE_PATH . '/app/controllers/administrador/matricula.php';
+                break;
+
+            case '/administrador/editar-matricula':
+                require BASE_PATH . '/app/views/dashboard/administrador/editarMatricula.php';
+                break;
+
+            case '/administrador/actualizar-matricula':
+                require BASE_PATH . '/app/controllers/administrador/matricula.php';
+                break;
+
+            case '/administrador/eliminar-matricula':
+                require BASE_PATH . '/app/controllers/administrador/matricula.php';
+                break;
 
                 
                 
