@@ -147,8 +147,8 @@
             </div>
 
             <div class="curso-ubicacion">
-              <i class="ri-map-pin-line"></i>
-              <span>Salón 203 - Edificio A</span>
+             
+              <span><?= $curso['nombre_asignatura'] ?></span>
             </div>
 
             <div class="curso-progress-section">
@@ -167,13 +167,12 @@
               class="btn-curso-primary">
               <i class="ri-eye-line"></i>
               Ver Detalles
-            </a>
-
-          <a href="<?= BASE_URL ?>/docente/actividades?id_asignatura=<?= $curso['id_asignatura'] ?>" 
-            class="btn-curso-secondary">
-            <i class="ri-clipboard-line"></i>
-            Actividades
-          </a>
+            </button>
+        <a href="<?= BASE_URL ?>/docente/actividades?id_curso=<?= $curso['id'] ?>" 
+   class="btn-curso-secondary">
+   <i class="ri-clipboard-line"></i>
+   Actividades
+</a>
 
           </div>
          
