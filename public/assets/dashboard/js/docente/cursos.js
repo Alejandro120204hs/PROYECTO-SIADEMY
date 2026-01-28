@@ -1,5 +1,5 @@
 /**
- * CURSOS DOCENTE - JAVASCRIPT
+ * CURSOS DOCENTE - JAVASCRIPT (CORREGIDO Y OPTIMIZADO)
  * Funcionalidad para filtrado y búsqueda de cursos
  */
 
@@ -9,44 +9,43 @@
   // ===== ELEMENTOS DEL DOM =====
   const app = document.getElementById('appGrid');
   const toggleLeft = document.getElementById('toggleLeft');
-  const toggleRight = document.getElementById('toggleRight');
   const leftSidebar = document.getElementById('leftSidebar');
-  const rightSidebar = document.getElementById('rightSidebar');
   const courseFilter = document.getElementById('courseFilter');
   const searchInput = document.getElementById('searchInput');
   const courseCards = document.querySelectorAll('.curso-card');
 
-  // ===== TOGGLE SIDEBARS =====
+  // ===== VERIFICACIÓN DE ELEMENTOS =====
+  if (!app) {
+    console.error('❌ No se encontró el elemento #appGrid');
+    return;
+  }
+
+  // ===== TOGGLE SIDEBAR IZQUIERDO =====
   if (toggleLeft && leftSidebar) {
     toggleLeft.addEventListener('click', function() {
       leftSidebar.classList.toggle('hidden');
       app.classList.toggle('hide-left');
       
       // Guardar preferencia en localStorage
-      localStorage.setItem('leftSidebarHidden', leftSidebar.classList.contains('hidden'));
+      try {
+        localStorage.setItem('leftSidebarHidden', leftSidebar.classList.contains('hidden'));
+      } catch (e) {
+        console.warn('No se pudo guardar en localStorage:', e);
+      }
     });
   }
 
-  if (toggleRight && rightSidebar) {
-    toggleRight.addEventListener('click', function() {
-      rightSidebar.classList.toggle('hidden');
-      app.classList.toggle('hide-right');
-      
-      // Guardar preferencia en localStorage
-      localStorage.setItem('rightSidebarHidden', rightSidebar.classList.contains('hidden'));
-    });
+  // Restaurar estado del sidebar desde localStorage
+  if (leftSidebar) {
+    try {
+      if (localStorage.getItem('leftSidebarHidden') === 'true') {
+        leftSidebar.classList.add('hidden');
+        app.classList.add('hide-left');
+      }
+    } catch (e) {
+      console.warn('No se pudo leer localStorage:', e);
+    }
   }
-
-  // Restaurar estado de sidebars desde localStorage
-if (leftSidebar && localStorage.getItem('leftSidebarHidden') === 'true') {
-  leftSidebar.classList.add('hidden');
-  app.classList.add('hide-left');
-}
-
-if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
-  rightSidebar.classList.add('hidden');
-  app.classList.add('hide-right');
-}
 
   // ===== FUNCIONES DE FILTRADO =====
   
@@ -55,20 +54,18 @@ if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
    * @param {string} grado - Grado a filtrar ('all', '10', '11', etc.)
    */
   function filterByGrado(grado) {
+    if (!courseCards.length) return;
+    
     let visibleCount = 0;
 
     courseCards.forEach(function(card) {
-      if (grado === 'all') {
+      const cardGrado = card.getAttribute('data-grado');
+      
+      if (grado === 'all' || cardGrado === grado) {
         showCard(card);
         visibleCount++;
       } else {
-        // Comparar el atributo data-grado con el grado seleccionado
-        if (card.getAttribute('data-grado') === grado) {
-          showCard(card);
-          visibleCount++;
-        } else {
-          hideCard(card);
-        }
+        hideCard(card);
       }
     });
 
@@ -80,6 +77,8 @@ if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
    * @param {string} searchTerm - Término de búsqueda
    */
   function filterBySearch(searchTerm) {
+    if (!courseCards.length) return;
+    
     const term = searchTerm.toLowerCase().trim();
     let visibleCount = 0;
 
@@ -91,18 +90,15 @@ if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
     }
 
     courseCards.forEach(function(card) {
-      const courseName = card.querySelector('.curso-nombre').textContent.toLowerCase();
-      const courseGrado = card.querySelector('.curso-grado').textContent.toLowerCase();
-      const courseUbicacion = card.querySelector('.curso-ubicacion span').textContent.toLowerCase();
-      const courseJornada = card.querySelector('.curso-badge-jornada').textContent.toLowerCase();
-      
-      // Obtener el código del curso si existe
-      const cursoCodigoElement = card.querySelector('.curso-codigo');
-      const cursoCodigo = cursoCodigoElement ? cursoCodigoElement.textContent.toLowerCase() : '';
+      const courseName = card.querySelector('.curso-nombre')?.textContent.toLowerCase() || '';
+      const courseIcon = card.querySelector('.curso-icon')?.textContent.toLowerCase() || '';
+      const courseUbicacion = card.querySelector('.curso-ubicacion span')?.textContent.toLowerCase() || '';
+      const courseJornada = card.querySelector('.curso-badge-jornada')?.textContent.toLowerCase() || '';
+      const cursoCodigo = card.querySelector('.curso-codigo')?.textContent.toLowerCase() || '';
 
-      // Buscar en nombre, grado, código, ubicación y jornada
+      // Buscar en todos los campos relevantes
       if (courseName.includes(term) || 
-          courseGrado.includes(term) || 
+          courseIcon.includes(term) || 
           cursoCodigo.includes(term) ||
           courseUbicacion.includes(term) ||
           courseJornada.includes(term)) {
@@ -122,10 +118,10 @@ if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
    */
   function showCard(card) {
     card.style.display = 'flex';
-    setTimeout(function() {
+    requestAnimationFrame(function() {
       card.style.opacity = '1';
       card.style.transform = 'translateY(0)';
-    }, 10);
+    });
   }
 
   /**
@@ -146,6 +142,8 @@ if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
    */
   function updateNoResultsMessage(visibleCount) {
     const grid = document.querySelector('.cursos-grid');
+    if (!grid) return;
+    
     let noResultsMsg = document.getElementById('no-results-message');
 
     if (visibleCount === 0) {
@@ -176,7 +174,6 @@ if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
   if (courseFilter) {
     courseFilter.addEventListener('change', function() {
       const grado = this.value;
-      console.log('Filtrando por grado:', grado); // Debug
       filterByGrado(grado);
       
       // Si hay texto en la búsqueda, aplicar ambos filtros
@@ -212,34 +209,17 @@ if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
     };
   }
 
-  // ===== ANIMACIONES DE HOVER EN BOTONES =====
-  const primaryButtons = document.querySelectorAll('.btn-curso-primary');
-  const secondaryButtons = document.querySelectorAll('.btn-curso-secondary');
-
-  primaryButtons.forEach(function(btn) {
-    btn.addEventListener('mouseenter', function() {
-      this.style.transform = 'translateY(-2px)';
-    });
-    btn.addEventListener('mouseleave', function() {
-      this.style.transform = 'translateY(0)';
-    });
-  });
-
-  secondaryButtons.forEach(function(btn) {
-    btn.addEventListener('mouseenter', function() {
-      this.style.transform = 'translateY(-2px)';
-    });
-    btn.addEventListener('mouseleave', function() {
-      this.style.transform = 'translateY(0)';
-    });
-  });
-
   // ===== INICIALIZACIÓN =====
   
   /**
    * Inicializa los estilos de las tarjetas para animaciones
    */
   function initCardStyles() {
+    if (!courseCards.length) {
+      console.warn('⚠️ No se encontraron tarjetas de cursos');
+      return;
+    }
+
     courseCards.forEach(function(card) {
       card.style.opacity = '0';
       card.style.transform = 'translateY(20px)';
@@ -257,64 +237,19 @@ if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
     }, 100);
   }
 
-  // Ejecutar inicialización cuando el DOM esté listo
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCardStyles);
-  } else {
-    initCardStyles();
-  }
-
-  // ===== MANEJO DE CLICKS EN BOTONES =====
-  
-  // Ver Detalles
-  document.addEventListener('click', function(e) {
-    if (e.target.closest('.btn-curso-primary')) {
-      e.preventDefault();
-      const card = e.target.closest('.curso-card');
-      const courseName = card.querySelector('.curso-nombre').textContent;
-      const courseGrado = card.querySelector('.curso-grado').textContent;
-      
-      console.log('Ver detalles de:', courseName, 'Grado:', courseGrado);
-      // Aquí puedes agregar la lógica para navegar o mostrar modal
-      // window.location.href = 'curso-detalle.php?grado=' + courseGrado;
-    }
-  });
-
-  // Actividades
-  document.addEventListener('click', function(e) {
-    if (e.target.closest('.btn-curso-secondary')) {
-      e.preventDefault();
-      const card = e.target.closest('.curso-card');
-      const courseName = card.querySelector('.curso-nombre').textContent;
-      const courseGrado = card.querySelector('.curso-grado').textContent;
-      
-      console.log('Ver actividades de:', courseName, 'Grado:', courseGrado);
-      // Aquí puedes agregar la lógica para navegar o mostrar modal
-      // window.location.href = 'curso-actividades.php?grado=' + courseGrado;
-    }
-  });
-
   // ===== RESPONSIVE - AJUSTES ADICIONALES =====
   
   function handleResize() {
     const width = window.innerWidth;
     
-    // En móviles, ocultar sidebars por defecto
-    if (width <= 980) {
-      if (leftSidebar && !leftSidebar.classList.contains('hidden')) {
+    // En móviles, ocultar sidebar por defecto
+    if (width <= 980 && leftSidebar) {
+      if (!leftSidebar.classList.contains('hidden')) {
         leftSidebar.classList.add('hidden');
         app.classList.add('hide-left');
       }
-      if (rightSidebar && !rightSidebar.classList.contains('hidden')) {
-        rightSidebar.classList.add('hidden');
-        app.classList.add('hide-right');
-      }
     }
   }
-
-  // Ejecutar al cargar y al redimensionar
-  window.addEventListener('resize', debounce(handleResize, 250));
-  handleResize();
 
   // ===== ACCESIBILIDAD =====
   
@@ -374,18 +309,34 @@ if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
   `;
   document.head.appendChild(style);
 
+  // ===== EJECUTAR INICIALIZACIÓN =====
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      initCardStyles();
+      handleResize();
+    });
+  } else {
+    initCardStyles();
+    handleResize();
+  }
+
+  // Event listener para resize
+  window.addEventListener('resize', debounce(handleResize, 250));
+
   // ===== CONSOLA DE DEPURACIÓN =====
   console.log('✅ Script de Cursos Docente cargado correctamente');
   console.log('📊 Total de cursos:', courseCards.length);
   
   // Debug: Mostrar los grados disponibles
-  const gradosDisponibles = [];
-  courseCards.forEach(function(card) {
-    const grado = card.getAttribute('data-grado');
-    if (grado && !gradosDisponibles.includes(grado)) {
-      gradosDisponibles.push(grado);
-    }
-  });
-  console.log('📚 Grados disponibles:', gradosDisponibles.sort());
+  if (courseCards.length > 0) {
+    const gradosDisponibles = [];
+    courseCards.forEach(function(card) {
+      const grado = card.getAttribute('data-grado');
+      if (grado && !gradosDisponibles.includes(grado)) {
+        gradosDisponibles.push(grado);
+      }
+    });
+    console.log('📚 Grados disponibles:', gradosDisponibles.sort());
+  }
 
 })();
