@@ -38,31 +38,32 @@
   }
 
   // Restaurar estado de sidebars desde localStorage
-  if (localStorage.getItem('leftSidebarHidden') === 'true') {
-    leftSidebar.classList.add('hidden');
-    app.classList.add('hide-left');
-  }
+if (leftSidebar && localStorage.getItem('leftSidebarHidden') === 'true') {
+  leftSidebar.classList.add('hidden');
+  app.classList.add('hide-left');
+}
 
-  if (localStorage.getItem('rightSidebarHidden') === 'true') {
-    rightSidebar.classList.add('hidden');
-    app.classList.add('hide-right');
-  }
+if (rightSidebar && localStorage.getItem('rightSidebarHidden') === 'true') {
+  rightSidebar.classList.add('hidden');
+  app.classList.add('hide-right');
+}
 
   // ===== FUNCIONES DE FILTRADO =====
   
   /**
-   * Filtra las tarjetas de cursos por categoría
-   * @param {string} category - Categoría a filtrar ('all', 'mathematics', 'physics', 'other')
+   * Filtra las tarjetas de cursos por grado
+   * @param {string} grado - Grado a filtrar ('all', '10', '11', etc.)
    */
-  function filterByCategory(category) {
+  function filterByGrado(grado) {
     let visibleCount = 0;
 
     courseCards.forEach(function(card) {
-      if (category === 'all') {
+      if (grado === 'all') {
         showCard(card);
         visibleCount++;
       } else {
-        if (card.getAttribute('data-category') === category) {
+        // Comparar el atributo data-grado con el grado seleccionado
+        if (card.getAttribute('data-grado') === grado) {
           showCard(card);
           visibleCount++;
         } else {
@@ -71,7 +72,6 @@
       }
     });
 
-    // Actualizar mensaje si no hay resultados
     updateNoResultsMessage(visibleCount);
   }
 
@@ -86,21 +86,26 @@
     if (term === '') {
       // Si no hay término de búsqueda, mostrar todos según el filtro actual
       const currentFilter = courseFilter ? courseFilter.value : 'all';
-      filterByCategory(currentFilter);
+      filterByGrado(currentFilter);
       return;
     }
 
     courseCards.forEach(function(card) {
       const courseName = card.querySelector('.curso-nombre').textContent.toLowerCase();
       const courseGrado = card.querySelector('.curso-grado').textContent.toLowerCase();
-      const courseCodigo = card.querySelector('.curso-codigo').textContent.toLowerCase();
       const courseUbicacion = card.querySelector('.curso-ubicacion span').textContent.toLowerCase();
+      const courseJornada = card.querySelector('.curso-badge-jornada').textContent.toLowerCase();
+      
+      // Obtener el código del curso si existe
+      const cursoCodigoElement = card.querySelector('.curso-codigo');
+      const cursoCodigo = cursoCodigoElement ? cursoCodigoElement.textContent.toLowerCase() : '';
 
-      // Buscar en nombre, grado, código y ubicación
+      // Buscar en nombre, grado, código, ubicación y jornada
       if (courseName.includes(term) || 
           courseGrado.includes(term) || 
-          courseCodigo.includes(term) ||
-          courseUbicacion.includes(term)) {
+          cursoCodigo.includes(term) ||
+          courseUbicacion.includes(term) ||
+          courseJornada.includes(term)) {
         showCard(card);
         visibleCount++;
       } else {
@@ -167,11 +172,12 @@
 
   // ===== EVENT LISTENERS =====
 
-  // Filtro por categoría
+  // Filtro por grado
   if (courseFilter) {
     courseFilter.addEventListener('change', function() {
-      const category = this.value;
-      filterByCategory(category);
+      const grado = this.value;
+      console.log('Filtrando por grado:', grado); // Debug
+      filterByGrado(grado);
       
       // Si hay texto en la búsqueda, aplicar ambos filtros
       if (searchInput && searchInput.value.trim() !== '') {
@@ -266,11 +272,11 @@
       e.preventDefault();
       const card = e.target.closest('.curso-card');
       const courseName = card.querySelector('.curso-nombre').textContent;
-      const courseCode = card.querySelector('.curso-codigo').textContent;
+      const courseGrado = card.querySelector('.curso-grado').textContent;
       
-      console.log('Ver detalles de:', courseName, courseCode);
+      console.log('Ver detalles de:', courseName, 'Grado:', courseGrado);
       // Aquí puedes agregar la lógica para navegar o mostrar modal
-      // window.location.href = 'curso-detalle.php?id=' + courseId;
+      // window.location.href = 'curso-detalle.php?grado=' + courseGrado;
     }
   });
 
@@ -280,11 +286,11 @@
       e.preventDefault();
       const card = e.target.closest('.curso-card');
       const courseName = card.querySelector('.curso-nombre').textContent;
-      const courseCode = card.querySelector('.curso-codigo').textContent;
+      const courseGrado = card.querySelector('.curso-grado').textContent;
       
-      console.log('Ver actividades de:', courseName, courseCode);
+      console.log('Ver actividades de:', courseName, 'Grado:', courseGrado);
       // Aquí puedes agregar la lógica para navegar o mostrar modal
-      // window.location.href = 'curso-actividades.php?id=' + courseId;
+      // window.location.href = 'curso-actividades.php?grado=' + courseGrado;
     }
   });
 
@@ -295,11 +301,11 @@
     
     // En móviles, ocultar sidebars por defecto
     if (width <= 980) {
-      if (!leftSidebar.classList.contains('hidden')) {
+      if (leftSidebar && !leftSidebar.classList.contains('hidden')) {
         leftSidebar.classList.add('hidden');
         app.classList.add('hide-left');
       }
-      if (!rightSidebar.classList.contains('hidden')) {
+      if (rightSidebar && !rightSidebar.classList.contains('hidden')) {
         rightSidebar.classList.add('hidden');
         app.classList.add('hide-right');
       }
@@ -371,5 +377,15 @@
   // ===== CONSOLA DE DEPURACIÓN =====
   console.log('✅ Script de Cursos Docente cargado correctamente');
   console.log('📊 Total de cursos:', courseCards.length);
+  
+  // Debug: Mostrar los grados disponibles
+  const gradosDisponibles = [];
+  courseCards.forEach(function(card) {
+    const grado = card.getAttribute('data-grado');
+    if (grado && !gradosDisponibles.includes(grado)) {
+      gradosDisponibles.push(grado);
+    }
+  });
+  console.log('📚 Grados disponibles:', gradosDisponibles.sort());
 
 })();
