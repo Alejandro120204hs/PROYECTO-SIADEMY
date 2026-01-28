@@ -54,7 +54,7 @@
                 break;
 
 
-              // -------------------------GENERRAR PDF-----------------------------------------
+              // -------------------------GENERAR PDF-----------------------------------------
                 case '/superAdmin-reporte':
                 require BASE_PATH . '/app/controllers/reportesPdfController.php';
                     mostrarReportes();
@@ -338,9 +338,17 @@
                 require BASE_PATH . '/app/views/dashboard/docente/docente.php';
                 break;
 
+            // --------------------------------------ROL: DOCENTE (MODULO CURSOS)---------------------------------------------
+
             case '/docente-cursos':
                 require BASE_PATH . '/app/views/dashboard/docente/cursos.php';
                 break;
+
+            case '/docente-cursos/actividades':
+                require BASE_PATH . '/app/views/dashboard/docente/actividades.php';
+                break;                
+
+            // --------------------------------------ROL: DOCENTE (MODULO EVENTO)---------------------------------------------
 
             case '/docente-eventos':
                 require BASE_PATH . '/app/views/dashboard/docente/eventos.php';

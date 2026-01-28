@@ -147,10 +147,12 @@
               <i class="ri-eye-line"></i>
               Ver Detalles
             </button>
-            <button class="btn-curso-secondary">
-              <i class="ri-clipboard-line"></i>
-              Actividades
-            </button>
+          <a href="<?= BASE_URL ?>/docente/actividades?id_asignatura=<?= $curso['id_asignatura'] ?>" 
+            class="btn-curso-secondary">
+            <i class="ri-clipboard-line"></i>
+            Actividades
+          </a>
+
           </div>
         </div>
 
