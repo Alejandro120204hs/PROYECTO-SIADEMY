@@ -163,7 +163,8 @@
           </div>
 
           <div class="curso-card-footer">
-            <button class="btn-curso-primary">
+            <a href="<?= BASE_URL ?>/docente/detalle-curso?id=<?= $curso['id'] ?>" 
+              class="btn-curso-primary">
               <i class="ri-eye-line"></i>
               Ver Detalles
             </button>
