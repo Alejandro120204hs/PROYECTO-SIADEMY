@@ -20,12 +20,14 @@
                     curso.curso, 
                     curso.grado,
                     curso.jornada,
+                    asignatura.nombre AS nombre_asignatura,
                     (SELECT COUNT(*) 
                      FROM matricula 
                      WHERE matricula.id_curso = curso.id) as total_estudiantes
                 FROM docente_asignatura_curso 
                 INNER JOIN asignatura_curso ON docente_asignatura_curso.id_asignatura_curso = asignatura_curso.id 
                 INNER JOIN curso ON asignatura_curso.id_curso = curso.id 
+                INNER JOIN asignatura ON asignatura_curso.id_asignatura = asignatura.id
                 INNER JOIN docente ON docente_asignatura_curso.id_docente = docente.id
                 WHERE docente.id_usuario = :id_docente
                 AND docente_asignatura_curso.id_institucion = :id_institucion
