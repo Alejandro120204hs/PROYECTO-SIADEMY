@@ -169,10 +169,10 @@
               Ver Detalles
             </button>
         <a href="<?= BASE_URL ?>/docente/actividades?id_curso=<?= $curso['id'] ?>" 
-   class="btn-curso-secondary">
-   <i class="ri-clipboard-line"></i>
-   Actividades
-</a>
+          class="btn-curso-secondary">
+          <i class="ri-clipboard-line"></i>
+          Actividades
+        </a>
 
           </div>
          
