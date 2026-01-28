@@ -1,7 +1,8 @@
 <?php 
 
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
-
+    }
     // VALIDAMOS SI HAY UNA SESION ACTIVA
     if(!isset($_SESSION['user'])){
         header('Location: /siademy/login');

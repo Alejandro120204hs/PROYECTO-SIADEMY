@@ -11,134 +11,13 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
-
-  <style>
-    /* ===== ESTILOS PARA SELECT DE FILTRO ===== */
-    .filter-section {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .filter-select-wrapper {
-      position: relative;
-      flex: 1;
-      max-width: 350px;
-    }
-
-    .filter-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 20px;
-      color: #a4b1ff;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .filter-select {
-      width: 100%;
-      height: 50px;
-      padding: 12px 20px 12px 48px;
-      background: linear-gradient(135deg, #1a2247 0%, #141c3f 100%);
-      border: 1px solid rgba(79, 70, 229, 0.3);
-      border-radius: 12px;
-      color: #e6e9f4;
-      font-size: 15px;
-      font-weight: 500;
-      font-family: 'Poppins', sans-serif;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a4b1ff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 16px center;
-      background-size: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .filter-select:hover {
-      border-color: rgba(79, 70, 229, 0.5);
-      background: linear-gradient(135deg, #1d2850 0%, #171f45 100%);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    .filter-select:focus {
-      outline: none;
-      border-color: #4f46e5;
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15), 0 6px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    .filter-select option {
-      background: #0e142e;
-      color: #e6e9f4;
-      padding: 12px;
-    }
-
-    .filter-search {
-      position: relative;
-      flex: 1;
-      max-width: 400px;
-    }
-
-    .filter-search i {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 20px;
-      color: #98a2b3;
-      pointer-events: none;
-    }
-
-    .filter-search input {
-      width: 100%;
-      height: 50px;
-      padding: 12px 20px 12px 48px;
-      background: #101632;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      color: #e6e9f4;
-      font-size: 15px;
-      font-family: 'Poppins', sans-serif;
-      transition: all 0.3s ease;
-    }
-
-    .filter-search input:focus {
-      outline: none;
-      border-color: #4f46e5;
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-      background: #151d3e;
-    }
-
-    .filter-search input::placeholder {
-      color: #98a2b3;
-    }
-
-    /* Responsive */
-    @media (max-width: 980px) {
-      .filter-section {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .filter-select-wrapper,
-      .filter-search {
-        max-width: 100%;
-      }
-    }
-  </style>
-
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/docente/cursos.css">
 </head>
 
 <body>
   <div class="app" id="appGrid">
     <!-- LEFT SIDEBAR -->
-     <?php 
+    <?php 
       include_once __DIR__ . '/../../layouts/sidebar_docente.php'
     ?>
 
@@ -151,9 +30,7 @@
           </button>
           <div class="title">Mis Cursos</div>
         </div>
-        <div class="topbar-actions">
-          
-        </div>
+       
         <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
           <i class="ri-layout-right-2-line"></i>
         </button>
@@ -193,390 +70,92 @@
         </div>
       </div>
 
-      <!-- FILTER TABS -->
-      <div class="filter-section">
-        <div class="filter-select-wrapper">
-          <i class="ri-filter-3-line filter-icon"></i>
-          <select id="courseFilter" class="filter-select">
+      <!-- FILTER SECTION -->
+      <div class="cursos-filter-section">
+        <div class="cursos-filter-select-wrapper">
+          <i class="ri-filter-3-line cursos-filter-icon"></i>
+          <select id="courseFilter" class="cursos-filter-select">
             <option value="all" selected>Todos los cursos (6)</option>
             <option value="mathematics">Matemáticas (3)</option>
             <option value="physics">Física (2)</option>
             <option value="other">Otros (1)</option>
           </select>
         </div>
-        <div class="filter-search">
+        <div class="cursos-filter-search">
           <i class="ri-search-line"></i>
-          <input type="text" id="searchInput" placeholder="Buscar curso...">
+          <input type="text" id="searchInput" placeholder="Buscar por grado o curso...">
         </div>
       </div>
 
       <!-- COURSES GRID -->
-      <section class="courses-grid">
+      <section class="cursos-grid">
+        
         <!-- Course Card 1 - Matemáticas -->
-        <div class="course-card" data-category="mathematics">
-            <div class="course-header">
-              <div class="course-icon" style="background: linear-gradient(135deg, #4f46e5, #6366f1)">
-                <i class="ri-calculator-line"></i>
-              </div>
-              <div class="course-actions">
-                <button class="btn-course-action" title="Editar"><i class="ri-edit-line"></i></button>
-                <button class="btn-course-action" title="Más opciones"><i class="ri-more-2-fill"></i></button>
-              </div>
+        <div class="curso-card" data-category="mathematics">
+          <div class="curso-card-header">
+            <div class="curso-icon" style="background: linear-gradient(135deg, #4f46e5, #6366f1)">
+              <i class="ri-calculator-line"></i>
             </div>
-            
-            <div class="course-body">
-              <h3>Matemáticas Avanzadas</h3>
-              <p class="course-description">10° A - Secundaria</p>
+            <div class="curso-badge-jornada jornada-manana">
+              <i class="ri-sun-line"></i>
+              Mañana
+            </div>
+          </div>
+          
+          <div class="curso-card-body">
+            <div class="curso-info-principal">
+              <div class="curso-grado">Grado 10°</div>
+              <h3 class="curso-nombre">Matemáticas Avanzadas</h3>
+              <div class="curso-codigo">Curso 101-A</div>
+            </div>
 
-              <div class="course-meta">
-                <span class="meta-item">
-                  <i class="ri-sun-line"></i>
-                  <strong>Mañana</strong>
-                </span>
-                <span class="meta-item">
-                  <i class="ri-user-line"></i>
-                  32 estudiantes
-                </span>
-              </div>
-
-              <div class="course-schedule">
-                <div class="schedule-item">
-                  <i class="ri-calendar-line"></i>
-                  <span>Lun - Mié - Vie</span>
-                </div>
-                <div class="schedule-item">
-                  <i class="ri-time-line"></i>
-                  <span>8:00 AM - 9:30 AM</span>
+            <div class="curso-meta-grid">
+              <div class="curso-meta-item">
+                <i class="ri-user-line"></i>
+                <div>
+                  <strong>32</strong>
+                  <small>Estudiantes</small>
                 </div>
               </div>
-
-              <div class="course-progress">
-                <div class="progress-info">
-                  <small>Progreso del período</small>
-                  <strong>68%</strong>
-                </div>
-                <div class="progress-bar-course">
-                  <div class="progress-fill-course" style="width: 68%;"></div>
+              <div class="curso-meta-item">
+                <i class="ri-time-line"></i>
+                <div>
+                  <strong>Lun-Mié-Vie</strong>
+                  <small>8:00 - 9:30 AM</small>
                 </div>
               </div>
             </div>
 
-            <div class="course-footer">
-              <button class="btn-course-primary">
-                <i class="ri-eye-line"></i>
-                Ver detalles
-              </button>
-              <button class="btn-course-secondary">
-                <i class="ri-file-list-line"></i>
-                Calificaciones
-              </button>
+            <div class="curso-ubicacion">
+              <i class="ri-map-pin-line"></i>
+              <span>Salón 203 - Edificio A</span>
+            </div>
+
+            <div class="curso-progress-section">
+              <div class="curso-progress-header">
+                <small>Progreso del período</small>
+                <strong class="curso-progress-percent">68%</strong>
+              </div>
+              <div class="curso-progress-bar">
+                <div class="curso-progress-fill" style="width: 68%;"></div>
+              </div>
             </div>
           </div>
 
-        <!-- Course Card 2 - Física -->
-        <div class="course-card" data-category="physics">
-            <div class="course-header">
-              <div class="course-icon" style="background: linear-gradient(135deg, #10b981, #059669)">
-                <i class="ri-test-tube-line"></i>
-              </div>
-              <div class="course-actions">
-                <button class="btn-course-action" title="Editar"><i class="ri-edit-line"></i></button>
-                <button class="btn-course-action" title="Más opciones"><i class="ri-more-2-fill"></i></button>
-              </div>
-            </div>
-            
-            <div class="course-body">
-              <h3>Física</h3>
-              <p class="course-description">11° B - Secundaria</p>
-
-              <div class="course-meta">
-                <span class="meta-item">
-                  <i class="ri-sun-line"></i>
-                  <strong>Tarde</strong>
-                </span>
-                <span class="meta-item">
-                  <i class="ri-user-line"></i>
-                  28 estudiantes
-                </span>
-              </div>
-
-              <div class="course-schedule">
-                <div class="schedule-item">
-                  <i class="ri-calendar-line"></i>
-                  <span>Mar - Jue</span>
-                </div>
-                <div class="schedule-item">
-                  <i class="ri-time-line"></i>
-                  <span>2:00 PM - 3:45 PM</span>
-                </div>
-              </div>
-
-              <div class="course-progress">
-                <div class="progress-info">
-                  <small>Progreso del período</small>
-                  <strong>72%</strong>
-                </div>
-                <div class="progress-bar-course">
-                  <div class="progress-fill-course" style="width: 72%;"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="course-footer">
-              <button class="btn-course-primary">
-                <i class="ri-eye-line"></i>
-                Ver detalles
-              </button>
-              <button class="btn-course-secondary">
-                <i class="ri-file-list-line"></i>
-                Calificaciones
-              </button>
-            </div>
+          <div class="curso-card-footer">
+            <button class="btn-curso-primary">
+              <i class="ri-eye-line"></i>
+              Ver Detalles
+            </button>
+            <button class="btn-curso-secondary">
+              <i class="ri-clipboard-line"></i>
+              Actividades
+            </button>
           </div>
+        </div>
 
-        <!-- Course Card 3 - Geometría -->
-        <div class="course-card" data-category="mathematics">
-            <div class="course-header">
-              <div class="course-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706)">
-                <i class="ri-shapes-line"></i>
-              </div>
-              <div class="course-actions">
-                <button class="btn-course-action" title="Editar"><i class="ri-edit-line"></i></button>
-                <button class="btn-course-action" title="Más opciones"><i class="ri-more-2-fill"></i></button>
-              </div>
-            </div>
-            
-            <div class="course-body">
-              <h3>Geometría Analítica</h3>
-              <p class="course-description">9° A - Secundaria</p>
+       
 
-              <div class="course-meta">
-                <span class="meta-item">
-                  <i class="ri-sun-line"></i>
-                  <strong>Mañana</strong>
-                </span>
-                <span class="meta-item">
-                  <i class="ri-user-line"></i>
-                  35 estudiantes
-                </span>
-              </div>
-
-              <div class="course-schedule">
-                <div class="schedule-item">
-                  <i class="ri-calendar-line"></i>
-                  <span>Lun - Vie</span>
-                </div>
-                <div class="schedule-item">
-                  <i class="ri-time-line"></i>
-                  <span>10:00 AM - 11:00 AM</span>
-                </div>
-              </div>
-
-              <div class="course-progress">
-                <div class="progress-info">
-                  <small>Progreso del período</small>
-                  <strong>45%</strong>
-                </div>
-                <div class="progress-bar-course">
-                  <div class="progress-fill-course warning" style="width: 45%;"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="course-footer">
-              <button class="btn-course-primary">
-                <i class="ri-eye-line"></i>
-                Ver detalles
-              </button>
-              <button class="btn-course-secondary">
-                <i class="ri-file-list-line"></i>
-                Calificaciones
-              </button>
-            </div>
-          </div>
-
-        <!-- Course Card 4 - Cálculo -->
-        <div class="course-card" data-category="mathematics">
-            <div class="course-header">
-              <div class="course-icon" style="background: linear-gradient(135deg, #ec4899, #db2777)">
-                <i class="ri-function-line"></i>
-              </div>
-              <div class="course-actions">
-                <button class="btn-course-action" title="Editar"><i class="ri-edit-line"></i></button>
-                <button class="btn-course-action" title="Más opciones"><i class="ri-more-2-fill"></i></button>
-              </div>
-            </div>
-            
-            <div class="course-body">
-              <h3>Cálculo Diferencial</h3>
-              <p class="course-description">11° A - Secundaria</p>
-
-              <div class="course-meta">
-                <span class="meta-item">
-                  <i class="ri-sun-line"></i>
-                  <strong>Tarde</strong>
-                </span>
-                <span class="meta-item">
-                  <i class="ri-user-line"></i>
-                  25 estudiantes
-                </span>
-              </div>
-
-              <div class="course-schedule">
-                <div class="schedule-item">
-                  <i class="ri-calendar-line"></i>
-                  <span>Mar - Jue</span>
-                </div>
-                <div class="schedule-item">
-                  <i class="ri-time-line"></i>
-                  <span>2:00 PM - 3:30 PM</span>
-                </div>
-              </div>
-
-              <div class="course-progress">
-                <div class="progress-info">
-                  <small>Progreso del período</small>
-                  <strong>81%</strong>
-                </div>
-                <div class="progress-bar-course">
-                  <div class="progress-fill-course" style="width: 81%;"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="course-footer">
-              <button class="btn-course-primary">
-                <i class="ri-eye-line"></i>
-                Ver detalles
-              </button>
-              <button class="btn-course-secondary">
-                <i class="ri-file-list-line"></i>
-                Calificaciones
-              </button>
-            </div>
-          </div>
-
-        <!-- Course Card 5 - Inglés -->
-        <div class="course-card" data-category="other">
-            <div class="course-header">
-              <div class="course-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed)">
-                <i class="ri-book-2-line"></i>
-              </div>
-              <div class="course-actions">
-                <button class="btn-course-action" title="Editar"><i class="ri-edit-line"></i></button>
-                <button class="btn-course-action" title="Más opciones"><i class="ri-more-2-fill"></i></button>
-              </div>
-            </div>
-            
-            <div class="course-body">
-              <h3>Inglés</h3>
-              <p class="course-description">10° B - Secundaria</p>
-
-              <div class="course-meta">
-                <span class="meta-item">
-                  <i class="ri-sun-line"></i>
-                  <strong>Mañana</strong>
-                </span>
-                <span class="meta-item">
-                  <i class="ri-user-line"></i>
-                  30 estudiantes
-                </span>
-              </div>
-
-              <div class="course-schedule">
-                <div class="schedule-item">
-                  <i class="ri-calendar-line"></i>
-                  <span>Lun - Mié - Vie</span>
-                </div>
-                <div class="schedule-item">
-                  <i class="ri-time-line"></i>
-                  <span>9:30 AM - 11:00 AM</span>
-                </div>
-              </div>
-
-              <div class="course-progress">
-                <div class="progress-info">
-                  <small>Progreso del período</small>
-                  <strong>55%</strong>
-                </div>
-                <div class="progress-bar-course">
-                  <div class="progress-fill-course" style="width: 55%;"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="course-footer">
-              <button class="btn-course-primary">
-                <i class="ri-eye-line"></i>
-                Ver detalles
-              </button>
-              <button class="btn-course-secondary">
-                <i class="ri-file-list-line"></i>
-                Calificaciones
-              </button>
-            </div>
-          </div>
-
-        <!-- Course Card 6 - Química -->
-        <div class="course-card" data-category="physics">
-            <div class="course-header">
-              <div class="course-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2)">
-                <i class="ri-flask-line"></i>
-              </div>
-              <div class="course-actions">
-                <button class="btn-course-action" title="Editar"><i class="ri-edit-line"></i></button>
-                <button class="btn-course-action" title="Más opciones"><i class="ri-more-2-fill"></i></button>
-              </div>
-            </div>
-            
-            <div class="course-body">
-              <h3>Química</h3>
-              <p class="course-description">10° C - Secundaria</p>
-
-              <div class="course-meta">
-                <span class="meta-item">
-                  <i class="ri-sun-line"></i>
-                  <strong>Tarde</strong>
-                </span>
-                <span class="meta-item">
-                  <i class="ri-user-line"></i>
-                  27 estudiantes
-                </span>
-              </div>
-
-              <div class="course-schedule">
-                <div class="schedule-item">
-                  <i class="ri-calendar-line"></i>
-                  <span>Mar - Jue - Vie</span>
-                </div>
-                <div class="schedule-item">
-                  <i class="ri-time-line"></i>
-                  <span>1:00 PM - 2:30 PM</span>
-                </div>
-              </div>
-
-              <div class="course-progress">
-                <div class="progress-info">
-                  <small>Progreso del período</small>
-                  <strong>63%</strong>
-                </div>
-                <div class="progress-bar-course">
-                  <div class="progress-fill-course" style="width: 63%;"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="course-footer">
-              <button class="btn-course-primary">
-                <i class="ri-eye-line"></i>
-                Ver detalles
-              </button>
-              <button class="btn-course-secondary">
-                <i class="ri-file-list-line"></i>
-                Calificaciones
-              </button>
-            </div>
-          </div>
       </section>
 
       <!-- UPCOMING CLASSES SECTION -->
@@ -758,61 +337,7 @@
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Toggle sidebars
-    const app = document.getElementById('appGrid');
-    const toggleLeft = document.getElementById('toggleLeft');
-    const toggleRight = document.getElementById('toggleRight');
-    const leftSidebar = document.getElementById('leftSidebar');
-    const rightSidebar = document.getElementById('rightSidebar');
-
-    toggleLeft.addEventListener('click', () => {
-      leftSidebar.classList.toggle('hidden');
-      app.classList.toggle('hide-left');
-    });
-
-    toggleRight.addEventListener('click', () => {
-      rightSidebar.classList.toggle('hidden');
-      app.classList.toggle('hide-right');
-    });
-
-    // Filter courses con select
-    const courseFilter = document.getElementById('courseFilter');
-    const courseCards = document.querySelectorAll('.course-card');
-
-    courseFilter.addEventListener('change', function() {
-      const filter = this.value;
-
-      courseCards.forEach(card => {
-        if (filter === 'all') {
-          card.style.display = 'block';
-        } else {
-          if (card.getAttribute('data-category') === filter) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
-          }
-        }
-      });
-    });
-
-    // Search filter
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', function() {
-      const searchTerm = this.value.toLowerCase();
-      
-      courseCards.forEach(card => {
-        const courseName = card.querySelector('h3').textContent.toLowerCase();
-        const courseDesc = card.querySelector('.course-description').textContent.toLowerCase();
-        
-        if (courseName.includes(searchTerm) || courseDesc.includes(searchTerm)) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  </script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/docente/cursos.js"></script>
 </body>
 
 </html>
