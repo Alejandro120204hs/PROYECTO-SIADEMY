@@ -346,7 +346,11 @@
 
             case '/docente-cursos/actividades':
                 require BASE_PATH . '/app/views/dashboard/docente/actividades.php';
-                break;                
+                break; 
+                
+            case '/docente/detalle-curso':
+                require BASE_PATH . '/app/views/dashboard/docente/detalle-curso.php';
+                break;
 
             // --------------------------------------ROL: DOCENTE (MODULO EVENTO)---------------------------------------------
 

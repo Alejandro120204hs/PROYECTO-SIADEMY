@@ -1,5 +1,5 @@
 <?php 
-    require_once BASE_PATH . '/app/helpers/session_docente.php';
+    
     require_once BASE_PATH . '/app/controllers/administrador/curso.php';
     require_once BASE_PATH . '/app/models/administradores/matricula.php';
     require_once BASE_PATH . '/app/models/administradores/docente_asignatura.php';
