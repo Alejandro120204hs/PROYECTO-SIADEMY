@@ -19,6 +19,7 @@
                     curso.id, 
                     curso.curso, 
                     curso.grado,
+                    curso.jornada,
                     (SELECT COUNT(*) 
                      FROM matricula 
                      WHERE matricula.id_curso = curso.id) as total_estudiantes
