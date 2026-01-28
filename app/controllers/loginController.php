@@ -40,6 +40,7 @@
             'id_institucion' => $resultado['id_institucion']
         ];
 
+
         // REDIRIGIENDO SEGUN EL ROL
         $redireccionar = '/siademy/login';
         $mensaje = 'Rol inexistente. Redirigiendo al inicio de sesion....';

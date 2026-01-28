@@ -1,3 +1,12 @@
+<?php 
+  // require_once BASE_PATH . '/app/helpers/session_administrador.php';
+   // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
+  require_once BASE_PATH . '/app/controllers/docente/curso.php';
+
+  // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
+  $datos = mostrarCursos();
+?>
+
 <!doctype html>
 <html lang="es">
 
@@ -9,8 +18,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
-  <!-- DataTables CSS -->
+  
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- DataTables CSS - VERSIÓN COMPATIBLE -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+  
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
 </head>
 
@@ -80,146 +94,43 @@
           <table id="coursesTable" class="table table-dark table-hover align-middle" style="width:100%">
             <thead>
               <tr>
-                <th>Curso/Materia</th>
+                <th>Curso</th>
                 <th>Grado</th>
                 <th>N° Estudiantes</th>
                 <th>Horario</th>
                 <th class="text-center" style="width:60px">Ver</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <strong>Matemáticas Avanzadas</strong>
-                  <small class="d-block text-muted">Álgebra y Trigonometría</small>
-                </td>
-                <td>
-                  <strong>10° A</strong>
-                </td>
-                <td>
-                  <span class="badge bg-info">32 estudiantes</span>
-                </td>
-                <td>
-                  <small class="d-block">Lun - Mié - Vie</small>
-                  <small class="text-muted">8:00 AM - 9:30 AM</small>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Ver detalles">
-                    <i class="ri-eye-line"></i>
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Física I</strong>
-                  <small class="d-block text-muted">Mecánica Clásica</small>
-                </td>
-                <td>
-                  <strong>11° B</strong>
-                </td>
-                <td>
-                  <span class="badge bg-info">28 estudiantes</span>
-                </td>
-                <td>
-                  <small class="d-block">Mar - Jue</small>
-                  <small class="text-muted">10:00 AM - 11:30 AM</small>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Ver detalles">
-                    <i class="ri-eye-line"></i>
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Cálculo Diferencial</strong>
-                  <small class="d-block text-muted">Límites y Derivadas</small>
-                </td>
-                <td>
-                  <strong>11° A</strong>
-                </td>
-                <td>
-                  <span class="badge bg-info">30 estudiantes</span>
-                </td>
-                <td>
-                  <small class="d-block">Lun - Mié - Vie</small>
-                  <small class="text-muted">2:00 PM - 3:30 PM</small>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Ver detalles">
-                    <i class="ri-eye-line"></i>
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Estadística</strong>
-                  <small class="d-block text-muted">Probabilidad y Análisis</small>
-                </td>
-                <td>
-                  <strong>10° B</strong>
-                </td>
-                <td>
-                  <span class="badge bg-info">29 estudiantes</span>
-                </td>
-                <td>
-                  <small class="d-block">Mar - Jue</small>
-                  <small class="text-muted">8:00 AM - 9:30 AM</small>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Ver detalles">
-                    <i class="ri-eye-line"></i>
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Geometría Analítica</strong>
-                  <small class="d-block text-muted">Vectores y Plano Cartesiano</small>
-                </td>
-                <td>
-                  <strong>9° A</strong>
-                </td>
-                <td>
-                  <span class="badge bg-info">35 estudiantes</span>
-                </td>
-                <td>
-                  <small class="d-block">Lun - Vie</small>
-                  <small class="text-muted">10:00 AM - 11:00 AM</small>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Ver detalles">
-                    <i class="ri-eye-line"></i>
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Física II</strong>
-                  <small class="d-block text-muted">Electromagnetismo</small>
-                </td>
-                <td>
-                  <strong>11° C</strong>
-                </td>
-                <td>
-                  <span class="badge bg-info">27 estudiantes</span>
-                </td>
-                <td>
-                  <small class="d-block">Mié - Vie</small>
-                  <small class="text-muted">1:00 PM - 2:30 PM</small>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Ver detalles">
-                    <i class="ri-eye-line"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
+         <tbody>
+  <?php if(!empty($datos)): ?>
+    <?php foreach($datos as $curso): ?>
+      <tr>
+        <td>
+          <strong><?= htmlspecialchars($curso['curso'], ENT_QUOTES, 'UTF-8') ?></strong>
+        </td>
+        <td>
+          <strong><?= htmlspecialchars($curso['grado'], ENT_QUOTES, 'UTF-8') ?></strong>
+        </td>
+        <td>
+          <span class="badge bg-info"><?= $curso['total_estudiantes'] ?> estudiantes</span>
+        </td>
+        <td>
+          <small class="d-block">Lun - Mié - Vie</small>
+          <small class="text-muted">8:00 AM - 9:30 AM</small>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-sm btn-outline-light" title="Ver detalles">
+            <i class="ri-eye-line"></i>
+          </button>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <tr>
+      <td colspan="5" class="text-center text-muted">No hay cursos registrados</td>
+    </tr>
+  <?php endif; ?>
+</tbody>
           </table>
         </div>
       </section>
@@ -469,12 +380,14 @@
 
   <!-- Bootstrap and DataTables Scripts -->
 
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="../../assets/dashboard/js/main-docente.js"></script>
+
+<!-- Bootstrap and DataTables Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-docente.js"></script>
 
 </body>
 
