@@ -63,11 +63,11 @@
                             <!-- Datos personales -->
                             <div class="col-md-5">
                                 <div class="mb-3">
-                                    <label for="">Nombres</label>
-                                    <input type="text" class="form-control" name="nombres"  tabindex="2">
+                                    <label for="">Nombre de la actividad</label>
+                                    <input type="text" class="form-control" name="nombre"  tabindex="2">
                                 </div>
                                  <div class="mb-3">
-                                    <label for="">tipo de documento</label>
+                                    <label for="">Grado°</label>
                                     <select class="selector" name="tipo_documento"  tabindex="4">
                                         <option selected>Seleccione un tipo de documento</option>
                                         <option value="CC">CC</option>
@@ -100,8 +100,8 @@
                             <div class="col-md-5">
                                
                                 <div class="mb-3">
-                                    <label for="">Apellidos</label>
-                                    <input type="text" class="form-control" name="apellidos"  tabindex="3">
+                                <label for="exampleFormControlTextarea1" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
                                  <div class="mb-3 parte2">
                                     <label for="">N° Documento*</label>
