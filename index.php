@@ -352,6 +352,10 @@
                 require BASE_PATH . '/app/views/dashboard/docente/detalle-curso.php';
                 break;
 
+            case '/docente/agregar-actividad':
+                require BASE_PATH . '/app/views/dashboard/docente/add-actividades.php';
+                break;
+
             // --------------------------------------ROL: DOCENTE (MODULO EVENTO)---------------------------------------------
 
             case '/docente-eventos':
