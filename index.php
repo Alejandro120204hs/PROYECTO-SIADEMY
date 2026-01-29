@@ -344,7 +344,7 @@
                 require BASE_PATH . '/app/views/dashboard/docente/cursos.php';
                 break;
 
-            case '/docente-cursos/actividades':
+            case '/docente/actividades':
                 require BASE_PATH . '/app/views/dashboard/docente/actividades.php';
                 break; 
                 
