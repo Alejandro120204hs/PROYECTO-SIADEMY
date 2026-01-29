@@ -32,6 +32,18 @@ require_once __DIR__ . '/../../config/database.php';
                 if(!password_verify($clave, $user['clave'])){
                     return ['error' => 'Contraseña incorrecta'];
                 }
+                        // 🔹 BUSCAR ID_DOCENTE SI EL USUARIO ES DOCENTE
+                $id_docente = null;
+
+                if ($user['rol'] === 'docente') {
+                    $sqlDocente = "SELECT id FROM docente WHERE id_usuario = :id_usuario LIMIT 1";
+                    $stmtDocente = $this->conexion->prepare($sqlDocente);
+                    $stmtDocente->bindParam(':id_usuario', $user['id']);
+                    $stmtDocente->execute();
+
+                    $docente = $stmtDocente->fetch(PDO::FETCH_ASSOC);
+                    $id_docente = $docente['id'] ?? null;
+                    }
 
                 // RETORNAMOS LOS DATOS DEL USUARIO AUTENTICADO
                 return[
