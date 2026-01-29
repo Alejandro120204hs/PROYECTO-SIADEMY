@@ -1,10 +1,21 @@
 <?php 
+    // 1. INICIAR SESIÓN
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     
+    // 2. VERIFICAR QUE ESTÉ LOGUEADO
+    if (!isset($_SESSION['user']) || $_SESSION['user']['rol'] !== 'Docente') {
+        header('Location: ' . BASE_URL . '/login');
+        exit;
+    }
+    
+    // 3. CARGAR DEPENDENCIAS
     require_once BASE_PATH . '/app/controllers/administrador/curso.php';
     require_once BASE_PATH . '/app/models/administradores/matricula.php';
     require_once BASE_PATH . '/app/models/administradores/docente_asignatura.php';
     
-    // Obtener el ID del curso y validar
+    // 4. OBTENER ID DEL CURSO
     $id_curso = $_GET['id'] ?? 0;
     
     if (!$id_curso) {
@@ -12,7 +23,7 @@
         exit;
     }
     
-    // Obtener información del curso
+    // 5. OBTENER DATOS DEL CURSO
     $curso = mostrarCursoId($id_curso);
     
     if (!$curso) {
@@ -20,50 +31,63 @@
         exit;
     }
     
-    // Obtener ID del docente actual (asumiendo que está en sesión)
-    session_start();
-
-    $id_docente = $_SESSION['usuario']['id_docente'] ?? 0;
-
+    // 6. OBTENER ID DOCENTE desde la tabla docentes
+    $id_usuario_sesion = $_SESSION['user']['id'];
     
+    // Obtener conexión PDO (ajusta según tu configuración)
+    require_once BASE_PATH . '/config/database.php';
+    $db = new Conexion();
+    $pdo = $db->getConexion();
     
-    // Obtener estudiantes matriculados en el curso
+    $stmt = $pdo->prepare("SELECT id, nombres, apellidos FROM docente WHERE id_usuario = ?");
+    $stmt->execute([$id_usuario_sesion]);
+    $docente_info = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$docente_info) {
+        // Si no existe el docente, redirigir
+        header('Location: ' . BASE_URL . '/login');
+        exit;
+    }
+    
+    $id_docente = $docente_info['id'];
+    $nombre_docente = $docente_info['nombres'] . ' ' . $docente_info['apellidos'];
+    
+    // 7. OBTENER DATOS
     $matriculaObj = new Matricula();
     $anioActual = date('Y');
-    $estudiantes = $matriculaObj->listarPorCurso($id_curso, $anioActual);
+    $estudiantes = $matriculaObj->listarPorCurso($id_curso, $anioActual) ?: [];
     
-    // Obtener asignaturas del curso con sus docentes
     $docenteAsignaturaObj = new DocenteAsignatura();
-    $asignaturas = $docenteAsignaturaObj->obtenerAsignaturasPorCurso($id_curso);
+    $asignaturas = $docenteAsignaturaObj->obtenerAsignaturasPorCurso($id_curso) ?: [];
     
-    // FILTRAR solo las asignaturas que imparte este docente
-    $mis_asignaturas = array_filter($asignaturas, function($asignatura) use ($id_docente) {
-        if (empty($asignatura['docentes'])) return false;
-        
-        foreach ($asignatura['docentes'] as $docente) {
-            if ($docente['id_docente'] == $id_docente && $docente['estado'] === 'activo') {
-                return true;
+    // 8. FILTRAR SOLO ASIGNATURAS DEL DOCENTE
+    $mis_asignaturas = [];
+    foreach ($asignaturas as $asignatura) {
+        if (!empty($asignatura['docentes'])) {
+            foreach ($asignatura['docentes'] as $docente) {
+                // Ahora SÍ existe id_docente
+                if ($docente['id_docente'] == $id_docente && $docente['estado'] === 'activo') {
+                    $mis_asignaturas[] = $asignatura;
+                    break; // Solo agregar una vez por asignatura
+                }
             }
         }
-        return false;
-    });
+    }
     
-    
-    // Calcular estadísticas
+    // 9. CALCULAR ESTADÍSTICAS
     $totalEstudiantes = count($estudiantes);
     $totalMisAsignaturas = count($mis_asignaturas);
     
-    // TODO: Estas métricas deben venir del controlador con queries específicas
-    // Por ahora son placeholder - REEMPLAZAR con datos reales
-    $actividadesPendientesCalificar = 0; // Query: actividades del docente en este curso sin calificar
-    $estudiantesEnRiesgo = 0; // Query: estudiantes con promedio < 3.0 en asignaturas del docente
-    $proximasActividades = 0; // Query: actividades con fecha límite próxima (próximos 7 días)
-    $promedioGeneral = 0; // Query: promedio de las asignaturas del docente en este curso
-
+    // Métricas placeholder - TODO: Implementar queries reales
+    $actividadesPendientesCalificar = 0;
+    $estudiantesEnRiesgo = 0;
+    $proximasActividades = 0;
+    $promedioGeneral = 0;
 ?>
 
 <!doctype html>
 <html lang="es">
+    
 
 <head>
     <meta charset="utf-8">
@@ -742,6 +766,6 @@
             padding: 1rem !important;
         }
     </style>
-</body>
-
+    
+</body>   
 </html>

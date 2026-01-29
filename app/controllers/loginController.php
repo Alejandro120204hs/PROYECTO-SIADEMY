@@ -37,8 +37,7 @@
         $_SESSION['user']=[
             'id' => $resultado['id'],
             'rol' => $resultado['rol'],
-            'id_institucion' => $resultado['id_institucion'],
-            'id_docente' => $resultado['id_docente'] ?? null
+            'id_institucion' => $resultado['id_institucion']
         ];
 
 

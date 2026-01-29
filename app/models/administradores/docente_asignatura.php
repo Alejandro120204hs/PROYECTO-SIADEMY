@@ -249,60 +249,62 @@ class DocenteAsignatura {
     }
 
     // Obtener asignaturas de un curso específico con sus docentes y estados individuales
-    public function obtenerAsignaturasPorCurso($id_curso){
-        try {
-            $sql = "SELECT 
-                        a.id as id_asignatura,
-                        a.nombre as asignatura,
-                        a.descripcion,
-                        ac.estado as estado_asignatura_curso,
-                        dac.id as id_asignacion,
-                        CONCAT(d.nombres, ' ', d.apellidos) as docente,
-                        dac.estado as estado_docente
-                    FROM asignatura_curso ac
-                    INNER JOIN asignatura a ON ac.id_asignatura = a.id
-                    LEFT JOIN docente_asignatura_curso dac ON ac.id = dac.id_asignatura_curso
-                    LEFT JOIN docente d ON dac.id_docente = d.id
-                    WHERE ac.id_curso = :id_curso
-                    ORDER BY a.nombre ASC, d.apellidos ASC";
+public function obtenerAsignaturasPorCurso($id_curso){
+    try {
+        $sql = "SELECT 
+                    a.id as id_asignatura,
+                    a.nombre as asignatura,
+                    a.descripcion,
+                    ac.estado as estado_asignatura_curso,
+                    dac.id as id_asignacion,
+                    d.id as id_docente,  -- ✓ AGREGADO
+                    CONCAT(d.nombres, ' ', d.apellidos) as docente,
+                    dac.estado as estado_docente
+                FROM asignatura_curso ac
+                INNER JOIN asignatura a ON ac.id_asignatura = a.id
+                LEFT JOIN docente_asignatura_curso dac ON ac.id = dac.id_asignatura_curso
+                LEFT JOIN docente d ON dac.id_docente = d.id
+                WHERE ac.id_curso = :id_curso
+                ORDER BY a.nombre ASC, d.apellidos ASC";
+        
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindParam(':id_curso', $id_curso);
+        $stmt->execute();
+        
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Agrupar asignaturas con sus docentes
+        $asignaturas = [];
+        foreach($resultados as $row){
+            $id_asig = $row['id_asignatura'];
             
-            $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':id_curso', $id_curso);
-            $stmt->execute();
-            
-            $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            // Agrupar asignaturas con sus docentes
-            $asignaturas = [];
-            foreach($resultados as $row){
-                $id_asig = $row['id_asignatura'];
-                
-                if(!isset($asignaturas[$id_asig])){
-                    $asignaturas[$id_asig] = [
-                        'id_asignatura' => $row['id_asignatura'],
-                        'asignatura' => $row['asignatura'],
-                        'descripcion' => $row['descripcion'],
-                        'estado' => $row['estado_asignatura_curso'],
-                        'docentes' => []
-                    ];
-                }
-                
-                if($row['docente']){
-                    $asignaturas[$id_asig]['docentes'][] = [
-                        'id_asignacion' => $row['id_asignacion'],
-                        'nombre' => $row['docente'],
-                        'estado' => $row['estado_docente']
-                    ];
-                }
+            if(!isset($asignaturas[$id_asig])){
+                $asignaturas[$id_asig] = [
+                    'id_asignatura' => $row['id_asignatura'],
+                    'asignatura' => $row['asignatura'],
+                    'descripcion' => $row['descripcion'],
+                    'estado' => $row['estado_asignatura_curso'],
+                    'docentes' => []
+                ];
             }
             
-            return array_values($asignaturas);
-            
-        } catch(PDOException $e){
-            error_log("Error en obtenerAsignaturasPorCurso: " . $e->getMessage());
-            return [];
+            if($row['docente']){
+                $asignaturas[$id_asig]['docentes'][] = [
+                    'id_asignacion' => $row['id_asignacion'],
+                    'id_docente' => $row['id_docente'],  // ✓ AGREGADO
+                    'nombre' => $row['docente'],
+                    'estado' => $row['estado_docente']
+                ];
+            }
         }
+        
+        return array_values($asignaturas);
+        
+    } catch(PDOException $e){
+        error_log("Error en obtenerAsignaturasPorCurso: " . $e->getMessage());
+        return [];
     }
+}
 }
 
 ?>
