@@ -4,11 +4,28 @@
     require_once BASE_PATH . '/app/models/administradores/matricula.php';
     require_once BASE_PATH . '/app/models/administradores/docente_asignatura.php';
     
-    // Obtener el ID del curso
+    // Obtener el ID del curso y validar
     $id_curso = $_GET['id'] ?? 0;
+    
+    if (!$id_curso) {
+        header('Location: ' . BASE_URL . '/docente-cursos');
+        exit;
+    }
     
     // Obtener información del curso
     $curso = mostrarCursoId($id_curso);
+    
+    if (!$curso) {
+        header('Location: ' . BASE_URL . '/docente-cursos');
+        exit;
+    }
+    
+    // Obtener ID del docente actual (asumiendo que está en sesión)
+    session_start();
+
+    $id_docente = $_SESSION['usuario']['id_docente'] ?? 0;
+
+    
     
     // Obtener estudiantes matriculados en el curso
     $matriculaObj = new Matricula();
@@ -19,8 +36,29 @@
     $docenteAsignaturaObj = new DocenteAsignatura();
     $asignaturas = $docenteAsignaturaObj->obtenerAsignaturasPorCurso($id_curso);
     
+    // FILTRAR solo las asignaturas que imparte este docente
+    $mis_asignaturas = array_filter($asignaturas, function($asignatura) use ($id_docente) {
+        if (empty($asignatura['docentes'])) return false;
+        
+        foreach ($asignatura['docentes'] as $docente) {
+            if ($docente['id_docente'] == $id_docente && $docente['estado'] === 'activo') {
+                return true;
+            }
+        }
+        return false;
+    });
+    
+    
     // Calcular estadísticas
     $totalEstudiantes = count($estudiantes);
+    $totalMisAsignaturas = count($mis_asignaturas);
+    
+    // TODO: Estas métricas deben venir del controlador con queries específicas
+    // Por ahora son placeholder - REEMPLAZAR con datos reales
+    $actividadesPendientesCalificar = 0; // Query: actividades del docente en este curso sin calificar
+    $estudiantesEnRiesgo = 0; // Query: estudiantes con promedio < 3.0 en asignaturas del docente
+    $proximasActividades = 0; // Query: actividades con fecha límite próxima (próximos 7 días)
+    $promedioGeneral = 0; // Query: promedio de las asignaturas del docente en este curso
 
 ?>
 
@@ -35,7 +73,7 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
     
     <style>
-        /* Forzar que las secciones ocupen el 100% sin espacios */
+        /* RESET Y ESTRUCTURA BASE */
         .academic-section {
             width: 100% !important;
             max-width: 100% !important;
@@ -54,27 +92,251 @@
             min-width: 100% !important;
         }
 
-        /* Ajustar el main para usar todo el ancho */
         .main {
             padding: 28px 0 40px 0 !important;
         }
 
-        /* Ajustar el header del curso */
         .student-profile-header {
             padding-left: 28px !important;
             padding-right: 28px !important;
         }
 
-        /* Ajustar las quick stats */
         .quick-stats {
             padding-left: 28px !important;
             padding-right: 28px !important;
         }
 
-        /* Ajustar el topbar */
         .topbar {
             padding-left: 28px !important;
             padding-right: 28px !important;
+        }
+
+        /* MEJORAS EN CARDS - Hacerlas clickeables */
+        .stat-card {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:active {
+            transform: translateY(-2px);
+        }
+
+        /* Indicador de clickeable */
+        .stat-card::after {
+            content: '\ea6e'; /* Remix icon arrow-right */
+            font-family: 'remixicon';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 20px;
+        }
+
+        .stat-card:hover::after {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* Estado de alerta en cards */
+        .stat-card.alert-high .stat-value {
+            color: #ef4444;
+            animation: pulse-red 2s infinite;
+        }
+
+        .stat-card.alert-medium .stat-value {
+            color: #f59e0b;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Mejora visual del badge de acciones rápidas */
+        .quick-actions-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+            animation: bounce-in 0.5s ease;
+        }
+
+        @keyframes bounce-in {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Empty states mejorados */
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            background: rgba(79, 70, 229, 0.05);
+            border-radius: 16px;
+            margin: 0 28px;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            color: rgba(79, 70, 229, 0.3);
+            margin-bottom: 16px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .empty-state-title {
+            color: #e6e9f4;
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .empty-state-description {
+            color: #97a1b6;
+            font-size: 14px;
+            margin: 0 0 20px 0;
+        }
+
+        .empty-state-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Sección de acciones rápidas */
+        .quick-actions-section {
+            margin: 24px 28px;
+            padding: 24px;
+            background: rgba(79, 70, 229, 0.08);
+            border-radius: 16px;
+            border: 1px solid rgba(79, 70, 229, 0.15);
+        }
+
+        .quick-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e6e9f4;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(79, 70, 229, 0.2);
+            border-color: rgba(79, 70, 229, 0.3);
+            transform: translateX(4px);
+        }
+
+        .quick-action-btn i {
+            font-size: 20px;
+        }
+
+        /* Tooltip para información adicional */
+        .info-tooltip {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: rgba(99, 102, 241, 0.2);
+            color: #6366f1;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: help;
+            margin-left: 6px;
+        }
+
+        .info-tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 12px;
+            background: #1f2937;
+            color: #e6e9f4;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        /* Indicador de periodo activo */
+        .period-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+
+        .period-indicator i {
+            font-size: 14px;
         }
     </style>
 </head>
@@ -82,9 +344,7 @@
 <body>
     <div class="app" id="appGrid">
         <!-- LEFT SIDEBAR -->
-            <?php 
-      include_once __DIR__ . '/../../layouts/sidebar_docente.php'
-    ?>
+        <?php include_once __DIR__ . '/../../layouts/sidebar_docente.php' ?>
 
         <!-- MAIN -->
         <main class="main">
@@ -107,14 +367,25 @@
                         <i class="ri-book-open-line" style="font-size: 48px;"></i>
                     </div>
                     <div class="profile-info">
-                        <h2><?= $curso['grado'] ?>° - <?= $curso['curso'] ?> • <?= $curso['jornada'] ?></h2>
-                        <p class="profile-subtitle"><i class="ri-user-star-line"></i> Director: Prof. <?= $curso['nombres_docente'] . ' ' . $curso['apellidos_docente'] ?></p>
+                        <h2>
+                            <?= $curso['grado'] ?>° - <?= $curso['curso'] ?> • <?= $curso['jornada'] ?>
+                            <span class="period-indicator">
+                                <i class="ri-calendar-check-line"></i>
+                                Periodo 1 - 2026
+                            </span>
+                        </h2>
+                        <p class="profile-subtitle">
+                            <i class="ri-user-star-line"></i> Director: Prof. <?= $curso['nombres_docente'] . ' ' . $curso['apellidos_docente'] ?>
+                        </p>
                         <div class="profile-badges">
                             <span class="badge-item <?= $curso['estado'] == 'Activo' ? 'badge-active' : '' ?>">
                                 <i class="ri-checkbox-circle-fill"></i> <?= $curso['estado'] ?>
                             </span>
                             <span class="badge-item badge-info">
                                 <i class="ri-calendar-line"></i> Año: <?= $anioActual ?>
+                            </span>
+                            <span class="badge-item badge-info">
+                                <i class="ri-book-2-line"></i> <?= $totalMisAsignaturas ?> asignatura<?= $totalMisAsignaturas != 1 ? 's' : '' ?>
                             </span>
                         </div>
                     </div>
@@ -123,79 +394,149 @@
                     <a href="<?= BASE_URL ?>/docente-cursos" class="btn-profile-action btn-secondary-action">
                         <i class="ri-arrow-left-line"></i> Volver a Cursos
                     </a>
-                    <button class="btn-profile-action btn-icon-action">
-                        <i class="ri-more-2-fill"></i>
+                    <button class="btn-profile-action btn-icon-action" onclick="window.print()">
+                        <i class="ri-printer-line"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- QUICK STATS -->
+            <!-- QUICK STATS - MEJORADAS Y CLICKEABLES -->
             <div class="quick-stats">
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                        <i class="ri-group-line"></i>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-label">Total Estudiantes</span>
-                        <strong class="stat-value"><?= $totalEstudiantes ?></strong>
-                    </div>
-                </div>
-                <div class="stat-card">
+                <!-- Card 1: Actividades Pendientes por Calificar -->
+                <div class="stat-card <?= $actividadesPendientesCalificar > 10 ? 'alert-high' : ($actividadesPendientesCalificar > 5 ? 'alert-medium' : '') ?>" 
+                     onclick="window.location.href='<?= BASE_URL ?>/docente-actividades-pendientes?curso=<?= $id_curso ?>'"
+                     title="Ver actividades pendientes de calificación">
+                    <?php if ($actividadesPendientesCalificar > 0): ?>
+                        <div class="quick-actions-badge"><?= $actividadesPendientesCalificar ?></div>
+                    <?php endif; ?>
                     <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                        <i class="ri-user-add-line"></i>
+                        <i class="ri-file-list-3-line"></i>
                     </div>
                     <div class="stat-content">
-                        <span class="stat-label">Actividades del Periodo</span>
-                        <strong class="stat-value">8</strong>
+                        <span class="stat-label">
+                            Pendientes por Calificar
+                            <i class="ri-information-line info-tooltip" data-tooltip="Actividades que han entregado tus estudiantes"></i>
+                        </span>
+                        <strong class="stat-value"><?= $actividadesPendientesCalificar ?></strong>
                     </div>
                 </div>
-                <div class="stat-card">
+
+                <!-- Card 2: Estudiantes en Riesgo Académico -->
+                <div class="stat-card <?= $estudiantesEnRiesgo > 5 ? 'alert-high' : ($estudiantesEnRiesgo > 0 ? 'alert-medium' : '') ?>" 
+                     onclick="window.location.href='<?= BASE_URL ?>/docente-estudiantes-riesgo?curso=<?= $id_curso ?>'"
+                     title="Ver estudiantes con promedio inferior a 3.0">
+                    <?php if ($estudiantesEnRiesgo > 0): ?>
+                        <div class="quick-actions-badge"><?= $estudiantesEnRiesgo ?></div>
+                    <?php endif; ?>
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <i class="ri-alert-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">
+                            Estudiantes en Riesgo
+                            <i class="ri-information-line info-tooltip" data-tooltip="Estudiantes con promedio < 3.0 en tus asignaturas"></i>
+                        </span>
+                        <strong class="stat-value"><?= $estudiantesEnRiesgo ?></strong>
+                    </div>
+                </div>
+
+                <!-- Card 3: Próximas Actividades -->
+                <div class="stat-card" 
+                     onclick="window.location.href='<?= BASE_URL ?>/docente-proximas-actividades?curso=<?= $id_curso ?>'"
+                     title="Ver actividades con fecha límite próxima">
+                    <?php if ($proximasActividades > 0): ?>
+                        <div class="quick-actions-badge" style="background: #f59e0b;"><?= $proximasActividades ?></div>
+                    <?php endif; ?>
                     <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                        <i class="ri-user-received-line"></i>
+                        <i class="ri-calendar-event-line"></i>
                     </div>
                     <div class="stat-content">
-                        <span class="stat-label">Actividades sin Calificar</span>
-                        <strong class="stat-value" style="color: <?= $cupoDisponible > 0 ? '#10b981' : '#ef4444' ?>">15</strong>
+                        <span class="stat-label">
+                            Próximas Actividades
+                            <i class="ri-information-line info-tooltip" data-tooltip="Actividades con vencimiento en los próximos 7 días"></i>
+                        </span>
+                        <strong class="stat-value"><?= $proximasActividades ?></strong>
                     </div>
                 </div>
-                <div class="stat-card">
+
+                <!-- Card 4: Promedio General del Curso -->
+                <div class="stat-card" 
+                     onclick="window.location.href='<?= BASE_URL ?>/docente-rendimiento-curso?curso=<?= $id_curso ?>'"
+                     title="Ver rendimiento académico del curso">
                     <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-                        <i class="ri-pie-chart-line"></i>
+                        <i class="ri-bar-chart-box-line"></i>
                     </div>
                     <div class="stat-content">
-                        <span class="stat-label">Estudiantes en Riesgo</span>
-                        <strong class="stat-value">48</strong>
+                        <span class="stat-label">
+                            Promedio General
+                            <i class="ri-information-line info-tooltip" data-tooltip="Promedio de tus asignaturas en este curso"></i>
+                        </span>
+                        <strong class="stat-value" style="color: <?= $promedioGeneral >= 4.0 ? '#10b981' : ($promedioGeneral >= 3.0 ? '#f59e0b' : '#ef4444') ?>">
+                            <?= number_format($promedioGeneral, 1) ?>
+                        </strong>
                     </div>
                 </div>
             </div>
 
-            <!-- SECCIÓN DE ASIGNATURAS -->
+            <!-- ACCIONES RÁPIDAS -->
+            <?php if ($totalMisAsignaturas > 0): ?>
+            <div class="quick-actions-section">
+                <h3 style="color: #e6e9f4; font-size: 16px; margin: 0 0 16px 0; font-weight: 600;">
+                    <i class="ri-flashlight-line" style="color: #6366f1;"></i>
+                    Acciones Rápidas
+                </h3>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <a href="<?= BASE_URL ?>/docente-crear-actividad?curso=<?= $id_curso ?>" class="quick-action-btn">
+                        <i class="ri-add-circle-line"></i>
+                        Nueva Actividad
+                    </a>
+                    <a href="<?= BASE_URL ?>/docente-calificaciones?curso=<?= $id_curso ?>" class="quick-action-btn">
+                        <i class="ri-file-edit-line"></i>
+                        Registrar Calificaciones
+                    </a>
+                    <a href="<?= BASE_URL ?>/docente-asistencia?curso=<?= $id_curso ?>" class="quick-action-btn">
+                        <i class="ri-user-follow-line"></i>
+                        Tomar Asistencia
+                    </a>
+                    <a href="<?= BASE_URL ?>/docente-reportes?curso=<?= $id_curso ?>" class="quick-action-btn">
+                        <i class="ri-file-chart-line"></i>
+                        Generar Reporte
+                    </a>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <!-- SECCIÓN DE ASIGNATURAS - SOLO LAS DEL DOCENTE -->
             <div class="academic-section" style="margin-bottom: 32px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 28px;">
                     <h3 class="section-title">
                         <i class="ri-book-line" style="color: #6366f1; margin-right: 8px;"></i>
-                        Asignatura(s) que Impartes (<?= count($asignaturas) ?>)
+                        Mis Asignaturas en este Curso (<?= $totalMisAsignaturas ?>)
                     </h3>
                 </div>
 
-                <?php if (!empty($asignaturas)): ?>
+                <?php if (!empty($mis_asignaturas)): ?>
                     <div class="subjects-table">
                         <table class="table table-dark table-hover">
                             <thead>
                                 <tr>
                                     <th style="width: 60px; padding-left: 28px;">#</th>
-                                    <th style="width: 25%;">Asignatura</th>
+                                    <th style="width: 30%;">Asignatura</th>
                                     <th style="width: 35%;">Descripción</th>
-                                    <th style="width: 40%; padding-right: 28px;">Docentes Asignados</th>
-                                    <th style="width: 10%;">Estado</th>
+                                    <th style="width: 15%; text-align: center;">Estudiantes</th>
+                                    <th style="width: 20%; text-align: center; padding-right: 28px;">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($asignaturas as $index => $asignatura): ?>
+                                <?php 
+                                $index = 0;
+                                foreach ($mis_asignaturas as $asignatura): 
+                                    $index++;
+                                ?>
                                     <tr>
                                         <td style="padding-left: 28px;">
                                             <div style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); display: flex; align-items: center; justify-content: center; font-weight: 600; color: #6366f1; font-size: 14px;">
-                                                <?= $index + 1 ?>
+                                                <?= $index ?>
                                             </div>
                                         </td>
                                         <td>
@@ -215,47 +556,27 @@
                                                 <?= htmlspecialchars($asignatura['descripcion'] ?: 'Sin descripción') ?>
                                             </span>
                                         </td>
-                                        <td>
-                                            <?php if (!empty($asignatura['docentes'])): ?>
-                                                <div style="display: flex; flex-direction: column; gap: 8px;">
-                                                    <?php foreach($asignatura['docentes'] as $docente): ?>
-                                                        <div style="display: flex; align-items: center; gap: 10px;">
-                                                            <div style="width: 32px; height: 32px; border-radius: 8px; background: <?= $docente['estado'] === 'activo' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(148, 163, 184, 0.15)' ?>; display: flex; align-items: center; justify-content: center;">
-                                                                <i class="ri-user-line" style="color: <?= $docente['estado'] === 'activo' ? '#10b981' : '#94a3b8' ?>; font-size: 16px;"></i>
-                                                            </div>
-                                                            <span style="color: #e6e9f4; font-size: 14px; font-weight: 500;">
-                                                                <?= htmlspecialchars($docente['nombre']) ?>
-                                                            </span>
-                                                        </div>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                            <?php else: ?>
-                                                <span style="color: #ef4444; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-                                                    <i class="ri-alert-line"></i>
-                                                    Sin docente asignado
-                                                </span>
-                                            <?php endif; ?>
+                                        <td style="text-align: center;">
+                                            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(99, 102, 241, 0.15); color: #6366f1; border-radius: 8px; font-weight: 600; font-size: 14px;">
+                                                <i class="ri-group-line"></i>
+                                                <?= $totalEstudiantes ?>
+                                            </span>
                                         </td>
-                                        <td style="padding-right: 28px;">
-                                            <?php if (!empty($asignatura['docentes'])): ?>
-                                                <div style="display: flex; flex-direction: column; gap: 8px;">
-                                                    <?php foreach($asignatura['docentes'] as $docente): ?>
-                                                        <?php if ($docente['estado'] === 'activo'): ?>
-                                                            <span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(16, 185, 129, 0.15); color: #10b981; border-radius: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px;">
-                                                                <i class="ri-checkbox-circle-fill" style="font-size: 12px;"></i>
-                                                                ACTIVO
-                                                            </span>
-                                                        <?php else: ?>
-                                                            <span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(148, 163, 184, 0.15); color: #94a3b8; border-radius: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px;">
-                                                                <i class="ri-close-circle-fill" style="font-size: 12px;"></i>
-                                                                INACTIVO
-                                                            </span>
-                                                        <?php endif; ?>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                            <?php else: ?>
-                                                <span style="color: #97a1b6; font-size: 13px;">-</span>
-                                            <?php endif; ?>
+                                        <td style="text-align: center; padding-right: 28px;">
+                                            <a href="<?= BASE_URL ?>/docente-actividades?asignatura=<?= $asignatura['id_asignatura'] ?>&curso=<?= $id_curso ?>" 
+                                               style="padding: 10px 14px; border-radius: 8px; text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; background: rgba(79, 70, 229, 0.1); color: #6366f1; margin-right: 8px;"
+                                               onmouseover="this.style.background='rgba(79, 70, 229, 0.2)'; this.style.transform='scale(1.1)'"
+                                               onmouseout="this.style.background='rgba(79, 70, 229, 0.1)'; this.style.transform='scale(1)'"
+                                               title="Ver actividades">
+                                                <i class="ri-file-list-3-line"></i>
+                                            </a>
+                                            <a href="<?= BASE_URL ?>/docente-calificaciones?asignatura=<?= $asignatura['id_asignatura'] ?>&curso=<?= $id_curso ?>" 
+                                               style="padding: 10px 14px; border-radius: 8px; text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; background: rgba(16, 185, 129, 0.1); color: #10b981;"
+                                               onmouseover="this.style.background='rgba(16, 185, 129, 0.2)'; this.style.transform='scale(1.1)'"
+                                               onmouseout="this.style.background='rgba(16, 185, 129, 0.1)'; this.style.transform='scale(1)'"
+                                               title="Ver calificaciones">
+                                                <i class="ri-file-edit-line"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -263,10 +584,13 @@
                         </table>
                     </div>
                 <?php else: ?>
-                    <div style="text-align: center; padding: 60px 40px; background: rgba(79, 70, 229, 0.05); border-radius: 16px; margin: 0 28px;">
-                        <i class="ri-book-line" style="font-size: 64px; color: rgba(79, 70, 229, 0.3); margin-bottom: 16px;"></i>
-                        <h3 style="color: #e6e9f4; margin: 0 0 8px 0; font-size: 20px;">No hay asignaturas asignadas</h3>
-                        <p style="color: #97a1b6; font-size: 14px; margin: 0 0 20px 0;">Este curso aún no tiene asignaturas configuradas.</p>
+                    <div class="empty-state">
+                        <i class="ri-book-line empty-state-icon"></i>
+                        <h3 class="empty-state-title">No tienes asignaturas asignadas en este curso</h3>
+                        <p class="empty-state-description">
+                            Actualmente no estás dictando ninguna asignatura en <?= $curso['grado'] ?>° - <?= $curso['curso'] ?>.
+                            <br>Contacta al coordinador académico si crees que esto es un error.
+                        </p>
                     </div>
                 <?php endif; ?>
             </div>
@@ -276,25 +600,34 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 28px;">
                     <h3 class="section-title">
                         <i class="ri-team-line" style="color: #6366f1; margin-right: 8px;"></i>
-                        Estudiantes  (<?= $totalEstudiantes ?>)
+                        Estudiantes del Curso (<?= $totalEstudiantes ?>)
                     </h3>
+                    <?php if ($totalEstudiantes > 0): ?>
+                        <div style="display: flex; gap: 12px;">
+                            <input type="text" 
+                                   id="searchStudent" 
+                                   placeholder="Buscar estudiante..." 
+                                   style="padding: 10px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #e6e9f4; font-size: 14px; width: 250px;"
+                                   onkeyup="filtrarEstudiantes()">
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <?php if (!empty($estudiantes)): ?>
                     <div class="subjects-table">
-                        <table class="table table-dark table-hover">
+                        <table class="table table-dark table-hover" id="tablaEstudiantes">
                             <thead>
                                 <tr>
                                     <th style="width: 80px; padding-left: 28px;">#</th>
                                     <th style="width: 35%;">Estudiante</th>
                                     <th style="width: 20%;">Documento</th>
-                                    <th style="width: 25%;">Fecha de Matrícula</th>
-                                    <th style="width: 20%; text-align: center; padding-right: 28px;">Acciones</th>
+                                    <th style="width: 20%;">Fecha de Matrícula</th>
+                                    <th style="width: 25%; text-align: center; padding-right: 28px;">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($estudiantes as $index => $estudiante): ?>
-                                    <tr>
+                                    <tr class="student-row">
                                         <td style="padding-left: 28px;">
                                             <div style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); display: flex; align-items: center; justify-content: center; font-weight: 600; color: #6366f1; font-size: 14px;">
                                                 <?= $index + 1 ?>
@@ -307,26 +640,28 @@
                                                      style="width: 48px; height: 48px; border-radius: 12px; object-fit: cover; border: 2px solid rgba(79, 70, 229, 0.2); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);"
                                                      onerror="this.onerror=null; this.src='<?= BASE_URL ?>/public/uploads/estudiantes/default.png'">
                                                 <div>
-                                                    <div style="font-weight: 600; color: #e6e9f4; font-size: 15px;">
+                                                    <div class="student-name" style="font-weight: 600; color: #e6e9f4; font-size: 15px;">
                                                         <?= htmlspecialchars($estudiante['estudiante_nombres'] . ' ' . $estudiante['estudiante_apellidos']) ?>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><?= htmlspecialchars($estudiante['estudiante_documento']) ?></td>
+                                        <td class="student-document"><?= htmlspecialchars($estudiante['estudiante_documento']) ?></td>
                                         <td><?= date('d/m/Y', strtotime($estudiante['fecha'])) ?></td>
                                         <td style="text-align: center; padding-right: 28px;">
-                                            <a href="<?= BASE_URL ?>/administrador/detalle-estudiante?id=<?= $estudiante['id_estudiante'] ?>" 
-                                               style="padding: 10px 14px; border-radius: 8px; text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; background: rgba(79, 70, 229, 0.1); color: #6366f1;"
+                                            <a href="<?= BASE_URL ?>/docente-perfil-estudiante?id=<?= $estudiante['id_estudiante'] ?>&curso=<?= $id_curso ?>" 
+                                               style="padding: 10px 14px; border-radius: 8px; text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; background: rgba(79, 70, 229, 0.1); color: #6366f1; margin-right: 8px;"
                                                onmouseover="this.style.background='rgba(79, 70, 229, 0.2)'; this.style.transform='scale(1.1)'"
-                                               onmouseout="this.style.background='rgba(79, 70, 229, 0.1)'; this.style.transform='scale(1)'">
+                                               onmouseout="this.style.background='rgba(79, 70, 229, 0.1)'; this.style.transform='scale(1)'"
+                                               title="Ver perfil académico">
                                                 <i class="ri-eye-line"></i>
                                             </a>
-                                            <a href="<?= BASE_URL ?>/administrador/editar-matricula?id=<?= $estudiante['id'] ?>" 
-                                               style="padding: 10px 14px; border-radius: 8px; text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; margin-left: 8px;"
-                                               onmouseover="this.style.background='rgba(59, 130, 246, 0.2)'; this.style.transform='scale(1.1)'"
-                                               onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'; this.style.transform='scale(1)'">
-                                                <i class="ri-edit-line"></i>
+                                            <a href="<?= BASE_URL ?>/docente-calificaciones-estudiante?id=<?= $estudiante['id_estudiante'] ?>&curso=<?= $id_curso ?>" 
+                                               style="padding: 10px 14px; border-radius: 8px; text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; background: rgba(16, 185, 129, 0.1); color: #10b981;"
+                                               onmouseover="this.style.background='rgba(16, 185, 129, 0.2)'; this.style.transform='scale(1.1)'"
+                                               onmouseout="this.style.background='rgba(16, 185, 129, 0.1)'; this.style.transform='scale(1)'"
+                                               title="Ver/editar calificaciones">
+                                                <i class="ri-file-edit-line"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -335,10 +670,12 @@
                         </table>
                     </div>
                 <?php else: ?>
-                    <div style="text-align: center; padding: 80px 40px;">
-                        <i class="ri-user-unfollow-line" style="font-size: 80px; color: rgba(79, 70, 229, 0.2); margin-bottom: 24px;"></i>
-                        <h3 style="color: #e6e9f4; margin: 0 0 12px 0; font-size: 22px;">No hay estudiantes matriculados</h3>
-                        <p style="color: #97a1b6; font-size: 15px; margin: 0 0 24px 0;">Este curso aún no tiene estudiantes matriculados para el año <?= $anioActual ?>.</p>
+                    <div class="empty-state">
+                        <i class="ri-user-unfollow-line empty-state-icon"></i>
+                        <h3 class="empty-state-title">No hay estudiantes matriculados</h3>
+                        <p class="empty-state-description">
+                            Este curso aún no tiene estudiantes matriculados para el año <?= $anioActual ?>.
+                        </p>
                     </div>
                 <?php endif; ?>
             </div>
@@ -347,7 +684,51 @@
     </div>
 
     <script>
-        // Script vacío - funcionalidad futura
+        // Filtrar estudiantes en tiempo real
+        function filtrarEstudiantes() {
+            const input = document.getElementById('searchStudent');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('tablaEstudiantes');
+            const rows = table.getElementsByClassName('student-row');
+
+            for (let i = 0; i < rows.length; i++) {
+                const nameCell = rows[i].querySelector('.student-name');
+                const docCell = rows[i].querySelector('.student-document');
+                
+                if (nameCell || docCell) {
+                    const nameText = nameCell ? nameCell.textContent.toLowerCase() : '';
+                    const docText = docCell ? docCell.textContent.toLowerCase() : '';
+                    
+                    if (nameText.indexOf(filter) > -1 || docText.indexOf(filter) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        // Confirmación antes de imprimir
+        document.querySelector('.btn-icon-action').addEventListener('click', function(e) {
+            if (!confirm('¿Deseas imprimir la información de este curso?')) {
+                e.preventDefault();
+            }
+        });
+
+        // Animación de entrada para las cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.stat-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
     </script>
         
     <style>
