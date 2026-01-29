@@ -82,7 +82,9 @@
 <body>
     <div class="app" id="appGrid">
         <!-- LEFT SIDEBAR -->
-        <?php include_once __DIR__ . '/../../layouts/sidebar_coordinador.php' ?>
+            <?php 
+      include_once __DIR__ . '/../../layouts/sidebar_docente.php'
+    ?>
 
         <!-- MAIN -->
         <main class="main">
@@ -118,7 +120,7 @@
                     </div>
                 </div>
                 <div class="profile-actions">
-                    <a href="<?= BASE_URL ?>/administrador-panel-cursos" class="btn-profile-action btn-secondary-action">
+                    <a href="<?= BASE_URL ?>/docente-cursos" class="btn-profile-action btn-secondary-action">
                         <i class="ri-arrow-left-line"></i> Volver a Cursos
                     </a>
                     <button class="btn-profile-action btn-icon-action">
@@ -134,11 +136,37 @@
                         <i class="ri-group-line"></i>
                     </div>
                     <div class="stat-content">
-                        <span class="stat-label">Estudiantes Matriculados</span>
+                        <span class="stat-label">Total Estudiantes</span>
                         <strong class="stat-value"><?= $totalEstudiantes ?></strong>
                     </div>
                 </div>
-
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="ri-user-add-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">Actividades del Periodo</span>
+                        <strong class="stat-value">8</strong>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="ri-user-received-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">Actividades sin Calificar</span>
+                        <strong class="stat-value" style="color: <?= $cupoDisponible > 0 ? '#10b981' : '#ef4444' ?>">15</strong>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="ri-pie-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">Estudiantes en Riesgo</span>
+                        <strong class="stat-value">48</strong>
+                    </div>
+                </div>
             </div>
 
             <!-- SECCIÓN DE ASIGNATURAS -->
@@ -146,7 +174,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 28px;">
                     <h3 class="section-title">
                         <i class="ri-book-line" style="color: #6366f1; margin-right: 8px;"></i>
-                        Asignaturas del Curso (<?= count($asignaturas) ?>)
+                        Asignatura(s) que Impartes (<?= count($asignaturas) ?>)
                     </h3>
                 </div>
 
@@ -248,7 +276,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 28px;">
                     <h3 class="section-title">
                         <i class="ri-team-line" style="color: #6366f1; margin-right: 8px;"></i>
-                        Estudiantes Matriculados (<?= $totalEstudiantes ?>)
+                        Estudiantes  (<?= $totalEstudiantes ?>)
                     </h3>
                 </div>
 
@@ -311,10 +339,6 @@
                         <i class="ri-user-unfollow-line" style="font-size: 80px; color: rgba(79, 70, 229, 0.2); margin-bottom: 24px;"></i>
                         <h3 style="color: #e6e9f4; margin: 0 0 12px 0; font-size: 22px;">No hay estudiantes matriculados</h3>
                         <p style="color: #97a1b6; font-size: 15px; margin: 0 0 24px 0;">Este curso aún no tiene estudiantes matriculados para el año <?= $anioActual ?>.</p>
-                        <a href="<?= BASE_URL ?>/administrador/registrar-matricula?curso=<?= $id_curso ?>" class="btn-profile-action btn-primary-action" style="display: inline-flex;">
-                            <i class="ri-user-add-line"></i>
-                            Matricular Primer Estudiante
-                        </a>
                     </div>
                 <?php endif; ?>
             </div>
