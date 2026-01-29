@@ -54,7 +54,7 @@
                 break;
 
 
-              // -------------------------GENERRAR PDF-----------------------------------------
+              // -------------------------GENERAR PDF-----------------------------------------
                 case '/superAdmin-reporte':
                 require BASE_PATH . '/app/controllers/reportesPdfController.php';
                     mostrarReportes();
@@ -131,7 +131,7 @@
                 require BASE_PATH . '/app/views/dashboard/superAdmin/pagos.php';
                 break;
 
-         
+        
 
             // -----------------------------ROL: ADMINISTRADOR--------------------------------------------------------------
 
@@ -272,6 +272,11 @@
                 require BASE_PATH . '/app/controllers/administrador/asignatura.php';
                 break;
 
+            // -------------------------------ADMINISTRADOR(ASIGNAR DOCENTES A ASIGNATURAS)-------------------------
+            case '/administrador/asignar-docentes':
+                require BASE_PATH . '/app/controllers/administrador/docente_asignatura.php';
+                break;
+
             // -------------------------------ADMINISTRADOR(MODULO CURSOS)-------------------------
             case '/administrador-panel-cursos':
                 require BASE_PATH . '/app/views/dashboard/administrador/cursos.php';
@@ -283,12 +288,78 @@
             case '/administrador/guardar-curso':
                 require BASE_PATH . '/app/controllers/administrador/curso.php';
                 break;
+
+            case '/administrador/eliminar-curso':
+                require BASE_PATH . '/app/controllers/administrador/curso.php';
+                break;
+
+            case '/administrador/editar-curso':
+                require BASE_PATH . '/app/views/dashboard/administrador/editarCurso.php';
+                break;
+
+            case '/administrador/actualizar-curso':
+                require BASE_PATH . '/app/controllers/administrador/curso.php';
+                break;
+
+            case '/administrador/detalle-curso':
+                require BASE_PATH . '/app/views/dashboard/administrador/detalle-curso.php';
+                break;
+
+            // -------------------------------ADMINISTRADOR(MODULO MATRÍCULAS)-------------------------
+            case '/administrador-panel-matriculas':
+                require BASE_PATH . '/app/views/dashboard/administrador/matriculas.php';
+                break;
+
+            case '/administrador/registrar-matricula':
+                require BASE_PATH . '/app/views/dashboard/administrador/addMatricula.php';
+                break;
+
+            case '/administrador/guardar-matricula':
+                require BASE_PATH . '/app/controllers/administrador/matricula.php';
+                break;
+
+            case '/administrador/editar-matricula':
+                require BASE_PATH . '/app/views/dashboard/administrador/editarMatricula.php';
+                break;
+
+            case '/administrador/actualizar-matricula':
+                require BASE_PATH . '/app/controllers/administrador/matricula.php';
+                break;
+
+            case '/administrador/eliminar-matricula':
+                require BASE_PATH . '/app/controllers/administrador/matricula.php';
+                break;
+
                 
                 
 
             // --------------------------------------ROL: DOCENTE---------------------------------------------
             case '/docente/dashboard':
                 require BASE_PATH . '/app/views/dashboard/docente/docente.php';
+                break;
+
+            // --------------------------------------ROL: DOCENTE (MODULO CURSOS)---------------------------------------------
+
+            case '/docente-cursos':
+                require BASE_PATH . '/app/views/dashboard/docente/cursos.php';
+                break;
+
+            case '/docente/actividades':
+                require BASE_PATH . '/app/views/dashboard/docente/actividades.php';
+                break; 
+                
+            case '/docente/detalle-curso':
+                require BASE_PATH . '/app/views/dashboard/docente/detalle-curso.php';
+                break;
+
+            case '/docente/agregar-actividad':
+                require BASE_PATH . '/app/views/dashboard/docente/add-actividades.php';
+                break;
+
+            // --------------------------------------ROL: DOCENTE (MODULO EVENTO)---------------------------------------------
+
+            case '/docente-eventos':
+                require BASE_PATH . '/app/views/dashboard/docente/eventos.php';
                 break;
             
             // -----------------------------------ROL: ESTUDIANTE------------------------------------------
@@ -324,14 +395,6 @@
             // -----------------------------------ROL: SECRETARÍA------------------------------------------
             case '/secretaria-academica/dashboard':
                 require BASE_PATH . '/app/views/dashboard/secretariaAcademica/secretariaAcademica.php';
-                break;
-
-            case '/secretaria-panel-matriculas':
-                require BASE_PATH . '/app/views/dashboard/secretariaAcademica/matriculas.php';
-                break;
-
-            case '/secretaria-panel-estudiantes':
-                require BASE_PATH . '/app/views/dashboard/secretariaAcademica/estudiantesM.php';
                 break;
 
 

@@ -40,6 +40,7 @@
             'id_institucion' => $resultado['id_institucion']
         ];
 
+
         // REDIRIGIENDO SEGUN EL ROL
         $redireccionar = '/siademy/login';
         $mensaje = 'Rol inexistente. Redirigiendo al inicio de sesion....';
@@ -50,10 +51,9 @@
                 $mensaje = 'Bienvenido Administrador';
                 break;
 
-
             case 'Docente':
                 $redireccionar = '/siademy/docente/dashboard';
-                $mensaje = 'Bienvenido docente academmico';
+                $mensaje = 'Bienvenido docente academico';
                 break;
 
             case 'Estudiante':

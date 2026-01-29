@@ -2232,3 +2232,27 @@
     display: flex;
   }
 }
+
+/* Eliminar scroll horizontal de las tablas */
+.datatable-card .table-responsive {
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+/* O forzar que el ancho de la tabla se ajuste */
+.datatable-card .table-responsive {
+  overflow: visible;
+}
+
+/* Alternativa: hacer que la tabla no desborde */
+.datatable-card table {
+  table-layout: fixed;
+  width: 100% !important;
+}
+
+.datatable-card table th,
+.datatable-card table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
