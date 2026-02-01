@@ -401,7 +401,7 @@
             // FIN RUTAS LOGIN
             default: 
                 http_response_code(404);
-                require BASE_PATH . '/app/views/auth/404.html';
+                require BASE_PATH . '/app/views/auth/404.php';
                 break;
         }
     ?>
