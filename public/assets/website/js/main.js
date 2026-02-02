@@ -259,21 +259,4 @@ if (packagesTrack && packageCards.length > 0) {
     });
 }
 
-// Newsletter form
-const newsletterForm = document.querySelector('.newsletter-form');
-if (newsletterForm) {
-    newsletterForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const emailInput = newsletterForm.querySelector('.newsletter-input');
-        const email = emailInput.value;
-        
-        // Aquí podrías enviar el email a tu servidor
-        console.log('Email suscrito:', email);
-        
-        // Mostrar mensaje de éxito
-        alert('¡Gracias por suscribirte! Te mantendremos al día con las novedades de SIADEMY.');
-        
-        // Limpiar el input
-        emailInput.value = '';
-    });
-}
+

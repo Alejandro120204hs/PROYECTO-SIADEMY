@@ -2,6 +2,13 @@
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
    // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
   require_once BASE_PATH . '/app/controllers/administrador/Docente.php';
+   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
 
   // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
   $datos = mostrarDocentes();
@@ -72,7 +79,8 @@
 
       <!-- Tabla de Estudiantes -->
       <div class="datatable-card">
-        <table id="tablaEstudiantes" class="table table-dark table-hover">
+        <div class="table-wrapper">
+          <table id="tablaEstudiantes" class="table table-dark table-hover">
           <thead>
             <tr>
               <th width="40">
@@ -121,6 +129,7 @@
  
           </tbody>
         </table>
+        </div>
       </div>
 
     </main>

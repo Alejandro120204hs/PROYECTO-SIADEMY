@@ -47,7 +47,7 @@
             <i class="ri-book-2-line"></i>
           </div>
           <div class="stat-content">
-            <h3>6</h3>
+            <h3><?= $estadisticas['total_materias'] ?></h3>
             <p>Materias Activas</p>
           </div>
         </div>
@@ -57,7 +57,7 @@
             <i class="ri-medal-line"></i>
           </div>
           <div class="stat-content">
-            <h3>3.8</h3>
+            <h3><?= number_format($estadisticas['promedio_general'], 1) ?></h3>
             <p>Promedio General</p>
           </div>
         </div>
@@ -67,7 +67,7 @@
             <i class="ri-alert-line"></i>
           </div>
           <div class="stat-content">
-            <h3>2</h3>
+            <h3><?= $estadisticas['en_riesgo'] ?></h3>
             <p>En Riesgo</p>
           </div>
         </div>
@@ -77,7 +77,7 @@
             <i class="ri-time-line"></i>
           </div>
           <div class="stat-content">
-            <h3>3</h3>
+            <h3><?= $estadisticas['actividades_pendientes'] ?></h3>
             <p>Act. Pendientes</p>
           </div>
         </div>
@@ -112,277 +112,68 @@
       <!-- MATERIAS GRID -->
       <div class="materias-container grid-view" id="materiasContainer">
 
-        <!-- MATERIA 1 -->
-        <div class="materia-card" data-status="riesgo">
-          <div class="materia-status riesgo"></div>
-          <div class="materia-header">
-            <div class="materia-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-              <i class="ri-calculator-line"></i>
-            </div>
-            <div class="materia-nota riesgo">2.8</div>
+        <?php if (empty($materias)): ?>
+          <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #97a1b6;">
+            <i class="ri-book-line" style="font-size: 64px; opacity: 0.5;"></i>
+            <h3 style="margin-top: 24px; color: #fff;">No tienes materias asignadas</h3>
+            <p style="margin-top: 12px; font-size: 16px;">Contacta con tu coordinador académico</p>
           </div>
-          <h3 class="materia-title">Matemáticas</h3>
-          <p class="materia-subtitle">Álgebra y Geometría</p>
+        <?php else: ?>
+          <?php foreach ($materias as $materia): ?>
+            <div class="materia-card" data-status="<?= $materia['estado_nota'] ?>">
+              <div class="materia-status <?= $materia['estado_nota'] ?>"></div>
+              <div class="materia-header">
+                <div class="materia-icon" style="background: <?= $materia['color_icono'] ?>">
+                  <i class="<?= $materia['icono'] ?>"></i>
+                </div>
+                <?php if ($materia['promedio']): ?>
+                  <div class="materia-nota <?= $materia['estado_nota'] ?>"><?= number_format($materia['promedio'], 1) ?></div>
+                <?php else: ?>
+                  <div class="materia-nota sin-nota">--</div>
+                <?php endif; ?>
+              </div>
+              <h3 class="materia-title"><?= htmlspecialchars($materia['materia']) ?></h3>
+              <p class="materia-subtitle"><?= htmlspecialchars($materia['descripcion'] ?: 'Sin descripción') ?></p>
 
-          <div class="materia-profesor">
-            <div class="profesor-avatar">CM</div>
-            <div class="profesor-info">
-              <strong>Prof. Carlos Méndez</strong>
-              <small>carlos.mendez@colegio.edu</small>
-            </div>
-          </div>
+              <div class="materia-profesor">
+                <div class="profesor-avatar"><?= $materia['iniciales_docente'] ?></div>
+                <div class="profesor-info">
+                  <strong>Prof. <?= htmlspecialchars($materia['docente_nombres'] . ' ' . $materia['docente_apellidos']) ?></strong>
+                  <small><?= htmlspecialchars($materia['docente_correo']) ?></small>
+                </div>
+              </div>
 
-          <div class="materia-stats">
-            <div class="stat-item">
-              <i class="ri-file-list-line"></i>
-              <span>12 actividades</span>
-            </div>
-            <div class="stat-item warning">
-              <i class="ri-time-line"></i>
-              <span>3 pendientes</span>
-            </div>
-            <div class="stat-item">
-              <i class="ri-calendar-check-line"></i>
-              <span>88% asistencia</span>
-            </div>
-          </div>
+              <div class="materia-stats">
+                <div class="stat-item">
+                  <i class="ri-file-list-line"></i>
+                  <span><?= $materia['total_actividades'] ?> actividades</span>
+                </div>
+                <div class="stat-item <?= $materia['actividades_pendientes'] > 0 ? 'warning' : 'success' ?>">
+                  <?php if ($materia['actividades_pendientes'] > 0): ?>
+                    <i class="ri-time-line"></i>
+                    <span><?= $materia['actividades_pendientes'] ?> pendientes</span>
+                  <?php else: ?>
+                    <i class="ri-checkbox-circle-line"></i>
+                    <span>0 pendientes</span>
+                  <?php endif; ?>
+                </div>
+                <div class="stat-item">
+                  <i class="ri-calendar-check-line"></i>
+                  <span>-- asistencia</span>
+                </div>
+              </div>
 
-          <div class="materia-actions">
-            <button class="btn-materia primary">
-              <i class="ri-eye-line"></i> Ver Detalles
-            </button>
-            <button class="btn-materia secondary">
-              <i class="ri-folder-2-line"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- MATERIA 2 -->
-        <div class="materia-card" data-status="critico">
-          <div class="materia-status critico"></div>
-          <div class="materia-header">
-            <div class="materia-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
-              <i class="ri-flask-line"></i>
+              <div class="materia-actions">
+                <button class="btn-materia primary" onclick="window.location.href='<?= BASE_URL ?>/estudiante-materia-detalle?id=<?= $materia['id_asignatura_curso'] ?>'">
+                  <i class="ri-file-list-3-line"></i> Ver Actividades
+                </button>
+                <button class="btn-materia secondary">
+                  <i class="ri-folder-2-line"></i>
+                </button>
+              </div>
             </div>
-            <div class="materia-nota critico">2.5</div>
-          </div>
-          <h3 class="materia-title">Física</h3>
-          <p class="materia-subtitle">Mecánica Clásica</p>
-
-          <div class="materia-profesor">
-            <div class="profesor-avatar" style="background:#10b981">AR</div>
-            <div class="profesor-info">
-              <strong>Prof. Ana Rodríguez</strong>
-              <small>ana.rodriguez@colegio.edu</small>
-            </div>
-          </div>
-
-          <div class="materia-stats">
-            <div class="stat-item">
-              <i class="ri-file-list-line"></i>
-              <span>15 actividades</span>
-            </div>
-            <div class="stat-item warning">
-              <i class="ri-time-line"></i>
-              <span>2 pendientes</span>
-            </div>
-            <div class="stat-item">
-              <i class="ri-calendar-check-line"></i>
-              <span>82% asistencia</span>
-            </div>
-          </div>
-
-          <div class="materia-actions">
-            <button class="btn-materia primary">
-              <i class="ri-eye-line"></i> Ver Detalles
-            </button>
-            <button class="btn-materia secondary">
-              <i class="ri-folder-2-line"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- MATERIA 3 -->
-        <div class="materia-card" data-status="riesgo">
-          <div class="materia-status riesgo"></div>
-          <div class="materia-header">
-            <div class="materia-icon" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
-              <i class="ri-test-tube-line"></i>
-            </div>
-            <div class="materia-nota riesgo">3.0</div>
-          </div>
-          <h3 class="materia-title">Química</h3>
-          <p class="materia-subtitle">Química Orgánica</p>
-
-          <div class="materia-profesor">
-            <div class="profesor-avatar" style="background:#f59e0b">LT</div>
-            <div class="profesor-info">
-              <strong>Prof. Luis Torres</strong>
-              <small>luis.torres@colegio.edu</small>
-            </div>
-          </div>
-
-          <div class="materia-stats">
-            <div class="stat-item">
-              <i class="ri-file-list-line"></i>
-              <span>10 actividades</span>
-            </div>
-            <div class="stat-item warning">
-              <i class="ri-time-line"></i>
-              <span>1 pendiente</span>
-            </div>
-            <div class="stat-item">
-              <i class="ri-calendar-check-line"></i>
-              <span>90% asistencia</span>
-            </div>
-          </div>
-
-          <div class="materia-actions">
-            <button class="btn-materia primary">
-              <i class="ri-eye-line"></i> Ver Detalles
-            </button>
-            <button class="btn-materia secondary">
-              <i class="ri-folder-2-line"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- MATERIA 4 -->
-        <div class="materia-card" data-status="excelente">
-          <div class="materia-status excelente"></div>
-          <div class="materia-header">
-            <div class="materia-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
-              <i class="ri-english-input"></i>
-            </div>
-            <div class="materia-nota excelente">4.5</div>
-          </div>
-          <h3 class="materia-title">Inglés</h3>
-          <p class="materia-subtitle">Nivel Intermedio</p>
-
-          <div class="materia-profesor">
-            <div class="profesor-avatar" style="background:#ef4444">PG</div>
-            <div class="profesor-info">
-              <strong>Prof. Patricia Gómez</strong>
-              <small>patricia.gomez@colegio.edu</small>
-            </div>
-          </div>
-
-          <div class="materia-stats">
-            <div class="stat-item">
-              <i class="ri-file-list-line"></i>
-              <span>14 actividades</span>
-            </div>
-            <div class="stat-item success">
-              <i class="ri-checkbox-circle-line"></i>
-              <span>0 pendientes</span>
-            </div>
-            <div class="stat-item">
-              <i class="ri-calendar-check-line"></i>
-              <span>95% asistencia</span>
-            </div>
-          </div>
-
-          <div class="materia-actions">
-            <button class="btn-materia primary">
-              <i class="ri-eye-line"></i> Ver Detalles
-            </button>
-            <button class="btn-materia secondary">
-              <i class="ri-folder-2-line"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- MATERIA 5 -->
-        <div class="materia-card" data-status="critico">
-          <div class="materia-status critico"></div>
-          <div class="materia-header">
-            <div class="materia-icon" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
-              <i class="ri-microscope-line"></i>
-            </div>
-            <div class="materia-nota critico">2.7</div>
-          </div>
-          <h3 class="materia-title">Biologia</h3>
-          <p class="materia-subtitle">La celula</p>
-
-          <div class="materia-profesor">
-            <div class="profesor-avatar" style="background:#8b5cf6">DA</div>
-            <div class="profesor-info">
-              <strong>Prof. Diego Álvarez</strong>
-              <small>diego.alvarez@colegio.edu</small>
-            </div>
-          </div>
-
-          <div class="materia-stats">
-            <div class="stat-item">
-              <i class="ri-file-list-line"></i>
-              <span>18 actividades</span>
-            </div>
-            <div class="stat-item warning">
-              <i class="ri-time-line"></i>
-              <span>4 pendientes</span>
-            </div>
-            <div class="stat-item">
-              <i class="ri-calendar-check-line"></i>
-              <span>85% asistencia</span>
-            </div>
-          </div>
-
-          <div class="materia-actions">
-            <button class="btn-materia primary">
-              <i class="ri-eye-line"></i> Ver Detalles
-            </button>
-            <button class="btn-materia secondary">
-              <i class="ri-folder-2-line"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- MATERIA 6 -->
-        <div class="materia-card" data-status="excelente">
-          <div class="materia-status excelente"></div>
-          <div class="materia-header">
-            <div class="materia-icon" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);">
-              <i class="ri-book-open-line"></i>
-            </div>
-            <div class="materia-nota bien">4.2</div>
-          </div>
-          <h3 class="materia-title">Historia</h3>
-          <p class="materia-subtitle">Historia de Colombia</p>
-
-          <div class="materia-profesor">
-            <div class="profesor-avatar" style="background:#06b6d4">MR</div>
-            <div class="profesor-info">
-              <strong>Prof. María Ramírez</strong>
-              <small>maria.ramirez@colegio.edu</small>
-            </div>
-          </div>
-
-          <div class="materia-stats">
-            <div class="stat-item">
-              <i class="ri-file-list-line"></i>
-              <span>11 actividades</span>
-            </div>
-            <div class="stat-item warning">
-              <i class="ri-time-line"></i>
-              <span>1 pendiente</span>
-            </div>
-            <div class="stat-item">
-              <i class="ri-calendar-check-line"></i>
-              <span>97% asistencia</span>
-            </div>
-          </div>
-
-          <div class="materia-actions">
-            <button class="btn-materia primary">
-              <i class="ri-eye-line"></i> Ver Detalles
-            </button>
-            <button class="btn-materia secondary">
-              <i class="ri-folder-2-line"></i>
-            </button>
-          </div>
-        </div>
-
-      </div>
+          <?php endforeach; ?>
+        <?php endif; ?>
     </main>
 
     <!-- RIGHT SIDEBAR -->
@@ -413,7 +204,7 @@
           </div>
           <div class="quick-action-content">
             <strong>Actividades</strong>
-            <small>3 tareas pendientes</small>
+            <small><?= $estadisticas['actividades_pendientes'] ?> tareas pendientes</small>
           </div>
         </div>
 
@@ -442,47 +233,32 @@
       <p class="muted">Actividades por vencer</p>
 
       <div class="deadline-list">
-        <div class="deadline-item urgent">
-          <div class="deadline-date">
-            <span class="day">22</span>
-            <span class="month">Nov</span>
+        <?php if (empty($actividades_proximas)): ?>
+          <div style="text-align: center; padding: 20px; color: #97a1b6;">
+            <i class="ri-checkbox-circle-line" style="font-size: 32px; opacity: 0.5;"></i>
+            <p style="margin-top: 12px; font-size: 14px;">¡Estás al día con tus actividades!</p>
           </div>
-          <div class="deadline-content">
-            <strong>Taller de Física</strong>
-            <small>Mecánica - Prof. Ana Rodríguez</small>
-            <div class="deadline-time">
-              <i class="ri-time-line"></i> Vence mañana
+        <?php else: ?>
+          <?php foreach ($actividades_proximas as $actividad): ?>
+            <?php 
+              $dias_restantes = floor((strtotime($actividad['fecha_entrega']) - time()) / (60 * 60 * 24));
+              $es_urgente = $dias_restantes <= 1;
+            ?>
+            <div class="deadline-item <?= $es_urgente ? 'urgent' : '' ?>">
+              <div class="deadline-date">
+                <span class="day"><?= date('d', strtotime($actividad['fecha_entrega'])) ?></span>
+                <span class="month"><?= obtenerMesAbreviado($actividad['fecha_entrega']) ?></span>
+              </div>
+              <div class="deadline-content">
+                <strong><?= htmlspecialchars($actividad['titulo']) ?></strong>
+                <small><?= htmlspecialchars($actividad['materia']) ?> - Prof. <?= htmlspecialchars($actividad['docente_nombres']) ?></small>
+                <div class="deadline-time">
+                  <i class="ri-time-line"></i> <?= formatearFechaProxima($actividad['fecha_entrega']) ?>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div class="deadline-item">
-          <div class="deadline-date">
-            <span class="day">25</span>
-            <span class="month">Nov</span>
-          </div>
-          <div class="deadline-content">
-            <strong>Ensayo de Historia</strong>
-            <small>Colombia - Prof. María Ramírez</small>
-            <div class="deadline-time">
-              <i class="ri-time-line"></i> En 4 días
-            </div>
-          </div>
-        </div>
-
-        <div class="deadline-item">
-          <div class="deadline-date">
-            <span class="day">28</span>
-            <span class="month">Nov</span>
-          </div>
-          <div class="deadline-content">
-            <strong>Proyecto Final</strong>
-            <small>Java - Prof. Diego Álvarez</small>
-            <div class="deadline-time">
-              <i class="ri-time-line"></i> En 7 días
-            </div>
-          </div>
-        </div>
+          <?php endforeach; ?>
+        <?php endif; ?>
       </div>
 
       <button class="btn-primary">Ver todas las actividades</button>

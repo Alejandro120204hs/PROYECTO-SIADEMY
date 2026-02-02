@@ -1,6 +1,13 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
   require_once BASE_PATH . '/app/controllers/administrador/matricula.php';
+   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
 
   // LLAMAMOS LA FUNCIÓN
   $datos = mostrarMatriculas();
@@ -13,68 +20,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="base-url" content="<?= BASE_URL ?>">
   <title>SIADEMY • Gestión de Matrículas</title>
  <?php 
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
  ?>
-  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
- <style>
-    .table-responsive {
-        overflow-x: auto;
-    }
-    
-    .badge {
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 500;
-    }
-    
-    .badge-success {
-        background-color: #28a745;
-        color: white;
-    }
-    
-    .badge-warning {
-        background-color: #ffc107;
-        color: #212529;
-    }
-    
-    .badge-info {
-        background-color: #17a2b8;
-        color: white;
-    }
-    
-    .btn-action {
-        padding: 5px 10px;
-        margin: 0 2px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-    }
-    
-    .btn-edit {
-        background-color: #007bff;
-        color: white;
-    }
-    
-    .btn-delete {
-        background-color: #dc3545;
-        color: white;
-    }
-    
-    .btn-edit:hover {
-        background-color: #0056b3;
-    }
-    
-    .btn-delete:hover {
-        background-color: #c82333;
-    }
- </style>
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-matricula.css">
+  
+ 
 </head>
 <body>
-  <div class="app" id="appGrid">
+  <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
       include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'
@@ -90,8 +46,6 @@
           <div class="title cursos">Gestión de Matrículas</div>
         </div>
 
-        <div class="div"></div>
-
         <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-matricula'">
             <i class="ri-user-add-line"></i> Matricular Estudiante
         </button>
@@ -100,9 +54,9 @@
           <i class="ri-search-2-line"></i>
           <input type="text" id="searchMatricula" placeholder="Buscar por estudiante, curso o documento...">
         </div>
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+       <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
+        ?>
       </div>
 
       <!-- KPI CARDS -->
@@ -144,7 +98,7 @@
       </div>
 
       <!-- FILTROS -->
-      <div class="filters-container" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <div class="filters-container">
         <div class="row">
           <div class="col-md-4">
             <label for="filterAnio">Filtrar por Año:</label>
@@ -199,7 +153,8 @@
         </div>
 
         <div class="table-responsive">
-          <table class="table table-hover" id="tableMatriculas">
+         <div class="table-wrapper">
+           <table class="table table-dark table-hover" id="tableMatriculas">
             <thead>
               <tr>
                 <th>ID</th>
@@ -260,6 +215,7 @@
               <?php endif; ?>
             </tbody>
           </table>
+         </div>
         </div>
       </section>
 
@@ -286,70 +242,10 @@
 
   </div>
 
-  <script>
-    // Función para confirmar eliminación
-    function confirmarEliminacion(id) {
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: "Esta acción eliminará la matrícula del estudiante",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = `<?= BASE_URL ?>/administrador/eliminar-matricula?id=${id}&accion=eliminar`;
-        }
-      });
-    }
-
-    // Búsqueda en tiempo real
-    document.getElementById('searchMatricula').addEventListener('keyup', function() {
-      const searchValue = this.value.toLowerCase();
-      const rows = document.querySelectorAll('#tableMatriculas tbody tr');
-      
-      rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(searchValue) ? '' : 'none';
-      });
-    });
-
-    // Filtros
-    function aplicarFiltros() {
-      const anio = document.getElementById('filterAnio').value;
-      const curso = document.getElementById('filterCurso').value;
-      const nivel = document.getElementById('filterNivel').value;
-      const rows = document.querySelectorAll('#tableMatriculas tbody tr');
-      
-      rows.forEach(row => {
-        const rowAnio = row.getAttribute('data-anio');
-        const rowCurso = row.getAttribute('data-curso');
-        const rowNivel = row.getAttribute('data-nivel');
-        
-        let mostrar = true;
-        
-        if (anio && rowAnio !== anio) mostrar = false;
-        if (curso && rowCurso !== curso) mostrar = false;
-        if (nivel && rowNivel !== nivel) mostrar = false;
-        
-        row.style.display = mostrar ? '' : 'none';
-      });
-    }
-
-    document.getElementById('filterAnio').addEventListener('change', aplicarFiltros);
-    document.getElementById('filterCurso').addEventListener('change', aplicarFiltros);
-    document.getElementById('filterNivel').addEventListener('change', aplicarFiltros);
-
-    // Toggle sidebars
-    document.getElementById('toggleLeft').addEventListener('click', function() {
-      document.querySelector('.sidebar').classList.toggle('collapsed');
-    });
-
-    document.getElementById('toggleRight').addEventListener('click', function() {
-      document.getElementById('rightPanel').classList.toggle('collapsed');
-    });
-  </script>
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <!-- Script JavaScript -->
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-matricula.js"></script>
 </body>
 </html>

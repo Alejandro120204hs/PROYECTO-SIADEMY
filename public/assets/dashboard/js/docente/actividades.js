@@ -294,3 +294,9 @@ function verificarResultadosTabla() {
     $('#tbodyActividades .empty-row').remove();
   }
 }
+
+// ===== BOTÓN VER ENTREGAS =====
+$(document).on('click', '.btn-ver-entregas', function() {
+  const idActividad = $(this).data('id');
+  window.location.href = `/siademy/docente/ver-entregas?id_actividad=${idActividad}`;
+});

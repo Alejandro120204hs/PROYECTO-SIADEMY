@@ -22,7 +22,7 @@
         // ENRUTAMIENTO BASICO
         switch($request){
             case '/':
-                require BASE_PATH . '/app/views/website/index.html';
+                require BASE_PATH . '/app/views/website/index.PHP';
                 break;
 
             // INICIO RUTAS LOGIN
@@ -40,6 +40,10 @@
 
             case '/generar-clave':
                 require BASE_PATH . '/app/controllers/recuperarClave.php';
+                break;
+
+            case '/enviar-correo':
+                require BASE_PATH . '/app/controllers/enviarCorreo.php';
                 break;
 
             
@@ -356,9 +360,22 @@
                 require BASE_PATH . '/app/views/dashboard/docente/add-actividades.php';
                 break;
 
-                case '/docente/asistencia':
-                require BASE_PATH . '/app/views/dashboard/docente/asistencia.php';
-                break;    
+              case '/docente/guardar_actividad':
+                require BASE_PATH . '/app/controllers/docente/actividad.php';
+                guardarActividad();
+                break;
+
+            case '/docente/ver-entregas':
+                require BASE_PATH . '/app/controllers/docente/ver_entregas.php';
+                break;
+
+            case '/docente/calificar-actividad':
+                require BASE_PATH . '/app/controllers/docente/calificar_actividad.php';
+                break;
+
+            case '/docente/descargar-entrega':
+                require BASE_PATH . '/app/controllers/docente/descargar_entrega.php';
+                break;
 
             // --------------------------------------ROL: DOCENTE (MODULO EVENTO)---------------------------------------------
 
@@ -367,16 +384,20 @@
                 break;
             
             // -----------------------------------ROL: ESTUDIANTE------------------------------------------
-            case '/estudiante/dashboard':
+                case '/estudiante/dashboard':
                 require BASE_PATH . '/app/views/dashboard/estudiante/estudiante.php';
                 break;
 
-             case '/estudiante-panel-materias':
-                require BASE_PATH . '/app/views/dashboard/estudiante/materias.php';
+            case '/estudiante-panel-materias':
+                require BASE_PATH . '/app/controllers/estudiante/materias.php';
                 break;
 
-            case '/estudiante-panel-actividades':
-                require BASE_PATH . '/app/views/dashboard/estudiante/actividades.php';
+            case '/estudiante-materia-detalle':
+                require BASE_PATH . '/app/controllers/estudiante/actividades_materia.php';
+                break;
+
+            case '/estudiante-entregar-actividad':
+                require BASE_PATH . '/app/controllers/estudiante/entregar_actividad.php';
                 break;
 
             case '/estudiante-panel-calificaciones':
@@ -386,6 +407,7 @@
             case '/estudiante-panel-profesores':
                 require BASE_PATH . '/app/views/dashboard/estudiante/misProfesores.php';
                 break;
+
 
             // ---------------------------------------ROL:  ACUDIENTE----------------------------------------
             case '/acudiente/dashboard':
@@ -405,7 +427,7 @@
             // FIN RUTAS LOGIN
             default: 
                 http_response_code(404);
-                require BASE_PATH . '/app/views/auth/404.html';
+                require BASE_PATH . '/app/views/auth/404.php';
                 break;
         }
     ?>

@@ -78,6 +78,8 @@
 
       <!-- Tabla de Estudiantes -->
       <div class="datatable-card">
+        <div class="table-wrapper">
+          
         <table id="tablaEstudiantes" class="table table-dark table-hover">
           <thead>
             <tr>
@@ -133,6 +135,7 @@
           
           </tbody>
         </table>
+        </div>
       </div>
 
     </main>
