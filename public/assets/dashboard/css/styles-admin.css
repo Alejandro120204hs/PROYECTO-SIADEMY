@@ -455,7 +455,6 @@ canvas {
 }
 
 
-
 .msg .time {
     color: #97a1b6;
     font-size: 12px;
@@ -1266,7 +1265,7 @@ canvas {
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #667eea);
+    background: linear-gradient(90deg, #667eea, #764ba2);
     opacity: 0;
     transition: opacity 0.3s;
 }

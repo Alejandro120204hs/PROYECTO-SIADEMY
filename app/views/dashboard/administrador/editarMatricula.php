@@ -105,13 +105,13 @@
                     <h6><i class="ri-file-info-line"></i> Información Actual de la Matrícula</h6>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>Estudiante:</strong> <?= htmlspecialchars($matricula['estudiante_nombres'] . ' ' . $matricula['estudiante_apellidos']) ?></p>
-                            <p><strong>Documento:</strong> <?= $matricula['estudiante_documento'] ?></p>
+                            <p style="color: black;"><strong>Estudiante:</strong> <?= htmlspecialchars($matricula['estudiante_nombres'] . ' ' . $matricula['estudiante_apellidos']) ?></p>
+                            <p style="color: black;"><strong>Documento:</strong> <?= $matricula['estudiante_documento'] ?></p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Curso:</strong> <?= $matricula['grado'] ?>° - <?= $matricula['nombre_curso'] ?></p>
-                            <p><strong>Año:</strong> <?= $matricula['anio'] ?></p>
-                            <p><strong>Fecha Matrícula:</strong> <?= date('d/m/Y', strtotime($matricula['fecha'])) ?></p>
+                            <p style="color: black;"><strong>Curso:</strong> <?= $matricula['grado'] ?>° - <?= $matricula['nombre_curso'] ?></p>
+                            <p style="color: black;"><strong>Año:</strong> <?= $matricula['anio'] ?></p>
+                            <p style="color: black;"><strong>Fecha Matrícula:</strong> <?= date('d/m/Y', strtotime($matricula['fecha'])) ?></p>
                         </div>
                     </div>
                 </div>
