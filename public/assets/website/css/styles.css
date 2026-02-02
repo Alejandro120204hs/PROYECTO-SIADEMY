@@ -1,3 +1,6 @@
+/* Importar fuentes desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap');
+
 /* Reset y estilos base */
 * {
 margin: 0;
@@ -9,10 +12,23 @@ html{
 }
 
 body {
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-color: #ffffff;
-overflow-x: hidden;
+    font-family: 'Open Sans', sans-serif;
+    color: #ffffff;
+    overflow-x: hidden;
 }
+h1, h2, h3, h4, h5, h6,
+.hero-title,
+.modulos-title,
+.roles-title,
+.team-text,
+.training-title,
+.pricing-title,
+.package-title,
+.card-title,
+.profile-name {
+    font-family: 'Montserrat', sans-serif;
+}
+
 
 .container {
 max-width: 1400px;
