@@ -643,3 +643,84 @@
         font-size: 14px;
       }
     }
+/* CUSTOM SCROLLBAR STYLES - Dark Theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0e142e;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2d3353;
+  border-radius: 10px;
+  border: 2px solid #0e142e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3d4463;
+}
+
+::-webkit-scrollbar-corner {
+  background: #0e142e;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2d3353 #0e142e;
+}
+
+/* TABLE WRAPPER CON SCROLL INTERNO */
+.table-wrapper {
+  max-height: 550px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-radius: 12px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.table-wrapper table {
+  margin-bottom: 0;
+  min-width: 100%;
+  width: max-content; /* Permite que la tabla se expanda */
+}
+
+/* Fijar encabezado de la tabla */
+.table-wrapper thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #0e142e !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap; /* Evita que los encabezados se corten */
+}
+
+.table-wrapper tbody td {
+  white-space: nowrap; /* Evita que el contenido se corte */
+}
+
+/* Excepción para columnas que necesitan wrap */
+.table-wrapper tbody td.dos-lineas {
+  white-space: normal !important;
+  max-width: 180px;
+  min-width: 140px;
+  word-wrap: break-word;
+}
+
+/* Prevenir scroll horizontal en body pero NO en table-wrapper */
+body {
+  overflow-x: hidden;
+}
+
+.main {
+  overflow-x: hidden;
+}
+
+.datatable-card {
+  overflow: visible;
+}
