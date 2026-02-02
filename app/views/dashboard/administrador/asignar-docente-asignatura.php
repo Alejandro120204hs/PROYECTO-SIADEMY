@@ -348,6 +348,10 @@
         padding: 12px 8px;
       }
     }
+
+    select:disabled {
+  background-color: #e9ecef !important;
+}
   </style>
 </head>
 
@@ -363,7 +367,7 @@
           <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
             <i class="ri-menu-2-line"></i>
           </button>
-          <div class="title">Asignar Docentes</div>
+          <div class="title">Agregar Asignatura</div>
         </div>
       </div>
 
@@ -383,12 +387,12 @@
       <!-- FORMULARIO DE ASIGNACIÓN -->
       <div class="form-card">
         <h3><i class="ri-add-circle-line"></i> Nueva Asignación</h3>
-        <p>Selecciona el docente, la asignatura y el curso donde dictará la materia</p>
+        <p>Selecciona la asignatura y el docente del curso asignado</p>
 
-        <div class="info-box">
+        <!-- <div class="info-box">
           <i class="ri-information-line"></i>
           <strong>Nota:</strong> El sistema creará automáticamente la relación entre asignatura-curso si no existe
-        </div>
+        </div> -->
 
         <?php if(isset($_GET['curso']) && !empty($_GET['curso'])): ?>
           <div class="alert alert-success">
@@ -401,6 +405,20 @@
           <input type="hidden" name="accion" value="asignar">
           
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+             <!-- SELECCIONAR ASIGNATURA -->
+            <div class="form-group">
+              <label>
+                <i class="ri-book-2-line"></i> Asignatura
+              </label>
+              <select class="form-select select2" name="asignatura" required>
+                <option value="">Seleccione una asignatura...</option>
+                <?php foreach($asignaturas as $asignatura): ?>
+                  <option value="<?= $asignatura['id'] ?>">
+                    <?= htmlspecialchars($asignatura['nombre']) ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
             <!-- SELECCIONAR DOCENTE -->
             <div class="form-group">
               <label>
@@ -419,42 +437,44 @@
               </select>
             </div>
 
-            <!-- SELECCIONAR ASIGNATURA -->
-            <div class="form-group">
-              <label>
-                <i class="ri-book-2-line"></i> Asignatura
-              </label>
-              <select class="form-select select2" name="asignatura" required>
-                <option value="">Seleccione una asignatura...</option>
-                <?php foreach($asignaturas as $asignatura): ?>
-                  <option value="<?= $asignatura['id'] ?>">
-                    <?= htmlspecialchars($asignatura['nombre']) ?>
-                  </option>
-                <?php endforeach; ?>
-              </select>
-            </div>
+           
 
             <!-- SELECCIONAR CURSO -->
-            <div class="form-group">
-              <label>
-                <i class="ri-team-line"></i> Curso
-              </label>
-              <select class="form-select select2" name="curso" required id="selectCurso">
-                <option value="">Seleccione un curso...</option>
-                <?php 
-                // Obtener el ID del curso desde el parámetro GET
-                $curso_preseleccionado = $_GET['curso'] ?? null;
-                foreach($cursos as $curso): 
-                ?>
-                  <option value="<?= $curso['id'] ?>" <?= ($curso_preseleccionado && $curso['id'] == $curso_preseleccionado) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($curso['nombre_curso']) ?> - <?= htmlspecialchars($curso['jornada']) ?>
-                    <?php if(isset($curso['director']) && $curso['director']): ?>
-                      (<?= htmlspecialchars($curso['director']) ?>)
-                    <?php endif; ?>
-                  </option>
-                <?php endforeach; ?>
-              </select>
-            </div>
+          <div class="form-group">
+  <label>
+    <i class="ri-team-line"></i> Curso
+  </label>
+  <?php
+  // Obtener el ID del curso desde el parámetro GET
+  $curso_preseleccionado_id = $_GET['curso'] ?? null;
+  $curso_preseleccionado_texto = '';
+  
+  // Buscar el nombre completo del curso preseleccionado
+  if ($curso_preseleccionado_id) {
+    foreach ($cursos as $curso) {
+      if ($curso['id'] == $curso_preseleccionado_id) {
+        $curso_preseleccionado_texto = $curso['nombre_curso'] . ' - ' . $curso['jornada'];
+        if (isset($curso['director']) && $curso['director']) {
+          $curso_preseleccionado_texto .= ' (' . $curso['director'] . ')';
+        }
+        break;
+      }
+    }
+  }
+  ?>
+  <input 
+    type="text" 
+    class="form-control" 
+    name="curso_display" 
+    id="inputCursoDisplay"
+    value="<?= htmlspecialchars($curso_preseleccionado_texto) ?>" 
+    placeholder="Ingrese el curso..."
+    required
+    readonly
+  >
+  <!-- Campo oculto con el ID real -->
+  <input type="hidden" name="curso" id="inputCurso" value="<?= htmlspecialchars($curso_preseleccionado_id ?? '') ?>">
+</div>
           </div>
 
           <div style="text-align: right; margin-top: 24px;">
