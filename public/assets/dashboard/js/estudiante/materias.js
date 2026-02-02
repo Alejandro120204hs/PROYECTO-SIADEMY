@@ -49,7 +49,7 @@ function generarHTMLMaterias() {
     ];
 
     const grid = document.getElementById('calificacionesGrid');
-    grid.innerHTML = ''; // Limpiar el grid
+    // grid.innerHTML = ''; // Limpiar el grid
 
     materiasHTML.forEach(materia => {
         const cardHTML = `
@@ -91,7 +91,7 @@ function generarHTMLMaterias() {
                 <div class="evaluaciones-section"></div>
             </div>
         `;
-        grid.innerHTML += cardHTML;
+        // grid.innerHTML += cardHTML;
     });
 }
 
