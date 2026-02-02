@@ -177,7 +177,7 @@
                     </h3>
                     <a href="<?= BASE_URL ?>/administrador/asignar-docentes?curso=<?= $id_curso ?>" class="btn-profile-action btn-primary-action" style="font-size: 14px; padding: 8px 16px;">
                         <i class="ri-user-add-line"></i>
-                        Asignar Docente
+                        Agregar Asignatura
                     </a>
                 </div>
 
