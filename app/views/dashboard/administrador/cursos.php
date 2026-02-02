@@ -21,7 +21,7 @@
  
 </head>
 <body>
-  <div class="app" id="appGrid">
+  <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
       include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'
@@ -48,9 +48,9 @@
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar curso, profesor o materia...">
         </div>
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+        <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
+        ?>
       </div>
 
       <!-- KPI CARDS -->
@@ -153,11 +153,7 @@
 
     </main>
 
-    <!-- RIGHT SIDEBAR -->
-    <!-- AQUI VA EL INCLUDE DEL SIDEBAR RIGHT -->
-     <?php 
-        include_once __DIR__ . '/../../layouts/sidebar_right_coordinador.php'
-     ?>
+    
   </div>
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

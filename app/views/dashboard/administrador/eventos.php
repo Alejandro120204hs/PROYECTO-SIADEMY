@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <div class="app" id="appGrid">
+  <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
       include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'
@@ -36,9 +36,9 @@
             <a href="administrador/registrar-evento"><span>Nuevo Evento</span></a>
           </button>
         </div>
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+       <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
+        ?>
       </div>
 
       <!-- FILTER SECTION -->
@@ -462,126 +462,7 @@
       </section>
     </main>
 
-    <!-- RIGHT SIDEBAR -->
-    <aside class="rightbar" id="rightSidebar">
-      <div class="user">
-        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-        <div class="avatar" title="Diego A.">DA</div>
-      </div>
-
-      <!-- EVENT STATISTICS -->
-      <div class="panel-title">Estadísticas del Mes</div>
-      <div class="event-stats">
-        <div class="stat-card">
-          <i class="ri-calendar-check-line"></i>
-          <div>
-            <strong>24</strong>
-            <small>Total Eventos</small>
-          </div>
-        </div>
-        <div class="stat-card">
-          <i class="ri-time-line"></i>
-          <div>
-            <strong>8</strong>
-            <small>Esta Semana</small>
-          </div>
-        </div>
-        <div class="stat-card">
-          <i class="ri-user-voice-line"></i>
-          <div>
-            <strong>5</strong>
-            <small>Reuniones</small>
-          </div>
-        </div>
-        <div class="stat-card">
-          <i class="ri-file-edit-line"></i>
-          <div>
-            <strong>6</strong>
-            <small>Exámenes</small>
-          </div>
-        </div>
-      </div>
-
-      <!-- TODAY'S EVENTS -->
-      <div class="panel-title" style="margin-top:20px">Eventos de Hoy</div>
-      <p class="muted">Octubre 31, 2025</p>
-
-      <div class="today-event-item">
-        <div class="today-event-time">
-          <i class="ri-time-line"></i>
-          <div>
-            <strong>8:00 AM</strong>
-            <small>Inicio</small>
-          </div>
-        </div>
-        <div class="today-event-content">
-          <h4>Clase - Matemáticas Avanzadas</h4>
-          <p>10° A • Aula 201</p>
-          <span class="event-badge in-progress">En progreso</span>
-        </div>
-      </div>
-
-      <div class="today-event-item">
-        <div class="today-event-time">
-          <i class="ri-time-line"></i>
-          <div>
-            <strong>10:00 AM</strong>
-            <small>Próximo</small>
-          </div>
-        </div>
-        <div class="today-event-content">
-          <h4>Clase - Física II</h4>
-          <p>11° B • Laboratorio</p>
-          <span class="event-badge upcoming">Próximo</span>
-        </div>
-      </div>
-
-      <!-- QUICK ACTIONS -->
-      <div class="panel-title" style="margin-top:20px">Acciones Rápidas</div>
-      
-      <button class="quick-action">
-        <i class="ri-add-circle-line"></i>
-        <span>Crear Evento</span>
-      </button>
-      
-      <button class="quick-action">
-        <i class="ri-download-2-line"></i>
-        <span>Exportar Calendario</span>
-      </button>
-      
-      <button class="quick-action">
-        <i class="ri-notification-3-line"></i>
-        <span>Configurar Recordatorios</span>
-      </button>
-
-      <!-- UPCOMING REMINDERS -->
-      <div class="panel-title" style="margin-top:20px">Recordatorios</div>
-      
-      <div class="reminder-item">
-        <i class="ri-alarm-warning-line"></i>
-        <div>
-          <strong>Preparar Material</strong>
-          <small>Examen de Matemáticas - 2 días</small>
-        </div>
-      </div>
-
-      <div class="reminder-item">
-        <i class="ri-calendar-todo-line"></i>
-        <div>
-          <strong>Confirmar Asistencia</strong>
-          <small>Reunión de Padres - Mañana</small>
-        </div>
-      </div>
-
-      <div class="reminder-item">
-        <i class="ri-file-list-3-line"></i>
-        <div>
-          <strong>Enviar Calificaciones</strong>
-          <small>Física II - 3 días</small>
-        </div>
-      </div>
-    </aside>
+    
   </div>
 
    <!-- Bootstrap and DataTables Scripts -->
