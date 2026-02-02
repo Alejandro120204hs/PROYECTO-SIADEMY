@@ -578,10 +578,13 @@
                 <!-- Newsletter -->
                 <div class="footer-newsletter">
                     <h3 class="newsletter-title">Mantenganse al dia con nosotros</h3>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Email" class="newsletter-input" required>
-                        <button type="submit" class="newsletter-btn">Enviar</button>
-                    </form>
+                  <form class="newsletter-form" action="<?= BASE_URL ?>/enviar-correo" method="POST">
+    <input type="email" name="correo" placeholder="Tu correo" class="newsletter-input" required>
+    <button type="submit" class="newsletter-btn">Enviar</button>
+</form>
+
+
+
                 </div>
             </div>
         </div>
@@ -601,7 +604,13 @@
         });
     </script>
 
+    
+
     <script src="public/assets/website/js/main.js"></script>
+  
+
+
+
 </body>
 
 </html>
