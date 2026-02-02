@@ -1,5 +1,13 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
+
+   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
 ?>
 
 <!doctype html>
