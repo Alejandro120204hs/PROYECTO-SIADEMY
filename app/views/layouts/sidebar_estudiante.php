@@ -13,11 +13,6 @@
             <span class="badge">6</span> <!-- COUNT de estudiante_materia -->
         </a>
 
-        <a href="<?= BASE_URL ?>/estudiante-panel-actividades">
-            <i class="ri-task-line"></i> Actividades
-            <span class="badge bg-warning">3</span> <!-- Pendientes -->
-        </a>
-
         <a href="<?= BASE_URL ?>/estudiante-panel-calificaciones">
             <i class="ri-bar-chart-line"></i> Calificaciones
         </a>
