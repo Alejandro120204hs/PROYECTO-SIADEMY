@@ -52,7 +52,7 @@
           <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-asignatura'">
             <i class="ri-add-line"></i> Agregar Asignatura
           </button>
-          <button class="btn-asignar-docente" onclick="window.location.href='<?= BASE_URL ?>/administrador/asignar-docentes'" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+          <button class="btn-agregar-estudiante" onclick="window.location.href='<?= BASE_URL ?>/administrador/asignar-docentes'" >
             <i class="ri-user-add-line"></i> Asignar Docentes
           </button>
         </div>

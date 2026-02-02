@@ -14,6 +14,9 @@
     --text: #101828;
 }
 
+/* Importar fuentes desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap');
+
 /* General */
 body {
     margin: 0;
@@ -23,7 +26,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Open Sans', sans-serif; /* Fuente por defecto para todo el contenido */
 }
+
+/* Titulos dentro del login-box */
+.login-box h2 {
+    color: white;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif; /* Fuente para títulos */
+}
+
 
 /* Contenedor principal */
 .login-container {

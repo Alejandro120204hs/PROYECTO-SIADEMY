@@ -510,7 +510,7 @@
                     Acciones Rápidas
                 </h3>
                 <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                    <a href="<?= BASE_URL ?>/docente-crear-actividad?curso=<?= $id_curso ?>" class="quick-action-btn">
+                    <a href="<?= BASE_URL ?>/docente/agregar-actividad<?= isset($id_curso) ? '?id_curso='.$id_curso : '' ?>" class="quick-action-btn">
                         <i class="ri-add-circle-line"></i>
                         Nueva Actividad
                     </a>

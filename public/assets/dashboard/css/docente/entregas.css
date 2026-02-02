@@ -1,0 +1,506 @@
+/* ===========================================
+   ENTREGAS DE ACTIVIDAD - ESTILOS DOCENTE
+   =========================================== */
+
+/* Header Actividad */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap');
+
+body{
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Fuente para todos los títulos */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.actividad-entregas-header {
+    background: linear-gradient(135deg, #1e2139 0%, #252836 100%);
+    border-radius: 16px;
+    padding: 24px 32px;
+    margin-bottom: 24px;
+    border: 1px solid #2a2d3a;
+}
+
+.actividad-header-content {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.actividad-tipo-badge-large {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.actividad-tipo-badge-large.tarea {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.actividad-tipo-badge-large.examen {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.actividad-tipo-badge-large.proyecto {
+    background: rgba(139, 92, 246, 0.1);
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.actividad-tipo-badge-large.quiz {
+    background: rgba(245, 158, 11, 0.1);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.actividad-entregas-header h1 {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.actividad-entregas-header p {
+    color: #97a1b6;
+    font-size: 14px;
+    margin: 0 0 16px 0;
+}
+
+.actividad-meta-info {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.actividad-meta-info span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #97a1b6;
+    font-size: 13px;
+}
+
+.actividad-meta-info span i {
+    color: #a4b1ff;
+}
+
+/* Estadísticas Grid */
+.entregas-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.stat-card-entrega {
+    background: linear-gradient(135deg, #1e2139 0%, #252836 100%);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid #2a2d3a;
+    transition: all 0.3s ease;
+}
+
+.stat-card-entrega:hover {
+    border-color: #a4b1ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(164, 177, 255, 0.1);
+}
+
+.stat-card-entrega .stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.stat-card-entrega .stat-icon.blue {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+}
+
+.stat-card-entrega .stat-icon.green {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+}
+
+.stat-card-entrega .stat-icon.orange {
+    background: rgba(251, 146, 60, 0.1);
+    color: #fb923c;
+}
+
+.stat-card-entrega .stat-icon.purple {
+    background: rgba(139, 92, 246, 0.1);
+    color: #a78bfa;
+}
+
+.stat-card-entrega .stat-icon.yellow {
+    background: rgba(245, 158, 11, 0.1);
+    color: #fbbf24;
+}
+
+.stat-card-entrega .stat-content h3 {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.stat-card-entrega .stat-content p {
+    color: #97a1b6;
+    font-size: 13px;
+    margin: 4px 0 0 0;
+}
+
+.stat-card-entrega .stat-content small {
+    color: #4ade80;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Filtros */
+.entregas-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filter-btn-entrega {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #252836;
+    border: 1px solid #2a2d3a;
+    color: #97a1b6;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn-entrega:hover {
+    background: #2a2d3a;
+    border-color: #a4b1ff;
+    color: #a4b1ff;
+}
+
+.filter-btn-entrega.active {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    border-color: #4f46e5;
+    color: #fff;
+}
+
+.search-box-entrega {
+    position: relative;
+    width: 300px;
+}
+
+.search-box-entrega i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #97a1b6;
+    font-size: 18px;
+}
+
+.search-box-entrega input {
+    width: 100%;
+    background: #252836;
+    border: 1px solid #2a2d3a;
+    color: #fff;
+    padding: 10px 14px 10px 42px;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-box-entrega input:focus {
+    outline: none;
+    border-color: #a4b1ff;
+    box-shadow: 0 0 0 3px rgba(164, 177, 255, 0.1);
+}
+
+/* Tabla Entregas */
+.entregas-table-container {
+    background: #1e2139;
+    border-radius: 12px;
+    border: 1px solid #2a2d3a;
+    overflow: hidden;
+}
+
+.entregas-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.entregas-table thead {
+    background: #252836;
+}
+
+.entregas-table thead th {
+    padding: 16px 20px;
+    text-align: left;
+    color: #97a1b6;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #2a2d3a;
+}
+
+.entregas-table tbody tr {
+    border-bottom: 1px solid #2a2d3a;
+    transition: all 0.2s ease;
+}
+
+.entregas-table tbody tr:hover {
+    background: #252836;
+}
+
+.entregas-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.entregas-table tbody td {
+    padding: 16px 20px;
+    color: #fff;
+    font-size: 14px;
+}
+
+/* Estudiante Info */
+.estudiante-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.estudiante-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #fff;
+    font-size: 16px;
+    overflow: hidden;
+    border: 2px solid #2a2d3a;
+}
+
+.estudiante-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.estudiante-info strong {
+    display: block;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.estudiante-info small {
+    display: block;
+    color: #97a1b6;
+    font-size: 12px;
+}
+
+/* Badges */
+.badge-estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-estado.pendiente {
+    background: rgba(251, 146, 60, 0.1);
+    color: #fb923c;
+    border: 1px solid rgba(251, 146, 60, 0.3);
+}
+
+.badge-estado.entregado {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-estado.calificado {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-estado.atrasado {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-puntualidad {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.badge-puntualidad.a-tiempo {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+}
+
+.badge-puntualidad.tarde {
+    background: rgba(245, 158, 11, 0.1);
+    color: #fbbf24;
+}
+
+.fecha-entrega {
+    color: #97a1b6;
+    font-size: 13px;
+}
+
+.nota-display {
+    display: inline-block;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+/* Botones de Acción */
+.acciones-btn-group {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.btn-accion-entrega {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid #2a2d3a;
+    background: #252836;
+    color: #97a1b6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+.btn-accion-entrega:hover {
+    transform: translateY(-2px);
+}
+
+.btn-accion-entrega.btn-descargar:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #60a5fa;
+    color: #60a5fa;
+}
+
+.btn-accion-entrega.btn-calificar:hover {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: #fbbf24;
+    color: #fbbf24;
+}
+
+.btn-accion-entrega.btn-ver-comentario:hover {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: #a78bfa;
+    color: #a78bfa;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.breadcrumb-link {
+    color: #97a1b6;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #a4b1ff;
+}
+
+.breadcrumb-separator {
+    color: #4a4f66;
+}
+
+.breadcrumb-current {
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .entregas-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .entregas-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box-entrega {
+        width: 100%;
+    }
+
+    .entregas-table-container {
+        overflow-x: auto;
+    }
+
+    .entregas-table {
+        min-width: 900px;
+    }
+}
