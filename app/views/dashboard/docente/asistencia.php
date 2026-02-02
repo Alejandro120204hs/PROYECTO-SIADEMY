@@ -280,7 +280,7 @@
 
         .filter-btn {
             padding: 12px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #4f46e5;
             color: white;
             border: none;
             border-radius: 10px;
