@@ -3,6 +3,17 @@
    =========================================== */
 
 /* Header Actividad */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap');
+
+body{
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Fuente para todos los títulos */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
 .actividad-entregas-header {
     background: linear-gradient(135deg, #1e2139 0%, #252836 100%);
     border-radius: 16px;
