@@ -72,12 +72,12 @@
                         </div>
                     </div>
 
-                    <div class="video-button">
+                    <!-- <div class="video-button">
                         <button class="btn-video-play" onclick="window.location.href='extras/404.php'">
                             <i class="fas fa-play"></i>
                         </button>
                         <span class="video-text">Explorar</span>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="hero-right">
@@ -138,7 +138,7 @@
                                 incluyendo su matrícula, asistencia, actividades, calificaciones y seguimiento escolar.
                                 Es el eje principal del sistema.
                             </p>
-                            <button class="btn-enroll">Inscríbete ahora</button>
+                      
                         </div>
                     </div>
 
@@ -397,7 +397,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-pricing">¡Adquirir!</button>
+                  
                     </div>
 
                     <div class="pricing-right">
@@ -535,10 +535,8 @@
                 <!-- Logo y Contacto -->
                 <div class="footer-info">
                     <div class="footer-logo">
-                        <div class="logo-icon">
-                            <div class="logo-layers"></div>
-                        </div>
-                        <span class="logo-text">SIADEMY</span>
+                        <img src="public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
+
                     </div>
 
                     <div class="footer-contact">
@@ -562,7 +560,14 @@
                     <h3 class="footer-title">Categorias</h3>
                     <ul class="footer-links">
                         <li><a href="#">Asesoramiento</a></li>
-                        <li><a href="#">Más</a></li>
+                        <li><a href="#">Gestión academica</a></li>
+                        <li><a href="#">Herramientas digitales</a></li>
+                        <li><a href="#">Soporte técnico</a></li>
+                        <li><a href="#">Reportes y analisis</a></li>
+                        <li><a href="#">Gestion administrativa</a></li>
+
+
+
                     </ul>
                 </div>
 
@@ -570,14 +575,19 @@
                 <div class="footer-column">
                     <h3 class="footer-title">Links</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Sobre nosotros</a></li>
-                        <li><a href="#">Mas</a></li>
+                        <li><a href="">Inicio</a></li>
+                        <li><a href="#modulos">Modulos</a></li>
+                        <li><a href="#roles">Roles</a></li>
+                        <li><a href="#team">Nuestro equipo</a></li>
+                        <li><a href="#training">Capacitacion</a></li>
+                        <li><a href="#pricing">Planes y paquetes</a></li>
+
                     </ul>
                 </div>
 
                 <!-- Newsletter -->
                 <div class="footer-newsletter">
-                    <h3 class="newsletter-title">Mantenganse al dia con nosotros</h3>
+                    <h3 class="newsletter-title">Adquiere nuestros servicios</h3>
                   <form class="newsletter-form" action="<?= BASE_URL ?>/enviar-correo" method="POST">
     <input type="email" name="correo" placeholder="Tu correo" class="newsletter-input" required>
     <button type="submit" class="newsletter-btn">Enviar</button>
