@@ -8,6 +8,7 @@
         <a href="<?= BASE_URL ?>/docente-cursos"><i class="ri-team-line"></i> Cursos</a>
           
         <a href="<?= BASE_URL ?>/docente-eventos"><i class="ri-calendar-event-line"></i> Eventos</a>
+        <a href="<?= BASE_URL ?>/docente/asistencia"><i class="ri-team-line"></i> Gestion de Asistencia</a>
 
     
       </nav>
