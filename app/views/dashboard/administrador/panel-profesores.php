@@ -115,9 +115,15 @@
               <td><?= $docente['estado'] ?></td>
               
               <td class="acciones p">
-                  <button class="btn-action"><a href="">Ver</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/editar-docente?id=<?= $docente['id'] ?>">Editar</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/eliminar-docente?accion=eliminar&id=<?= $docente['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
+                <a class="btn-action" href="">
+                  Ver
+                </a>
+                <a class="btn-action" href="<?= BASE_URL ?>/administrador/editar-docente?id=<?= $docente['id'] ?>">
+                  Editar
+                </a>
+                <a class="btn-action" href="<?= BASE_URL ?>/administrador/eliminar-docente?accion=eliminar&id=<?= $docente['id_usuario'] ?>">
+                  <i class="bi bi-trash3-fill"></i>
+                </a>
               </td>
             </tr>
               <?php endforeach; ?>
