@@ -22,7 +22,7 @@
         // ENRUTAMIENTO BASICO
         switch($request){
             case '/':
-                require BASE_PATH . '/app/views/website/index.html';
+                require BASE_PATH . '/app/views/website/index.PHP';
                 break;
 
             // INICIO RUTAS LOGIN
@@ -40,6 +40,10 @@
 
             case '/generar-clave':
                 require BASE_PATH . '/app/controllers/recuperarClave.php';
+                break;
+
+            case '/enviar-correo':
+                require BASE_PATH . '/app/controllers/enviarCorreo.php';
                 break;
 
             
@@ -401,7 +405,7 @@
             // FIN RUTAS LOGIN
             default: 
                 http_response_code(404);
-                require BASE_PATH . '/app/views/auth/404.html';
+                require BASE_PATH . '/app/views/auth/404.php';
                 break;
         }
     ?>

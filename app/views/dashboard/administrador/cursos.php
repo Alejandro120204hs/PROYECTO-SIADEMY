@@ -1,6 +1,13 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
   require_once BASE_PATH . '/app/controllers/administrador/curso.php';
+   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
 
   // LLAMAMOS LA FUNCION
   $datos = mostrarCursos();
@@ -21,7 +28,7 @@
  
 </head>
 <body>
-  <div class="app" id="appGrid">
+  <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
       include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'
@@ -48,9 +55,9 @@
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar curso, profesor o materia...">
         </div>
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+        <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
+        ?>
       </div>
 
       <!-- KPI CARDS -->
@@ -153,11 +160,7 @@
 
     </main>
 
-    <!-- RIGHT SIDEBAR -->
-    <!-- AQUI VA EL INCLUDE DEL SIDEBAR RIGHT -->
-     <?php 
-        include_once __DIR__ . '/../../layouts/sidebar_right_coordinador.php'
-     ?>
+    
   </div>
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
