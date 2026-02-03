@@ -1,8 +1,16 @@
 * {
     margin: 0;
     padding: 0;
+<<<<<<< HEAD:assets/extras/login.css
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
+=======
+    height: 100vh;
+    background-color: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+>>>>>>> b837485 (Se ajusto la interfaz del login):assets/extras/css/login.css
 }
 
 body,
@@ -35,6 +43,7 @@ html {
 .izquierda {
     display: flex;
     justify-content: center;
+<<<<<<< HEAD:assets/extras/login.css
     align-items: center;
     height: 100vh;
     color: #000;
@@ -51,13 +60,72 @@ html {
     border-radius: 20px;
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
     text-align: center;
-    align-items: center;
-    justify-content: center;
+=======
+    width: 100%;
+    max-width: 920px;
+    background: var(--bg-2);
+    border-radius: 20px;
 }
 
+/* Parte izquierda */
+.login-left {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+>>>>>>> b837485 (Se ajusto la interfaz del login):assets/extras/css/login.css
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-left img {
+    width: 110px;
+    padding: 10px;
+    z-index: 3;
+}
+
+<<<<<<< HEAD:assets/extras/login.css
 /* Logo */
 .logo img {
     width: 200px;
+=======
+.logo {
+    width: 180px;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    position: absolute;
+    top: -80px;
+    left: 155px;
+    background: linear-gradient(180deg, #4f46e5, #0d1f58);
+    border-radius: 45%;
+    z-index: 1;
+}
+
+.login-box {
+    background: linear-gradient(180deg, #0d1f58, #4f46e5);
+    padding: 40px 20px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 400px;
+    z-index: 2;
+}
+
+.login-box h2 {
+    color: white;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.input-group {
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+>>>>>>> b837485 (Se ajusto la interfaz del login):assets/extras/css/login.css
     margin-bottom: 15px;
     display: flex;
 }
@@ -137,6 +205,7 @@ html {
     margin-bottom: 20px;
 }
 
+<<<<<<< HEAD:assets/extras/login.css
 .recuperar:hover {
     text-decoration: underline;
 }
@@ -149,6 +218,12 @@ html {
     border: none;
     border-radius: 25px;
     font-weight: bold;
+=======
+/* Parte derecha */
+.login-right {
+    width: 60%;
+    justify-content: center;
+>>>>>>> b837485 (Se ajusto la interfaz del login):assets/extras/css/login.css
     align-items: center;
     display: flex;
     justify-content: center;
