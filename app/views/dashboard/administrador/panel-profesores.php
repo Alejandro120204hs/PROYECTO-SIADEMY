@@ -2,6 +2,13 @@
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
    // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
   require_once BASE_PATH . '/app/controllers/administrador/Docente.php';
+   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
 
   // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
   $datos = mostrarDocentes();
@@ -47,21 +54,13 @@
           <div class="title">Profesores</div>
         </div>
         <div class="search">
-          <i class="ri-search-2-line"></i>
-          <input type="text" placeholder="Buscar Aquí">
+   
         </div>
         
         <!-- Botón Agregar Estudiante -->
         <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-profesores'">
           <i class="ri-add-line"></i> Agregar Profesor
         </button>
-        
-        <!-- Dropdown Más Nuevo -->
-        <div class="dropdown-custom">
-          <button class="dropdown-toggle-custom">
-            Más Nuevo <i class="ri-arrow-down-s-line"></i>
-          </button>
-        </div>
         
         <div class="user">
           <?php
@@ -72,7 +71,8 @@
 
       <!-- Tabla de Estudiantes -->
       <div class="datatable-card">
-        <table id="tablaEstudiantes" class="table table-dark table-hover">
+        <div class="table-wrapper">
+          <table id="tablaEstudiantes" class="table table-dark table-hover">
           <thead>
             <tr>
               <th width="40">
@@ -107,9 +107,15 @@
               <td><?= $docente['estado'] ?></td>
               
               <td class="acciones p">
-                  <button class="btn-action"><a href="">Ver</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/editar-docente?id=<?= $docente['id'] ?>">Editar</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/eliminar-docente?accion=eliminar&id=<?= $docente['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
+                <a class="btn-action" href="">
+                  Ver
+                </a>
+                <a class="btn-action" href="<?= BASE_URL ?>/administrador/editar-docente?id=<?= $docente['id'] ?>">
+                  Editar
+                </a>
+                <a class="btn-action" href="<?= BASE_URL ?>/administrador/eliminar-docente?accion=eliminar&id=<?= $docente['id_usuario'] ?>">
+                  <i class="bi bi-trash3-fill"></i>
+                </a>
               </td>
             </tr>
               <?php endforeach; ?>
@@ -121,6 +127,7 @@
  
           </tbody>
         </table>
+        </div>
       </div>
 
     </main>

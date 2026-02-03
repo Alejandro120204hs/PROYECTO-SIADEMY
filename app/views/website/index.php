@@ -16,10 +16,7 @@
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <div class="logo-icon">
-                        <div class="logo-layers"></div>
-                    </div>
-                    <span class="logo-text">SIADEMY</span>
+                    <img src="public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
                 </div>
 
                 <ul class="nav-menu">
@@ -54,7 +51,7 @@
                     </h1>
 
                     <div class="hero-cta">
-                        <button class="btn btn-cta">COMENZAR AHORA</button>
+                        <button class="btn btn-cta"onclick="window.location.href='login'">COMENZAR AHORA</button>
 
                         <div class="reviews">
                             <div class="reviews-avatars">
@@ -70,17 +67,17 @@
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star-half-alt"></i>
                                 </div>
-                                <span class="reviews-count">(10k+ Reviews)</span>
+                                <span class="reviews-count"></span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="video-button">
-                        <button class="btn-video-play" onclick="window.location.href='extras/404.html'">
+                    <!-- <div class="video-button">
+                        <button class="btn-video-play" onclick="window.location.href='extras/404.php'">
                             <i class="fas fa-play"></i>
                         </button>
-                        <span class="video-text">Note - Explore</span>
-                    </div>
+                        <span class="video-text">Explorar</span>
+                    </div> -->
                 </div>
 
                 <div class="hero-right">
@@ -116,14 +113,14 @@
         <div class="container">
             <div class="modulos-header">
                 <h2 class="modulos-title">Módulos</h2>
-                <div class="modulos-nav">
+                <!-- <div class="modulos-nav">
                     <button class="nav-arrow prev-arrow">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <button class="nav-arrow next-arrow">
                         <i class="fas fa-chevron-right"></i>
                     </button>
-                </div>
+                </div> -->
             </div>
 
             <div class="modulos-slider">
@@ -135,13 +132,13 @@
                             <span class="card-badge">Estudiantes</span>
                         </div>
                         <div class="card-content">
-                            <h3 class="card-title">Product Management Basic - Course</h3>
+                            <h3 class="card-title">Gestión de productos</h3>
                             <p class="card-description">
                                 Este módulo permite gestionar la información académica y personal de los estudiantes,
                                 incluyendo su matrícula, asistencia, actividades, calificaciones y seguimiento escolar.
                                 Es el eje principal del sistema.
                             </p>
-                            <button class="btn-enroll">Enroll Now</button>
+                      
                         </div>
                     </div>
 
@@ -152,7 +149,7 @@
                             <span class="card-badge badge-acudientes">Acudientes</span>
                         </div>
                         <div class="card-content">
-                            <h3 class="card-title">BM Data Science Professional Certificate</h3>
+                            <h3 class="card-title">Módulo de acudientes</h3>
                             <p class="card-description">
                                 Los acudientes pueden acceder a la información académica de sus hijos o representados,
                                 visualizar reportes, recibir notificaciones y estar en comunicación constante con
@@ -168,7 +165,7 @@
                             <span class="card-badge badge-docentes">Docentes</span>
                         </div>
                         <div class="card-content">
-                            <h3 class="card-title">The Science of Well-Being</h3>
+                            <h3 class="card-title">Módulo de docentes</h3>
                             <p class="card-description">
                                 A través de este módulo, los docentes pueden registrar asistencia, gestionar actividades
                                 y calificaciones, participar en foros, emitir reportes académicos y comunicarse con
@@ -184,7 +181,7 @@
                             <span class="card-badge badge-admin">Administradores</span>
                         </div>
                         <div class="card-content">
-                            <h3 class="card-title">Gestión Institucional Integral</h3>
+                            <h3 class="card-title">Módulo administrativo</h3>
                             <p class="card-description">
                                 Este módulo está enfocado en la gestión institucional: control de usuarios, asignación
                                 de roles, creación de cursos y niveles académicos, seguimiento de matrículas y
@@ -276,10 +273,11 @@
                             </div>
                             <div class="card-body">
                                 <div class="profile-photo">
-                                    <img src="public/assets/website/imgs/imagenbw.jpg" alt="Mark J. William">
+                                    <img src="public/assets/extras/img/imagen-00230304.jpg" alt="Mark J. William">
                                 </div>
-                                <h3 class="profile-name">Mark J. William</h3>
-                                <p class="profile-label">Nombre</p>
+                                    <img width="150px" src="public/uploads/logopositivo.png" alt="Mark J. William">
+                                
+                          
                             </div>
                         </div>
 
@@ -288,21 +286,20 @@
                             <div class="card-info">
                                 <div class="info-item">
                                     <span class="bullet"></span>
-                                    <p class="info-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                                        diam nonummy nibh euismod tincidunt ut laoreet dolore</p>
+                                    <p class="info-text">
+                                        En SIADEMY transformamos la gestión académica de tu institución. Te ofrecemos una plataforma integral que facilita el seguimiento estudiantil y conecta de manera eficiente a toda tu comunidad educativa.</p>
                                 </div>
                                 <div class="info-item">
                                     <span class="bullet"></span>
-                                    <p class="info-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                                        diam nonummy nibh euismod tincidunt ut laoreet dolore</p>
+                                    <p class="info-text">Comprometidos con la calidad, la innovación y el uso de la tecnología como herramienta para fortalecer la gestión académica y la comunicación entre docentes, estudiantes y acudientes.</p>
                                 </div>
                             </div>
                             <div class="card-signature">
-                                <p class="signature-label">card holder signature</p>
+                               
                                 <div class="signature">
-                                    <span class="signature-text">William</span>
+                                    <span class="signature-text">SIADEMY</span>
                                 </div>
-                                <p class="signature-id">Mark J. William / 0121 2170 1 2911</p>
+                                <p class="signature-id">Tel. / +57 3213919596</p>
                             </div>
                             <div class="card-logo">
                                 <div class="owl-logo">
@@ -327,7 +324,7 @@
                 </div>
 
                 <div class="training-right">
-                    <span class="training-badge">Training</span>
+                    <span class="training-badge">Capacitación</span>
                     <h2 class="training-title">Capacitacion Del Personal</h2>
 
                     <div class="training-features">
@@ -401,7 +398,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-pricing">¡Adquirir!</button>
+                  
                     </div>
 
                     <div class="pricing-right">
@@ -454,7 +451,7 @@
                                         <img src="public/assets/website/imgs/imguserrr4.jpg" alt="Usuario 4">
                                         <img src="public/assets/website/imgs/imguserrr5.jpg" alt="Usuario 5">
                                     </div>
-                                    <span class="users-count">+ 40 students</span>
+                                    <span class="users-count">+ 40 estudiantes</span>
                                 </div>
                             </div>
                         </div>
@@ -478,7 +475,7 @@
                                         <img src="public/assets/website/imgs/imguserr4.jpg" alt="Usuario 4">
                                         <img src="public/assets/website/imgs/imguserr5.jpg" alt="Usuario 5">
                                     </div>
-                                    <span class="users-count">+ 100 students</span>
+                                    <span class="users-count">+ 100 estudiantes</span>
                                 </div>
                             </div>
                         </div>
@@ -502,7 +499,7 @@
                                         <img src="public/assets/website/imgs/imguser4.jpg" alt="Usuario 4">
                                         <img src="public/assets/website/imgs/imguser5.jpg" alt="Usuario 5">
                                     </div>
-                                    <span class="users-count">+ 200 students</span>
+                                    <span class="users-count">+ 200 estudiantes</span>
                                 </div>
                             </div>
                         </div>
@@ -539,24 +536,22 @@
                 <!-- Logo y Contacto -->
                 <div class="footer-info">
                     <div class="footer-logo">
-                        <div class="logo-icon">
-                            <div class="logo-layers"></div>
-                        </div>
-                        <span class="logo-text">SIADEMY</span>
+                        <img src="public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
+
                     </div>
 
                     <div class="footer-contact">
                         <div class="contact-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Dirección: Carrera 10</span>
+                            <span>Dirección: Calle 3 #5-72</span>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-phone"></i>
-                            <span>Tel: 3125321798</span>
+                            <span>Tel: +57 3213919596</span>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-envelope"></i>
-                            <span>Email: siademy@gmail.com</span>
+                            <span>Email: soportesiademy@gmail.com</span>
                         </div>
                     </div>
                 </div>
@@ -566,7 +561,14 @@
                     <h3 class="footer-title">Categorias</h3>
                     <ul class="footer-links">
                         <li><a href="#">Asesoramiento</a></li>
-                        <li><a href="#">Más</a></li>
+                        <li><a href="#">Gestión academica</a></li>
+                        <li><a href="#">Herramientas digitales</a></li>
+                        <li><a href="#">Soporte técnico</a></li>
+                        <li><a href="#">Reportes y analisis</a></li>
+                        <li><a href="#">Gestion administrativa</a></li>
+
+
+
                     </ul>
                 </div>
 
@@ -574,18 +576,26 @@
                 <div class="footer-column">
                     <h3 class="footer-title">Links</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Sobre nosotros</a></li>
-                        <li><a href="#">Mas</a></li>
+                        <li><a href="">Inicio</a></li>
+                        <li><a href="#modulos">Modulos</a></li>
+                        <li><a href="#roles">Roles</a></li>
+                        <li><a href="#team">Nuestro equipo</a></li>
+                        <li><a href="#training">Capacitacion</a></li>
+                        <li><a href="#pricing">Planes y paquetes</a></li>
+
                     </ul>
                 </div>
 
                 <!-- Newsletter -->
                 <div class="footer-newsletter">
-                    <h3 class="newsletter-title">Mantenganse al dia con nosotros</h3>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Email" class="newsletter-input" required>
-                        <button type="submit" class="newsletter-btn">Enviar</button>
-                    </form>
+                    <h3 class="newsletter-title">Adquiere nuestros servicios</h3>
+                  <form class="newsletter-form" action="<?= BASE_URL ?>/enviar-correo" method="POST">
+    <input type="email" name="correo" placeholder="Tu correo" class="newsletter-input" required>
+    <button type="submit" class="newsletter-btn">Enviar</button>
+</form>
+
+
+
                 </div>
             </div>
         </div>
@@ -605,7 +615,13 @@
         });
     </script>
 
+    
+
     <script src="public/assets/website/js/main.js"></script>
+  
+
+
+
 </body>
 
 </html>

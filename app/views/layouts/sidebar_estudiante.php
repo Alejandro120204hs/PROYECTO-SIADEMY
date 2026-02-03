@@ -1,7 +1,7 @@
 <aside class="sidebar" id="leftSidebar">
     <a class="brand" href="#">
-        <span class="logo"><i class="ri-shield-star-line"></i></span>
-        <span>Siademy</span>
+                       <img width="170px" src="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
+
     </a>
     <nav class="nav">
         <a class="active" href="<?= BASE_URL ?>/estudiante/dashboard">
@@ -11,11 +11,6 @@
         <a href="<?= BASE_URL ?>/estudiante-panel-materias">
             <i class="ri-book-2-line"></i> Mis Materias
             <span class="badge">6</span> <!-- COUNT de estudiante_materia -->
-        </a>
-
-        <a href="<?= BASE_URL ?>/estudiante-panel-actividades">
-            <i class="ri-task-line"></i> Actividades
-            <span class="badge bg-warning">3</span> <!-- Pendientes -->
         </a>
 
         <a href="<?= BASE_URL ?>/estudiante-panel-calificaciones">

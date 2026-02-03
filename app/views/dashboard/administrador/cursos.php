@@ -1,6 +1,13 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
   require_once BASE_PATH . '/app/controllers/administrador/curso.php';
+   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
 
   // LLAMAMOS LA FUNCION
   $datos = mostrarCursos();
@@ -21,7 +28,7 @@
  
 </head>
 <body>
-  <div class="app" id="appGrid">
+  <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
       include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'
@@ -40,17 +47,19 @@
 
         <div class="div"></div>
 
-        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-curso'">
-        Agregar Curso
-        </button>
+
         
         <div class="search">
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar curso, profesor o materia...">
         </div>
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+
+        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-curso'">
+          <i class="ri-add-line"></i> Agregar Curso
+        </button>        
+        <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
+        ?>
       </div>
 
       <!-- KPI CARDS -->
@@ -132,7 +141,7 @@
             </div>
 
             <div class="course-actions">
-              <button class="btn-secondary"><i class="bi bi-eye"></i></button>
+              <button class="btn-secondary" onclick="window.location.href='<?= BASE_URL ?>/administrador/detalle-curso?id=<?= $curso['id'] ?>'"><i class="bi bi-eye"></i></button>
               <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/editar-curso?id=<?= $curso['id'] ?>"><i class="bi bi-pencil-square"></i></a></button>
               <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/eliminar-curso?accion=eliminar&id=<?= $curso['id'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
 
@@ -153,11 +162,7 @@
 
     </main>
 
-    <!-- RIGHT SIDEBAR -->
-    <!-- AQUI VA EL INCLUDE DEL SIDEBAR RIGHT -->
-     <?php 
-        include_once __DIR__ . '/../../layouts/sidebar_right_coordinador.php'
-     ?>
+    
   </div>
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

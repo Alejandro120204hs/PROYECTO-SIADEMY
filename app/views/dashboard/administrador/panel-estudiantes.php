@@ -51,8 +51,7 @@
           <div class="title">Estudiantes</div>
         </div>
         <div class="search">
-          <i class="ri-search-2-line"></i>
-          <input type="text" placeholder="Buscar Aquí">
+          
         </div>
         
         <!-- Botón Agregar Estudiante -->
@@ -60,14 +59,6 @@
           <i class="ri-add-line"></i> Agregar Estudiante
         </button>
           <a class="btn-pdf" href="<?= BASE_URL ?>/administrador-reporte?reporte=estudiantes" target="_blank">Generar PDF</a>
-
-        
-        <!-- Dropdown Más Nuevo -->
-        <div class="dropdown-custom">
-          <button class="dropdown-toggle-custom">
-            Más Nuevo <i class="ri-arrow-down-s-line"></i>
-          </button>
-        </div>
         
         <div class="user">
           <?php
@@ -78,6 +69,8 @@
 
       <!-- Tabla de Estudiantes -->
       <div class="datatable-card">
+        <div class="table-wrapper">
+          
         <table id="tablaEstudiantes" class="table table-dark table-hover">
           <thead>
             <tr>
@@ -117,9 +110,13 @@
               <td><?= $estudiante['fecha_de_nacimiento'] ?></td>
               <td><?= $estudiante['estado'] ?></td>
               <td class="acciones">
-                  <button class="btn-action"><a href="">Ver</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/editar-estudiante?id=<?= $estudiante['id'] ?>">Editar</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/eliminar-estudiante?accion=eliminar&id=<?= $estudiante['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
+                  <a class="btn-action" href="">Ver</a>
+                  <a class="btn-action" href="<?= BASE_URL ?>/administrador/editar-estudiante?id=<?= $estudiante['id'] ?>">
+                    Editar
+                  </a>
+                  <a class="btn-action" href="<?= BASE_URL ?>/administrador/eliminar-estudiante?accion=eliminar&id=<?= $estudiante['id_usuario'] ?>">
+                    <i class="bi bi-trash3-fill"></i>
+                  </a>
 
               </td>
             </tr>
@@ -133,6 +130,7 @@
           
           </tbody>
         </table>
+        </div>
       </div>
 
     </main>

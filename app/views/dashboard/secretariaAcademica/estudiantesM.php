@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-estudiantesM.css">
 </head>
@@ -151,15 +152,9 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="action-btns">
-                                        <button class="btn-icon view" title="Ver perfil" onclick="openPerfilModal(1)">
-                                            <i class="ri-eye-line"></i>
-                                        </button>
-                                        <button class="btn-icon edit" title="Editar">
-                                            <i class="ri-edit-line"></i>
-                                        </button>
-                                        <button class="btn-icon more" title="Más opciones">
-                                            <i class="ri-more-2-fill"></i>
-                                        </button>
+                                        <button class="btn-actions view" title="Ver perfil"><a href="">Ver</a></button>
+                                        <button class="btn-actions  edit" title="Editar"><a href="">Editar</a></button>
+                                        <button class="btn-actions delete" title="Eliminar"><a href=""><i class="bi bi-trash3-fill"></i></a></button>
                                     </div>
                                 </td>
                             </tr>
@@ -188,15 +183,9 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="action-btns">
-                                        <button class="btn-icon view" title="Ver perfil" onclick="openPerfilModal(2)">
-                                            <i class="ri-eye-line"></i>
-                                        </button>
-                                        <button class="btn-icon edit" title="Editar">
-                                            <i class="ri-edit-line"></i>
-                                        </button>
-                                        <button class="btn-icon more" title="Más opciones">
-                                            <i class="ri-more-2-fill"></i>
-                                        </button>
+                                        <button class="btn-actions view" title="Ver perfil"><a href="">Ver</a></button>
+                                        <button class="btn-actions edit" title="Editar"><a href="">Editar</a></button>
+                                        <button class="btn-actions delete" title="Eliminar"><a href=""><i class="bi bi-trash3-fill"></i></a></button>
                                     </div>
                                 </td>
                             </tr>
@@ -225,15 +214,9 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="action-btns">
-                                        <button class="btn-icon view" title="Ver perfil" onclick="openPerfilModal(3)">
-                                            <i class="ri-eye-line"></i>
-                                        </button>
-                                        <button class="btn-icon edit" title="Editar">
-                                            <i class="ri-edit-line"></i>
-                                        </button>
-                                        <button class="btn-icon more" title="Más opciones">
-                                            <i class="ri-more-2-fill"></i>
-                                        </button>
+                                        <button class="btn-actions view" title="Ver perfil"><a href="">Ver</a></button>
+                                        <button class="btn-actions  edit" title="Editar"><a href="">Editar</a></button>
+                                        <button class="btn-actions delete" title="Eliminar"><a href=""><i class="bi bi-trash3-fill"></i></a></button>
                                     </div>
                                 </td>
                             </tr>
@@ -262,15 +245,9 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="action-btns">
-                                        <button class="btn-icon view" title="Ver perfil" onclick="openPerfilModal(4)">
-                                            <i class="ri-eye-line"></i>
-                                        </button>
-                                        <button class="btn-icon edit" title="Editar">
-                                            <i class="ri-edit-line"></i>
-                                        </button>
-                                        <button class="btn-icon more" title="Más opciones">
-                                            <i class="ri-more-2-fill"></i>
-                                        </button>
+                                        <button class="btn-actions view" title="Ver perfil"><a href="">Ver</a></button>
+                                        <button class="btn-actions  edit" title="Editar"><a href="">Editar</a></button>
+                                        <button class="btn-actions delete" title="Eliminar"><a href=""><i class="bi bi-trash3-fill"></i></a></button>
                                     </div>
                                 </td>
                             </tr>
@@ -299,15 +276,9 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="action-btns">
-                                        <button class="btn-icon view" title="Ver perfil" onclick="openPerfilModal(5)">
-                                            <i class="ri-eye-line"></i>
-                                        </button>
-                                        <button class="btn-icon edit" title="Editar">
-                                            <i class="ri-edit-line"></i>
-                                        </button>
-                                        <button class="btn-icon more" title="Más opciones">
-                                            <i class="ri-more-2-fill"></i>
-                                        </button>
+                                        <button class="btn-actions view" title="Ver perfil"><a href="">Ver</a></button>
+                                        <button class="btn-actions  edit" title="Editar"><a href="">Editar</a></button>
+                                        <button class="btn-actions delete" title="Eliminar"><a href=""><i class="bi bi-trash3-fill"></i></a></button>
                                     </div>
                                 </td>
                             </tr>
@@ -336,15 +307,9 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="action-btns">
-                                        <button class="btn-icon view" title="Ver perfil" onclick="openPerfilModal(6)">
-                                            <i class="ri-eye-line"></i>
-                                        </button>
-                                        <button class="btn-icon edit" title="Editar">
-                                            <i class="ri-edit-line"></i>
-                                        </button>
-                                        <button class="btn-icon more" title="Más opciones">
-                                            <i class="ri-more-2-fill"></i>
-                                        </button>
+                                        <button class="btn-actions view" title="Ver perfil"><a href="">Ver</a></button>
+                                        <button class="btn-actions  edit" title="Editar"><a href="">Editar</a></button>
+                                        <button class="btn-actions delete" title="Eliminar"><a href=""><i class="bi bi-trash3-fill"></i></a></button>
                                     </div>
                                 </td>
                             </tr>
@@ -373,12 +338,8 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="action-btns">
-                                        <button class="btn-icon view" title="Ver perfil" onclick="openPerfilModal(7)">
-                                            <i class="ri-eye-line"></i>
-                                        </button>
-                                        <button class="btn-icon more" title="Más opciones">
-                                            <i class="ri-more-2-fill"></i>
-                                        </button>
+                                        <button class="btn-actions view" title="Ver perfil"><a href="">Ver</a></button>
+                                        <button class="btn-actions delete" title="Eliminar"><a href=""><i class="bi bi-trash3-fill"></i></a></button>
                                     </div>
                                 </td>
                             </tr>
@@ -669,21 +630,6 @@
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL PERFIL ESTUDIANTE -->
-    <div class="modal-overlay" id="perfilModal">
-        <div class="modal-dialog large">
-            <div class="modal-header">
-                <h3><i class="ri-user-line"></i> Perfil del Estudiante</h3>
-                <button class="modal-close" onclick="closePerfilModal()">
-                    <i class="ri-close-line"></i>
-                </button>
-            </div>
-            <div class="modal-body" id="perfilContent">
-                <!-- Contenido dinámico del perfil -->
             </div>
         </div>
     </div>

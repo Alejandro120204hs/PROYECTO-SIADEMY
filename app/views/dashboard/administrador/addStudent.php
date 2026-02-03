@@ -163,7 +163,7 @@
 
                                 <div class="mb-3">
                                      <label for="selectAcudiente">Acudiente</label>
-                                    <select id="selectAcudiente" class="form-select" name="acudiente" required tabindex="5">
+                                    <select id="selectAcudiente" class="form-select" name="acudiente" required>
                                         <option value="" selected disabled>Escriba el número de documento del acudiente</option>
                                         <?php if (!empty($datos)): ?>
                                         <?php foreach ($datos as $acudiente): ?>
@@ -233,51 +233,99 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
    <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const select = document.getElementById('selectAcudiente');
+document.addEventListener('DOMContentLoaded', function () {
+    const select = document.getElementById('selectAcudiente');
+    if (!select) return;
 
-  const allChoices = Array.from(select.querySelectorAll('option'))
-    .filter(opt => opt.value !== '' && !opt.disabled)
-    .map(opt => ({ value: opt.value, label: opt.textContent.trim() }));
+    /* ===========================
+       OPCIONES REALES
+    =========================== */
+    const allChoices = Array.from(select.querySelectorAll('option'))
+        .filter(opt => opt.value !== '' && !opt.disabled)
+        .map(opt => ({
+            value: opt.value,
+            label: opt.textContent.trim()
+        }));
 
-  const choices = new Choices(select, {
-    searchEnabled: true,
-    shouldSort: false,
-    placeholder: true,
-    placeholderValue: 'Escriba el número de documento del acudiente',
-    itemSelectText: '',
-    removeItemButton: false,
-    choices: [],
-    position: 'bottom' // <- fuerza siempre hacia abajo
-  });
+    /* ===========================
+       INIT CHOICES
+    =========================== */
+    const choices = new Choices(select, {
+        searchEnabled: true,
+        shouldSort: false,
+        placeholder: true,
+        placeholderValue: 'Escriba el número de documento del acudiente',
+        itemSelectText: '',
+        removeItemButton: false,
+        choices: [],
+        position: 'top'
+    });
 
-  select.addEventListener('showDropdown', function() {
-    choices.clearChoices();
-  });
+    /* ===========================
+       TABINDEX REAL (CLAVE)
+       tabindex="5"
+    =========================== */
+    setTimeout(() => {
+        const wrapper = select.closest('.choices');
+        if (!wrapper) return;
 
-  select.addEventListener('search', function(event) {
-    const q = event.detail.value.trim().toLowerCase();
-    if (q.length === 0) { choices.clearChoices(); return; }
-    const limit = 10;
-    const filtered = allChoices
-      .filter(c => c.label.toLowerCase().includes(q))
-      .slice(0, limit);
+        const inner = wrapper.querySelector('.choices__inner');
+        const input = wrapper.querySelector('input');
 
-    if (filtered.length > 0) {
-      choices.setChoices(filtered, 'value', 'label', true);
-    } else {
-      choices.setChoices([{ value: '__no_results__', label: 'No se encontraron resultados', disabled: true }], 'value', 'label', true);
-    }
-  });
+        if (inner) inner.setAttribute('tabindex', '5');
+        if (input) input.setAttribute('tabindex', '-1');
+    }, 50);
 
-  select.addEventListener('choice', function(event) {
-    if (event.detail.choice && event.detail.choice.value === '__no_results__') {
-      event.preventDefault && event.preventDefault();
-      choices.removeActiveItems();
-    }
-  });
+    /* ===========================
+       MOSTRAR SOLO 4 AL ABRIR
+    =========================== */
+    select.addEventListener('showDropdown', function () {
+        choices.clearChoices();
+        choices.setChoices(
+            allChoices.slice(0, 4),
+            'value',
+            'label',
+            true
+        );
+    });
+
+    /* ===========================
+       BUSCAR ESCRIBIENDO
+    =========================== */
+    select.addEventListener('search', function (event) {
+        const q = event.detail.value.trim().toLowerCase();
+        choices.clearChoices();
+
+        if (q.length === 0) {
+            choices.setChoices(allChoices.slice(0, 4), 'value', 'label', true);
+            return;
+        }
+
+        const filtered = allChoices
+            .filter(c => c.label.toLowerCase().includes(q))
+            .slice(0, 10);
+
+        if (filtered.length > 0) {
+            choices.setChoices(filtered, 'value', 'label', true);
+        } else {
+            choices.setChoices([
+                { value: '__no_results__', label: 'No se encontraron resultados', disabled: true }
+            ], 'value', 'label', true);
+        }
+    });
+
+    /* ===========================
+       BLOQUEAR "NO RESULTADOS"
+    =========================== */
+    select.addEventListener('choice', function (event) {
+        if (event.detail.choice?.value === '__no_results__') {
+            event.preventDefault();
+            choices.removeActiveItems();
+        }
+    });
 });
 </script>
+
 
 
 </body>

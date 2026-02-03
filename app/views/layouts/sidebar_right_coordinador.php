@@ -9,7 +9,7 @@
     $usuario = mostrarPerfil($id);
 ?>
 
-<aside class="rightbar" id="rightSidebar">
+<aside class="rightbar hidden" id="rightSidebar">
       <div class="user">
         
         <?php

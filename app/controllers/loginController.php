@@ -34,11 +34,34 @@
 
         // SI PASA ESTA LINEA, EL USUARIO ES VALIDO
         session_start();
-        $_SESSION['user']=[
+        
+        // Datos base de sesión
+        $_SESSION['user'] = [
             'id' => $resultado['id'],
             'rol' => $resultado['rol'],
             'id_institucion' => $resultado['id_institucion']
         ];
+        
+        // Si es docente, obtener id_docente de la tabla docente
+        if ($resultado['rol'] === 'Docente') {
+            require_once __DIR__ . '/../../config/database.php';
+            $db = new Conexion();
+            $conn = $db->getConexion();
+            
+            try {
+                $stmt = $conn->prepare("SELECT id FROM docente WHERE id_usuario = :id_usuario");
+                $stmt->bindParam(':id_usuario', $resultado['id'], PDO::PARAM_INT);
+                $stmt->execute();
+                $docente = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                if ($docente) {
+                    $_SESSION['user']['id_docente'] = $docente['id'];
+                }
+            } catch(PDOException $e) {
+                error_log("Error al obtener id_docente: " . $e->getMessage());
+            }
+        }
+
 
         // REDIRIGIENDO SEGUN EL ROL
         $redireccionar = '/siademy/login';

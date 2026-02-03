@@ -1,3 +1,4 @@
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap');
     :root {
       --bg: #0f1e4a;
       --bg-2: #0b1736;
@@ -25,10 +26,17 @@
 
     body {
       margin: 0;
-      font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu;
+    font-family: 'Open Sans', sans-serif;
+
       color: #fff;
       background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
     }
+
+    
+/* Fuente para todos los títulos */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+}
 
     a {
       color: inherit;
@@ -281,40 +289,76 @@
       opacity: 0;
     }
 
-    .user {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      justify-content: flex-end;
-    }
+.user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
 
-    .user .btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      background: #1d2030;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-    .user .btn:hover {
-      background: #242842;
-      color: #fff;
-    }
+.user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
 
-    .user .avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      background: #2d3353;
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      cursor: pointer;
-    }
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #a0a3bd;
+  line-height: 1.2;
+  text-transform: capitalize;
+}
+
+.user .avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: #2d3353;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.user .avatar img {
+  transition: opacity 0.2s ease;
+}
+
+.user .avatar:hover img {
+  opacity: 0.85;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .user-name {
+    font-size: 13px;
+  }
+  
+  .user-role {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-details {
+    display: none;
+  }
+}
 
     /* DATATABLE STYLES */
     .datatable-card {
@@ -380,7 +424,6 @@
 
     .table-dark td.acciones{
       display: flex;
-      height: 72px;
     }
 
     .table-dark td.acciones.p{
@@ -481,12 +524,13 @@
       background: #4f46e5;
       color: white;
       border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
+      margin: 6px;
+      padding: 14px 25px;
     }
 
     .btn-action:hover {
@@ -643,3 +687,84 @@
         font-size: 14px;
       }
     }
+/* CUSTOM SCROLLBAR STYLES - Dark Theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0e142e;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2d3353;
+  border-radius: 10px;
+  border: 2px solid #0e142e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3d4463;
+}
+
+::-webkit-scrollbar-corner {
+  background: #0e142e;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2d3353 #0e142e;
+}
+
+/* TABLE WRAPPER CON SCROLL INTERNO */
+.table-wrapper {
+  max-height: 550px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-radius: 12px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.table-wrapper table {
+  margin-bottom: 0;
+  min-width: 100%;
+  width: max-content; /* Permite que la tabla se expanda */
+}
+
+/* Fijar encabezado de la tabla */
+.table-wrapper thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #0e142e !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap; /* Evita que los encabezados se corten */
+}
+
+.table-wrapper tbody td {
+  white-space: nowrap; /* Evita que el contenido se corte */
+}
+
+/* Excepción para columnas que necesitan wrap */
+.table-wrapper tbody td.dos-lineas {
+  white-space: normal !important;
+  max-width: 180px;
+  min-width: 140px;
+  word-wrap: break-word;
+}
+
+/* Prevenir scroll horizontal en body pero NO en table-wrapper */
+body {
+  overflow-x: hidden;
+}
+
+.main {
+  overflow-x: hidden;
+}
+
+.datatable-card {
+  overflow: visible;
+}

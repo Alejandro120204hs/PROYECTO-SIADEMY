@@ -108,13 +108,15 @@
                                         <option value="9">Noveno</option>
                                         <option value="10">Decimo</option>
                                         <option value="11">Once</option>
+                                        <option value="12">Doce</option>
+                                        <option value="13">Trece</option>
 
                                         </select>
                                     </div>
 
                                      <div class="mb-3">
                                         <label for="selectAcudiente">Docente</label>
-                                        <select id="selectAcudiente" class="form-select" name="docente" required tabindex="5">
+                                        <select id="selectAcudiente" class="form-select"name="docente" required>
                                             <option value="" selected disabled>Escriba el nombre del docente</option>
                                             <?php if (!empty($datos)): ?>
                                             <?php foreach ($datos as $do): ?>
@@ -130,7 +132,7 @@
 
                                      <div class="mb-3">
                                     <label for="">Cupo</label>
-                                    <input type="number" class="form-control" name="cupo"  tabindex="2">
+                                    <input type="number" class="form-control" name="cupo"  tabindex="5">
                                 </div>
                                 </div>
 
@@ -143,7 +145,7 @@
 
                                  <div class="mb-3">
                                         <label for="selectAcudiente">Nivel academico</label>
-                                        <select id="selectNivel" class="form-select select-similar" name="nivel" required>
+                                        <select id="selectNivel" class="selector" tabindex="4" name="nivel" required>
                                             <option value="" selected disabled>Seleccione un nivel académico</option>
                                             <?php foreach ($nivel as $ni): ?>
                                                 <option value="<?= $ni['id'] ?>">
@@ -155,12 +157,12 @@
 
                                      <div class="mb-3">
                                          <label for="">Jornada</label>
-                                        <select class="selector" name="jornada"  tabindex="1">
+                                        <select class="selector" name="jornada"  tabindex="6">
                                         <option selected>Seleccione una jornada</option>
                                         <option value="Mañana">Mañana</option>
                                         <option value="Tarde">Tarde</option>
                                         <option value="Noche">Noche</option>
-                                        <option value="Diurna">Diurna</option>
+                                        <option value="Fin_semana">Fin de semana</option>
                                        
                                         
                                         </select>
@@ -200,51 +202,93 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="<?=BASE_URL ?>/public/assets/dashboard/js/main-formulario.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        const select = document.getElementById('selectAcudiente');
+document.addEventListener('DOMContentLoaded', function () {
+    const select = document.getElementById('selectAcudiente');
 
-        const allChoices = Array.from(select.querySelectorAll('option'))
-            .filter(opt => opt.value !== '' && !opt.disabled)
-            .map(opt => ({ value: opt.value, label: opt.textContent.trim() }));
+    // Todas las opciones reales
+    const allChoices = Array.from(select.querySelectorAll('option'))
+        .filter(opt => opt.value !== '' && !opt.disabled)
+        .map(opt => ({
+            value: opt.value,
+            label: opt.textContent.trim()
+        }));
 
-        const choices = new Choices(select, {
-            searchEnabled: true,
-            shouldSort: false,
-            placeholder: true,
-            placeholderValue: 'Escriba el nombre del docente',
-            itemSelectText: '',
-            removeItemButton: false,
-            choices: [],
-            position: 'bottom' // <- fuerza siempre hacia abajo
-        });
+    const choices = new Choices(select, {
+        searchEnabled: true,
+        shouldSort: false,
+        placeholder: true,
+        placeholderValue: 'Escriba el nombre del docente',
+        itemSelectText: '',
+        removeItemButton: false,
+        choices: [],
+        position: 'bottom'
+    });
 
-        select.addEventListener('showDropdown', function() {
-            choices.clearChoices();
-        });
+    /* ===========================
+       TABINDEX REAL (CLAVE)
+    =========================== */
+    setTimeout(() => {
+    const choicesWrapper = select.closest('.choices');
+    if (!choicesWrapper) return;
 
-        select.addEventListener('search', function(event) {
-            const q = event.detail.value.trim().toLowerCase();
-            if (q.length === 0) { choices.clearChoices(); return; }
-            const limit = 10;
-            const filtered = allChoices
+    const inner = choicesWrapper.querySelector('.choices__inner');
+    const input = choicesWrapper.querySelector('input');
+
+    if (inner) {
+        inner.setAttribute('tabindex', '3');
+    }
+
+    if (input) {
+        input.setAttribute('tabindex', '-1'); // evita doble foco
+    }
+}, 50);
+
+
+    /* ===========================
+       MOSTRAR 4 AL ABRIR
+    =========================== */
+    select.addEventListener('showDropdown', function () {
+        choices.clearChoices();
+        choices.setChoices(allChoices.slice(0, 4), 'value', 'label', true);
+    });
+
+    /* ===========================
+       BUSCAR ESCRIBIENDO
+    =========================== */
+    select.addEventListener('search', function (event) {
+        const q = event.detail.value.trim().toLowerCase();
+        choices.clearChoices();
+
+        if (q.length === 0) {
+            choices.setChoices(allChoices.slice(0, 4), 'value', 'label', true);
+            return;
+        }
+
+        const filtered = allChoices
             .filter(c => c.label.toLowerCase().includes(q))
-            .slice(0, limit);
+            .slice(0, 10);
 
-            if (filtered.length > 0) {
+        if (filtered.length > 0) {
             choices.setChoices(filtered, 'value', 'label', true);
-            } else {
-            choices.setChoices([{ value: '__no_results__', label: 'No se encontraron resultados', disabled: true }], 'value', 'label', true);
-            }
-        });
+        } else {
+            choices.setChoices([
+                { value: '__no_results__', label: 'No se encontraron resultados', disabled: true }
+            ], 'value', 'label', true);
+        }
+    });
 
-        select.addEventListener('choice', function(event) {
-            if (event.detail.choice && event.detail.choice.value === '__no_results__') {
-            event.preventDefault && event.preventDefault();
+    /* ===========================
+       BLOQUEAR "NO RESULTADOS"
+    =========================== */
+    select.addEventListener('choice', function (event) {
+        if (event.detail.choice?.value === '__no_results__') {
+            event.preventDefault();
             choices.removeActiveItems();
-            }
-        });
-        });
-    </script>
+        }
+    });
+});
+</script>
+
 </body>
 
 </html>
