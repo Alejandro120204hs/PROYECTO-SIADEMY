@@ -144,14 +144,13 @@ $(document).ready(function() {
         $.ajax({
             url: '/siademy/docente/calificar-actividad',
             type: 'POST',
+            dataType: 'json',
             data: {
                 id_entrega: idEntrega,
                 nota: nota,
                 observacion: observacion
             },
-            success: function(response) {
-                const data = JSON.parse(response);
-                
+            success: function(data) {
                 if (data.success) {
                     Swal.fire({
                         icon: 'success',
