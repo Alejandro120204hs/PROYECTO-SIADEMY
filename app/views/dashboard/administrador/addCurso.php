@@ -108,6 +108,8 @@
                                         <option value="9">Noveno</option>
                                         <option value="10">Decimo</option>
                                         <option value="11">Once</option>
+                                        <option value="12">Doce</option>
+                                        <option value="13">Trece</option>
 
                                         </select>
                                     </div>
@@ -160,7 +162,7 @@
                                         <option value="Mañana">Mañana</option>
                                         <option value="Tarde">Tarde</option>
                                         <option value="Noche">Noche</option>
-                                        <option value="Diurna">Diurna</option>
+                                        <option value="Fin_semana">Fin de semana</option>
                                        
                                         
                                         </select>
