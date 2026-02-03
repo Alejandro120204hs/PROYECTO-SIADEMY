@@ -44,16 +44,14 @@
             <i class="ri-menu-2-line"></i>
           </button>
           <div class="title cursos">Gestión de Matrículas</div>
-        </div>
-
-        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-matricula'">
-            <i class="ri-user-add-line"></i> Matricular Estudiante
-        </button>
-        
+        </div> 
         <div class="search">
           <i class="ri-search-2-line"></i>
           <input type="text" id="searchMatricula" placeholder="Buscar por estudiante, curso o documento...">
         </div>
+        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-matricula'">
+            <i class="ri-user-add-line"></i> Matricular Estudiante
+        </button>        
        <?php
           include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
         ?>
