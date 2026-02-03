@@ -63,9 +63,29 @@ try {
     require_once BASE_PATH . '/app/models/docente/calificacion.php';
     $modeloCalificacion = new CalificacionDocente();
     
-    // Datos del docente
-    $id_docente = $_SESSION['user']['id'];
+    // Datos del docente - Obtener id_docente desde la sesión o desde la BD
+    $id_docente = $_SESSION['user']['id_docente'] ?? null;
     $id_institucion = $_SESSION['user']['id_institucion'];
+    
+    // Si no está en sesión, buscar en la BD
+    if (!$id_docente) {
+        require_once BASE_PATH . '/config/database.php';
+        $db = new Conexion();
+        $conn = $db->getConexion();
+        $stmt = $conn->prepare("SELECT id FROM docente WHERE id_usuario = :id_usuario");
+        $stmt->bindParam(':id_usuario', $_SESSION['user']['id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $docente = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($docente) {
+            $id_docente = $docente['id'];
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'No se encontró el registro del docente'
+            ]);
+            exit;
+        }
+    }
     
     // Verificar que la entrega existe y pertenece a un curso del docente
     $verificacion = $modeloCalificacion->verificarPermisoCalificar($id_entrega, $id_docente, $id_institucion);

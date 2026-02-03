@@ -14,21 +14,18 @@ class CalificacionDocente extends Conexion {
      */
     public function verificarPermisoCalificar($id_entrega, $id_docente, $id_institucion) {
         try {
+            // Si es el docente de la actividad, puede calificar
             $sql = "SELECT COUNT(*) as tiene_permiso
                     FROM entrega_actividad ea
                     INNER JOIN actividad a ON ea.id_actividad = a.id
-                    INNER JOIN asignatura_curso ac ON a.id_asignatura_curso = ac.id
-                    INNER JOIN docente_asignatura da ON da.id_asignatura_curso = ac.id
                     WHERE ea.id = :id_entrega
-                      AND da.id_docente = :id_docente
-                      AND ea.id_institucion = :id_institucion
-                      AND a.id_institucion = :id_institucion2";
+                      AND a.id_docente = :id_docente
+                      AND a.id_institucion = :id_institucion";
             
             $stmt = $this->getConexion()->prepare($sql);
             $stmt->bindParam(':id_entrega', $id_entrega, PDO::PARAM_INT);
             $stmt->bindParam(':id_docente', $id_docente, PDO::PARAM_INT);
             $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
-            $stmt->bindParam(':id_institucion2', $id_institucion, PDO::PARAM_INT);
             $stmt->execute();
             
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -46,6 +43,22 @@ class CalificacionDocente extends Conexion {
      */
     public function guardarCalificacion($id_entrega, $nota, $observacion, $id_docente) {
         try {
+            // Obtener datos de la entrega
+            $sqlEntrega = "SELECT ea.id_actividad, ea.id_estudiante, a.id_institucion
+                          FROM entrega_actividad ea
+                          INNER JOIN actividad a ON ea.id_actividad = a.id
+                          WHERE ea.id = :id_entrega";
+            
+            $stmtEntrega = $this->getConexion()->prepare($sqlEntrega);
+            $stmtEntrega->bindParam(':id_entrega', $id_entrega, PDO::PARAM_INT);
+            $stmtEntrega->execute();
+            $datosEntrega = $stmtEntrega->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$datosEntrega) {
+                error_log("No se encontró la entrega con ID: " . $id_entrega);
+                return false;
+            }
+            
             // Verificar si ya existe una calificación
             $sqlCheck = "SELECT id FROM calificacion 
                          WHERE id_entrega = :id_entrega";
@@ -74,14 +87,19 @@ class CalificacionDocente extends Conexion {
                 return $stmtUpdate->execute();
                 
             } else {
-                // Crear nueva calificación
+                // Crear nueva calificación con todos los campos requeridos
                 $sqlInsert = "INSERT INTO calificacion 
-                             (id_entrega, nota, observacion, id_docente_calificador, fecha_calificacion)
-                             VALUES (:id_entrega, :nota, :observacion, :id_docente, NOW())";
+                             (id_entrega, id_institucion, nota, id_actividad, id_estudiante, 
+                              observacion, id_docente_calificador, fecha_calificacion)
+                             VALUES (:id_entrega, :id_institucion, :nota, :id_actividad, :id_estudiante,
+                                     :observacion, :id_docente, NOW())";
                 
                 $stmtInsert = $this->getConexion()->prepare($sqlInsert);
                 $stmtInsert->bindParam(':id_entrega', $id_entrega, PDO::PARAM_INT);
+                $stmtInsert->bindParam(':id_institucion', $datosEntrega['id_institucion'], PDO::PARAM_INT);
                 $stmtInsert->bindParam(':nota', $nota);
+                $stmtInsert->bindParam(':id_actividad', $datosEntrega['id_actividad'], PDO::PARAM_INT);
+                $stmtInsert->bindParam(':id_estudiante', $datosEntrega['id_estudiante'], PDO::PARAM_INT);
                 $stmtInsert->bindParam(':observacion', $observacion, PDO::PARAM_STR);
                 $stmtInsert->bindParam(':id_docente', $id_docente, PDO::PARAM_INT);
                 
