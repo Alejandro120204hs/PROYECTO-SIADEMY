@@ -51,7 +51,7 @@
                     </h1>
 
                     <div class="hero-cta">
-                        <button class="btn btn-cta">COMENZAR AHORA</button>
+                        <button class="btn btn-cta"onclick="window.location.href='login'">COMENZAR AHORA</button>
 
                         <div class="reviews">
                             <div class="reviews-avatars">
