@@ -51,8 +51,7 @@
           <div class="title">Estudiantes</div>
         </div>
         <div class="search">
-          <i class="ri-search-2-line"></i>
-          <input type="text" placeholder="Buscar Aquí">
+          
         </div>
         
         <!-- Botón Agregar Estudiante -->
