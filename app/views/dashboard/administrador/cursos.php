@@ -54,7 +54,7 @@
           <input type="text" placeholder="Buscar curso, profesor o materia...">
         </div>
 
-        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-profesores'">
+        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-curso'">
           <i class="ri-add-line"></i> Agregar Curso
         </button>        
         <?php
