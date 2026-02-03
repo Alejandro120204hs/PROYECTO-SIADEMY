@@ -645,6 +645,7 @@ h1, h2, h3, h4, h5, h6 {
 
     form .selector {
       width: 100% !important;
+      height: 45px !important;
       border: 1px solid #ccc !important;
       border-radius: 6px !important;
       padding: 10px 12px !important;
@@ -905,3 +906,67 @@ h1, h2, h3, h4, h5, h6 {
         font-size: 14px;
       }
     }
+
+  /* ===============================
+   CHOICES.JS - IGUALAR ESTILO
+=============================== */
+
+.choices {
+  width: 100%;
+}
+
+.choices__inner {
+  background-color: #101632 !important;
+  border: 1px solid #ccc !important;
+  border-radius: 6px !important;
+  padding: 10px 12px !important;
+  min-height: 45px !important;
+  height: 45px !important;
+  color: var(--card) !important;
+  font-size: 0.95rem !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Texto seleccionado / placeholder */
+.choices__item,
+.choices__placeholder {
+  color: var(--card) !important;
+  opacity: 1 !important;
+}
+
+/* Input de búsqueda */
+.choices__input {
+  background-color: transparent !important;
+  color: var(--card) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Dropdown */
+.choices__list--dropdown,
+.choices__list[aria-expanded] {
+  background-color: var(--sidebar) !important;
+  border: 1px solid #ccc !important;
+  border-radius: 6px !important;
+  margin-top: 4px;
+  z-index: 9999;
+}
+
+/* Opciones */
+.choices__list--dropdown .choices__item {
+  color: var(--card) !important;
+  padding: 10px 12px;
+}
+
+/* Hover opción */
+.choices__list--dropdown .choices__item--selectable.is-highlighted {
+  background-color: #1d2340 !important;
+}
+
+/* Focus (igual que inputs) */
+.choices__inner:focus,
+.choices__inner:focus-within {
+  border-color: #007bff !important;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5) !important;
+}
