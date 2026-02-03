@@ -129,7 +129,7 @@
     </tr>
   <?php endif; ?>
 </tbody>
-          </table>
+          </table class="table datatable">
         </div>
       </section>
 
