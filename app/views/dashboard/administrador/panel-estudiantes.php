@@ -60,14 +60,6 @@
           <i class="ri-add-line"></i> Agregar Estudiante
         </button>
           <a class="btn-pdf" href="<?= BASE_URL ?>/administrador-reporte?reporte=estudiantes" target="_blank">Generar PDF</a>
-
-        
-        <!-- Dropdown Más Nuevo -->
-        <div class="dropdown-custom">
-          <button class="dropdown-toggle-custom">
-            Más Nuevo <i class="ri-arrow-down-s-line"></i>
-          </button>
-        </div>
         
         <div class="user">
           <?php

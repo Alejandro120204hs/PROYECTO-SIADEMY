@@ -63,13 +63,6 @@
           <i class="ri-add-line"></i> Agregar Profesor
         </button>
         
-        <!-- Dropdown Más Nuevo -->
-        <div class="dropdown-custom">
-          <button class="dropdown-toggle-custom">
-            Más Nuevo <i class="ri-arrow-down-s-line"></i>
-          </button>
-        </div>
-        
         <div class="user">
           <?php
           include_once __DIR__ . '/../../layouts/boton_perfil.php'
