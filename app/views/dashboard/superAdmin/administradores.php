@@ -100,8 +100,8 @@
               <td><?= $administrador['documento'] ?></td>
               <td class="acciones">
              
-                <button class="btn-action"><a href="<?= BASE_URL ?>/superAdmin-editar-administrador?id=<?= $administrador['id'] ?>">Editar</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/superAdmin-eliminar-administrador?accion=eliminar&id=<?= $administrador['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
+                <a class="btn-action" href="<?= BASE_URL ?>/superAdmin-editar-administrador?id=<?= $administrador['id'] ?>">Editar</a>
+                <a class="btn-action" href="<?= BASE_URL ?>/superAdmin-eliminar-administrador?accion=eliminar&id=<?= $administrador['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a>
               </td>
             </tr>
 
