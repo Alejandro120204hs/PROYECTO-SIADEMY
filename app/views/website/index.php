@@ -273,10 +273,11 @@
                             </div>
                             <div class="card-body">
                                 <div class="profile-photo">
-                                    <img src="public/assets/extras/img/lider.jpeg" alt="Mark J. William">
+                                    <img src="public/assets/extras/img/imagen-00230304.jpg" alt="Mark J. William">
                                 </div>
-                                <h3 class="profile-name">Alejandro Hernandez</h3>
-                                <p class="profile-label">Nombre</p>
+                                    <img width="150px" src="public/uploads/logopositivo.png" alt="Mark J. William">
+                                
+                          
                             </div>
                         </div>
 
@@ -285,18 +286,18 @@
                             <div class="card-info">
                                 <div class="info-item">
                                     <span class="bullet"></span>
-                                    <p class="info-text">Líder del Proyecto.
-                                        Encargado de la coordinación, planificación y supervisión general del sistema de seguimiento académico, garantizando su correcto funcionamiento, evolución y alineación con las necesidades institucionales.</p>
+                                    <p class="info-text">
+                                        En SIADEMY transformamos la gestión académica de tu institución. Te ofrecemos una plataforma integral que facilita el seguimiento estudiantil y conecta de manera eficiente a toda tu comunidad educativa.</p>
                                 </div>
                                 <div class="info-item">
                                     <span class="bullet"></span>
-                                    <p class="info-text">Comprometido con la calidad, la innovación y el uso de la tecnología como herramienta para fortalecer la gestión académica y la comunicación entre instituciones, docentes, estudiantes y acudientes.</p>
+                                    <p class="info-text">Comprometidos con la calidad, la innovación y el uso de la tecnología como herramienta para fortalecer la gestión académica y la comunicación entre docentes, estudiantes y acudientes.</p>
                                 </div>
                             </div>
                             <div class="card-signature">
-                                <p class="signature-label">card holder signature</p>
+                               
                                 <div class="signature">
-                                    <span class="signature-text">Alejandro</span>
+                                    <span class="signature-text">SIADEMY</span>
                                 </div>
                                 <p class="signature-id">Tel. / +57 3213919596</p>
                             </div>
@@ -542,15 +543,15 @@
                     <div class="footer-contact">
                         <div class="contact-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Dirección: Carrera 10</span>
+                            <span>Dirección: Calle 3 #5-72</span>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-phone"></i>
-                            <span>Tel: 3125321798</span>
+                            <span>Tel: +57 3213919596</span>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-envelope"></i>
-                            <span>Email: siademy@gmail.com</span>
+                            <span>Email: soportesiademy@gmail.com</span>
                         </div>
                     </div>
                 </div>
