@@ -5,8 +5,8 @@
       </a>
       <nav class="nav">
         <a  href="<?= BASE_URL ?>/administrador/dashboard"><i class="ri-home-5-line"></i> Panel</a>
-        <a href="<?= BASE_URL ?>/administrador-panel-estudiantes"><i class="ri-team-line"></i> Estudiantes</a>
         <a href="<?= BASE_URL ?>/administrador-panel-acudientes"><i class="ri-team-line"></i> Acudientes</a>
+        <a href="<?= BASE_URL ?>/administrador-panel-estudiantes"><i class="ri-team-line"></i> Estudiantes</a>
         <a href="<?= BASE_URL ?>/administrador-panel-profesores"><i class="ri-user-3-line"></i> Profesores</a>
         <a href="<?= BASE_URL ?>/administrador-panel-eventos"><i class="ri-calendar-event-line"></i> Eventos</a>
         
