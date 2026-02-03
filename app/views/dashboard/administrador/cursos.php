@@ -47,14 +47,16 @@
 
         <div class="div"></div>
 
-        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-curso'">
-        Agregar Curso
-        </button>
+
         
         <div class="search">
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar curso, profesor o materia...">
         </div>
+
+        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-profesores'">
+          <i class="ri-add-line"></i> Agregar Curso
+        </button>        
         <?php
           include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
         ?>

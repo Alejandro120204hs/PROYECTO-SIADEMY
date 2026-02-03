@@ -48,6 +48,10 @@
           </button>
           <div class="title">Gestión de Asignaturas</div>
         </div>
+        <div class="search">
+          <i class="ri-search-2-line"></i>
+          <input type="text" placeholder="Buscar asignatura o profesor...">
+        </div>        
         <div class="topbar-buttons" style="display: flex; gap: 10px;">
           <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-asignatura'">
             <i class="ri-add-line"></i> Agregar Asignatura
@@ -56,10 +60,7 @@
             <i class="ri-user-add-line"></i> Asignar Docentes
           </button>
         </div>
-        <div class="search">
-          <i class="ri-search-2-line"></i>
-          <input type="text" placeholder="Buscar asignatura o profesor...">
-        </div>
+
         
         <?php
   include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
