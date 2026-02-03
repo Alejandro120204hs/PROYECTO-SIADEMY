@@ -498,32 +498,62 @@ a {
     font-size: 16px;
 }
 
-.btn-icon.view {
-    background: rgba(59, 130, 246, 0.15);
-    color: #3b82f6;
+.btn-actions.view {
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 102, 246, 0.15);
+    color: #0044fd;
 }
 
-.btn-icon.view:hover {
+.btn-actions.view:hover {
     background: #3b82f6;
     color: white;
 }
 
-.btn-icon.edit {
+.btn-actions.edit {
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     background: rgba(245, 158, 11, 0.15);
     color: #f59e0b;
 }
 
-.btn-icon.edit:hover {
+.btn-actions.edit:hover {
     background: #f59e0b;
     color: white;
 }
 
-.btn-icon.more {
+.btn-actions.delete {
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     background: rgba(139, 92, 246, 0.15);
     color: #8b5cf6;
 }
 
-.btn-icon.more:hover {
+.btn-actions.delete:hover {
     background: #8b5cf6;
     color: white;
 }

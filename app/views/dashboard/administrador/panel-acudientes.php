@@ -123,11 +123,15 @@
               
            
               <td class="acciones">
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/detalle-acudiente">Ver</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/editar-acudiente?id=<?= $acudiente['id'] ?>">Editar</a></button>
-                <button class="btn-action"><a href="<?= BASE_URL ?>/administrador/eliminar-acudiente?accion=eliminar&id=<?= $acudiente['id_usuario'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
-
-                
+                <a class="btn-action" href="<?= BASE_URL ?>/administrador/detalle-acudiente">
+                  Ver
+                </a>
+                <a class="btn-action" href="<?= BASE_URL ?>/administrador/editar-acudiente?id=<?= $acudiente['id'] ?>">
+                  Editar
+                </a>
+                <a class="btn-action" href="<?= BASE_URL ?>/administrador/eliminar-acudiente?accion=eliminar&id=<?= $acudiente['id_usuario'] ?>">
+                  <i class="bi bi-trash3-fill"></i>
+                </a>
               </td>
             </tr>
           

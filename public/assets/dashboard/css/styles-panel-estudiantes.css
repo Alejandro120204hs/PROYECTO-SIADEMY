@@ -388,7 +388,6 @@ h1, h2, h3, h4, h5, h6 {
 
     .table-dark td.acciones{
       display: flex;
-      height: 72px;
     }
 
     .table-dark td.acciones.p{
@@ -489,12 +488,13 @@ h1, h2, h3, h4, h5, h6 {
       background: #4f46e5;
       color: white;
       border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
+      margin: 6px;
+      padding: 14px 25px;
     }
 
     .btn-action:hover {

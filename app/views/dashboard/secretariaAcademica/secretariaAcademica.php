@@ -174,8 +174,8 @@
                                         <button class="btn-action approve" title="Aprobar">
                                             <i class="ri-check-line"></i>
                                         </button>
-                                        <button class="btn-action view" title="Ver">
-                                            <i class="ri-eye-line"></i>
+                                        <button class="btn-actions view" title="Ver perfil">
+                                            <a href="">Ver</a>
                                         </button>
                                         <button class="btn-action reject" title="Rechazar">
                                             <i class="ri-close-line"></i>
@@ -207,8 +207,8 @@
                                         <button class="btn-action approve" title="Aprobar">
                                             <i class="ri-check-line"></i>
                                         </button>
-                                        <button class="btn-action view" title="Ver">
-                                            <i class="ri-eye-line"></i>
+                                        <button class="btn-actions view" title="Ver perfil">
+                                            <a href="">Ver</a>
                                         </button>
                                         <button class="btn-action reject" title="Rechazar">
                                             <i class="ri-close-line"></i>
@@ -240,8 +240,8 @@
                                         <button class="btn-action approve" title="Aprobar">
                                             <i class="ri-check-line"></i>
                                         </button>
-                                        <button class="btn-action view" title="Ver">
-                                            <i class="ri-eye-line"></i>
+                                        <button class="btn-actions view" title="Ver perfil">
+                                            <a href="">Ver</a>
                                         </button>
                                         <button class="btn-action reject" title="Rechazar">
                                             <i class="ri-close-line"></i>
@@ -273,8 +273,8 @@
                                         <button class="btn-action approve" title="Aprobar">
                                             <i class="ri-check-line"></i>
                                         </button>
-                                        <button class="btn-action view" title="Ver">
-                                            <i class="ri-eye-line"></i>
+                                        <button class="btn-actions view" title="Ver perfil">
+                                            <a href="">Ver</a>
                                         </button>
                                         <button class="btn-action reject" title="Rechazar">
                                             <i class="ri-close-line"></i>
@@ -306,8 +306,8 @@
                                         <button class="btn-action approve" title="Aprobar">
                                             <i class="ri-check-line"></i>
                                         </button>
-                                        <button class="btn-action view" title="Ver">
-                                            <i class="ri-eye-line"></i>
+                                        <button class="btn-actions view" title="Ver perfil">
+                                            <a href="">Ver</a>
                                         </button>
                                         <button class="btn-action reject" title="Rechazar">
                                             <i class="ri-close-line"></i>
