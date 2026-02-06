@@ -3472,6 +3472,249 @@ canvas {
     color: #97a1b6;
 }
 
+/* ========================================
+   ESTILOS PARA DROPDOWN DE USUARIO
+   Agregar al final de styles-admin.css
+   ======================================== */
+
+/* Contenedor principal del usuario */
+.user {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Avatar clickeable */
+.avatar {
+  position: relative;
+  z-index: 10;
+}
+
+.avatar img {
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.avatar:hover img {
+  opacity: 0.85;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+}
+
+/* Dropdown Menu */
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 280px;
+  background: linear-gradient(180deg, #161821 0%, #101117 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 
+              0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.user-dropdown.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Flecha decorativa del dropdown */
+.user-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  width: 12px;
+  height: 12px;
+  background: #161821;
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  transform: rotate(45deg);
+}
+
+/* Header del dropdown */
+.dropdown-header {
+  padding: 20px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(79, 70, 229, 0.05);
+  border-bottom: 1px solid var(--border);
+}
+
+.dropdown-header img {
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-header strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.dropdown-header small {
+  display: block;
+  font-size: 12px;
+  color: #a0a3bd;
+  text-transform: capitalize;
+  line-height: 1.2;
+}
+
+/* Divisor */
+.dropdown-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 6px 0;
+}
+
+/* Items del dropdown */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  color: #d7d9df;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+}
+
+.dropdown-item:hover {
+  background: #1d2030;
+  color: #fff;
+}
+
+.dropdown-item:active {
+  background: #232636;
+}
+
+.dropdown-item i:first-child {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  color: #aab1c1;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover i:first-child {
+  color: #6366f1;
+  transform: scale(1.1);
+}
+
+.dropdown-item span:not(.dropdown-badge) {
+  flex: 1;
+}
+
+/* Badge para notificaciones */
+.dropdown-badge {
+  background: #ef4444;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0);
+  }
+}
+
+/* Flecha para items con submenú */
+.dropdown-arrow {
+  margin-left: auto;
+  font-size: 16px;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover .dropdown-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+/* Item de cerrar sesión */
+.dropdown-item-danger {
+  color: #fca5a5;
+}
+
+.dropdown-item-danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.dropdown-item-danger:hover i {
+  color: #ef4444;
+}
+
+/* Efecto de entrada suave */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-dropdown.show {
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .user-dropdown {
+    width: 260px;
+    right: -10px;
+  }
+  
+  .user-dropdown::before {
+    right: 30px;
+  }
+}
+
+/* Overlay para cerrar el dropdown */
+.dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 999;
+  display: none;
+}
+
+.dropdown-overlay.show {
+  display: block;
+}
+
 /* RESPONSIVE */
 @media (max-width: 1200px) {
     .students-grid-guardian {

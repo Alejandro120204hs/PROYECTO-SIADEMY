@@ -26,6 +26,8 @@
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
  ?>
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-matricula.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
+
   
  
 </head>

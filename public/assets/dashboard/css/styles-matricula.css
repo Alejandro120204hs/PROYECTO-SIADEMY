@@ -163,7 +163,7 @@ a {
     justify-content: space-between;
     gap: 12px;
     margin-bottom: 20px;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
 }
 
 .topbar-left {
