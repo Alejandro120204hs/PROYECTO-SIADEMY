@@ -167,6 +167,7 @@
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-estudiante.js"></script>
   <script>
     // Toggle view grid/list
