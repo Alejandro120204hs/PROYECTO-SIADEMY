@@ -51,8 +51,79 @@ switch($method){
 
 // FUNCIONES DEL CRUD
 function registrarPeriodo(){
+        // Soportar envío de un solo periodo o de múltiples periodos (arrays)
+        // Si se envían arrays (nombre[] / fecha_inicio[] / fecha_fin[]), se procesan todos en bucle
 
-        // CAPTURAMOS EN VARIABLES LOS DATOS ENVIADOS A TRAVÉS DEL METODO POST Y LOS NAME DE LOS CAMPOS
+        // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
+        session_start();
+        if(!isset($_SESSION['user']['id_institucion'])){
+            mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
+            exit();
+        }
+        $id_institucion = $_SESSION['user']['id_institucion'];
+
+        $objetoPeriodo = new Periodo();
+
+        // Si se enviaron arrays de periodos
+        if(isset($_POST['fecha_inicio']) && is_array($_POST['fecha_inicio'])){
+            $nombres = $_POST['nombre'] ?? [];
+            $tipos = $_POST['tipo_periodo'] ?? [];
+            $numeros = $_POST['numero_periodo'] ?? [];
+            $anos = $_POST['ano_lectivo'] ?? [];
+            $fechasInicio = $_POST['fecha_inicio'] ?? [];
+            $fechasFin = $_POST['fecha_fin'] ?? [];
+            $activos = $_POST['activo'] ?? [];
+
+            $count = count($fechasInicio);
+            if($count === 0){
+                mostrarSweetAlert('error', 'Campos vacíos', 'No se encontraron períodos para registrar.');
+                exit();
+            }
+
+            // Validar rangos de fechas básicos
+            for($i=0;$i<$count;$i++){
+                if(empty($nombres[$i]) || empty($tipos[$i]) || empty($numeros[$i]) || empty($anos[$i]) || empty($fechasInicio[$i]) || empty($fechasFin[$i])){
+                    mostrarSweetAlert('error', 'Campos vacíos', 'Por favor complete todos los campos de los periodos generados.');
+                    exit();
+                }
+                if(strtotime($fechasInicio[$i]) >= strtotime($fechasFin[$i])){
+                    mostrarSweetAlert('error', 'Fechas inválidas', 'La fecha de inicio debe ser menor a la fecha de fin en los periodos generados.');
+                    exit();
+                }
+            }
+
+            // Registrar todos los periodos
+            $allOk = true;
+            for($i=0;$i<$count;$i++){
+                $activoFlag = (isset($activos[$i]) && $activos[$i] == 'on') ? 1 : 0;
+                $data = [
+                    'nombre' => $nombres[$i],
+                    'tipo_periodo' => $tipos[$i],
+                    'numero_periodo' => $numeros[$i],
+                    'ano_lectivo' => $anos[$i],
+                    'fecha_inicio' => $fechasInicio[$i],
+                    'fecha_fin' => $fechasFin[$i],
+                    'activo' => $activoFlag,
+                    'estado' => $activoFlag == 1 ? 'en_curso' : 'planificado',
+                    'institucion_id' => $id_institucion
+                ];
+
+                $res = $objetoPeriodo->registrar($data);
+                if($res !== true){
+                    $allOk = false;
+                }
+            }
+
+            if($allOk){
+                mostrarSweetAlert('success', 'Registro exitoso', 'Se han creado los periodos académicos. Redirigiendo...', '/siademy/administrador-periodo');
+                exit();
+            }else{
+                mostrarSweetAlert('error', 'Error al registrar', 'Ocurrió un error al crear algunos periodos. Redirigiendo...', '/siademy/administrador-periodo');
+                exit();
+            }
+        }
+
+        // En caso de envío simple (campos individuales)
         $nombre = $_POST['nombre'] ?? '';
         $tipo_periodo = $_POST['tipo_periodo'] ?? '';
         $numero_periodo = $_POST['numero_periodo'] ?? '';
@@ -73,16 +144,6 @@ function registrarPeriodo(){
             exit();
         }
 
-         // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
-        session_start();
-        if(!isset($_SESSION['user']['id_institucion'])){
-            mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
-            exit();
-        }
-        $id_institucion = $_SESSION['user']['id_institucion'];
-      
-        // creamos un objeto con los datos traidos por el metodo post
-        $objetoPeriodo = new Periodo();
         $data = [
             'nombre' => $nombre,
             'tipo_periodo' => $tipo_periodo,
@@ -95,11 +156,8 @@ function registrarPeriodo(){
             'institucion_id' => $id_institucion
         ];
 
-        // ENVIAMOS LA DATA AL METODO "REGISTRAR" DE LA CLASE INSTANSEADA ANTERIORMENTE "Periodo" Y ESPERAMOS UNA RESPUESTA BOOLEANA DEL MODELO EN EL RESULTADO
-
         $resultado = $objetoPeriodo -> registrar($data);
 
-        // SI LA RESPUESTA DEL MODELO ES VERDADERA CONFIRMAMOS EL REGISTRO Y REDIRECCIONAMOS, SI ES FALSA NOTIFICAMOS Y REDIRECCIONAMOS
         if($resultado === true){
             mostrarSweetAlert('success', 'Registro exitoso', 'Se ha creado un nuevo periodo académico. Redirigiendo...', '/siademy/administrador-periodo');
             exit();

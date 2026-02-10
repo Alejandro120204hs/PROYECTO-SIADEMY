@@ -286,7 +286,7 @@
           <!-- Tipo de periodo -->
           <div class="form-group-periodo">
             <label for="inputTipo">Tipo de Periodo <span class="req">*</span></label>
-            <select name="tipo_periodo" id="inputTipo" class="form-input-periodo" required onchange="actualizarNombre()">
+            <select name="tipo_periodo" id="inputTipo" class="form-input-periodo" required onchange="actualizarNombre(); generarSubperiodos();">
               <option value="" disabled selected>Selecciona el tipo</option>
               <option value="bimestre">Bimestre</option>
               <option value="trimestre">Trimestre</option>
@@ -298,7 +298,7 @@
           <!-- Número de periodo -->
           <div class="form-group-periodo">
             <label for="inputNumero">Número del Periodo <span class="req">*</span></label>
-            <select name="numero_periodo" id="inputNumero" class="form-input-periodo" required onchange="actualizarNombre()">
+              <select name="numero_periodo" id="inputNumero" class="form-input-periodo" required onchange="actualizarNombre()">
               <option value="" disabled selected>Selecciona el número</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -335,11 +335,11 @@
           <div class="form-row-periodo">
             <div class="form-group-periodo">
               <label for="inputInicio">Fecha de Inicio <span class="req">*</span></label>
-              <input type="date" name="fecha_inicio" id="inputInicio" class="form-input-periodo" required onchange="calcularDuracion()">
+              <input type="date" name="fecha_inicio" id="inputInicio" class="form-input-periodo" required onchange="calcularDuracion(); generarSubperiodos();">
             </div>
             <div class="form-group-periodo">
               <label for="inputFin">Fecha de Fin <span class="req">*</span></label>
-              <input type="date" name="fecha_fin" id="inputFin" class="form-input-periodo" required onchange="calcularDuracion()">
+              <input type="date" name="fecha_fin" id="inputFin" class="form-input-periodo" required onchange="calcularDuracion(); generarSubperiodos();">
             </div>
           </div>
 
@@ -348,6 +348,15 @@
             <i class="ri-information-line"></i>
             <span id="duracionTexto"></span>
           </div>
+
+          <!-- Previsualización de sub-periodos generados -->
+          <div id="generatedPeriodsPreview" style="display:none; margin-top:12px;">
+            <label>Períodos a crear:</label>
+            <div id="generatedList" style="margin-top:8px; display:flex; flex-direction:column; gap:6px;"></div>
+          </div>
+
+          <!-- Contenedor para inputs hidden (arrays) -->
+          <div id="generatedInputs"></div>
 
           <!-- Activar inmediatamente -->
           <div class="form-check-periodo" id="checkActivoContainer" style="display: none;">
@@ -423,12 +432,14 @@
     
     // --- GUARDAR PERIODO ---
     function guardarPeriodo() {
-      // Validar que el nombre esté lleno
-      if(!document.getElementById('inputNombre').value) {
-        alert('Por favor selecciona el tipo y número del período');
+      // Permitir envío si existe nombre individual o hay periodos generados
+      const nombreSimple = document.getElementById('inputNombre').value;
+      const generated = document.getElementById('generatedInputs').children.length > 0;
+      if(!nombreSimple && !generated){
+        alert('Por favor selecciona el tipo y número del período o genera sub-periodos con fechas.');
         return;
       }
-      
+
       // Enviar formulario
       document.getElementById('formPeriodo').submit();
     }
@@ -439,6 +450,7 @@
       document.getElementById('inputId').value = '';
       document.getElementById('inputAccion').value = '';
       document.getElementById('formPeriodo').reset();
+      limpiarGenerados();
       document.getElementById('formPeriodo').action = baseUrl + '/administrador/guardar-periodo';
       document.getElementById('nombrePreview').style.display = 'none';
       document.getElementById('duracionInfo').style.display = 'none';
@@ -463,6 +475,7 @@
           document.getElementById('inputNombre').value = data.nombre;
           document.getElementById('formPeriodo').action = baseUrl + '/administrador/actualizar-periodo';
           document.getElementById('checkActivoContainer').style.display = 'none';
+            limpiarGenerados();
           
           actualizarNombre();
           calcularDuracion();
@@ -549,6 +562,128 @@
           document.getElementById('duracionInfo').style.display = 'none';
         }
       }
+    }
+
+    // --- GENERAR SUB-PERIODOS AUTOMÁTICAMENTE ---
+    function generarSubperiodos(){
+      // No generar sub-periodos cuando estamos en modo editar
+      const accion = document.getElementById('inputAccion').value;
+      if(accion === 'actualizar'){
+        limpiarGenerados();
+        return;
+      }
+
+      const tipo = document.getElementById('inputTipo').value;
+      const inicioVal = document.getElementById('inputInicio').value;
+      const finVal = document.getElementById('inputFin').value;
+      const ano = document.getElementById('inputAno').value;
+
+      const mapping = { 'bimestre': 6, 'trimestre': 4, 'semestre': 2, 'anual': 1 };
+      const count = mapping[tipo] || 0;
+
+      // Limpiar previos
+      limpiarGenerados();
+
+      if(count <= 1) {
+        document.getElementById('generatedPeriodsPreview').style.display = 'none';
+        return;
+      }
+
+      if(!inicioVal || !finVal) {
+        // Necesitamos fechas para dividir
+        document.getElementById('generatedPeriodsPreview').style.display = 'none';
+        return;
+      }
+
+      const inicio = new Date(inicioVal);
+      const fin = new Date(finVal);
+      if(fin <= inicio){
+        document.getElementById('generatedPeriodsPreview').style.display = 'none';
+        return;
+      }
+
+      const totalMs = fin.getTime() - inicio.getTime();
+      const segmentMs = Math.floor(totalMs / count);
+
+      const ord = {1:'Primer',2:'Segundo',3:'Tercer',4:'Cuarto',5:'Quinto',6:'Sexto'};
+      const tipoTexto = { 'bimestre': 'Bimestre', 'trimestre': 'Trimestre', 'semestre': 'Semestre', 'anual': 'Año Lectivo' };
+
+      const list = document.getElementById('generatedList');
+      const inputs = document.getElementById('generatedInputs');
+
+      let cursor = new Date(inicio.getTime());
+      for(let i=0;i<count;i++){
+        let segStart = new Date(cursor.getTime());
+        let segEnd;
+        if(i < count -1){
+          segEnd = new Date(segStart.getTime() + segmentMs);
+        } else {
+          segEnd = new Date(fin.getTime());
+        }
+
+        // Ajustar horas a 00:00:00
+        segStart.setHours(0,0,0,0);
+        segEnd.setHours(0,0,0,0);
+
+        // Formatear YYYY-MM-DD
+        const toISO = d => d.toISOString().slice(0,10);
+        const display = d => d.toLocaleDateString();
+
+        const numero = (i+1).toString();
+        const nombre = `${ord[numero] || (numero+'°')} ${tipoTexto[tipo]} ${ano}`;
+
+        // Añadir preview
+        const item = document.createElement('div');
+        item.textContent = `${numero} · ${nombre} — ${display(segStart)} → ${display(segEnd)}`;
+        list.appendChild(item);
+
+        // Añadir inputs hidden
+        const inputsHtml = [
+          {name:'nombre[]', value:nombre},
+          {name:'tipo_periodo[]', value:tipo},
+          {name:'numero_periodo[]', value:numero},
+          {name:'ano_lectivo[]', value:ano},
+          {name:'fecha_inicio[]', value:toISO(segStart)},
+          {name:'fecha_fin[]', value:toISO(segEnd)}
+        ];
+
+        inputsHtml.forEach(it => {
+          const el = document.createElement('input');
+          el.type = 'hidden';
+          el.name = it.name;
+          el.value = it.value;
+          inputs.appendChild(el);
+        });
+
+        // Si el checkbox de activar está marcado y es el primer periodo, añadir activo[] = 'on'
+        if(i === 0){
+          const activoChk = document.getElementById('inputActivo');
+          const el = document.createElement('input');
+          el.type = 'hidden';
+          el.name = 'activo[]';
+          el.value = (activoChk && activoChk.checked) ? 'on' : '';
+          inputs.appendChild(el);
+        } else {
+          // mantener posición: añadir activo[] vacío
+          const el = document.createElement('input');
+          el.type = 'hidden';
+          el.name = 'activo[]';
+          el.value = '';
+          inputs.appendChild(el);
+        }
+
+        // mover cursor al día siguiente del segEnd
+        cursor = new Date(segEnd.getTime() + 24*60*60*1000);
+      }
+
+      document.getElementById('generatedPeriodsPreview').style.display = 'block';
+    }
+
+    function limpiarGenerados(){
+      const list = document.getElementById('generatedList');
+      const inputs = document.getElementById('generatedInputs');
+      list.innerHTML = '';
+      inputs.innerHTML = '';
     }
 
     // --- CERRAR AL HACER CLICK FUERA ---
