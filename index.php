@@ -334,7 +334,11 @@
                 require BASE_PATH . '/app/controllers/administrador/matricula.php';
                 break;
 
-                
+            // -------------------------------ADMINISTRADOR(MODULO PERIODOS)-------------------------
+
+            case '/administrador-periodo':
+                require BASE_PATH . '/app/views/dashboard/administrador/periodo.php';
+                break;            
                 
 
             // --------------------------------------ROL: DOCENTE---------------------------------------------
