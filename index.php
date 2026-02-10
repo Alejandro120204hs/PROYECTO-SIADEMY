@@ -338,6 +338,30 @@
 
             case '/administrador-periodo':
                 require BASE_PATH . '/app/views/dashboard/administrador/periodo.php';
+                break;
+
+            case '/administrador/guardar-periodo':
+                require BASE_PATH . '/app/controllers/administrador/periodo.php';
+                break;
+
+            case '/administrador/actualizar-periodo':
+                require BASE_PATH . '/app/controllers/administrador/periodo.php';
+                break;
+
+            case '/administrador/eliminar-periodo':
+                require BASE_PATH . '/app/controllers/administrador/periodo.php';
+                break;
+
+            case '/administrador/activar-periodo':
+                require BASE_PATH . '/app/controllers/administrador/periodo.php';
+                break;
+
+            case '/administrador/editar-periodo':
+                require BASE_PATH . '/app/controllers/administrador/periodo.php';
+                break;
+
+            case '/administrador/listar-periodos':
+                require BASE_PATH . '/app/controllers/administrador/periodo.php';
                 break;            
                 
 
