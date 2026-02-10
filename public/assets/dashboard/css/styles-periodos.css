@@ -1,0 +1,909 @@
+/* ========================================
+   ESTILOS - GESTIÓN DE PERIODOS ACADÉMICOS
+   styles-periodos.css
+   ======================================== */
+
+/* BTN AGREGAR PERIODO (topbar) */
+.btn-agregar-periodo {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-agregar-periodo:hover {
+  background: #6366f1;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-agregar-periodo i {
+  font-size: 18px;
+}
+
+/* ========================================
+   BANNER PERIODO ACTIVO
+   ======================================== */
+.periodo-activo-banner {
+  background: linear-gradient(135deg, #1a1f4e 0%, #11193a 100%);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-left: 4px solid #6366f1;
+  border-radius: 16px;
+  padding: 22px 28px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(99, 102, 241, 0.08);
+}
+
+.banner-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.banner-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  color: #818cf8;
+  flex-shrink: 0;
+}
+
+.banner-label {
+  display: block;
+  font-size: 12px;
+  color: #818cf8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.banner-title {
+  margin: 0 0 8px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.banner-fechas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #a4b1ff;
+}
+
+.banner-fechas i {
+  font-size: 15px;
+  color: #818cf8;
+}
+
+.banner-duracion {
+  background: rgba(99, 102, 241, 0.18);
+  color: #818cf8;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.banner-right {
+  min-width: 240px;
+}
+
+.banner-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.banner-progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #a4b1ff;
+}
+
+.banner-progress-label strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: #818cf8;
+}
+
+.banner-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(99, 102, 241, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.banner-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5, #818cf8);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.banner-dias-restantes {
+  font-size: 12px;
+  color: #97a1b6;
+  text-align: right;
+}
+
+/* ========================================
+   BARRA DE FILTROS
+   ======================================== */
+.periodos-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #11193a;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 20px;
+  margin-bottom: 20px;
+}
+
+.filter-year-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #a4b1ff;
+}
+
+.filter-year-group i {
+  font-size: 17px;
+}
+
+.periodo-select {
+  background: #0e142e;
+  border: 1px solid var(--border);
+  color: #e6e9f4;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.periodo-select:focus {
+  border-color: #4f46e5;
+}
+
+.filter-status-group {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-chip {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: #97a1b6;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+  background: #0e142e;
+  color: #e6e9f4;
+}
+
+.filter-chip.active {
+  background: rgba(79, 70, 229, 0.18);
+  border-color: rgba(99, 102, 241, 0.5);
+  color: #818cf8;
+  font-weight: 600;
+}
+
+/* ========================================
+   SECCIÓN LISTA DE PERIODOS
+   ======================================== */
+.periodos-section {
+  background: #11193a;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+.periodos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.periodos-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.periodos-count {
+  background: rgba(99, 102, 241, 0.18);
+  color: #818cf8;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+.periodos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ========================================
+   TARJETA DE PERIODO
+   ======================================== */
+.periodo-card {
+  background: #171a28;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.periodo-card:hover {
+  border-color: rgba(99, 102, 241, 0.25);
+  background: #1a1e2e;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+}
+
+/* Card activa */
+.periodo-card.activo {
+  border-color: rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, #1a1f4e 0%, #171a28 100%);
+}
+
+/* Indicador lateral del periodo activo */
+.periodo-activo-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #4f46e5, #818cf8);
+  border-radius: 14px 0 0 14px;
+}
+
+/* Izquierda de la card */
+.periodo-card-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Número del periodo */
+.periodo-numero {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+.periodo-numero.en-curso {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+}
+
+.periodo-numero.finalizado {
+  background: #1f2340;
+  color: #6b7280;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.periodo-numero.planificado {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+/* Info del periodo */
+.periodo-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.periodo-nombre-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.periodo-nombre-row h4 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Badges de estado */
+.periodo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.periodo-badge.en-curso {
+  background: rgba(99, 102, 241, 0.18);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.periodo-badge.finalizado {
+  background: rgba(107, 114, 128, 0.15);
+  color: #9ca3af;
+  border: 1px solid rgba(107, 114, 128, 0.25);
+}
+
+.periodo-badge.planificado {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+/* Meta del periodo (fechas, duración) */
+.periodo-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #97a1b6;
+  flex-wrap: wrap;
+}
+
+.periodo-meta i {
+  font-size: 14px;
+  color: #6366f1;
+}
+
+.periodo-sep {
+  color: #2d3353;
+  font-size: 16px;
+}
+
+/* Progress mini (solo en periodo activo) */
+.periodo-progress-mini {
+  width: 180px;
+  height: 5px;
+  background: rgba(99, 102, 241, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.periodo-progress-fill-mini {
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5, #818cf8);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+/* Derecha de la card - Acciones */
+.periodo-card-right {
+  flex-shrink: 0;
+}
+
+.periodo-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-periodo-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0e142e;
+  color: #a4b1ff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-periodo-action i {
+  font-size: 16px;
+}
+
+.btn-periodo-action:hover {
+  background: #1d2340;
+  color: #fff;
+}
+
+/* Solo ícono */
+.btn-ver:hover, .btn-editar:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.btn-eliminar {
+  color: #ef4444;
+}
+
+.btn-eliminar:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #ef4444;
+}
+
+.btn-activar {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #10b981;
+}
+
+.btn-activar:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #34d399;
+}
+
+/* ========================================
+   MODALES
+   ======================================== */
+.periodo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.periodo-modal-overlay.active {
+  display: flex;
+  animation: fadeInOverlay 0.2s ease;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.periodo-modal {
+  background: #11193a;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  animation: slideUpModal 0.25s ease;
+  overflow: hidden;
+}
+
+.periodo-modal-sm {
+  max-width: 440px;
+}
+
+@keyframes slideUpModal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.periodo-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.periodo-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.periodo-modal-header h3 i {
+  color: #818cf8;
+  font-size: 20px;
+}
+
+.modal-close-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0e142e;
+  color: #97a1b6;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  transition: all 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: #1d2340;
+  color: #fff;
+}
+
+.periodo-modal-body {
+  padding: 24px;
+}
+
+/* Form inputs del modal */
+.form-group-periodo {
+  margin-bottom: 18px;
+}
+
+.form-group-periodo label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #a4b1ff;
+  margin-bottom: 8px;
+}
+
+.form-input-periodo {
+  width: 100%;
+  background: #0e142e;
+  border: 1px solid var(--border);
+  color: #e6e9f4;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  appearance: none;
+}
+
+.form-input-periodo:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-input-periodo option {
+  background: #0e142e;
+}
+
+.form-row-periodo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Preview nombre */
+.nombre-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: #a4b1ff;
+}
+
+.nombre-preview i {
+  color: #818cf8;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.nombre-preview strong {
+  color: #fff;
+}
+
+/* Info duración */
+.duracion-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: #34d399;
+}
+
+.duracion-info i {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Checkbox */
+.form-check-periodo {
+  margin-top: 4px;
+}
+
+.check-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #c8cede;
+  margin-bottom: 6px;
+}
+
+.check-label input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: #4f46e5;
+  cursor: pointer;
+}
+
+.form-check-periodo small {
+  display: block;
+  font-size: 12px;
+  color: #97a1b6;
+  margin-left: 27px;
+}
+
+.req {
+  color: #ef4444;
+}
+
+/* Footer del modal */
+.periodo-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 18px 24px;
+  border-top: 1px solid var(--border);
+}
+
+.btn-modal-cancelar {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0e142e;
+  color: #97a1b6;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-modal-cancelar:hover {
+  background: #1d2340;
+  color: #fff;
+}
+
+.btn-modal-guardar {
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: none;
+  background: #4f46e5;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.btn-modal-guardar:hover {
+  background: #6366f1;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+}
+
+.btn-modal-activar {
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: none;
+  background: #10b981;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.btn-modal-activar:hover {
+  background: #059669;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+}
+
+/* Confirmar activación */
+.activar-confirm-content {
+  text-align: center;
+}
+
+.activar-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.12);
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px auto;
+  font-size: 30px;
+  color: #f59e0b;
+}
+
+.activar-confirm-content > p {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  color: #e6e9f4;
+}
+
+.activar-consecuencias {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.consecuencia-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.consecuencia-item i {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.consecuencia-item.desactivar {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.consecuencia-item.desactivar i { color: #ef4444; }
+
+.consecuencia-item.activar {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+.consecuencia-item.activar i { color: #10b981; }
+
+.consecuencia-item.info {
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: #a4b1ff;
+}
+
+.consecuencia-item.info i { color: #818cf8; }
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 1200px) {
+  .periodo-activo-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .banner-right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 980px) {
+  .periodos-filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .filter-status-group {
+    flex-wrap: wrap;
+  }
+
+  .periodo-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .periodo-card-right {
+    width: 100%;
+  }
+
+  .periodo-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .form-row-periodo {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .banner-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .periodo-card-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .periodo-meta {
+    flex-direction: column; 
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .periodo-sep {
+    display: none;
+  }
+}
