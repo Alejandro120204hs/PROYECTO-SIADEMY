@@ -4,10 +4,37 @@
    //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
     require_once BASE_PATH . '/app/controllers/perfil.php';
     
+    // IMPORTAMOS LOS MODELOS NECESARIOS
+    require_once BASE_PATH . '/app/models/administradores/estudiante.php';
+    require_once BASE_PATH . '/app/models/administradores/acudiente.php';
+    require_once BASE_PATH . '/app/models/administradores/docente.php';
+    require_once BASE_PATH . '/app/models/administradores/eventos.php';
+    require_once BASE_PATH . '/app/models/administradores/cursos.php';
+    require_once BASE_PATH . '/app/models/administradores/asignatura.php';
+    
     // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
     $id = $_SESSION['user']['id'];
     // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
     $usuario = mostrarPerfil($id);
+
+    // OBTENEMOS LA INSTITUCIÓN DEL ADMIN
+    $id_institucion = $_SESSION['user']['id_institucion'];
+
+    // INSTANCIAMOS LOS MODELOS
+    $objEstudiante = new Estudiante();
+    $objAcudiente = new Acudiente();
+    $objDocente = new Docente();
+    $objEvento = new Evento();
+    $objCurso = new Curso();
+    $objAsignatura = new Asignatura();
+
+    // CONTAMOS LOS REGISTROS POR INSTITUCIÓN
+    $totalEstudiantes = $objEstudiante->contar($id_institucion);
+    $totalAcudientes = $objAcudiente->contar($id_institucion);
+    $totalProfesores = $objDocente->contar($id_institucion);
+    $totalEventos = $objEvento->contar($id_institucion);
+    $totalCursos = $objCurso->contar($id_institucion);
+    $totalAsignaturas = $objAsignatura->contar($id_institucion);
 ?>
 
 <!doctype html>
@@ -55,28 +82,42 @@
           <div class="icon"><i class="ri-user-3-line"></i></div>
           <div>
             <small>Estudiantes</small>
-            <strong>932</strong>
+            <strong><?php echo $totalEstudiantes; ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-user-2-line"></i></div>
           <div>
             <small>Acudientes</small>
-            <strong>754</strong>
+            <strong><?php echo $totalAcudientes; ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-user-star-line"></i></div>
           <div>
             <small>Profesores</small>
-            <strong>40</strong>
+            <strong><?php echo $totalProfesores; ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-calendar-2-line"></i></div>
           <div>
             <small>Eventos</small>
-            <strong>32</strong>
+            <strong><?php echo $totalEventos; ?></strong>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="icon"><i class="ri-book-3-line"></i></div>
+          <div>
+            <small>Cursos</small>
+            <strong><?php echo $totalCursos; ?></strong>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="icon"><i class="ri-article-line"></i></div>
+          <div>
+            <small>Asignaturas</small>
+            <strong><?php echo $totalAsignaturas; ?></strong>
           </div>
         </div>
       </section>

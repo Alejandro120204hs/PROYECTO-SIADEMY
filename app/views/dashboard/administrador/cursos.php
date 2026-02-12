@@ -4,10 +4,28 @@
    //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
     require_once BASE_PATH . '/app/controllers/perfil.php';
     
+    // IMPORTAMOS LOS MODELOS NECESARIOS
+    require_once BASE_PATH . '/app/models/administradores/cursos.php';
+    require_once BASE_PATH . '/app/models/administradores/estudiante.php';
+    require_once BASE_PATH . '/app/models/administradores/docente.php';
+    
     // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
     $id = $_SESSION['user']['id'];
     // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
     $usuario = mostrarPerfil($id);
+
+    // OBTENEMOS LA INSTITUCIÓN DEL ADMIN
+    $id_institucion = $_SESSION['user']['id_institucion'];
+
+    // INSTANCIAMOS LOS MODELOS
+    $objCurso = new Curso();
+    $objEstudiante = new Estudiante();
+    $objDocente = new Docente();
+
+    // CONTAMOS LOS REGISTROS POR INSTITUCIÓN
+    $totalCursos = $objCurso->contar($id_institucion);
+    $totalEstudiantes = $objEstudiante->contar($id_institucion);
+    $totalProfesores = $objDocente->contar($id_institucion);
 
   // LLAMAMOS LA FUNCION
   $datos = mostrarCursos();
@@ -68,28 +86,28 @@
           <div class="icon"><i class="ri-book-3-line"></i></div>
           <div>
             <small>Total Cursos</small>
-            <strong>24</strong>
+            <strong><?php echo $totalCursos; ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-group-line"></i></div>
           <div>
             <small>Total Estudiantes</small>
-            <strong>842</strong>
+            <strong><?php echo $totalEstudiantes; ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-user-star-line"></i></div>
           <div>
             <small>Profesores Activos</small>
-            <strong>38</strong>
+            <strong><?php echo $totalProfesores; ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-alarm-warning-line"></i></div>
           <div>
             <small>Alertas Activas</small>
-            <strong>12</strong>
+            <strong>0</strong>
           </div>
         </div>
       </div>

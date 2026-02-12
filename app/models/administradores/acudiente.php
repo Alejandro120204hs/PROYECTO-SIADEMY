@@ -159,6 +159,20 @@
 
             }
         }
+
+        public function contar($id_institucion){
+            try{
+                $consultar = "SELECT COUNT(*) as total FROM acudiente INNER JOIN usuario ON acudiente.id_usuario = usuario.id WHERE acudiente.id_institucion = :id_institucion AND usuario.estado = 'Activo'";
+                $resultado = $this->conexion->prepare($consultar);
+                $resultado->bindParam(':id_institucion', $id_institucion);
+                $resultado->execute();
+                $fila = $resultado->fetch();
+                return $fila['total'] ?? 0;
+            }catch(PDOException $e){
+                error_log("Error en Acudiente::contar->" . $e->getMessage());
+                return 0;
+            }
+        }
     }
 
 ?>
