@@ -586,6 +586,29 @@
 
 .periodo-modal-body {
   padding: 24px;
+  max-height: 65vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Scroll personalizado */
+.periodo-modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.periodo-modal-body::-webkit-scrollbar-track {
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 10px;
+}
+
+.periodo-modal-body::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.periodo-modal-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.5);
 }
 
 /* Form inputs del modal */
@@ -905,5 +928,127 @@
 
   .periodo-sep {
     display: none;
+  }
+}
+
+/* ========================================
+   ESTILOS - PREVISUALIZACIÓN DE PERIODOS GENERADOS (EDITABLES)
+   ======================================== */
+
+#generatedPeriodsPreview {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+#generatedPeriodsPreview > label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #a4b1ff;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+#generatedList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.generated-periodo-item {
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 12px;
+  padding: 14px 16px;
+  transition: all 0.2s ease;
+}
+
+.generated-periodo-item:hover {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.generated-periodo-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.generated-numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.generated-nombre {
+  font-size: 14px;
+  font-weight: 600;
+  color: #c8cede;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.generated-periodo-dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.generated-date-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.generated-date-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #818cf8;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.generated-date-input {
+  width: 100%;
+  background: #0e142e;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #e6e9f4;
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.generated-date-input:focus {
+  background: rgba(99, 102, 241, 0.05);
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.generated-date-input:hover {
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+/* Responsive: En pantallas pequeñas, las fechas se apilan */
+@media (max-width: 600px) {
+  .generated-periodo-dates {
+    grid-template-columns: 1fr;
   }
 }
