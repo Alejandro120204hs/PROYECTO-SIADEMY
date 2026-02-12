@@ -72,7 +72,7 @@
           <input type="text" placeholder="Buscar periodo...">
         </div>
         <button class="btn-agregar-periodo" onclick="abrirModalCrear()">
-          <i class="ri-add-line"></i> Agregar Periodo
+          <i class="ri-add-line"></i> Definir Periodo
         </button>
           <?php
           include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
@@ -125,6 +125,7 @@
           $diasRecorridos = $inicio->diff($ahora)->days;
           $porcentaje = round(($diasRecorridos / $totalDias) * 100);
         ?>
+        
         <div class="banner-left">
           <div class="banner-icon">
             <i class="ri-calendar-check-line"></i>
@@ -272,7 +273,7 @@
   <div class="periodo-modal-overlay" id="modalOverlay">
     <div class="periodo-modal">
       <div class="periodo-modal-header">
-        <h3 id="modalTitulo"><i class="ri-add-circle-line"></i> Agregar Periodo</h3>
+        <h3 id="modalTitulo"><i class="ri-add-circle-line"></i> Definir Periodo</h3>
         <button class="modal-close-btn" onclick="cerrarModal()">
           <i class="ri-close-line"></i>
         </button>
@@ -564,7 +565,7 @@
       }
     }
 
-    // --- GENERAR SUB-PERIODOS AUTOMÁTICAMENTE ---
+    // --- GENERAR SUB-PERIODOS AUTOMÁTICAMENTE CON CAMPOS EDITABLES ---
     function generarSubperiodos(){
       // No generar sub-periodos cuando estamos en modo editar
       const accion = document.getElementById('inputAccion').value;
@@ -632,19 +633,82 @@
         const numero = (i+1).toString();
         const nombre = `${ord[numero] || (numero+'°')} ${tipoTexto[tipo]} ${ano}`;
 
-        // Añadir preview
-        const item = document.createElement('div');
-        item.textContent = `${numero} · ${nombre} — ${display(segStart)} → ${display(segEnd)}`;
-        list.appendChild(item);
+        // CREAR ESTRUCTURA EDITABLE
+        const itemWrapper = document.createElement('div');
+        itemWrapper.className = 'generated-periodo-item';
+        itemWrapper.setAttribute('data-index', i);
 
-        // Añadir inputs hidden
+        // Encabezado del periodo
+        const header = document.createElement('div');
+        header.className = 'generated-periodo-header';
+        header.innerHTML = `
+          <span class="generated-numero">${numero}</span>
+          <span class="generated-nombre">${nombre}</span>
+        `;
+        itemWrapper.appendChild(header);
+
+        // Contenedor de fechas editables
+        const datesContainer = document.createElement('div');
+        datesContainer.className = 'generated-periodo-dates';
+
+        // Campo fecha inicio
+        const startLabel = document.createElement('label');
+        startLabel.className = 'generated-date-label';
+        startLabel.innerText = 'Inicio:';
+        const startInput = document.createElement('input');
+        startInput.type = 'date';
+        startInput.className = 'generated-date-input';
+        startInput.value = toISO(segStart);
+        startInput.setAttribute('data-periodo-index', i);
+        startInput.setAttribute('data-fecha-type', 'inicio');
+        startInput.addEventListener('change', function(){
+          actualizarFechaGenerada(i, 'inicio', this.value);
+          // Si cambio fecha inicio, actualizar fecha fin del período anterior si es necesario
+          if(i > 0) {
+            validarYAjustarPeriodoAnterior(i, this.value);
+          }
+        });
+
+        const startGroup = document.createElement('div');
+        startGroup.className = 'generated-date-group';
+        startGroup.appendChild(startLabel);
+        startGroup.appendChild(startInput);
+        datesContainer.appendChild(startGroup);
+
+        // Campo fecha fin
+        const endLabel = document.createElement('label');
+        endLabel.className = 'generated-date-label';
+        endLabel.innerText = 'Fin:';
+        const endInput = document.createElement('input');
+        endInput.type = 'date';
+        endInput.className = 'generated-date-input';
+        endInput.value = toISO(segEnd);
+        endInput.setAttribute('data-periodo-index', i);
+        endInput.setAttribute('data-fecha-type', 'fin');
+        endInput.addEventListener('change', function(){
+          actualizarFechaGenerada(i, 'fin', this.value);
+          // Si es fecha fin, actualizar fecha inicio del siguiente periodo
+          actualizarPeriodoSiguiente(i, this.value);
+        });
+
+        const endGroup = document.createElement('div');
+        endGroup.className = 'generated-date-group';
+        endGroup.appendChild(endLabel);
+        endGroup.appendChild(endInput);
+        datesContainer.appendChild(endGroup);
+
+        itemWrapper.appendChild(datesContainer);
+        list.appendChild(itemWrapper);
+
+        // CREAR INPUTS HIDDEN para enviarse al servidor
+        // Almacenaremos estos en el contenedor inputs pero con atributos data para identificarlos
         const inputsHtml = [
           {name:'nombre[]', value:nombre},
           {name:'tipo_periodo[]', value:tipo},
           {name:'numero_periodo[]', value:numero},
           {name:'ano_lectivo[]', value:ano},
-          {name:'fecha_inicio[]', value:toISO(segStart)},
-          {name:'fecha_fin[]', value:toISO(segEnd)}
+          {name:'fecha_inicio[]', value:toISO(segStart), dataIndex: i, dataField: 'inicio'},
+          {name:'fecha_fin[]', value:toISO(segEnd), dataIndex: i, dataField: 'fin'}
         ];
 
         inputsHtml.forEach(it => {
@@ -652,6 +716,10 @@
           el.type = 'hidden';
           el.name = it.name;
           el.value = it.value;
+          if(it.dataIndex !== undefined) {
+            el.setAttribute('data-index', it.dataIndex);
+            el.setAttribute('data-field', it.dataField);
+          }
           inputs.appendChild(el);
         });
 
@@ -677,6 +745,102 @@
       }
 
       document.getElementById('generatedPeriodsPreview').style.display = 'block';
+    }
+
+    // --- ACTUALIZAR FECHAS EN LOS INPUTS HIDDEN ---
+    function actualizarFechaGenerada(index, field, newValue) {
+      // Encontrar el input hidden correspondiente
+      const inputs = document.getElementById('generatedInputs');
+      const hiddenInputs = inputs.querySelectorAll(`input[data-index="${index}"][data-field="${field}"]`);
+      
+      hiddenInputs.forEach(input => {
+        input.value = newValue;
+      });
+
+      // También actualizar el input visual (para caso de que se necesite)
+      const visualInput = document.querySelector(`input[data-periodo-index="${index}"][data-fecha-type="${field}"]`);
+      if(visualInput && visualInput.value !== newValue) {
+        visualInput.value = newValue;
+      }
+    }
+
+    // --- VALIDAR Y AJUSTAR PERÍODO ANTERIOR SI ES NECESARIO ---
+    function validarYAjustarPeriodoAnterior(indexActual, fechaInicioActual) {
+      const indexAnterior = indexActual - 1;
+      
+      // Obtener fecha fin del período anterior
+      const inputFinAnterior = document.querySelector(`input[data-periodo-index="${indexAnterior}"][data-fecha-type="fin"]`);
+      if(!inputFinAnterior) return;
+
+      const fechaInicioActualDate = new Date(fechaInicioActual);
+      fechaInicioActualDate.setHours(0, 0, 0, 0);
+      
+      const fechaFinAnterior = new Date(inputFinAnterior.value);
+      fechaFinAnterior.setHours(0, 0, 0, 0);
+
+      // Si la fecha fin del anterior es >= a la fecha inicio actual, ajustar
+      if(fechaFinAnterior >= fechaInicioActualDate) {
+        // La fecha fin del anterior debe ser 1 día antes de la fecha inicio actual
+        const toISO = d => d.toISOString().slice(0, 10);
+        const nuevaFechaFinAnterior = new Date(fechaInicioActualDate.getTime() - 24 * 60 * 60 * 1000);
+        const nuevaFechaFinAnteriorISO = toISO(nuevaFechaFinAnterior);
+
+        inputFinAnterior.value = nuevaFechaFinAnteriorISO;
+        actualizarFechaGenerada(indexAnterior, 'fin', nuevaFechaFinAnteriorISO);
+
+        // Propagar hacia atrás de manera recursiva
+        if(indexAnterior > 0) {
+          validarYAjustarPeriodoAnterior(indexAnterior, nuevaFechaFinAnteriorISO);
+        }
+      }
+    }
+
+    // --- ACTUALIZAR PERÍODO SIGUIENTE CUANDO SE CAMBIA LA FECHA FIN ---
+    function actualizarPeriodoSiguiente(indexActual, fechaFinActual) {
+      const siguienteIndex = indexActual + 1;
+      
+      // Verificar si existe el siguiente período
+      const siguientePeriodo = document.querySelector(`.generated-periodo-item[data-index="${siguienteIndex}"]`);
+      if(!siguientePeriodo) return; // No hay siguiente período
+
+      // Obtener los inputs del siguiente período ANTES de modificarlos
+      const inputInicio = document.querySelector(`input[data-periodo-index="${siguienteIndex}"][data-fecha-type="inicio"]`);
+      const inputFinSiguiente = document.querySelector(`input[data-periodo-index="${siguienteIndex}"][data-fecha-type="fin"]`);
+      
+      if(!inputInicio || !inputFinSiguiente) return;
+
+      // Calcular la duración original del siguiente período
+      const fechaInicioAntiguaSiguiente = new Date(inputInicio.value);
+      const fechaFinAntiguaSiguiente = new Date(inputFinSiguiente.value);
+      const duracionOriginal = fechaFinAntiguaSiguiente.getTime() - fechaInicioAntiguaSiguiente.getTime();
+
+      // Calcular la fecha de inicio del siguiente (día después de la fecha fin)
+      const fechaFin = new Date(fechaFinActual);
+      fechaFin.setHours(0, 0, 0, 0);
+      const nuevaFechaInicio = new Date(fechaFin.getTime() + 24 * 60 * 60 * 1000);
+      
+      const toISO = d => d.toISOString().slice(0, 10);
+      const nuevaFechaInicioISO = toISO(nuevaFechaInicio);
+
+      // Actualizar el input visual del siguiente período
+      inputInicio.value = nuevaFechaInicioISO;
+
+      // Actualizar el input hidden
+      actualizarFechaGenerada(siguienteIndex, 'inicio', nuevaFechaInicioISO);
+
+      // Si la duración original es positiva, mantener la misma duración
+      if(duracionOriginal > 0) {
+        const nuevaFechaFinSiguiente = new Date(nuevaFechaInicio.getTime() + duracionOriginal);
+        const nuevaFechaFinSiguienteISO = toISO(nuevaFechaFinSiguiente);
+        
+        inputFinSiguiente.value = nuevaFechaFinSiguienteISO;
+        actualizarFechaGenerada(siguienteIndex, 'fin', nuevaFechaFinSiguienteISO);
+
+        // Continuar en cascada si existen más períodos
+        if(siguienteIndex + 1 < document.querySelectorAll('.generated-periodo-item').length) {
+          actualizarPeriodoSiguiente(siguienteIndex, nuevaFechaFinSiguienteISO);
+        }
+      }
     }
 
     function limpiarGenerados(){
