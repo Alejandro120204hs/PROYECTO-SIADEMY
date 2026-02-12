@@ -153,6 +153,20 @@
                 return false;
             }
         }
+
+        public function contar($id_institucion){
+            try{
+                $consultar = "SELECT COUNT(*) as total FROM estudiante INNER JOIN usuario ON estudiante.id_usuario = usuario.id WHERE estudiante.id_institucion = :id_institucion AND usuario.estado = 'Activo'";
+                $resultado = $this->conexion->prepare($consultar);
+                $resultado->bindParam(':id_institucion', $id_institucion);
+                $resultado->execute();
+                $fila = $resultado->fetch();
+                return $fila['total'] ?? 0;
+            }catch(PDOException $e){
+                error_log("Error en Estudiante::contar->" . $e->getMessage());
+                return 0;
+            }
+        }
     }
 
 ?>

@@ -5,10 +5,25 @@
     //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
     require_once BASE_PATH . '/app/controllers/perfil.php';
     
+    // IMPORTAMOS LOS MODELOS NECESARIOS
+    require_once BASE_PATH . '/app/models/administradores/asignatura.php';
+    require_once BASE_PATH . '/app/models/administradores/docente.php';
+    
     // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
     $id = $_SESSION['user']['id'];
     // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
     $usuario = mostrarPerfil($id);
+
+    // OBTENEMOS LA INSTITUCIÓN DEL ADMIN
+    $id_institucion = $_SESSION['user']['id_institucion'];
+
+    // INSTANCIAMOS LOS MODELOS
+    $objAsignatura = new Asignatura();
+    $objDocente = new Docente();
+
+    // CONTAMOS LOS REGISTROS POR INSTITUCIÓN
+    $totalAsignaturas = $objAsignatura->contar($id_institucion);
+    $totalProfesores = $objDocente->contar($id_institucion);
 
   // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
   $asignaturas = mostrarAsignaturas();
@@ -73,14 +88,14 @@
           <div class="icon"><i class="ri-booklet-line"></i></div>
           <div>
             <small>Total Asignaturas</small>
-            <strong>18</strong>
+            <strong><?php echo $totalAsignaturas; ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-user-star-line"></i></div>
           <div>
             <small>Profesores</small>
-            <strong>38</strong>
+            <strong><?php echo $totalProfesores; ?></strong>
           </div>
         </div>
         <div class="kpi">

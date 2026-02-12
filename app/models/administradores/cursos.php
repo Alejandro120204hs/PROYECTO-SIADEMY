@@ -110,6 +110,20 @@
                 die("Error en Curso::actualizar->" . $e->getMessage());
             }
         }
+
+        public function contar($id_institucion){
+            try{
+                $consultar = "SELECT COUNT(*) as total FROM curso WHERE id_institucion = :id_institucion AND estado = 'Activo'";
+                $resultado = $this->conexion->prepare($consultar);
+                $resultado->bindParam(':id_institucion', $id_institucion);
+                $resultado->execute();
+                $fila = $resultado->fetch();
+                return $fila['total'] ?? 0;
+            }catch(PDOException $e){
+                error_log("Error en Curso::contar->" . $e->getMessage());
+                return 0;
+            }
+        }
     }
 
 ?>
