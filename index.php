@@ -63,6 +63,18 @@
                 require BASE_PATH . '/app/controllers/perfil.php';
                 break;
 
+            case '/configuracion':
+                require BASE_PATH . '/app/controllers/configuracion.php';
+                break;
+
+            case '/notificaciones':
+                require BASE_PATH . '/app/controllers/notificaciones.php';
+                break;
+
+            case '/ayuda':
+                require BASE_PATH . '/app/controllers/ayuda.php';
+                break;
+
 
               // -------------------------GENERAR PDF-----------------------------------------
                 case '/superAdmin-reporte':
