@@ -3,6 +3,10 @@
         // index.php - Router principal, EN LARAVEL SE TIENE UN ARCHIVO DIFERENTE POR CADA CARPETA
 
         require_once __DIR__ . '/config/config.php';
+        require_once BASE_PATH . '/app/helpers/session_helper.php';
+
+        // Iniciar sesión
+        initSession();
 
         // OBTENER LA URI ACTUAL (POR EJEMPLO: /siademy/login)
         $requestUri = $_SERVER['REQUEST_URI'];
@@ -46,7 +50,9 @@
                 require BASE_PATH . '/app/controllers/enviarCorreo.php';
                 break;
 
-            
+            case '/logout':
+                require BASE_PATH . '/app/controllers/logoutController.php';
+                break;
 
             // -------------------------------PERFIL-----------------------------------------------
             case '/dashboard-perfil':
@@ -55,6 +61,18 @@
             
             case '/actualizar-clave':
                 require BASE_PATH . '/app/controllers/perfil.php';
+                break;
+
+            case '/configuracion':
+                require BASE_PATH . '/app/controllers/configuracion.php';
+                break;
+
+            case '/notificaciones':
+                require BASE_PATH . '/app/controllers/notificaciones.php';
+                break;
+
+            case '/ayuda':
+                require BASE_PATH . '/app/controllers/ayuda.php';
                 break;
 
 

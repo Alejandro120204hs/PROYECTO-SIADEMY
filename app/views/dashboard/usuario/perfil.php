@@ -632,6 +632,11 @@
         document.querySelector('.app').classList.toggle('hide-right');
         document.getElementById('rightSidebar').classList.toggle('hidden');
     });
+
+    // Si viene de /configuracion, abrir automáticamente el modal
+    <?php if(isset($activeTab) && $activeTab === 'edit-profile'): ?>
+        openModal('edit-profile');
+    <?php endif; ?>
 });
   </script>
 </body>
