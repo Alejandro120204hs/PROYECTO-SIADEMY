@@ -400,7 +400,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .table-dark {
-      --bs-table-bg: #171a28;
+      /* --bs-table-bg: #171a28; */
       --bs-table-border-color: var(--border);
       --bs-table-hover-bg: #1d2340;
     }

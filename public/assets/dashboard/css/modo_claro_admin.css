@@ -1,0 +1,1139 @@
+/*
+  Modo claro (light mode) para el dashboard
+
+/* Variables del tema claro: modifica aquí para personalizar rápidamente */
+body.light-mode {
+  --bg: #ffffff;         /* Fondo general (inicio del gradiente) */
+  --bg-2: #ffffff;       /* Fondo secundario (final del gradiente) */
+  --card-bg: #ffffff;    /* Fondo de tarjetas y paneles */
+  --panel-bg: #ffffff;   /* Fondo extra para paneles si hace falta */
+  --text-color: #000000; /* Color principal del texto */
+  --muted-color: #6b7280;/* Texto secundario / placeholders */
+  --gris-fondo: #e2e2e2; /* para los fondos de las cards */
+  --accent: #4f46e5;     /* azul mas usado para elementos destacados */
+}
+
+/* Global: fondo y color de texto para el modo claro */
+body.light-mode {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%) !important;
+  color: var(--text-color) !important;
+}
+
+/* Tarjetas, topbar y áreas principales usan el fondo de tarjeta */
+body.light-mode .main,
+body.light-mode .topbar,
+body.light-mode .calendar-card,
+body.light-mode .datatable-card {
+  background: var(--card-bg) !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .toggle-btn {
+  background: white !important;
+  color: #6b7280 !important;
+}
+
+body.light-mode .card {
+  background: #ffffff !important;
+  border: 1px solid var(--accent) !important;
+  color: var(--text-color) !important;
+  margin-bottom: 10px;
+}
+
+body.light-mode .kpi {
+  background: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid #4f46e5;
+}
+
+/* KPI icon: fondo suave y color de acento */
+body.light-mode .kpi .icon {
+  background: #f3f4f6 !important;
+  color: var(--accent) !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .kpi small {
+  color: #6b7280 !important;
+  font-weight: 600;
+}
+
+body.light-mode .pill {
+  background: #f3f4f6 !important;
+  color: #000000 !important;
+  border: 1px solid #e5e7eb !important;
+  padding: 6px 12px !important;
+  border-radius: 20px !important;
+}
+
+body.light-mode .table-hover > tbody > tr:hover {
+  background: rgba(79, 70, 229, 0.04) !important;
+}
+
+/* Del desplegable - estilos específicos para el user dropdown */
+body.light-mode .user-dropdown-wrapper {
+  background: transparent !important;
+}
+
+body.light-mode .dataTables_wrapper .dataTables_filter input {
+  background: white !important;
+  border: 1px solid var(--accent) !important;
+  color: var(--text-color) !important;
+  box-shadow: none;
+}
+
+body.light-mode .dataTables_wrapper .dataTables_length select {
+  color: var(--text-color) !important;
+}
+
+/* Notificaciones tipo toast (ajusta según tu componente de toasts) */
+body.light-mode .toast-notification {
+  background: #10b981;
+  color: #fff;
+}
+
+body.light-mode .user-name {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .datatable-card h3 {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .calendar-nav button {
+  background: white !important;
+  border: 2px solid var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+/*============================================
+  SCROLLBARS - MODO CLARO
+============================================ */
+
+body.light-mode * {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f3f4f6; /* thumb color / track color */
+}
+
+body.light-mode *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body.light-mode *::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+body.light-mode *::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 4px;
+  border: 2px solid #f3f4f6;
+}
+
+body.light-mode *::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0;
+}
+
+body.light-mode *::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ============================================
+   SIDEBAR IZQUIERDO - MODO CLARO
+   ============================================ */
+
+/* Sidebar general */
+body.light-mode .sidebar {
+  background: linear-gradient(180deg, #0f1e4a 0%, #0b1736 100%) !important;
+  border-right: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .sidebar.hidden {
+  border: none !important;
+}
+
+/* Brand/Logo del sidebar */
+body.light-mode .brand {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .brand small {
+  opacity: 0.7;
+  color: #6b7280 !important;
+}
+
+/* Navegación general */
+body.light-mode .nav a {
+  color: #ffffff !important;
+  transition: all 0.2s ease;
+}
+
+body.light-mode .nav a:hover {
+  background: #b1b0ba !important;
+  color: var(--text-color) !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .nav a.active {
+  background: #c7d2e8 !important;
+  color: var(--accent) !important;
+  box-shadow: inset 0 0 0 1px rgba(79, 70, 229, 0.2) !important;
+  font-weight: 600;
+}
+
+/* Iconos del navegación */
+body.light-mode .nav i {
+  color: #9ca3af !important;
+}
+
+body.light-mode .nav a:hover i {
+  color: #4f46e5 !important;
+}
+
+body.light-mode .nav a.active i {
+  color: var(--accent) !important;
+}
+
+/* Secciones del menú */
+body.light-mode .nav .section {
+  color: #9ca3af !important;
+  background: transparent;
+}
+
+/* Spacer */
+body.light-mode .spacer {
+  background: transparent;
+}
+
+/* ============================================
+   DROPDOWNS Y MENÚS DESPLEGABLES
+   ============================================ */
+
+/* User dropdown */
+body.light-mode .user-dropdown {
+  background: var(--card-bg) !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), 
+              0 0 0 1px rgba(0, 0, 0, 0.05) inset !important;
+}
+
+/* Flecha del dropdown */
+body.light-mode .user-dropdown::before {
+  background: var(--card-bg) !important;
+  border-left: 1px solid #e5e7eb !important;
+  border-top: 1px solid #e5e7eb !important;
+}
+
+/* Header del dropdown */
+body.light-mode .dropdown-header {
+  background: #f9fafb !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .dropdown-header strong {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .dropdown-header small {
+  color: #6b7280 !important;
+}
+
+/* Items del dropdown */
+body.light-mode .dropdown-item {
+  color: #4b5563 !important;
+  transition: all 0.2s ease;
+}
+
+body.light-mode .dropdown-item:hover {
+  background: #f3f4f6 !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .dropdown-item:active {
+  background: #e5e7eb !important;
+}
+
+body.light-mode .dropdown-item i:first-child {
+  color: #9ca3af !important;
+}
+
+body.light-mode .dropdown-item:hover i:first-child {
+  color: var(--accent) !important;
+}
+
+/* Dropdown item peligroso (logout) */
+body.light-mode .dropdown-item-danger {
+  color: #dc2626 !important;
+}
+
+body.light-mode .dropdown-item-danger:hover {
+  background: rgba(220, 38, 38, 0.1) !important;
+  color: #991b1b !important;
+}
+
+body.light-mode .dropdown-item-danger:hover i {
+  color: #dc2626 !important;
+}
+
+/* Badge del dropdown */
+body.light-mode .dropdown-badge {
+  background: #ef4444 !important;
+  color: white !important;
+}
+
+/* Divisor */
+body.light-mode .dropdown-divider {
+  background: #e5e7eb !important;
+}
+
+/* Overlay del dropdown */
+body.light-mode .dropdown-overlay {
+  background: transparent !important;
+}
+
+/* ============================================
+   ELEMENTOS ADICIONALES SIDEBAR
+   ============================================ */
+
+/* Items de lista en sidebar */
+body.light-mode .area-item,
+body.light-mode .document-item,
+body.light-mode .quick-action-btn,
+body.light-mode .class-item,
+body.light-mode .reminder-item,
+body.light-mode .authorized-item {
+  background: #f9fafb !important;
+  border: 1px solid #e5e7eb !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .area-item:hover,
+body.light-mode .document-item:hover,
+body.light-mode .quick-action-btn:hover,
+body.light-mode .class-item:hover,
+body.light-mode .reminder-item:hover,
+body.light-mode .authorized-item:hover {
+  background: #f3f4f6 !important;
+  border-color: var(--accent) !important;
+}
+
+/* Strong y small en estos elementos */
+body.light-mode .area-item strong,
+body.light-mode .document-item strong,
+body.light-mode .class-item strong,
+body.light-mode .reminder-item strong,
+body.light-mode .authorized-item strong {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .area-item small,
+body.light-mode .document-item small,
+body.light-mode .class-item small,
+body.light-mode .reminder-item small,
+body.light-mode .authorized-item small {
+  color: #6b7280 !important;
+}
+
+/* Iconos en estos elementos */
+body.light-mode .area-icon,
+body.light-mode .authorized-avatar {
+  background: #e5e7eb !important;
+  color: var(--accent) !important;
+}
+
+body.light-mode .document-item i {
+  color: #ef4444 !important;
+}
+
+body.light-mode .quick-action-btn i,
+body.light-mode .reminder-item i,
+body.light-mode .class-time i {
+  color: var(--accent) !important;
+}
+
+body.light-mode .class-time {
+  color: var(--accent) !important;
+}
+
+/* Reminder importante */
+body.light-mode .reminder-item.important {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+  background: rgba(245, 158, 11, 0.05) !important;
+}
+
+body.light-mode .reminder-item.important i {
+  color: #f59e0b !important;
+}
+
+/* Authorized primary */
+body.light-mode .authorized-item.primary {
+  border-color: rgba(79, 70, 229, 0.3) !important;
+  background: rgba(79, 70, 229, 0.05) !important;
+}
+
+/* ============================================
+   TOGGLE BUTTON
+   ============================================ */
+
+body.light-mode .toggle-btn {
+  background: white !important;
+  border: 1px solid #4b5563 !important;
+  color: #6b7280 !important;
+}
+
+body.light-mode .toggle-btn:hover {
+  background: #fafcff !important;
+  color: var(--accent) !important;
+  border: 1px solid var(--accent) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ============================================
+   TABLAS EN MODO CLARO
+   ============================================ */
+
+body.light-mode table th {
+  background: #f3f4f6 !important;
+  color: var(--text-color) !important;
+  font-weight: 600;
+  border-bottom: 2px solid #e5e7eb !important;
+}
+
+body.light-mode table td {
+  background: white;
+  color: var(--text-color) !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .table-hover tbody tr:hover {
+    background-color: transparent !important;
+}
+
+body.light-mode table tr:hover {
+  background: #f9fafb !important;
+}
+
+/* Anulación específica para tablas con la clase .table-dark cuando estamos
+   en modo claro: mantener el aspecto pero evitar el hover oscuro de Bootstrap */
+body.light-mode .table-dark,
+body.light-mode table.table-dark {
+  background-color: transparent !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .table-dark tbody th,
+body.light-mode .table-dark tbody td,
+body.light-mode table.table-dark tbody th,
+body.light-mode table.table-dark tbody td {
+  background-color: transparent !important;
+  color: var(--text-color) !important;
+  border-color: #e5e7eb !important;
+}
+
+/* Hover suave y claro para filas en .table-dark dentro de modo claro */
+body.light-mode .table-dark.table-hover tbody tr:hover > *,
+body.light-mode .table-dark.table-hover tbody tr:hover {
+  background-color: rgba(79, 70, 229, 0.04) !important;
+  color: var(--text-color) !important;
+}
+
+/* Regla más específica para sobreescribir hover oscuro aplicado desde
+   estilos globales (.table-dark en styles-admin.css u otros) */
+body.light-mode table.table-dark tbody tr:hover,
+body.light-mode .table-dark tbody tr:hover,
+body.light-mode table.table-dark.table-hover tbody tr:hover > td,
+body.light-mode table.table-dark.table-hover tbody tr:hover > th,
+body.light-mode table.table-dark tbody tr:hover > td,
+body.light-mode table.table-dark tbody tr:hover > th {
+  background-color: rgba(79, 70, 229, 0.04) !important;
+  background: rgba(79, 70, 229, 0.04) !important;
+  color: var(--text-color) !important;
+}
+
+/* Forzar celdas internas a no mantener fondo oscuro cuando no hay hover */
+body.light-mode table.table-dark tbody tr > td,
+body.light-mode table.table-dark tbody tr > th {
+  background-color: transparent !important;
+  background: transparent !important;
+  color: var(--text-color) !important;
+}
+
+/* ============================================
+   CARDS Y PANELES ADICIONALES
+   ============================================ */
+
+body.light-mode .info-card,
+body.light-mode .academic-section,
+body.light-mode .attendance-section,
+body.light-mode .discipline-section,
+body.light-mode .communication-section,
+body.light-mode .meetings-section,
+body.light-mode .performance-section,
+body.light-mode .evaluations-section,
+body.light-mode .schedule-section {
+  background: var(--card-bg) !important;
+  border: 1px solid #e5e7eb !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .info-card-header {
+  background: #f9fafb !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .info-card-header h3 {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .info-card-header i {
+  color: var(--accent) !important;
+}
+
+body.light-mode .info-row {
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .info-label {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .info-value {
+  color: var(--text-color) !important;
+}
+
+/* ============================================
+   BADGES Y ESTADOS
+   ============================================ */
+
+body.light-mode .badge-item,
+body.light-mode .badge-status {
+  border: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .badge-active {
+  background: rgba(16, 185, 129, 0.1) !important;
+  color: #059669 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+body.light-mode .badge-info {
+  background: rgba(79, 70, 229, 0.1) !important;
+  color: var(--accent) !important;
+  border: 1px solid rgba(79, 70, 229, 0.3) !important;
+}
+
+body.light-mode .badge-success {
+  background: rgba(16, 185, 129, 0.1) !important;
+  color: #059669 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+body.light-mode .badge-mini {
+  border: 1px solid #e5e7eb !important;
+}
+
+/* ============================================
+   BOTONES EN MODO CLARO
+   ============================================ */
+
+body.light-mode .btn-secondary,
+body.light-mode .btn-icon,
+body.light-mode .btn-back,
+body.light-mode .btn-timeline,
+body.light-mode .btn-calendar {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .btn-secondary:hover,
+body.light-mode .btn-icon:hover,
+body.light-mode .btn-back:hover,
+body.light-mode .btn-timeline:hover,
+body.light-mode .btn-calendar:hover {
+  background: #f9fafb !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+body.light-mode .btn-primary-action,
+body.light-mode .btn-confirm {
+  background: var(--accent) !important;
+  color: white !important;
+}
+
+body.light-mode .btn-primary-action:hover,
+body.light-mode .btn-confirm:hover {
+  background: #6366f1 !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4) !important;
+}
+
+body.light-mode .btn-secondary-action {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .btn-secondary-action:hover {
+  background: #f9fafb !important;
+  color: var(--accent) !important;
+}
+
+body.light-mode .btn-icon-action {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  color: var(--accent) !important;
+}
+
+body.light-mode .btn-icon-action:hover {
+  background: #f9fafb !important;
+  color: #6366f1 !important;
+}
+
+/* ============================================
+   INPUTS Y FORMULARIOS
+   ============================================ */
+
+body.light-mode .form-select,
+body.light-mode input[type="text"],
+body.light-mode input[type="email"],
+body.light-mode input[type="password"],
+body.light-mode textarea {
+  background: white !important;
+  border: 1px solid #00040b !important;
+  color: #000000 !important;
+}
+
+body.light-mode .form-select:focus,
+body.light-mode input[type="text"]:focus,
+body.light-mode input[type="email"]:focus,
+body.light-mode input[type="password"]:focus,
+body.light-mode textarea:focus {
+  background: white !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
+}
+
+body.light-mode .form-select option {
+  background: white !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode input::placeholder {
+  color: #9ca3af !important;
+}
+
+body.light-mode .btn-outline-light {
+  background: transparent !important;
+  border: 1px solid #000000 !important;
+  color: #000000 !important;
+}
+
+body.light-mode .btn-outline-light:hover {
+  background: transparent !important;
+  border: 2px solid var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+/* ============================================
+   ELEMENTS DE CONTENIDO
+   ============================================ */
+
+body.light-mode .performance-chart,
+body.light-mode .chart-placeholder,
+body.light-mode .chart-container {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .observation-item {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  border-left: 4px solid #10b981 !important;
+}
+
+body.light-mode .observation-date {
+  background: #f3f4f6 !important;
+  border: 1px solid #e5e7eb !important;
+  color: var(--accent) !important;
+}
+
+body.light-mode .observation-content strong {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .observation-content p {
+  color: #4b5563 !important;
+}
+
+body.light-mode .observation-teacher {
+  color: #6b7280 !important;
+}
+
+/* ============================================
+   TIMELINE
+   ============================================ */
+
+body.light-mode .communication-timeline::before {
+  background: linear-gradient(180deg, var(--accent), transparent) !important;
+}
+
+body.light-mode .timeline-marker {
+  background: var(--accent) !important;
+  color: white !important;
+  box-shadow: 0 0 0 4px #ffffff, 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-mode .timeline-content {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .timeline-header strong {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .timeline-date {
+  color: #6b7280 !important;
+}
+
+body.light-mode .timeline-text {
+  color: #4b5563 !important;
+}
+
+/* ============================================
+   MEETING ITEMS
+   ============================================ */
+
+body.light-mode .meeting-item {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .meeting-item:hover {
+  border-color: var(--accent) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .meeting-item.upcoming {
+  border-left: 4px solid var(--accent) !important;
+}
+
+body.light-mode .meeting-date-badge {
+  background: linear-gradient(135deg, var(--accent) 0%, #6366f1 100%) !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3) !important;
+}
+
+body.light-mode .meeting-date-badge.past {
+  background: linear-gradient(135deg, #9ca3af 0%, #d1d5db 100%) !important;
+}
+
+body.light-mode .meeting-details h5 {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .meeting-details p {
+  color: #4b5563 !important;
+}
+
+body.light-mode .meeting-meta span {
+  color: #6b7280 !important;
+}
+
+body.light-mode .meeting-status.attended {
+  background: rgba(16, 185, 129, 0.1) !important;
+  color: #059669 !important;
+}
+
+body.light-mode .meeting-status.missed {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #dc2626 !important;
+}
+
+/* ============================================
+   SECTION TITLES Y HEADERS
+   ============================================ */
+
+body.light-mode .section-title {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .profile-subtitle {
+  color: #6b7280 !important;
+}
+
+body.light-mode .subject-area {
+  color: #6b7280 !important;
+}
+
+body.light-mode .stat-label,
+body.light-mode .stat-label-teacher,
+body.light-mode .performance-label {
+  color: #6b7280 !important;
+}
+
+body.light-mode .stat-value,
+body.light-mode .stat-value.grade-excellent,
+body.light-mode .stat-value.grade-good {
+  color: var(--text-color) !important;
+}
+
+/* ============================================ 
+    MODULO DE EVENTOS
+===============================================*/
+
+body.light-mode .filter-tab-event {
+  background: white !important;
+  border: 1px solid #4f46e5 !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .filter-tab-event.active {
+  background: #0075F2 !important;
+  border-color: #0075F2 !important;
+  color: white !important;
+
+}
+
+body.light-mode .events-calendar-section {
+  background: #f3f4f6 !important;
+}
+
+body.light-mode .calendar-view-header h3 {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .btn-calendar-nav {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  color: var(--accent) !important;
+}
+
+body.light-mode .btn-calendar-nav:hover {
+  background: #f3f4f6 !important;
+  border: 1px solid var(--accent) !important;
+}
+
+body.light-mode .calendar-large-header {
+  background: #0075F2 !important;
+  color: white;
+}
+
+body.light-mode .calendar-large-day {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .calendar-day-number {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .calendar-large-day.today {
+  background: #c8e3ff !important;
+  color: white !important;
+  border-color: #0075F2 !important;
+}
+
+body.light-mode .event-card {
+  background: #f3f4f6 !important;
+  border: 1px solid var(--accent) !important;
+}
+
+body.light-mode .event-card-body h4 {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .event-meta .meta-item strong {
+  color: var(--accent) !important;
+}
+
+body.light-mode .event-card-body p {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .event-meta .meta-item {
+  color: var(--muted-color);
+}
+
+body.light-mode .event-card-footer, 
+body.light-mode .event-card-header {
+  background: #e2e2e2 !important;
+}
+
+body.light-mode .btn-event-action {
+  background: #4b5563 !important;
+  color: white !important;
+}
+
+body.light-mode .btn-event-secondary {
+  background: white !important;
+  border: 2px solid var(--accent) !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .btn-event-secondary:hover {
+  background: #f3f4f6 !important;
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+body.light-mode .participant-avatar {
+  border: 1px solid var(--accent) !important;
+}
+
+body.light-mode .btn-view {
+  background: var(--bg) !important;
+  border: 2px solid var(--accent) !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .btn-view.active {
+  background: var(--accent) !important;
+  color: white !important;
+}
+
+/* ============================================ 
+    MODULO DE CURSOS
+===============================================*/
+
+body.light-mode .courses-section {
+  background: #f3f4f6 !important;
+}
+
+body.light-mode .courses-header h3 {
+  color: var(--text-color) !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .course-card {
+  background: #f3f4f6 !important;
+  border: 1px solid #e5e7eb !important;
+  border: 1px solid var(--accent) !important;
+}
+
+body.light-mode .course-card h4 {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .stat {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .view-toggle {
+  background: var(--gris-fondo) !important;
+}
+
+body.light-mode .view-btn {
+  background: transparent !important;
+  border: 2px solid transparent !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .view-btn.active {
+  background: var(--accent) !important;
+  color: white !important;
+}
+
+/* ============================================ 
+    MODULO DE ASIGNATURAS
+===============================================*/
+
+body.light-mode .subjects-section {
+  background: #f3f4f6 !important;
+}
+
+body.light-mode .subjects-header h3 {
+  color: var(--text-color) !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .subject-card {
+  background: #f3f4f6 !important;
+  border: 1px solid #e5e7eb !important;
+  border: 1px solid var(--accent) !important;
+}
+
+body.light-mode .subject-card h4 {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .info-item,
+body.light-mode .stat-box {
+  background: var(--gris-fondo) !important;
+}
+
+body.light-mode .info-item strong {
+  color: var(--text-color) !important;
+}
+
+/* ============================================ 
+    MODULO DE MATRICULAS
+===============================================*/
+
+body.light-mode .filters-container {
+  background: #f3f4f6 !important;
+}
+
+body.light-mode .filters-container label {
+  color: var(--accent) !important;
+}
+
+body.light-mode .table-section {
+  background: #f3f4f6 !important;
+}
+
+body.light-mode .table-header h3 {
+  color: var(--text-color) !important;
+  font-weight: 700 !important;
+}
+
+/* ============================================ 
+    MODULO DE PERIODOS
+===============================================*/
+
+body.light-mode .periodo-activo-banner {
+  background: #f3f4f6 !important;
+}
+
+body.light-mode .periodos-filter-bar {
+  background: #f3f4f6 !important;
+}
+
+body.light-mode label {
+  color: var(--accent) !important;
+}
+
+body.light-mode .periodo-select {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  color: var(--text-color) !important;
+}
+
+body.light-mode .periodos-section {
+  background: #f3f4f6 !important;
+}
+
+body.light-mode .periodos-header h3 {
+  color: var(--text-color) !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .banner-title,
+body.light-mode .banner-dias-restantes {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .banner-label,
+body.light-mode .banner-fechas {
+  color: #6b7280 !important;
+}
+
+body.light-mode .periodo-card {
+  background: #f3f4f6 !important;
+  border: 1px solid #e5e7eb !important;
+  border: 1px solid var(--accent) !important;
+}
+
+body.light-mode .periodo-nombre-row h4 {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .periodo-card.activo {
+  background: var(--gris-fondo) !important;
+}
+
+body.light-mode .periodo-numero {
+  background: var(--muted-color);
+  border: 1px solid #000000;
+  color:  white;
+}
+
+body.light-mode .periodo-numero.planificado {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+body.light-mode .btn-periodo-action {
+  background: white;
+  border: 1px solid var(--accent);
+  color: var(--text-color);
+}
+
+body.light-mode .btn-periodo-action:hover {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+
+body.light-mode .btn-activar {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #10b981;
+}
+
+body.light-mode .btn-eliminar {
+  color: red;
+}
+
+body.light-mode .btn-eliminar:hover {
+  background: transparent;
+  border: 1px solid red;
+  color: red;
+}
+
+body.light-mode .filter-chip.active {
+  background: var(--accent) !important;
+  color: white !important;
+}
+
+body.light-mode .filter-chip:hover {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--accent) !important;
+}
+
+
+body.light-mode .periodo-modal-header,
+body.light-mode .periodo-modal-footer {
+  background: #e2e2e2 !important;
+}
+
+body.light-mode .periodo-modal-body {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .periodo-modal-sm {
+  border: 1px solid var(--accent) !important;
+}
+
+body.light-mode .activar-confirm-content > p {
+  color: var(--text-color) !important;
+}
+
+body.light-mode .modal-close-btn {
+  background: white;
+  border: 1px solid #e5e7eb !important;
+  color: var(--text-color);
+}
+
+body.light-mode .modal-close-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent) !important;
+}
+
+body.light-mode .periodo-modal-header h3 {
+  color: var(--text-color) !important;
+}
+
+/* ============================================
+   RESPONSIVE - MINOR ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 980px) {
+  body.light-mode .sidebar {
+    background: linear-gradient(180deg, #f3f4f6 0%, #ffffff 100%) !important;
+  }
+}

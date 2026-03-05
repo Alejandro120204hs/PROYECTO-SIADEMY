@@ -246,9 +246,6 @@ document.addEventListener('DOMContentLoaded', function() {
       // Guardar preferencia en localStorage
       const currentMode = document.body.classList.contains('light-mode') ? 'light' : 'dark';
       localStorage.setItem('theme-mode', currentMode);
-      
-      // Mostrar notificación (opcional)
-      showNotification('Tema cambiado correctamente');
     });
   }
   

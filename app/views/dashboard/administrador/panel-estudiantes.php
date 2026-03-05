@@ -71,7 +71,7 @@
       <div class="datatable-card">
         <div class="table-wrapper">
           
-        <table id="tablaEstudiantes" class="table table-dark table-hover">
+        <table id="tablaEstudiantes" class="table table-dark">
           <thead>
             <tr>
               <th width="40">

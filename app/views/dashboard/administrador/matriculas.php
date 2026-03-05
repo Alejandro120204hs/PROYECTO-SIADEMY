@@ -154,7 +154,7 @@
 
         <div class="table-responsive">
          <div class="table-wrapper">
-           <table class="table table-dark table-hover" id="tableMatriculas">
+           <table class="table table-dark" id="tableMatriculas">
             <thead>
               <tr>
                 <th>ID</th>
