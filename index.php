@@ -26,7 +26,7 @@
         // ENRUTAMIENTO BASICO
         switch($request){
             case '/':
-                require BASE_PATH . '/app/views/website/index.PHP';
+                require BASE_PATH . '/app/views/website/index.php';
                 break;
 
             // INICIO RUTAS LOGIN
