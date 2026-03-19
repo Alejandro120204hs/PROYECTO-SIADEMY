@@ -9,19 +9,24 @@
         initSession();
 
         // OBTENER LA URI ACTUAL (POR EJEMPLO: /siademy/login)
-        $requestUri = $_SERVER['REQUEST_URI'];
+       $requestUri = $_SERVER['REQUEST_URI'];
 
-        // QUITAR EL PREFIJO DE LA CARPETA DEL PROYECTO
-        $request = str_replace('/siademy', '', $requestUri);
+// Quitar parámetros (?id=...)
+$request = strtok($requestUri, '?');
 
-        // QUITAR PARAMETROS TIPO ?id=123
-        $request = strtok($request, '?');
+// Quitar index.php si viene en la URL
+$request = str_replace('/index.php', '', $request);
 
-        // QUITAR LA BARRA FINAL (SI EXISTE)
-        $request = rtrim($request, '/');
+// IMPORTANTE: ya no quitar /siademy en producción
+// (esto era solo para local)
 
-        // SI LA RUTA QUEDA VACIA, SE INTERPETRA COMO "/"
-        if($request === '')$request = '/';
+// Quitar barra final
+$request = rtrim($request, '/');
+
+// Si queda vacío → raíz
+if ($request === '') {
+    $request = '/';
+}
         
         // ENRUTAMIENTO BASICO
         switch($request){

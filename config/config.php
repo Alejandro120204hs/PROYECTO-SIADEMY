@@ -7,7 +7,7 @@
     $protocol = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
 
     // NOMBRE DE LA CARPETA DEL PROYECTO EN LOCAL
-    $baseFolder = '/siademy';
+    $baseFolder = '/siademyy';
 
     // HOST ACTUAL
     $host = $_SERVER['HTTP_HOST'];
