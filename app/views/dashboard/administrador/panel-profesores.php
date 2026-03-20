@@ -34,7 +34,7 @@
   <?php 
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
   ?>
-  <link rel="stylesheet" href="public/assets/dashboard/css/styles-panel-estudiantes.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-panel-estudiantes.css">
 
 </head>
 <body>
@@ -70,9 +70,8 @@
       </div>
 
       <!-- Tabla de Estudiantes -->
-      <div class="datatable-card">
-        <div class="table-wrapper">
-          <table id="tablaEstudiantes" class="table table-dark table-hover">
+      <div class="datatable-card table-scroll-x">
+          <table id="tablaEstudiantes" class="table table-dark table-hover table-scroll-content">
           <thead>
             <tr>
               <th width="40">
@@ -106,7 +105,7 @@
               <td><?= $docente['ciudad'] ?></td>
               <td><?= $docente['estado'] ?></td>
               
-              <td class="acciones p">
+              <td class="acciones">
                 <a class="btn-action" href="">
                   Ver
                 </a>
@@ -127,7 +126,6 @@
  
           </tbody>
         </table>
-        </div>
       </div>
 
     </main>

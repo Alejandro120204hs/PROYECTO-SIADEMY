@@ -66,8 +66,8 @@
       </div>
 
       <!-- Tabla de Estudiantes -->
-      <div class="datatable-card">
-        <table id="tablaEstudiantes" class="table table-dark table-hover">
+      <div class="datatable-card table-scroll-x">
+        <table id="tablaEstudiantes" class="table table-dark table-hover table-scroll-content">
           <thead>
             
             <tr>

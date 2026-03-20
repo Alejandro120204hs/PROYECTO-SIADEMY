@@ -30,7 +30,7 @@
   <?php 
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
   ?>
-  <link rel="stylesheet" href="public/assets/dashboard/css/styles-panel-estudiantes.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-panel-estudiantes.css">
 
 </head>
 
@@ -68,10 +68,8 @@
       </div>
 
       <!-- Tabla de Estudiantes -->
-      <div class="datatable-card">
-        <div class="table-wrapper">
-          
-        <table id="tablaEstudiantes" class="table table-dark table-hover">
+      <div class="datatable-card table-scroll-x">
+        <table id="tablaEstudiantes" class="table table-dark table-hover table-scroll-content">
           <thead>
             <tr>
               <th width="40">
@@ -130,7 +128,6 @@
           
           </tbody>
         </table>
-        </div>
       </div>
 
     </main>
