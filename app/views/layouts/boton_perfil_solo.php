@@ -49,7 +49,7 @@
       <span>Modo Descanso</span>
     </a>
     <div class="dropdown-divider"></div>
-    <a href="<?= BASE_URL ?>/logout" class="dropdown-item dropdown-item-danger">
+    <a href="<?= BASE_URL ?>/login" class="dropdown-item dropdown-item-danger">
       <i class="ri-logout-box-line"></i>
       <span>Cerrar Sesión</span>
     </a>
