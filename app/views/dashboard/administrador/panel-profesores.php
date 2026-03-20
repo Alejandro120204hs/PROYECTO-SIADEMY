@@ -1,7 +1,7 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
    // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
-  require_once BASE_PATH . '/app/controllers/administrador/Docente.php';
+  require_once BASE_PATH . '/app/controllers/administrador/docente.php';
    //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
     require_once BASE_PATH . '/app/controllers/perfil.php';
     
@@ -99,7 +99,7 @@
                alt="foto" width="50px" height="50px" style="border-radius: 50%;"></td>
               <td><?= $docente['nombres'] ?></td>
               <td><?= $docente['apellidos'] ?></td>
-              <td><?= $docente['tipo_documento'],-$docente['documento']?></td>
+              <td><?= $docente['tipo_documento'] . '-' . $docente['documento'] ?></td>
               <td><?= $docente['correo'] ?></td>
               <td><?= $docente['telefono'] ?></td>
               <td><?= $docente['ciudad'] ?></td>
