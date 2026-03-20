@@ -1027,3 +1027,122 @@ body {
 .datatable-card {
   overflow: visible;
 }
+
+/* =============================================
+   SIDEBAR OVERLAY – drawer en tablet/móvil
+   ============================================= */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 8, 30, 0.65);
+  z-index: 999;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.sidebar-overlay.active { display: block; }
+
+/* =============================================
+   RESPONSIVE – Tablet landscape (≤980px)
+   ============================================= */
+@media (max-width: 980px) {
+  .app,
+  .app.hide-left,
+  .app.hide-right,
+  .app.hide-both {
+    grid-template-columns: 1fr;
+  }
+  .topbar { flex-wrap: wrap; gap: 8px; }
+  .search {
+    width: min(320px, 40%);
+  }
+}
+
+/* =============================================
+   RESPONSIVE – Tablet portrait (≤768px)
+   Sidebar drawer + topbar en 2 filas
+   ============================================= */
+@media (max-width: 768px) {
+  .app,
+  .app.hide-left,
+  .app.hide-right,
+  .app.hide-both {
+    grid-template-columns: 1fr;
+  }
+
+  /* Drawer lateral */
+  .sidebar {
+    position: fixed !important;
+    left: -270px !important;
+    top: 0 !important;
+    height: 100dvh !important;
+    width: 260px !important;
+    min-width: 260px !important;
+    z-index: 1000;
+    transition: left 0.3s ease !important;
+    opacity: 1 !important;
+    padding: 24px 16px !important;
+    border-right: 1px solid rgba(255,255,255,.08) !important;
+    overflow-y: auto !important;
+  }
+  .sidebar.hidden {
+    left: -270px !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+  .sidebar.mobile-open {
+    left: 0 !important;
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Topbar: primera fila = toggle + title + user */
+  .topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .topbar-left { flex: 1; }
+  .user { margin-left: auto; }
+
+  /* Segunda fila: search ocupa todo el ancho */
+  .search {
+    order: 10;
+    width: 100% !important;
+    margin-left: 0;
+  }
+
+  /* Botones de acción: misma fila debajo */
+  .btn-agregar-estudiante,
+  .btn-pdf,
+  .dropdown-custom {
+    order: 11;
+  }
+
+  .title { font-size: 24px; }
+
+  .main { padding: 20px 14px 32px; }
+}
+
+/* =============================================
+   RESPONSIVE – Móvil (≤480px)
+   ============================================= */
+@media (max-width: 480px) {
+  .title { font-size: 20px; }
+
+  .main { padding: 14px 10px 24px; }
+
+  /* Ocultar texto "Más Nuevo" en dropdown pequeño */
+  .dropdown-custom { display: none; }
+
+  /* Botones de acción más compactos */
+  .btn-agregar-estudiante {
+    font-size: 13px;
+    padding: 10px 14px;
+  }
+  .btn-pdf {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .toggle-btn { width: 38px; height: 38px; }
+}

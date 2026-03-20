@@ -75,6 +75,7 @@ body {
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
     width: 80%;
     max-width: 400px;
+    box-sizing: border-box;
 }
 
 .login-box h2 {
@@ -91,19 +92,25 @@ body {
     align-items: center;
     margin-bottom: 15px;
     padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .input-group i {
     font-size: 20px;
     margin-right: 10px;
     color: var(--brand);
+    flex-shrink: 0;
 }
 
 .input-group input {
     border: none;
     outline: none;
     flex: 1;
+    min-width: 0;
     font-size: 15px;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 button {
@@ -172,37 +179,126 @@ button:hover {
 }
 
 /* RESPONSIVE */
-@media (max-width:980px) {
+body {
+    overflow-x: hidden;
+}
+
+@media (max-width: 980px) {
     .login-container {
-        width: 80%;
+        width: 88%;
     }
 
     .logo {
         left: -60px;
         top: -50px;
     }
-
-    .login-left img {
-        width: 80px;
-    }
 }
 
-@media (max-width:780px) {
+/* ── Tablet portrait: ocultar imagen, form ocupa todo el ancho ── */
+@media (max-width: 780px) {
     .login-right {
         display: none;
     }
+
+    .login-left {
+        width: 100%;
+        padding: 90px 24px 40px;
+    }
+
+    /* Logo centrado encima del formulario */
+    .logo {
+        width: 140px;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .login-box {
+        width: 90%;
+        max-width: 420px;
+    }
 }
 
-@media (max-width:600px) {
-    .logo {
-        left: 80px;
+/* ── Móvil estándar (≤480px) ── */
+@media (max-width: 480px) {
+    body {
+        height: 100vh;
+        min-height: 100dvh;
+        align-items: center;
+        padding: 0;
+    }
+
+    .login-container {
+        width: 94%;
+        margin: 0 auto;
+        border-radius: 14px;
     }
 
     .login-right {
+        display: none;
+    }
+
+    /* Sin padding-top: el form queda centrado naturalmente */
+    .login-left {
+        width: 100%;
+        padding: 32px 16px;
+    }
+
+    /* Ocultar logo flotante: en pantallas pequeñas no cabe bien */
+    .logo {
+        display: none;
+    }
+
+    .login-left > div:first-child {
         display: none;
     }
 
     .login-box {
         width: 100%;
+        max-width: 100%;
+        padding: 28px 16px 24px;
+        border-radius: 12px;
+    }
+
+    .login-box h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .input-group {
+        padding: 8px 10px;
+    }
+
+    .input-group input {
+        font-size: 14px;
+    }
+
+    button {
+        width: 78%;
+        padding: 11px;
+    }
+
+    .forgot {
+        font-size: 13px;
+    }
+}
+
+/* ── Móvil muy pequeño (≤360px) ── */
+@media (max-width: 360px) {
+    .login-container {
+        width: 97%;
+        border-radius: 10px;
+    }
+
+    .login-left {
+        padding: 24px 12px;
+    }
+
+    .login-box h2 {
+        font-size: 20px;
+    }
+
+    button {
+        width: 88%;
     }
 }

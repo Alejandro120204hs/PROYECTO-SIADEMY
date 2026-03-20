@@ -616,72 +616,147 @@ a {
   overflow-wrap: break-word;
 }
 
-/* RESPONSIVE */
+/* =============================================
+   SIDEBAR OVERLAY – aparece sobre el contenido
+   en tablets/móviles cuando el drawer está abierto
+   ============================================= */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 8, 30, 0.65);
+  z-index: 999;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.sidebar-overlay.active { display: block; }
+
+/* =============================================
+   RESPONSIVE – Desktop ancho (≤1200px)
+   ============================================= */
 @media (max-width: 1200px) {
   .app {
     grid-template-columns: 220px 1fr 320px;
   }
-
-  .app.hide-left {
-    grid-template-columns: 0 1fr 320px;
-  }
-
-  .app.hide-right {
-    grid-template-columns: 220px 1fr 0;
-  }
-
-  .app.hide-both {
-    grid-template-columns: 0 1fr 0;
-  }
+  .app.hide-left  { grid-template-columns: 0 1fr 320px; }
+  .app.hide-right { grid-template-columns: 220px 1fr 0; }
+  .app.hide-both  { grid-template-columns: 0 1fr 0; }
 }
 
+/* =============================================
+   RESPONSIVE – Tablet landscape (≤980px)
+   Sidebar y rightbar pasan a flujo normal
+   ============================================= */
 @media (max-width: 980px) {
-  .app {
+  .app,
+  .app.hide-left,
+  .app.hide-right,
+  .app.hide-both {
     grid-template-columns: 1fr;
   }
+  .rightbar { order: 3; }
+  .sidebar.hidden,
+  .rightbar.hidden { display: none; }
+  .search { width: 100%; }
+  .topbar { flex-wrap: wrap; }
+}
 
+/* =============================================
+   RESPONSIVE – Tablet portrait (≤768px)
+   Sidebar se convierte en drawer fijo lateral
+   ============================================= */
+@media (max-width: 768px) {
+  .app,
   .app.hide-left,
   .app.hide-right,
   .app.hide-both {
     grid-template-columns: 1fr;
   }
 
-  .sidebar,
-  .rightbar {
-    position: relative;
-    height: auto;
+  /* Drawer lateral */
+  .sidebar {
+    position: fixed !important;
+    left: -270px !important;
+    top: 0 !important;
+    height: 100dvh !important;
+    width: 260px !important;
+    min-width: 260px !important;
+    z-index: 1000;
+    transition: left 0.3s ease !important;
+    opacity: 1 !important;
+    padding: 24px 16px !important;
+    border-right: 1px solid var(--border) !important;
+    overflow-y: auto !important;
+  }
+  .sidebar.hidden {
+    left: -270px !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+  .sidebar.mobile-open {
+    left: 0 !important;
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6);
   }
 
-  .rightbar {
-    order: 3;
+  /* Ocultar rightbar en tablet */
+  .rightbar { display: none; }
+
+  .main {
+    padding: 20px 16px 32px;
+    max-height: unset;
   }
 
-  .sidebar.hidden,
-  .rightbar.hidden {
-    display: none;
-  }
+  .title { font-size: 26px; }
+
+  .topbar { flex-wrap: wrap; gap: 8px; }
 
   .search {
     width: 100%;
+    margin-left: 0;
+    order: 10;
   }
 
-  .topbar {
+  /* KPIs en 2 columnas */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* Gráfico: controles en línea propia */
+  .chart-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chart-controls { width: 100%; }
+  .chart-stats {
     flex-wrap: wrap;
+    gap: 12px;
   }
 }
 
-@media (max-width: 600px) {
-  .title {
-    font-size: 26px;
-  }
+/* =============================================
+   RESPONSIVE – Móvil (≤480px)
+   ============================================= */
+@media (max-width: 480px) {
+  .main { padding: 16px 12px 24px; }
 
-  .main {
-    padding: 20px 16px;
-  }
+  .title { font-size: 22px; }
 
+  .topbar { gap: 6px; }
+
+  /* KPIs apilados */
   .kpi-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
+  .kpi-value { font-size: 26px; }
+
+  /* Gráfico más compacto */
+  .chart-container { min-height: 220px; }
+  .chart-stats { flex-direction: column; }
+
+  /* Botones de toggle más compactos */
+  .toggle-btn { width: 38px; height: 38px; }
 }
 
 /* Estilos de scrollbar para el sidebar izquierdo */
