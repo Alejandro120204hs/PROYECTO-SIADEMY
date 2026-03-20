@@ -17,10 +17,10 @@
 
     // AGREGAR SWEET ALERT DEL ENVIO O NO ENVIO DEL CORREO
     if($resultado === true){
-            mostrarSweetAlert('success', 'Nueva clave generada', 'Se ha enviado a una nueva contraseña a su correo electronico. Redirigiendo...', '/siademy/login');
+            mostrarSweetAlert('success', 'Nueva clave generada', 'Se ha enviado a una nueva contraseña a su correo electronico. Redirigiendo...', BASE_URL . '/login');
             exit();
         }else{
-            mostrarSweetAlert('error', 'Usuario no encontrado', 'Verifique su correo electronico e intente nuevamente.  Redirigiendo...', '/siademy/login');
+            mostrarSweetAlert('error', 'Usuario no encontrado', 'Verifique su correo electronico e intente nuevamente.  Redirigiendo...', BASE_URL . '/login');
             exit();
         }
         exit();
