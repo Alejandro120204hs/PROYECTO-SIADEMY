@@ -8,11 +8,16 @@
         // Iniciar sesión
         initSession();
 
-        // OBTENER LA URI ACTUAL (POR EJEMPLO: /siademy/login)
+        // OBTENER LA URI ACTUAL
         $requestUri = $_SERVER['REQUEST_URI'];
 
-        // QUITAR EL PREFIJO DE LA CARPETA DEL PROYECTO
-        $request = str_replace('/siademy', '', $requestUri);
+        // DETECTAR PREFIJO DE LA APP DINAMICAMENTE (/, /siademy, etc.)
+        $basePath = parse_url(BASE_URL, PHP_URL_PATH) ?: '';
+        if ($basePath !== '' && $basePath !== '/' && strpos($requestUri, $basePath) === 0) {
+            $request = substr($requestUri, strlen($basePath));
+        } else {
+            $request = $requestUri;
+        }
 
         // QUITAR PARAMETROS TIPO ?id=123
         $request = strtok($request, '?');
