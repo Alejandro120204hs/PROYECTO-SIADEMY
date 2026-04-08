@@ -90,10 +90,10 @@
 
         // SI LA RESPUESTA DEL MODELO ES VERDADERA CONFIRMAMOS EL REGISTRO Y REDIRECCIONAMOS
         if($resultado === true){
-            mostrarSweetAlert('success', 'Evento registrado', 'El evento ha sido creado exitosamente. Redirigiendo...', '/siademy/administrador-eventos');
+            mostrarSweetAlert('success', 'Evento registrado', 'El evento ha sido creado exitosamente. Redirigiendo...', BASE_URL . '/administrador-eventos');
             exit();
         }else{
-            mostrarSweetAlert('error', 'Error al registrar', 'No se pudo registrar el evento, intente nuevamente. Redirigiendo...', '/siademy/administrador-eventos');
+            mostrarSweetAlert('error', 'Error al registrar', 'No se pudo registrar el evento, intente nuevamente. Redirigiendo...', BASE_URL . '/administrador-eventos');
             exit();
         }
     }
@@ -187,10 +187,10 @@
         $resultado = $objetoEvento->actualizar($data);
 
         if($resultado === true){
-            mostrarSweetAlert('success', 'Evento actualizado', 'El evento ha sido actualizado exitosamente. Redirigiendo...', '/siademy/administrador-eventos');
+            mostrarSweetAlert('success', 'Evento actualizado', 'El evento ha sido actualizado exitosamente. Redirigiendo...', BASE_URL . '/administrador-eventos');
             exit();
         }else{
-            mostrarSweetAlert('error', 'Error al actualizar', 'No se pudo actualizar el evento, intente nuevamente. Redirigiendo...', '/siademy/administrador-eventos');
+            mostrarSweetAlert('error', 'Error al actualizar', 'No se pudo actualizar el evento, intente nuevamente. Redirigiendo...', BASE_URL . '/administrador-eventos');
             exit();
         }
     }
@@ -214,10 +214,10 @@
         $resultado = $objetoEvento->eliminar($id, $id_institucion);
 
         if($resultado === true){
-            mostrarSweetAlert('success', 'Evento eliminado', 'El evento ha sido eliminado exitosamente. Redirigiendo...', '/siademy/administrador-eventos');
+            mostrarSweetAlert('success', 'Evento eliminado', 'El evento ha sido eliminado exitosamente. Redirigiendo...', BASE_URL . '/administrador-eventos');
             exit();
         }else{
-            mostrarSweetAlert('error', 'Error al eliminar', 'No se pudo eliminar el evento, intente nuevamente. Redirigiendo...', '/siademy/administrador-eventos');
+            mostrarSweetAlert('error', 'Error al eliminar', 'No se pudo eliminar el evento, intente nuevamente. Redirigiendo...', BASE_URL . '/administrador-eventos');
             exit();
         }
     }

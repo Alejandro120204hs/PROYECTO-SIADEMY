@@ -52,7 +52,7 @@
   <?php 
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
   ?>
-  <link rel="stylesheet" href="public/assets/dashboard/css/styles-docente.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
 </head>
 
 <body>
