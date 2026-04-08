@@ -61,6 +61,7 @@
         <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-profesores'">
           <i class="ri-add-line"></i> Agregar Profesor
         </button>
+          <a class="btn-pdf" href="<?= BASE_URL ?>/administrador-reporte?reporte=docentes" target="_blank">Generar PDF</a>
         
         <div class="user">
           <?php

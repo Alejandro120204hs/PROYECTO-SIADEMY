@@ -1,6 +1,7 @@
 <?php 
 
-    function mostrarSweetAlert($tipo, $titulo, $mensaje, $redirect = null) {
+    if (!function_exists('mostrarSweetAlert')) {
+        function mostrarSweetAlert($tipo, $titulo, $mensaje, $redirect = null) {
         echo "
         <html>
             <head>
@@ -130,6 +131,7 @@
 
             </body>
         </html>";
+        }
     }
 
 ?>

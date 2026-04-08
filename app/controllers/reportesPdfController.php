@@ -6,6 +6,7 @@
     require_once BASE_PATH . '/app/controllers/superAdmin/administradores.php';
     require_once BASE_PATH . '/app/controllers/administrador/acudiente.php';
     require_once BASE_PATH . '/app/controllers/administrador/estudiante_controller.php';
+    require_once BASE_PATH . '/app/controllers/administrador/docente.php';
 
 
 
@@ -30,7 +31,10 @@
         case 'estudiantes':
             reportesEstudiantesPdf();
             break;
-        
+
+        case 'docentes':
+            reportesDocentesPdf();
+            break;
    }
    }
 
@@ -87,7 +91,21 @@
         require BASE_PATH . '/app/views/pdf/estudiantes_pdf.php';
         $html = ob_get_clean();
 
-        generarPDF($html, 'reporte_acudientes.pdf', false);
+        generarPDF($html, 'reporte_estudiantes.pdf', false);
+    }
+
+    function reportesDocentesPdf(){
+        // CARGAR LA VISTA Y OBTENERLA COMO HTML
+        ob_start();
+        // ASIGNAMOS LOS DATOS DE LA FUNCION EN EL CONTROLADOR ENLAZADO A UNA VARIABLE QUE PODAMOS MANIPULAR EN LA VISTA DEL PDF
+        
+        $docentes = mostrarDocentes();
+
+        // ARCHIVO QUE TIENE LA INTERFAZ DISEÑADA EN HTML
+        require BASE_PATH . '/app/views/pdf/docentes_pdf.php';
+        $html = ob_get_clean();
+
+        generarPDF($html, 'reporte_docentes.pdf', false);
     }
 
 

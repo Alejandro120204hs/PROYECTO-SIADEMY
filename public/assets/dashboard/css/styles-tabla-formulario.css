@@ -172,6 +172,12 @@ h1, h2, h3, h4, h5, h6 {
       gap: 12px;
     }
 
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .toggle-btn {
       width: 42px;
       height: 42px;
@@ -309,6 +315,36 @@ h1, h2, h3, h4, h5, h6 {
       align-items: center;
       gap: 12px;
       justify-content: flex-end;
+      position: relative;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .user-role {
+      font-size: 12px;
+      color: #a0a3bd;
+      line-height: 1.2;
+      text-transform: capitalize;
     }
 
     .user .btn {
@@ -337,6 +373,146 @@ h1, h2, h3, h4, h5, h6 {
       place-items: center;
       font-weight: 700;
       cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+    }
+
+    .user .avatar img {
+      transition: opacity 0.2s ease;
+    }
+
+    .user .avatar:hover img {
+      opacity: 0.85;
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 280px;
+      background: linear-gradient(180deg, #161821 0%, #101117 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      overflow: hidden;
+    }
+
+    .user-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .user-dropdown::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      right: 20px;
+      width: 12px;
+      height: 12px;
+      background: #161821;
+      border-left: 1px solid var(--border);
+      border-top: 1px solid var(--border);
+      transform: rotate(45deg);
+    }
+
+    .dropdown-header {
+      padding: 20px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(79, 70, 229, 0.05);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dropdown-header img {
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown-header strong {
+      display: block;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .dropdown-header small {
+      color: #a0a3bd;
+      font-size: 12px;
+      text-transform: capitalize;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      color: #e6e9f4;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      font-size: 14px;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(79, 70, 229, 0.08);
+      color: #fff;
+    }
+
+    .dropdown-item i:first-child {
+      width: 18px;
+      text-align: center;
+      color: #a0a3bd;
+      font-size: 17px;
+    }
+
+    .dropdown-item:hover i:first-child {
+      color: #4f46e5;
+    }
+
+    .dropdown-badge {
+      margin-left: auto;
+      background: #4f46e5;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .dropdown-arrow {
+      margin-left: auto;
+      color: #8b91a3;
+      font-size: 16px;
+    }
+
+    .dropdown-item-danger {
+      color: #fca5a5;
+    }
+
+    .dropdown-item-danger:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #fecaca;
+    }
+
+    .dropdown-item-danger i:first-child,
+    .dropdown-item-danger:hover i:first-child {
+      color: #ef4444;
     }
 
     /* DATATABLE STYLES */
@@ -880,6 +1056,10 @@ h1, h2, h3, h4, h5, h6 {
       .topbar {
         flex-wrap: wrap;
       }
+
+      .user {
+        margin-left: auto;
+      }
     }
 
     @media (max-width:600px) {
@@ -904,6 +1084,15 @@ h1, h2, h3, h4, h5, h6 {
 
       .table {
         font-size: 14px;
+      }
+
+      .user-details {
+        display: none;
+      }
+
+      .user-dropdown {
+        width: min(280px, calc(100vw - 32px));
+        right: 0;
       }
     }
 
