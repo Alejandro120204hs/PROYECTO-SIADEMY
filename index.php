@@ -256,12 +256,31 @@
                 require BASE_PATH . '/app/views/dashboard/administrador/eventos.php';
                 break;
 
+            case '/administrador-eventos':
+                require BASE_PATH . '/app/views/dashboard/administrador/eventos.php';
+                break;
+
             case '/administrador/registrar-evento':
                 require BASE_PATH . '/app/views/dashboard/administrador/addEvento.php';
                 break;
 
-            case 'administrador/guardar-evento':
+            case '/administrador/guardar-evento':
                 require BASE_PATH . '/app/controllers/administrador/eventos.php';
+                manejarSolicitudEventos();
+                break;
+
+            case '/administrador/eliminar-evento':
+                require BASE_PATH . '/app/controllers/administrador/eventos.php';
+                manejarSolicitudEventos();
+                break;
+
+            case '/administrador/editar-evento':
+                require BASE_PATH . '/app/views/dashboard/administrador/editarEvento.php';
+                break;
+
+            case '/administrador/actualizar-evento':
+                require BASE_PATH . '/app/controllers/administrador/eventos.php';
+                manejarSolicitudEventos();
                 break;
 
             case '/administrador-panel-asignaturas':

@@ -2,11 +2,45 @@
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
    //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
     require_once BASE_PATH . '/app/controllers/perfil.php';
+    require_once BASE_PATH . '/app/controllers/administrador/eventos.php';
     
     // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
     $id = $_SESSION['user']['id'];
     // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
     $usuario = mostrarPerfil($id);
+    
+    // OBTENEMOS LOS EVENTOS DE LA INSTITUCIÓN
+    $eventos = mostrarEventos();
+    
+    // FUNCIÓN PARA OBTENER EL DÍA DE LA SEMANA EN ESPAÑOL
+    function getDiaSemana($timestamp) {
+        $dias = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+        return $dias[date('w', $timestamp)];
+    }
+    
+    // FUNCIÓN PARA MAPEAR TIPO DE EVENTO A CATEGORIA PARA FILTROS
+    function getTipoCategoria($tipo) {
+        $map = [
+            'reuniones' => 'meetings',
+            'examen' => 'exams',
+            'actividad' => 'activities',
+            'taller' => 'workshops',
+            'conferencia' => 'conferences'
+        ];
+        return $map[strtolower($tipo)] ?? 'all';
+    }
+    
+    // FUNCIÓN PARA OBTENER ICONO DEL TIPO DE EVENTO
+    function getIconoTipo($tipo) {
+        $iconos = [
+            'reuniones' => 'ri-user-voice-line',
+            'examen' => 'ri-file-edit-line',
+            'actividad' => 'ri-basketball-line',
+            'taller' => 'ri-briefcase-line',
+            'conferencia' => 'ri-presentation-line'
+        ];
+        return $iconos[strtolower($tipo)] ?? 'ri-calendar-line';
+    }
 ?>
 <!doctype html>
 <html lang="es">
@@ -38,14 +72,16 @@
           <div class="title">Eventos Académicos</div>
         </div>
         <div class="topbar-actions">
-          <button class="btn-action" >
+          <button class="btn-action" onclick="window.location.href='<?= BASE_URL ?>/administrador/registrar-evento'">
             <i class="ri-add-line"></i>
-            <a href="administrador/registrar-evento"><span>Nuevo Evento</span></a>
+            <span>Nuevo Evento</span>
           </button>
         </div>
+        <div class="user">
        <?php
           include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
         ?>
+        </div>
       </div>
 
       <!-- FILTER SECTION -->
@@ -114,357 +150,99 @@
             Próximos Eventos
           </h3>
           <div class="view-options">
-            <button class="btn-view active" data-view="list">
-              <i class="ri-list-check"></i>
-            </button>
-            <button class="btn-view" data-view="grid">
+            
+            <button class="btn-view active" data-view="grid">
               <i class="ri-grid-line"></i>
+            </button>
+            <button class="btn-view " data-view="list">
+              <i class="ri-list-check"></i>
             </button>
           </div>
         </div>
 
         <div class="events-container" id="eventsContainer">
-          <!-- Event Card 1 -->
-          <div class="event-card" data-category="meetings" data-date="2024-10-28">
-            <div class="event-card-header">
-              <div class="event-type-badge meetings">
-                <i class="ri-user-voice-line"></i>
-                <span>Reunión</span>
-              </div>
-              <div class="event-actions">
-                <button class="btn-event-action" title="Editar">
-                  <i class="ri-edit-line"></i>
-                </button>
-                <button class="btn-event-action" title="Más opciones">
-                  <i class="ri-more-2-fill"></i>
-                </button>
-              </div>
+          <?php 
+          if(empty($eventos)): 
+          ?>
+            <div class="no-events-message" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
+              <i class="ri-calendar-blank-line" style="font-size: 48px; margin-bottom: 20px;"></i>
+              <p>No hay eventos registrados aún</p>
+              <a href="<?= BASE_URL ?>/administrador/registrar-evento" class="btn btn-primary mt-3">
+                <i class="ri-add-line"></i> Crear Primer Evento
+              </a>
             </div>
-            <div class="event-card-body">
-              <h4>Reunión de Padres - Grado 7°</h4>
-              <p>Reunión general para padres de familia del grado séptimo. Se discutirán temas académicos y disciplinarios del segundo período.</p>
-              
-              <div class="event-meta">
-                <div class="meta-item">
-                  <i class="ri-calendar-line"></i>
-                  <span><strong>28 Oct</strong> - Lunes</span>
+          <?php 
+          else:
+            foreach($eventos as $evento):
+              $categoria = getTipoCategoria($evento['tipo_evento']);
+              $icono = getIconoTipo($evento['tipo_evento']);
+              $fecha = strtotime($evento['fecha_evento']);
+              $diaSemana = getDiaSemana($fecha);
+          ?>
+            <!-- Evento Dinámico -->
+            <div class="event-card" data-category="<?= htmlspecialchars($categoria) ?>" data-date="<?= htmlspecialchars($evento['fecha_evento']) ?>">
+              <div class="event-card-header">
+                <div class="event-type-badge <?= htmlspecialchars($categoria) ?>">
+                  <i class="<?= htmlspecialchars($icono) ?>"></i>
+                  <span><?= htmlspecialchars(ucfirst($evento['tipo_evento'])) ?></span>
                 </div>
-                <div class="meta-item">
-                  <i class="ri-time-line"></i>
-                  <span>2:00 PM - 4:00 PM</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-map-pin-line"></i>
-                  <span>Auditorio Principal</span>
+                <div class="event-actions">
+                  <a href="<?= BASE_URL ?>/administrador/editar-evento?id=<?= htmlspecialchars($evento['id']) ?>" class="btn-event-action" title="Editar">
+                    <i class="ri-edit-line"></i>
+                  </a>
+                  <button class="btn-event-action" onclick="if(confirm('¿Deseas eliminar este evento?')) window.location.href='<?= BASE_URL ?>/administrador/eliminar-evento?accion=eliminar&id=<?= htmlspecialchars($evento['id']) ?>';" title="Eliminar">
+                    <i class="ri-delete-bin-line"></i>
+                  </button>
                 </div>
               </div>
+              <div class="event-card-body">
+                <h4><?= htmlspecialchars($evento['nombre_evento']) ?></h4>
+                <p><?= htmlspecialchars(substr($evento['descripcion'], 0, 150)) ?><?= strlen($evento['descripcion']) > 150 ? '...' : '' ?></p>
+                
+                <div class="event-meta">
+                  <div class="meta-item">
+                    <i class="ri-calendar-line"></i>
+                    <span><strong><?= date('d M', $fecha) ?></strong> - <?= ucfirst($diaSemana) ?></span>
+                  </div>
+                  <div class="meta-item">
+                    <i class="ri-time-line"></i>
+                    <span><?= htmlspecialchars($evento['hora_inicio']) ?> - <?= htmlspecialchars($evento['hora_fin']) ?></span>
+                  </div>
+                  <div class="meta-item">
+                    <i class="ri-map-pin-line"></i>
+                    <span><?= htmlspecialchars($evento['ubicacion']) ?></span>
+                  </div>
+                </div>
 
-              <div class="event-participants">
-                <div class="participants-avatars">
-                  <div class="participant-avatar">DA</div>
-                  <div class="participant-avatar">MP</div>
-                  <div class="participant-avatar">LC</div>
-                  <div class="participants-more">+45</div>
+                <div class="event-participants">
+                  <div class="participants-avatars">
+                    <div class="participant-avatar"><?= strtoupper(substr($evento['responsable'], 0, 2)) ?></div>
+                  </div>
+                  <span class="participants-text">
+                    <?php 
+                      $partic = intval($evento['participantes_esperados']);
+                      echo $partic > 0 ? "$partic participantes esperados" : "Participantes por confirmar";
+                    ?>
+                  </span>
                 </div>
-                <span class="participants-text">48 participantes confirmados</span>
+              </div>
+              <div class="event-card-footer">
+                <a href="<?= BASE_URL ?>/administrador/editar-evento?id=<?= htmlspecialchars($evento['id']) ?>" class="btn-event-secondary">
+                  <i class="ri-information-line"></i>
+                  Ver / Editar
+                </a>
+                <?php if($evento['requiere_confirmacion']): ?>
+                  <button class="btn-event-primary">
+                    <i class="ri-checkbox-circle-line"></i>
+                    Confirmar
+                  </button>
+                <?php endif; ?>
               </div>
             </div>
-            <div class="event-card-footer">
-              <button class="btn-event-primary">
-                <i class="ri-checkbox-circle-line"></i>
-                Confirmar Asistencia
-              </button>
-              <button class="btn-event-secondary">
-                <i class="ri-information-line"></i>
-                Detalles
-              </button>
-            </div>
-          </div>
-
-          <!-- Event Card 2 -->
-          <div class="event-card" data-category="exams" data-date="2024-10-30">
-            <div class="event-card-header">
-              <div class="event-type-badge exams">
-                <i class="ri-file-edit-line"></i>
-                <span>Examen</span>
-              </div>
-              <div class="event-actions">
-                <button class="btn-event-action" title="Editar">
-                  <i class="ri-edit-line"></i>
-                </button>
-                <button class="btn-event-action" title="Más opciones">
-                  <i class="ri-more-2-fill"></i>
-                </button>
-              </div>
-            </div>
-            <div class="event-card-body">
-              <h4>Examen Final - Matemáticas Avanzadas</h4>
-              <p>Evaluación final del segundo período académico. Temas: Álgebra, Trigonometría y Funciones.</p>
-              
-              <div class="event-meta">
-                <div class="meta-item">
-                  <i class="ri-calendar-line"></i>
-                  <span><strong>30 Oct</strong> - Miércoles</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-time-line"></i>
-                  <span>8:00 AM - 10:00 AM</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-map-pin-line"></i>
-                  <span>Aula 201</span>
-                </div>
-              </div>
-
-              <div class="event-participants">
-                <div class="participants-avatars">
-                  <div class="participant-avatar">TS</div>
-                  <div class="participant-avatar">JN</div>
-                  <div class="participant-avatar">KH</div>
-                  <div class="participants-more">+29</div>
-                </div>
-                <span class="participants-text">32 estudiantes - 10° A</span>
-              </div>
-            </div>
-            <div class="event-card-footer">
-              <button class="btn-event-primary">
-                <i class="ri-file-list-3-line"></i>
-                Ver Temario
-              </button>
-              <button class="btn-event-secondary">
-                <i class="ri-printer-line"></i>
-                Imprimir
-              </button>
-            </div>
-          </div>
-
-          <!-- Event Card 3 -->
-          <div class="event-card" data-category="activities" data-date="2024-11-02">
-            <div class="event-card-header">
-              <div class="event-type-badge activities">
-                <i class="ri-music-2-line"></i>
-                <span>Actividad</span>
-              </div>
-              <div class="event-actions">
-                <button class="btn-event-action" title="Editar">
-                  <i class="ri-edit-line"></i>
-                </button>
-                <button class="btn-event-action" title="Más opciones">
-                  <i class="ri-more-2-fill"></i>
-                </button>
-              </div>
-            </div>
-            <div class="event-card-body">
-              <h4>Festival Cultural Institucional</h4>
-              <p>Presentación de obras teatrales, danzas típicas y exposiciones culturales de todos los grados.</p>
-              
-              <div class="event-meta">
-                <div class="meta-item">
-                  <i class="ri-calendar-line"></i>
-                  <span><strong>02 Nov</strong> - Sábado</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-time-line"></i>
-                  <span>9:00 AM - 12:00 PM</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-map-pin-line"></i>
-                  <span>Coliseo Central</span>
-                </div>
-              </div>
-
-              <div class="event-participants">
-                <div class="participants-avatars">
-                  <div class="participant-avatar">DA</div>
-                  <div class="participant-avatar">SW</div>
-                  <div class="participant-avatar">JP</div>
-                  <div class="participants-more">+127</div>
-                </div>
-                <span class="participants-text">Toda la comunidad educativa</span>
-              </div>
-            </div>
-            <div class="event-card-footer">
-              <button class="btn-event-primary">
-                <i class="ri-calendar-check-line"></i>
-                Agregar al Calendario
-              </button>
-              <button class="btn-event-secondary">
-                <i class="ri-share-line"></i>
-                Compartir
-              </button>
-            </div>
-          </div>
-
-          <!-- Event Card 4 -->
-          <div class="event-card" data-category="activities" data-date="2024-11-05">
-            <div class="event-card-header">
-              <div class="event-type-badge activities">
-                <i class="ri-basketball-line"></i>
-                <span>Deportiva</span>
-              </div>
-              <div class="event-actions">
-                <button class="btn-event-action" title="Editar">
-                  <i class="ri-edit-line"></i>
-                </button>
-                <button class="btn-event-action" title="Más opciones">
-                  <i class="ri-more-2-fill"></i>
-                </button>
-              </div>
-            </div>
-            <div class="event-card-body">
-              <h4>Día del Deporte - Juegos Inter-cursos</h4>
-              <p>Competencias deportivas en fútbol, baloncesto, voleibol y atletismo entre todos los cursos.</p>
-              
-              <div class="event-meta">
-                <div class="meta-item">
-                  <i class="ri-calendar-line"></i>
-                  <span><strong>05 Nov</strong> - Martes</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-time-line"></i>
-                  <span>7:00 AM - 3:00 PM</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-map-pin-line"></i>
-                  <span>Canchas Deportivas</span>
-                </div>
-              </div>
-
-              <div class="event-participants">
-                <div class="participants-avatars">
-                  <div class="participant-avatar">MA</div>
-                  <div class="participant-avatar">JR</div>
-                  <div class="participant-avatar">LS</div>
-                  <div class="participants-more">+215</div>
-                </div>
-                <span class="participants-text">Todos los estudiantes</span>
-              </div>
-            </div>
-            <div class="event-card-footer">
-              <button class="btn-event-primary">
-                <i class="ri-team-line"></i>
-                Ver Equipos
-              </button>
-              <button class="btn-event-secondary">
-                <i class="ri-trophy-line"></i>
-                Resultados
-              </button>
-            </div>
-          </div>
-
-          <!-- Event Card 5 -->
-          <div class="event-card" data-category="exams" data-date="2024-11-08">
-            <div class="event-card-header">
-              <div class="event-type-badge exams">
-                <i class="ri-file-edit-line"></i>
-                <span>Examen</span>
-              </div>
-              <div class="event-actions">
-                <button class="btn-event-action" title="Editar">
-                  <i class="ri-edit-line"></i>
-                </button>
-                <button class="btn-event-action" title="Más opciones">
-                  <i class="ri-more-2-fill"></i>
-                </button>
-              </div>
-            </div>
-            <div class="event-card-body">
-              <h4>Evaluación - Física II (Electromagnetismo)</h4>
-              <p>Examen parcial sobre Campos Eléctricos, Campos Magnéticos y Ondas Electromagnéticas.</p>
-              
-              <div class="event-meta">
-                <div class="meta-item">
-                  <i class="ri-calendar-line"></i>
-                  <span><strong>08 Nov</strong> - Viernes</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-time-line"></i>
-                  <span>1:00 PM - 2:30 PM</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-map-pin-line"></i>
-                  <span>Aula 305</span>
-                </div>
-              </div>
-
-              <div class="event-participants">
-                <div class="participants-avatars">
-                  <div class="participant-avatar">AM</div>
-                  <div class="participant-avatar">PC</div>
-                  <div class="participant-avatar">RF</div>
-                  <div class="participants-more">+24</div>
-                </div>
-                <span class="participants-text">27 estudiantes - 11° C</span>
-              </div>
-            </div>
-            <div class="event-card-footer">
-              <button class="btn-event-primary">
-                <i class="ri-book-open-line"></i>
-                Material de Estudio
-              </button>
-              <button class="btn-event-secondary">
-                <i class="ri-notification-line"></i>
-                Recordatorio
-              </button>
-            </div>
-          </div>
-
-          <!-- Event Card 6 -->
-          <div class="event-card" data-category="activities" data-date="2024-11-10">
-            <div class="event-card-header">
-              <div class="event-type-badge activities">
-                <i class="ri-flask-line"></i>
-                <span>Feria</span>
-              </div>
-              <div class="event-actions">
-                <button class="btn-event-action" title="Editar">
-                  <i class="ri-edit-line"></i>
-                </button>
-                <button class="btn-event-action" title="Más opciones">
-                  <i class="ri-more-2-fill"></i>
-                </button>
-              </div>
-            </div>
-            <div class="event-card-body">
-              <h4>Feria de Ciencias 2024</h4>
-              <p>Exposición de proyectos científicos estudiantiles en física, química, biología y ciencias ambientales.</p>
-              
-              <div class="event-meta">
-                <div class="meta-item">
-                  <i class="ri-calendar-line"></i>
-                  <span><strong>10 Nov</strong> - Domingo</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-time-line"></i>
-                  <span>1:00 PM - 5:00 PM</span>
-                </div>
-                <div class="meta-item">
-                  <i class="ri-map-pin-line"></i>
-                  <span>Laboratorios y Cafetería</span>
-                </div>
-              </div>
-
-              <div class="event-participants">
-                <div class="participants-avatars">
-                  <div class="participant-avatar">DA</div>
-                  <div class="participant-avatar">MC</div>
-                  <div class="participant-avatar">NA</div>
-                  <div class="participants-more">+89</div>
-                </div>
-                <span class="participants-text">92 proyectos inscritos</span>
-              </div>
-            </div>
-            <div class="event-card-footer">
-              <button class="btn-event-primary">
-                <i class="ri-eye-line"></i>
-                Ver Proyectos
-              </button>
-              <button class="btn-event-secondary">
-                <i class="ri-award-line"></i>
-                Jurados
-              </button>
-            </div>
-          </div>
+          <?php 
+            endforeach;
+          endif; 
+          ?>
         </div>
       </section>
     </main>
