@@ -368,23 +368,237 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ========================================
-// EVENTOS ADMIN - TOGGLE DE VISTA
+// EVENTOS ADMIN - CALENDARIO, FILTROS Y VISTA
 // ========================================
 document.addEventListener('DOMContentLoaded', function () {
-  const viewButtons = document.querySelectorAll('.btn-view');
   const eventsContainer = document.getElementById('eventsContainer');
+  const calendarGrid = document.getElementById('calendarLargeGrid');
+  const monthYearElement = document.getElementById('calendarMonthYear');
+  const prevMonthBtn = document.getElementById('prevMonthEvents');
+  const nextMonthBtn = document.getElementById('nextMonthEvents');
+  const todayBtn = document.getElementById('todayBtn');
+  const filterTabs = Array.from(document.querySelectorAll('.filter-tab-event'));
+  const searchInput = document.getElementById('searchEvents');
+  const viewButtons = Array.from(document.querySelectorAll('.btn-view'));
+  const eventCards = Array.from(document.querySelectorAll('.event-card'));
 
-  if (!viewButtons.length || !eventsContainer) return;
+  if (!eventsContainer || !calendarGrid) return;
 
-  viewButtons.forEach((button) => {
-    button.addEventListener('click', function () {
-      viewButtons.forEach((item) => item.classList.remove('active'));
-      this.classList.add('active');
+  const monthsEvents = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+  const daysOfWeekEvents = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  const categoryLabels = {
+    all: () => eventCards.length,
+    upcoming: (cardData) => cardData.filter((item) => item.isUpcoming).length,
+    meetings: (cardData) => cardData.filter((item) => item.category === 'meetings').length,
+    exams: (cardData) => cardData.filter((item) => item.category === 'exams').length,
+    activities: (cardData) => cardData.filter((item) => item.category === 'activities').length
+  };
 
-      const view = this.getAttribute('data-view');
-      eventsContainer.classList.toggle('list-view', view === 'list');
+  const today = new Date();
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  let currentMonthEvents = today.getMonth();
+  let currentYearEvents = today.getFullYear();
+  let activeFilter = filterTabs.find((tab) => tab.classList.contains('active'))?.dataset.filter || 'all';
+
+  function normalizeDate(dateValue) {
+    if (!dateValue) return null;
+
+    const [year, month, day] = dateValue.split('-').map(Number);
+    if (!year || !month || !day) return null;
+
+    return new Date(year, month - 1, day);
+  }
+
+  function getCategoryIcon(category) {
+    const icons = {
+      meetings: 'ri-user-voice-line',
+      exams: 'ri-file-edit-line',
+      activities: 'ri-basketball-line'
+    };
+
+    return icons[category] || 'ri-calendar-line';
+  }
+
+  const cardData = eventCards.map((card) => {
+    const title = card.querySelector('h4')?.textContent.trim() || 'Evento';
+    const description = card.querySelector('.event-card-body p')?.textContent.trim() || '';
+    const category = card.dataset.category || 'all';
+    const dateValue = card.dataset.date || '';
+    const dateObject = normalizeDate(dateValue);
+
+    return {
+      card,
+      title,
+      description,
+      category,
+      dateValue,
+      dateObject,
+      icon: getCategoryIcon(category),
+      isUpcoming: Boolean(dateObject) && dateObject >= todayStart
+    };
+  });
+
+  function updateBadgeCounts() {
+    filterTabs.forEach((tab) => {
+      const badge = tab.querySelector('.badge-count');
+      const filter = tab.dataset.filter || 'all';
+      const countResolver = categoryLabels[filter];
+
+      if (!badge || !countResolver) return;
+      badge.textContent = String(countResolver(cardData));
+    });
+  }
+
+  function matchesFilter(item) {
+    if (activeFilter === 'all') return true;
+    if (activeFilter === 'upcoming') return item.isUpcoming;
+    return item.category === activeFilter;
+  }
+
+  function matchesSearch(item, searchTerm) {
+    if (!searchTerm) return true;
+
+    const normalizedSearch = searchTerm.toLowerCase();
+    return item.title.toLowerCase().includes(normalizedSearch)
+      || item.description.toLowerCase().includes(normalizedSearch);
+  }
+
+  function applyEventFilters() {
+    const searchTerm = searchInput?.value.trim() || '';
+
+    cardData.forEach((item) => {
+      const isVisible = matchesFilter(item) && matchesSearch(item, searchTerm);
+      item.card.style.display = isVisible ? '' : 'none';
+    });
+  }
+
+  function buildEventsMap() {
+    return cardData.reduce((accumulator, item) => {
+      if (!item.dateValue) return accumulator;
+
+      if (!accumulator[item.dateValue]) {
+        accumulator[item.dateValue] = [];
+      }
+
+      accumulator[item.dateValue].push({
+        title: item.title,
+        category: item.category,
+        icon: item.icon
+      });
+
+      return accumulator;
+    }, {});
+  }
+
+  const eventsData = buildEventsMap();
+
+  function generateEventsCalendar(month, year) {
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
+    let calendarHTML = '';
+
+    daysOfWeekEvents.forEach((day) => {
+      calendarHTML += `<div class="calendar-large-header">${day}</div>`;
+    });
+
+    for (let dayOffset = firstDay - 1; dayOffset >= 0; dayOffset--) {
+      const dayNumber = daysInPrevMonth - dayOffset;
+      calendarHTML += `<div class="calendar-large-day other-month"><div class="calendar-day-number">${dayNumber}</div></div>`;
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const dayEvents = eventsData[dateString] || [];
+      const isToday = day === today.getDate()
+        && month === today.getMonth()
+        && year === today.getFullYear();
+
+      let classes = 'calendar-large-day';
+      if (isToday) classes += ' today';
+      if (dayEvents.length > 0) classes += ' has-events';
+
+      let eventsHTML = '';
+      if (dayEvents.length > 0) {
+        eventsHTML = '<div class="calendar-day-events">';
+        dayEvents.slice(0, 2).forEach((eventItem) => {
+          eventsHTML += `<div class="calendar-mini-event ${eventItem.category}"><i class="${eventItem.icon}"></i><span>${eventItem.title}</span></div>`;
+        });
+
+        if (dayEvents.length > 2) {
+          eventsHTML += `<div class="calendar-mini-event more-events">+${dayEvents.length - 2} más</div>`;
+        }
+
+        eventsHTML += '</div>';
+      }
+
+      calendarHTML += `<div class="${classes}"><div class="calendar-day-number">${day}</div>${eventsHTML}</div>`;
+    }
+
+    const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+    const remainingCells = totalCells - (firstDay + daysInMonth);
+
+    for (let day = 1; day <= remainingCells; day++) {
+      calendarHTML += `<div class="calendar-large-day other-month"><div class="calendar-day-number">${day}</div></div>`;
+    }
+
+    calendarGrid.innerHTML = calendarHTML;
+    if (monthYearElement) {
+      monthYearElement.textContent = `${monthsEvents[month]} ${year}`;
+    }
+  }
+
+  prevMonthBtn?.addEventListener('click', () => {
+    currentMonthEvents--;
+    if (currentMonthEvents < 0) {
+      currentMonthEvents = 11;
+      currentYearEvents--;
+    }
+
+    generateEventsCalendar(currentMonthEvents, currentYearEvents);
+  });
+
+  nextMonthBtn?.addEventListener('click', () => {
+    currentMonthEvents++;
+    if (currentMonthEvents > 11) {
+      currentMonthEvents = 0;
+      currentYearEvents++;
+    }
+
+    generateEventsCalendar(currentMonthEvents, currentYearEvents);
+  });
+
+  todayBtn?.addEventListener('click', () => {
+    currentMonthEvents = today.getMonth();
+    currentYearEvents = today.getFullYear();
+    generateEventsCalendar(currentMonthEvents, currentYearEvents);
+  });
+
+  filterTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      filterTabs.forEach((item) => item.classList.remove('active'));
+      tab.classList.add('active');
+      activeFilter = tab.dataset.filter || 'all';
+      applyEventFilters();
     });
   });
+
+  searchInput?.addEventListener('input', applyEventFilters);
+
+  viewButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      viewButtons.forEach((item) => item.classList.remove('active'));
+      button.classList.add('active');
+      eventsContainer.classList.toggle('list-view', button.dataset.view === 'list');
+    });
+  });
+
+  updateBadgeCounts();
+  applyEventFilters();
+  generateEventsCalendar(currentMonthEvents, currentYearEvents);
 });
 
 // ========================================
