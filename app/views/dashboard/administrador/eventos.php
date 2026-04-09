@@ -11,6 +11,8 @@
     
     // OBTENEMOS LOS EVENTOS DE LA INSTITUCIÓN
     $eventos = mostrarEventos();
+    $cssVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-docente.css') ?: time();
+    $jsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-admin.js') ?: time();
     
     // FUNCIÓN PARA OBTENER EL DÍA DE LA SEMANA EN ESPAÑOL
     function getDiaSemana($timestamp) {
@@ -52,7 +54,7 @@
   <?php 
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
   ?>
-  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css?v=<?= $cssVersion ?>">
 </head>
 
 <body class="eventos-admin-page">
@@ -253,7 +255,7 @@
    <!-- Bootstrap and DataTables Scripts -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js?v=<?= $jsVersion ?>"></script>
 
 
 </body>

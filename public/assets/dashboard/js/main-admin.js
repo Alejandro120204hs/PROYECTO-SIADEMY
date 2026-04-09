@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const savedTheme = localStorage.getItem('theme-mode');
   if (savedTheme === 'light') {
     document.body.classList.add('light-mode');
-    const icon = toggleThemeBtn?.querySelector('i:first-child');
+    const icon = toggleThemeBtn ? toggleThemeBtn.querySelector('i:first-child') : null;
     if (icon) icon.className = 'ri-sun-line';
   }
   
@@ -401,7 +401,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   let currentMonthEvents = today.getMonth();
   let currentYearEvents = today.getFullYear();
-  let activeFilter = filterTabs.find((tab) => tab.classList.contains('active'))?.dataset.filter || 'all';
+  const activeTab = filterTabs.find((tab) => tab.classList.contains('active'));
+  let activeFilter = activeTab ? activeTab.dataset.filter : 'all';
 
   function normalizeDate(dateValue) {
     if (!dateValue) return null;
@@ -423,8 +424,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const cardData = eventCards.map((card) => {
-    const title = card.querySelector('h4')?.textContent.trim() || 'Evento';
-    const description = card.querySelector('.event-card-body p')?.textContent.trim() || '';
+    const titleElement = card.querySelector('h4');
+    const descriptionElement = card.querySelector('.event-card-body p');
+    const title = titleElement ? titleElement.textContent.trim() : 'Evento';
+    const description = descriptionElement ? descriptionElement.textContent.trim() : '';
     const category = card.dataset.category || 'all';
     const dateValue = card.dataset.date || '';
     const dateObject = normalizeDate(dateValue);
@@ -467,7 +470,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function applyEventFilters() {
-    const searchTerm = searchInput?.value.trim() || '';
+    const searchTerm = searchInput ? searchInput.value.trim() : '';
 
     cardData.forEach((item) => {
       const isVisible = matchesFilter(item) && matchesSearch(item, searchTerm);
@@ -551,31 +554,37 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  prevMonthBtn?.addEventListener('click', () => {
-    currentMonthEvents--;
-    if (currentMonthEvents < 0) {
-      currentMonthEvents = 11;
-      currentYearEvents--;
-    }
+  if (prevMonthBtn) {
+    prevMonthBtn.addEventListener('click', () => {
+      currentMonthEvents--;
+      if (currentMonthEvents < 0) {
+        currentMonthEvents = 11;
+        currentYearEvents--;
+      }
 
-    generateEventsCalendar(currentMonthEvents, currentYearEvents);
-  });
+      generateEventsCalendar(currentMonthEvents, currentYearEvents);
+    });
+  }
 
-  nextMonthBtn?.addEventListener('click', () => {
-    currentMonthEvents++;
-    if (currentMonthEvents > 11) {
-      currentMonthEvents = 0;
-      currentYearEvents++;
-    }
+  if (nextMonthBtn) {
+    nextMonthBtn.addEventListener('click', () => {
+      currentMonthEvents++;
+      if (currentMonthEvents > 11) {
+        currentMonthEvents = 0;
+        currentYearEvents++;
+      }
 
-    generateEventsCalendar(currentMonthEvents, currentYearEvents);
-  });
+      generateEventsCalendar(currentMonthEvents, currentYearEvents);
+    });
+  }
 
-  todayBtn?.addEventListener('click', () => {
-    currentMonthEvents = today.getMonth();
-    currentYearEvents = today.getFullYear();
-    generateEventsCalendar(currentMonthEvents, currentYearEvents);
-  });
+  if (todayBtn) {
+    todayBtn.addEventListener('click', () => {
+      currentMonthEvents = today.getMonth();
+      currentYearEvents = today.getFullYear();
+      generateEventsCalendar(currentMonthEvents, currentYearEvents);
+    });
+  }
 
   filterTabs.forEach((tab) => {
     tab.addEventListener('click', () => {
@@ -586,7 +595,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  searchInput?.addEventListener('input', applyEventFilters);
+  if (searchInput) {
+    searchInput.addEventListener('input', applyEventFilters);
+  }
 
   viewButtons.forEach((button) => {
     button.addEventListener('click', () => {
