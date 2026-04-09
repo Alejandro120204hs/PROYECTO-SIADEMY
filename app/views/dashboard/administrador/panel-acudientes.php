@@ -68,7 +68,7 @@
         <div class="user">
           <?php
           include_once __DIR__ . '/../../layouts/boton_perfil_solo.php'
-          ?>
+          ?>    
         </div>
       </div>
 

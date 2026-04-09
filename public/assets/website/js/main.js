@@ -2,23 +2,41 @@
 const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
 const navMenu = document.querySelector('.nav-menu');
 const navButtons = document.querySelector('.nav-buttons');
+const navLinks = document.querySelectorAll('.nav-menu a');
+
+function setMobileMenuState(isOpen) {
+    if (!navMenu || !navButtons || !mobileMenuToggle) return;
+
+    navMenu.classList.toggle('active', isOpen);
+    navButtons.classList.toggle('active', isOpen);
+
+    const icon = mobileMenuToggle.querySelector('i');
+    if (!icon) return;
+
+    icon.classList.toggle('fa-bars', !isOpen);
+    icon.classList.toggle('fa-times', isOpen);
+}
 
 if (mobileMenuToggle) {
     mobileMenuToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        navButtons.classList.toggle('active');
-        
-        // Cambiar ícono
-        const icon = mobileMenuToggle.querySelector('i');
-        if (icon.classList.contains('fa-bars')) {
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-times');
-        } else {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-        }
+        const isOpen = navMenu?.classList.contains('active');
+        setMobileMenuState(!isOpen);
     });
 }
+
+navLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            setMobileMenuState(false);
+        }
+    });
+});
+
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        setMobileMenuState(false);
+    }
+});
 
 // Animación al hacer scroll
 const heroImage = document.querySelector('.hero-image');

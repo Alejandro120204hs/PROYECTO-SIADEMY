@@ -1450,6 +1450,7 @@ transform: scale(1.05);
 .hero-content {
     grid-template-columns: 1fr;
     gap: 40px;
+    margin-top: 40px;
 }
 
 .hero-title {
@@ -1553,16 +1554,77 @@ transform: scale(1.05);
 }
 
 @media (max-width: 768px) {
+.navbar {
+    position: relative;
+    flex-wrap: wrap;
+}
+
 .nav-menu {
     display: none;
+    width: 100%;
+    order: 4;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 16px;
+    padding: 12px;
+    background: rgba(20, 20, 20, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+}
+
+.nav-menu.active {
+    display: flex;
+}
+
+.nav-menu li {
+    width: 100%;
+}
+
+.nav-menu a {
+    display: block;
+    width: 100%;
+    padding: 14px 12px;
+    border-radius: 12px;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .nav-buttons {
     display: none;
+    width: 100%;
+    order: 5;
+    margin-top: 12px;
+}
+
+.nav-buttons.active {
+    display: flex;
+}
+
+.nav-buttons .btn {
+    width: 100%;
 }
 
 .mobile-menu-toggle {
     display: block;
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.mobile-menu-toggle:active {
+    transform: scale(0.96);
 }
 
 .hero-title {
