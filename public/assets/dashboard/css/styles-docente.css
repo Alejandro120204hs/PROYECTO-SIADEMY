@@ -2706,6 +2706,10 @@ body.eventos-admin-page .events-container {
 }
 
 @media (max-width: 768px) {
+  body.eventos-admin-page .events-list-header .view-options {
+    display: none;
+  }
+
   body.eventos-admin-page .topbar-left {
     order: 1;
     flex: 1 1 auto;
