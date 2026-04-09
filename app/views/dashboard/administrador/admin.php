@@ -35,6 +35,8 @@
     $totalEventos = $objEvento->contar($id_institucion);
     $totalCursos = $objCurso->contar($id_institucion);
     $totalAsignaturas = $objAsignatura->contar($id_institucion);
+    $adminCssVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-admin.css') ?: time();
+    $mainAdminJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-admin.js') ?: time();
 ?>
 
 <!doctype html>
@@ -47,7 +49,7 @@
   <?php
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
   ?>
-<link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css?v=<?= $adminCssVersion ?>">
 
 </head>
 
@@ -267,7 +269,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
 
-  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js?v=<?= $mainAdminJsVersion ?>"></script>
 </body>
 
 
