@@ -45,7 +45,7 @@
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
  
 </head>
-<body>
+<body class="admin-cursos-page">
   <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
@@ -60,21 +60,19 @@
             <i class="ri-menu-2-line"></i>
           </button>
           <div class="title cursos">Gestión de Cursos</div>
-          
         </div>
-
-        <div class="div"></div>
-
-
         
         <div class="search">
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar curso, profesor o materia...">
         </div>
 
-        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-curso'">
-          <i class="ri-add-line"></i> Agregar Curso
-        </button>        
+        <div class="topbar-actions">
+          <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-curso'">
+            <i class="ri-add-line"></i> Agregar Curso
+          </button>
+        </div>
+
         <?php
           include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
         ?>

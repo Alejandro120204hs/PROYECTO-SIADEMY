@@ -2545,3 +2545,379 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ========================================
+   ADMIN EVENTS - RESPONSIVE REFINEMENTS
+   ======================================== */
+@media (max-width: 1024px) {
+  .main {
+    padding: 18px 12px 26px;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .topbar-left {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .title {
+    font-size: clamp(24px, 4vw, 32px);
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-tabs-events {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding-bottom: 6px;
+  }
+
+  .filter-tab-event {
+    flex-shrink: 0;
+  }
+
+  .event-card-footer {
+    flex-direction: column;
+  }
+
+  .btn-event-primary,
+  .btn-event-secondary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .topbar-actions {
+    display: flex;
+    width: 100%;
+  }
+
+  .topbar-actions .btn-action {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .datatable-card .table-responsive {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+  }
+
+  .datatable-card table {
+    table-layout: auto;
+    width: max-content !important;
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 14px 10px 24px;
+  }
+
+  .calendar-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .event-card-body {
+    padding: 14px;
+  }
+
+  .event-card-footer {
+    padding: 12px 14px;
+  }
+}
+
+/* Botones de eventos: tamaño táctil correcto */
+@media (max-width: 768px) {
+  .btn-action,
+  .btn-event-primary,
+  .btn-event-secondary,
+  .btn-calendar-today,
+  .btn-calendar-nav {
+    min-height: 42px;
+    padding: 10px 14px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  .btn-calendar-nav {
+    min-width: 42px;
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-action,
+  .btn-event-primary,
+  .btn-event-secondary,
+  .btn-calendar-today,
+  .btn-calendar-nav {
+    min-height: 44px;
+    padding: 11px 12px;
+    font-size: 13px;
+  }
+
+  .btn-calendar-nav {
+    min-width: 44px;
+    padding: 0;
+  }
+}
+
+/* ========================================
+   EVENTOS ADMIN PAGE - RESPONSIVE FIX
+   ======================================== */
+body.eventos-admin-page .main,
+body.eventos-admin-page .topbar,
+body.eventos-admin-page .events-calendar-section,
+body.eventos-admin-page .events-list-section,
+body.eventos-admin-page .events-container {
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  body.eventos-admin-page .main {
+    padding: 18px 12px 26px;
+  }
+
+  body.eventos-admin-page .topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  body.eventos-admin-page .topbar-left {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  body.eventos-admin-page .title {
+    font-size: clamp(24px, 4vw, 32px);
+  }
+
+  body.eventos-admin-page .events-container {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  body.eventos-admin-page .topbar-left {
+    order: 1;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  body.eventos-admin-page .user {
+    order: 2;
+    margin-left: auto;
+    align-self: center;
+  }
+
+  body.eventos-admin-page .topbar-actions {
+    display: flex !important;
+    width: 100%;
+    order: 3;
+    margin-left: 0;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  body.eventos-admin-page .topbar-actions .btn-action {
+    width: auto !important;
+    min-width: 160px;
+    justify-content: center;
+    white-space: nowrap;
+  }
+
+  body.eventos-admin-page .filter-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  body.eventos-admin-page .filter-tabs-events {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding-bottom: 4px;
+  }
+
+  body.eventos-admin-page .filter-tab-event {
+    flex-shrink: 0;
+    min-height: 42px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  body.eventos-admin-page .filter-search {
+    width: 100%;
+  }
+
+  body.eventos-admin-page .events-calendar-section {
+    padding: 14px;
+    overflow-x: auto;
+  }
+
+  body.eventos-admin-page .calendar-view-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  body.eventos-admin-page .calendar-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  body.eventos-admin-page .calendar-large-grid {
+    min-width: 680px;
+  }
+
+  body.eventos-admin-page .events-container {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  body.eventos-admin-page .event-card {
+    border-radius: 14px;
+  }
+
+  body.eventos-admin-page .event-card-header {
+    padding: 12px 14px;
+  }
+
+  body.eventos-admin-page .event-card-body {
+    padding: 14px;
+  }
+
+  body.eventos-admin-page .event-card-footer {
+    padding: 12px 14px;
+    flex-direction: column;
+  }
+
+  body.eventos-admin-page .btn-event-primary,
+  body.eventos-admin-page .btn-event-secondary,
+  body.eventos-admin-page .btn-calendar-today,
+  body.eventos-admin-page .btn-calendar-nav {
+    min-height: 42px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  body.eventos-admin-page .main {
+    padding: 14px 10px 24px;
+  }
+
+  body.eventos-admin-page .topbar-left {
+    order: 1;
+    flex: 1 1 auto;
+  }
+
+  body.eventos-admin-page .user {
+    order: 2;
+    margin-left: auto;
+  }
+
+  body.eventos-admin-page .topbar-actions {
+    width: 100%;
+    order: 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  body.eventos-admin-page .topbar-actions .btn-action {
+    width: auto !important;
+    min-width: 150px;
+    max-width: 100%;
+  }
+
+  body.eventos-admin-page .title {
+    font-size: 22px;
+  }
+
+  body.eventos-admin-page .filter-tab-event .badge-count {
+    display: none;
+  }
+
+  body.eventos-admin-page .calendar-large-grid {
+    min-width: 620px;
+  }
+
+  body.eventos-admin-page .btn-action,
+  body.eventos-admin-page .btn-event-primary,
+  body.eventos-admin-page .btn-event-secondary {
+    min-height: 44px;
+    font-size: 13px;
+  }
+}
+
+/* ========================================
+   EVENTOS BUTTON SIZE SYSTEM (UNIFICADO)
+   ======================================== */
+@media (min-width: 769px) {
+  .btn-action,
+  .btn-event-primary,
+  .btn-event-secondary,
+  .btn-calendar-today,
+  .btn-calendar-nav,
+  .btn {
+    min-height: 40px !important;
+    padding: 10px 18px !important;
+    font-size: 14px !important;
+    border-radius: 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  .btn-calendar-nav {
+    min-width: 40px !important;
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-action,
+  .btn-event-primary,
+  .btn-event-secondary,
+  .btn-calendar-today,
+  .btn-calendar-nav,
+  .btn {
+    min-height: 42px !important;
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    border-radius: 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  .btn-calendar-nav {
+    min-width: 42px !important;
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-action,
+  .btn-event-primary,
+  .btn-event-secondary,
+  .btn-calendar-today,
+  .btn-calendar-nav,
+  .btn {
+    min-height: 44px !important;
+    padding: 11px 12px !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  .btn-calendar-nav {
+    min-width: 44px !important;
+    padding: 0 !important;
+  }
+}

@@ -31,7 +31,7 @@
   
  
 </head>
-<body>
+<body class="admin-matriculas-page">
   <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
@@ -51,9 +51,13 @@
           <i class="ri-search-2-line"></i>
           <input type="text" id="searchMatricula" placeholder="Buscar por estudiante, curso o documento...">
         </div>
-        <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-matricula'">
-            <i class="ri-user-add-line"></i> Matricular Estudiante
-        </button>        
+
+        <div class="topbar-actions">
+          <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-matricula'">
+              <i class="ri-user-add-line"></i> Matricular Estudiante
+          </button>
+        </div>
+
        <?php
           include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
         ?>

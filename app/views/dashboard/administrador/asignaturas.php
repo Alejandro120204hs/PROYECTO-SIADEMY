@@ -47,7 +47,7 @@
   
 </head>
 
-<body>
+<body class="admin-asignaturas-page">
   <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
@@ -67,7 +67,7 @@
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar asignatura o profesor...">
         </div>        
-        <div class="topbar-buttons" style="display: flex; gap: 10px;">
+        <div class="topbar-actions">
           <button class="btn-agregar-estudiante" onclick="window.location.href='administrador/registrar-asignatura'">
             <i class="ri-add-line"></i> Agregar Asignatura
           </button>
