@@ -9,9 +9,11 @@
   let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
 
   // ── Overlay para drawer en móvil ──────────────────────────
-  const overlay = document.createElement('div');
-  overlay.className = 'sidebar-overlay';
-  document.body.appendChild(overlay);
+  const overlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
+  if (!overlay.parentElement) {
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+  }
 
   function isMobile() { return window.innerWidth <= 768; }
 
@@ -28,7 +30,7 @@
     overlay.classList.remove('active');
   }
 
-  overlay.addEventListener('click', closeMobileDrawer);
+  overlay.onclick = closeMobileDrawer;
 
   window.addEventListener('resize', () => {
     if (!isMobile()) {
@@ -57,7 +59,13 @@
     updateGridState();
   }
 
-  toggleLeft?.addEventListener('click', toggleLeftSidebar);
+  if (toggleLeft) {
+    toggleLeft.onclick = (event) => {
+      event.preventDefault();
+      toggleLeftSidebar();
+    };
+  }
+  if (!isMobile() && !leftVisible && leftSidebar) leftSidebar.classList.add('hidden');
   updateGridState();
 
 

@@ -2,6 +2,13 @@
     require_once BASE_PATH . '/app/helpers/session_administrador.php';
     require_once BASE_PATH . '/app/controllers/administrador/docente.php';
     require_once BASE_PATH . '/app/controllers/administrador/nivel_academico.php';
+      require_once BASE_PATH . '/app/controllers/perfil.php';
+     
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
     
     $datos = mostrarDocentes();
     $nivel = mostrarNivelAcademico();
@@ -65,9 +72,9 @@
                 </div>
 
                 <div class="user">
-                    <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-                    <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-                    <div class="avatar" title="Diego A.">DA</div>
+                   <?php
+          include_once __DIR__ . '/../../layouts/boton_perfil_solo.php'
+          ?>  
                 </div>
             </div>
             <div class="subtitulo"><p>Formulario de registro, Completa los siguientes pasos para registrar un nuevo Curso en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>

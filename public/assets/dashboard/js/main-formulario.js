@@ -3,29 +3,65 @@ const leftSidebar = document.getElementById('leftSidebar');
 const appGrid = document.getElementById('appGrid');
 const toggleLeft = document.getElementById('toggleLeft');
 
-// Cargar estado desde localStorage
 let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
 
-function updateGridState() {
-    appGrid.classList.remove('hide-left');
+// ── Overlay y drawer móvil ────────────────────────────────
+const overlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
+if (!overlay.parentElement) {
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+}
 
-    if (!leftVisible) {
-        appGrid.classList.add('hide-left');
+function isMobile() { return window.innerWidth <= 768; }
+
+function openMobileDrawer() {
+    if (!leftSidebar) return;
+    leftSidebar.classList.add('mobile-open');
+    leftSidebar.classList.remove('hidden');
+    overlay.classList.add('active');
+}
+
+function closeMobileDrawer() {
+    if (!leftSidebar) return;
+    leftSidebar.classList.remove('mobile-open');
+    leftSidebar.classList.add('hidden');
+    overlay.classList.remove('active');
+}
+
+overlay.onclick = closeMobileDrawer;
+
+window.addEventListener('resize', () => {
+    if (!isMobile()) {
+        overlay.classList.remove('active');
+        if (leftSidebar) leftSidebar.classList.remove('mobile-open');
     }
+});
+
+function updateGridState() {
+    if (!appGrid) return;
+    if (isMobile()) return;
+    appGrid.classList.toggle('hide-left', !leftVisible);
 }
 
 function toggleLeftSidebar() {
+    if (isMobile()) {
+        const isOpen = leftSidebar && leftSidebar.classList.contains('mobile-open');
+        isOpen ? closeMobileDrawer() : openMobileDrawer();
+        return;
+    }
     leftVisible = !leftVisible;
-    leftSidebar.classList.toggle('hidden', !leftVisible);
+    if (leftSidebar) leftSidebar.classList.toggle('hidden', !leftVisible);
     localStorage.setItem('leftSidebarVisible', leftVisible);
     updateGridState();
 }
 
-// Event listeners
-toggleLeft.addEventListener('click', toggleLeftSidebar);
-
-// Aplicar estado inicial
-if (!leftVisible) leftSidebar.classList.add('hidden');
+if (toggleLeft) {
+    toggleLeft.onclick = (event) => {
+        event.preventDefault();
+        toggleLeftSidebar();
+    };
+}
+if (!isMobile() && !leftVisible && leftSidebar) leftSidebar.classList.add('hidden');
 updateGridState();
 
 // Inicializar DataTable

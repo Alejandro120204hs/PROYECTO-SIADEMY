@@ -1302,3 +1302,43 @@ form {
     line-height: 1.2 !important;
   }
 }
+
+/* =============================================
+   SIDEBAR DRAWER – animación móvil/tablet
+   ============================================= */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 8, 30, 0.65);
+  z-index: 999;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.sidebar-overlay.active { display: block; }
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed !important;
+    left: -270px !important;
+    top: 0 !important;
+    height: 100dvh !important;
+    width: 260px !important;
+    min-width: 260px !important;
+    z-index: 1000;
+    transition: left 0.3s ease !important;
+    opacity: 1 !important;
+    padding: 24px 16px !important;
+    border-right: 1px solid rgba(255,255,255,.08) !important;
+    overflow-y: auto !important;
+  }
+  .sidebar.hidden {
+    left: -270px !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+  .sidebar.mobile-open {
+    left: 0 !important;
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6);
+  }
+}
