@@ -623,15 +623,120 @@
     }
 
     // Toggle sidebars
-    document.getElementById('toggleLeft').addEventListener('click', function() {
-        document.querySelector('.app').classList.toggle('hide-left');
-        document.getElementById('leftSidebar').classList.toggle('hidden');
+    const appGrid = document.getElementById('appGrid');
+    const leftSidebar = document.getElementById('leftSidebar');
+    const rightSidebar = document.getElementById('rightSidebar');
+    const toggleLeft = document.getElementById('toggleLeft');
+    const toggleRight = document.getElementById('toggleRight');
+    const sidebarOverlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
+
+    if (!sidebarOverlay.parentElement) {
+      sidebarOverlay.className = 'sidebar-overlay';
+      document.body.appendChild(sidebarOverlay);
+    }
+
+    let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
+    let rightVisible = localStorage.getItem('rightSidebarVisible') !== 'false';
+
+    function isMobile() {
+      return window.innerWidth <= 768;
+    }
+
+    function openMobileDrawer() {
+      if (!leftSidebar) return;
+      leftSidebar.classList.add('mobile-open');
+      leftSidebar.classList.remove('hidden');
+      sidebarOverlay.classList.add('active');
+    }
+
+    function closeMobileDrawer() {
+      if (!leftSidebar) return;
+      leftSidebar.classList.remove('mobile-open');
+      leftSidebar.classList.add('hidden');
+      sidebarOverlay.classList.remove('active');
+    }
+
+    function updateGridState() {
+      if (!appGrid) return;
+
+      appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
+
+      if (isMobile()) {
+        if (!rightVisible) {
+          appGrid.classList.add('hide-right');
+        }
+        return;
+      }
+
+      if (!leftVisible && !rightVisible) {
+        appGrid.classList.add('hide-both');
+      } else if (!leftVisible) {
+        appGrid.classList.add('hide-left');
+      } else if (!rightVisible) {
+        appGrid.classList.add('hide-right');
+      }
+    }
+
+    function toggleLeftSidebar() {
+      if (isMobile()) {
+        const isOpen = leftSidebar && leftSidebar.classList.contains('mobile-open');
+        isOpen ? closeMobileDrawer() : openMobileDrawer();
+        return;
+      }
+
+      leftVisible = !leftVisible;
+      if (leftSidebar) {
+        leftSidebar.classList.toggle('hidden', !leftVisible);
+      }
+      localStorage.setItem('leftSidebarVisible', leftVisible);
+      updateGridState();
+    }
+
+    function toggleRightSidebar() {
+      rightVisible = !rightVisible;
+      if (rightSidebar) {
+        rightSidebar.classList.toggle('hidden', !rightVisible);
+      }
+      localStorage.setItem('rightSidebarVisible', rightVisible);
+      updateGridState();
+    }
+
+    if (toggleLeft) {
+      toggleLeft.addEventListener('click', function(event) {
+        event.preventDefault();
+        toggleLeftSidebar();
+      });
+    }
+
+    if (toggleRight) {
+      toggleRight.addEventListener('click', function(event) {
+        event.preventDefault();
+        toggleRightSidebar();
+      });
+    }
+
+    sidebarOverlay.addEventListener('click', closeMobileDrawer);
+
+    window.addEventListener('resize', function() {
+      if (!isMobile()) {
+        sidebarOverlay.classList.remove('active');
+        if (leftSidebar) {
+          leftSidebar.classList.remove('mobile-open');
+          leftSidebar.classList.toggle('hidden', !leftVisible);
+        }
+      }
+      updateGridState();
     });
 
-    document.getElementById('toggleRight').addEventListener('click', function() {
-        document.querySelector('.app').classList.toggle('hide-right');
-        document.getElementById('rightSidebar').classList.toggle('hidden');
-    });
+    if (!isMobile() && leftSidebar) {
+      leftSidebar.classList.toggle('hidden', !leftVisible);
+    }
+
+    if (rightSidebar) {
+      rightSidebar.classList.toggle('hidden', !rightVisible);
+    }
+
+    updateGridState();
 
     // Si viene de /configuracion, abrir automáticamente el modal
     <?php if(isset($activeTab) && $activeTab === 'edit-profile'): ?>

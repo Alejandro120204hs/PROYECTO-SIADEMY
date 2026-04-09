@@ -64,55 +64,53 @@ if (toggleLeft) {
 if (!isMobile() && !leftVisible && leftSidebar) leftSidebar.classList.add('hidden');
 updateGridState();
 
-// Inicializar DataTable
-$(document).ready(function () {
-    $('#tablaEstudiantes').DataTable({
-        language: {
-            processing: "Procesando...",
-            lengthMenu: "Mostrar _MENU_ registros",
-            zeroRecords: "No se encontraron resultados",
-            emptyTable: "Ningún dato disponible en esta tabla",
-            info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-            infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
-            infoFiltered: "(filtrado de un total de _MAX_ registros)",
-            infoPostFix: "",
-            search: "Buscar:",
-            url: "",
-            infoThousands: ",",
-            loadingRecords: "Cargando...",
-            paginate: {
-                first: "Primero",
-                last: "Último",
-                next: "Siguiente",
-                previous: "Anterior"
-            }
-        },
-        pageLength: 10,
-        lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
-        ordering: true,
-        searching: true,
-        paging: true,
-        info: true,
-        responsive: true,
-        columnDefs: [
-            { orderable: false, targets: [0, 6, 8] }
-        ]
-    });
+// Inicializar DataTable solo si jQuery/DataTables existen en la vista actual
+if (window.jQuery && window.jQuery.fn && window.jQuery.fn.DataTable) {
+    window.jQuery(function ($) {
+        if (!$('#tablaEstudiantes').length) return;
 
-    // Seleccionar todos los checkboxes
-    $('#selectAll').on('click', function () {
-        $('.row-checkbox').prop('checked', this.checked);
-    });
+        $('#tablaEstudiantes').DataTable({
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar _MENU_ registros",
+                zeroRecords: "No se encontraron resultados",
+                emptyTable: "Ningún dato disponible en esta tabla",
+                info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                infoPostFix: "",
+                search: "Buscar:",
+                url: "",
+                infoThousands: ",",
+                loadingRecords: "Cargando...",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior"
+                }
+            },
+            pageLength: 10,
+            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            ordering: true,
+            searching: true,
+            paging: true,
+            info: true,
+            responsive: true,
+            columnDefs: [
+                { orderable: false, targets: [0, 6, 8] }
+            ]
+        });
 
-    // Actualizar el checkbox principal si se desmarcan checkboxes individuales
-    $('.row-checkbox').on('click', function () {
-        if ($('.row-checkbox:checked').length == $('.row-checkbox').length) {
-            $('#selectAll').prop('checked', true);
-        } else {
-            $('#selectAll').prop('checked', false);
-        }
+        $('#selectAll').on('click', function () {
+            $('.row-checkbox').prop('checked', this.checked);
+        });
+
+        $('.row-checkbox').on('click', function () {
+            $('#selectAll').prop('checked', $('.row-checkbox:checked').length === $('.row-checkbox').length);
+        });
     });
-});
+}
 
 
 // La parte de el wizard
@@ -139,4 +137,44 @@ function prevStep() {
     if (currentStep > 0) currentStep--;
     showStep(currentStep);
 }
+
+// Dropdown de perfil
+document.addEventListener('DOMContentLoaded', function () {
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    const userDropdown = document.getElementById('userDropdown');
+
+    if (!userMenuBtn || !userDropdown) return;
+
+    const dropdownOverlay = document.querySelector('.dropdown-overlay') || document.createElement('div');
+    if (!dropdownOverlay.parentElement) {
+        dropdownOverlay.className = 'dropdown-overlay';
+        document.body.appendChild(dropdownOverlay);
+    }
+
+    function openDropdown() {
+        userDropdown.classList.add('show');
+        dropdownOverlay.classList.add('show');
+    }
+
+    function closeDropdown() {
+        userDropdown.classList.remove('show');
+        dropdownOverlay.classList.remove('show');
+    }
+
+    userMenuBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        userDropdown.classList.contains('show') ? closeDropdown() : openDropdown();
+    });
+
+    dropdownOverlay.addEventListener('click', closeDropdown);
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeDropdown();
+    });
+
+    userDropdown.addEventListener('click', function (event) {
+        event.stopPropagation();
+    });
+});
 
