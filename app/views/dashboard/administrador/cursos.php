@@ -26,6 +26,8 @@
     $totalCursos = $objCurso->contar($id_institucion);
     $totalEstudiantes = $objEstudiante->contar($id_institucion);
     $totalProfesores = $objDocente->contar($id_institucion);
+    $adminCssVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-admin.css') ?: time();
+    $mainAdminJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-admin.js') ?: time();
 
   // LLAMAMOS LA FUNCION
   $datos = mostrarCursos();
@@ -42,7 +44,7 @@
  <?php 
     include_once __DIR__ . '/../../layouts/header_coordinador.php'
  ?>
-  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css?v=<?= $adminCssVersion ?>">
  
 </head>
 <body class="admin-cursos-page">
@@ -183,7 +185,7 @@
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js?v=<?= $mainAdminJsVersion ?>"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-estudiante.js"></script>
   <script>
     // Toggle view grid/list

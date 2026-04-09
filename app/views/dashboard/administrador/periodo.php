@@ -28,6 +28,9 @@
   }
   sort($anosDisponibles, SORT_NUMERIC);
   $anosDisponibles = array_reverse($anosDisponibles);
+  $adminCssVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-admin.css') ?: time();
+  $periodosCssVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-periodos.css') ?: time();
+  $mainAdminJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-admin.js') ?: time();
   
   // Año por defecto es el actual o el más reciente
   $anoActual = isset($_GET['ano']) ? $_GET['ano'] : (end($anosDisponibles) ?: date('Y'));
@@ -46,8 +49,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SIADEMY • Periodos Académicos</title>
   <?php include_once __DIR__ . '/../../layouts/header_coordinador.php' ?>
-  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
-  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-periodos.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css?v=<?= $adminCssVersion ?>">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-periodos.css?v=<?= $periodosCssVersion ?>">
 </head>
 
 <body>
@@ -421,7 +424,7 @@
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js?v=<?= $mainAdminJsVersion ?>"></script>
 
   <script>
     const baseUrl = '<?= BASE_URL ?>';
