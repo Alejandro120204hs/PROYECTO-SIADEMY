@@ -1159,3 +1159,146 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #007bff !important;
   box-shadow: 0 0 3px rgba(0, 123, 255, 0.5) !important;
 }
+
+/* ========================================
+   ADMIN FORMS - RESPONSIVE REFINEMENTS
+   ======================================== */
+.main,
+.container-fluid,
+form {
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .main {
+    padding: 18px 12px 26px;
+  }
+
+  .subtitulo {
+    margin: 16px 0;
+    padding: 0;
+  }
+
+  .subtitulo p {
+    margin: 0;
+    padding: 12px 14px;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .search {
+    order: 10;
+    width: 100% !important;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 0.75rem 0.25rem !important;
+  }
+
+  .botones {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .botones a,
+  .botones button {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .form-control,
+  .form-select,
+  form input,
+  form select,
+  form textarea {
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 22px;
+  }
+
+  .main {
+    padding: 14px 10px 24px;
+  }
+}
+
+/* Botones de formularios: tamaño adecuado en móviles */
+@media (max-width: 768px) {
+  .botones a,
+  .botones button,
+  .btn-action {
+    min-height: 42px;
+    padding: 10px 14px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .botones a,
+  .botones button,
+  .btn-action {
+    min-height: 44px;
+    padding: 11px 12px;
+    font-size: 13px;
+  }
+}
+
+/* ========================================
+   ADMIN FORM BUTTON SIZE SYSTEM (UNIFICADO)
+   ======================================== */
+.botones a,
+.botones button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 769px) {
+  .botones a,
+  .botones button,
+  .btn-action,
+  .btn {
+    min-height: 40px !important;
+    padding: 10px 18px !important;
+    font-size: 14px !important;
+    border-radius: 10px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .botones a,
+  .botones button,
+  .btn-action,
+  .btn {
+    min-height: 42px !important;
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    border-radius: 10px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .botones a,
+  .botones button,
+  .btn-action,
+  .btn {
+    min-height: 44px !important;
+    padding: 11px 12px !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+    line-height: 1.2 !important;
+  }
+}

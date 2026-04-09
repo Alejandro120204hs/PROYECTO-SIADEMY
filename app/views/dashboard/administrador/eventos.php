@@ -55,7 +55,7 @@
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
 </head>
 
-<body>
+<body class="eventos-admin-page">
   <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
