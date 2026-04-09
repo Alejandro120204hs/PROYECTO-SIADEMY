@@ -36,6 +36,16 @@ switch($method){
             // EDITAR PERIODO (RETORNA JSON)
             if($accion === 'editar' && isset($_GET['id'])){
                 editarPeriodo($_GET['id']);
+            }
+            
+            // OBTENER PERIODO ACTIVO (RETORNA JSON)
+            if($accion === 'obtener-activo'){
+                obtenerPeriodoActivo();
+            }
+            
+            // OBTENER AÑOS DISPONIBLES (RETORNA JSON)
+            if($accion === 'obtener-anos'){
+                obtenerAnosDisponibles();
             }else if(!isset($_GET['accion'])){
                 // Muestra la lista de periodos
                 mostrarPeriodos();
@@ -312,6 +322,74 @@ function activarPeriodo($id){
         mostrarSweetAlert('error', 'Error al activar', 'No se pudo activar el período, intente nuevamente. Redirigiendo...', '/siademy/administrador-periodo');
         exit();
     }
+}
+
+function obtenerPeriodoActivo(){
+    // VERIFICAMOS SI LA SESIÓN YA ESTÁ INICIADA
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // VERIFICAMOS SI EL USUARIO TIENE LA VARIABLE DE SESIÓN SETEADA
+    if(!isset($_SESSION['user'])){
+        http_response_code(401);
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'No autorizado']);
+        exit();
+    }
+
+    $id_institucion = $_SESSION['user']['id_institucion'];
+
+    $objetoPeriodo = new Periodo();
+    $periodoActivo = $objetoPeriodo->obtenerPeriodoActivo($id_institucion);
+
+    header('Content-Type: application/json');
+    echo json_encode($periodoActivo);
+}
+
+function obtenerAnosDisponibles(){
+    // VERIFICAMOS SI LA SESIÓN YA ESTÁ INICIADA
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // VERIFICAMOS SI EL USUARIO TIENE LA VARIABLE DE SESIÓN SETEADA
+    if(!isset($_SESSION['user'])){
+        http_response_code(401);
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'No autorizado']);
+        exit();
+    }
+
+    $id_institucion = $_SESSION['user']['id_institucion'];
+
+    $objetoPeriodo = new Periodo();
+    $todosLosPeriodos = $objetoPeriodo->listar($id_institucion);
+
+    // Extraer años únicos y ordenar descendentemente
+    $anosDisponibles = [];
+    foreach($todosLosPeriodos as $periodo){
+        if(!in_array($periodo['ano_lectivo'], $anosDisponibles)){
+            $anosDisponibles[] = $periodo['ano_lectivo'];
+        }
+    }
+    sort($anosDisponibles, SORT_NUMERIC);
+    $anosDisponibles = array_reverse($anosDisponibles);
+
+    // Si no hay anos registrados, devolver años de referencia
+    if(empty($anosDisponibles)){
+        $anoActual = date('Y');
+        $anosDisponibles = [
+            $anoActual,
+            $anoActual + 1,
+            $anoActual + 2,
+            $anoActual + 3,
+            $anoActual + 4
+        ];
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($anosDisponibles);
 }
 
 ?>
