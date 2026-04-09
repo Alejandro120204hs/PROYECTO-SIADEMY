@@ -1,25 +1,18 @@
 <?php
 
-/**
- * Session Administrador - Valida que el usuario sea un administrador
- * Incluye el archivo principal de sesión helper para usar sus funciones
- */
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+    }
+    // VALIDAMOS SI HAY UNA SESION ACTIVA
+    if(!isset($_SESSION['user'])){
+        header('Location: ' . BASE_URL . '/login');
+        exit();
+    }
 
-require_once __DIR__ . '/session_helper.php';
-
-// Iniciar sesión si no está activa
-initSession();
-
-// Validamos si hay una sesión activa
-if (!isSessionActive()) {
-    header('Location: /siademy/login');
-    exit();
-}
-
-// Validamos que el rol sea el correspondiente (Administrador)
-if (!hasRole('Administrador')) {
-    header('Location: /siademy/login');
-    exit();
-}
+    // VALIDAMOS QUE EL ROL SEA EL CORRESPONDIENTE
+    if($_SESSION['user']['rol'] != 'Administrador'){
+        header('Location: ' . BASE_URL . '/login');
+        exit();
+    }
 
 ?>

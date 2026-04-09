@@ -11,14 +11,14 @@ require_once __DIR__ . '/session_helper.php';
 initSession();
 
 // Verificamos que haya una sesión activa
-if (!isSessionActive()) {
-    header('Location: /siademy/login');
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    header('Location: ' . BASE_URL . '/login');
     exit();
 }
 
 // Validamos que el rol sea Docente
-if (!hasRole('Docente')) {
-    header('Location: /siademy/login');
+if (!isset($_SESSION['user']['rol']) || $_SESSION['user']['rol'] !== 'Docente') {
+    header('Location: ' . BASE_URL . '/login');
     exit();
 }
 
