@@ -2,6 +2,7 @@
 
     // IMPORTAMOS LAS DEPENDENCIAS NECESARIAS
     require_once __DIR__ . '/../helpers/alert_helper.php';
+    require_once __DIR__ . '/../helpers/session_helper.php';
     require_once __DIR__ . '/../models/login.php';
     
 
@@ -33,7 +34,7 @@
         }
 
         // SI PASA ESTA LINEA, EL USUARIO ES VALIDO
-        session_start();
+        // La sesión ya fue iniciada en index.php, no la volvemos a iniciar
         
         // Datos base de sesión
         $_SESSION['user'] = [

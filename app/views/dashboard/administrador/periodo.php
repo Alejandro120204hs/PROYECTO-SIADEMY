@@ -323,12 +323,7 @@
           <div class="form-group-periodo">
             <label for="inputAno">Año Lectivo <span class="req">*</span></label>
             <select name="ano_lectivo" id="inputAno" class="form-input-periodo" required>
-              <option value="2025">2025</option>
-              <option value="2026" selected>2026</option>
-              <option value="2027">2027</option>
-              <option value="2028">2028</option>
-              <option value="2029">2029</option>
-              <option value="2030">2030</option>
+              <option value="" disabled selected>Cargando años...</option>
             </select>
           </div>
 
@@ -397,15 +392,15 @@
           <div class="activar-icon">
             <i class="ri-alert-line"></i>
           </div>
-          <p>¿Deseas activar el <strong id="nombreActivar">Tercer Bimestre</strong>?</p>
+          <p>¿Deseas activar el <strong id="nombreActivar">--</strong>?</p>
           <div class="activar-consecuencias">
             <div class="consecuencia-item desactivar">
               <i class="ri-close-circle-line"></i>
-              <span>Se desactivará: <strong>Segundo Bimestre</strong> (activo actualmente)</span>
+              <span>Se desactivará: <strong id="nombreActivo">--</strong> (activo actualmente)</span>
             </div>
             <div class="consecuencia-item activar">
               <i class="ri-check-circle-line"></i>
-              <span>Se activará: <strong id="nombreActivarConfirm">Tercer Bimestre</strong></span>
+              <span>Se activará: <strong id="nombreActivarConfirm">--</strong></span>
             </div>
             <div class="consecuencia-item info">
               <i class="ri-information-line"></i>
@@ -457,7 +452,31 @@
       document.getElementById('duracionInfo').style.display = 'none';
       document.getElementById('checkActivoContainer').style.display = 'block';
       document.getElementById('inputNombre').value = '';
+      cargarAnosDisponibles();
       document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function cargarAnosDisponibles() {
+      fetch(baseUrl + '/administrador/editar-periodo?accion=obtener-anos')
+        .then(response => response.json())
+        .then(anos => {
+          const selectAno = document.getElementById('inputAno');
+          selectAno.innerHTML = '';
+          
+          let anoActual = new Date().getFullYear();
+          anos.forEach(ano => {
+            const option = document.createElement('option');
+            option.value = ano;
+            option.textContent = ano;
+            if(ano == anoActual) option.selected = true;
+            selectAno.appendChild(option);
+          });
+        })
+        .catch(error => {
+          console.error('Error al cargar años:', error);
+          const selectAno = document.getElementById('inputAno');
+          selectAno.innerHTML = '<option value="">Error al cargar años</option>';
+        });
     }
 
     function abrirModalEditar(id) {
@@ -469,14 +488,16 @@
           document.getElementById('inputId').value = data.id;
           document.getElementById('inputTipo').value = data.tipo_periodo;
           document.getElementById('inputNumero').value = data.numero_periodo;
-          document.getElementById('inputAno').value = data.ano_lectivo;
           document.getElementById('inputInicio').value = data.fecha_inicio;
           document.getElementById('inputFin').value = data.fecha_fin;
           document.getElementById('inputAccion').value = 'actualizar';
           document.getElementById('inputNombre').value = data.nombre;
           document.getElementById('formPeriodo').action = baseUrl + '/administrador/actualizar-periodo';
           document.getElementById('checkActivoContainer').style.display = 'none';
-            limpiarGenerados();
+          limpiarGenerados();
+          
+          // Cargar años antes de establecer el valor seleccionado
+          cargarAnosDisponiblesYSeleccionar(data.ano_lectivo);
           
           actualizarNombre();
           calcularDuracion();
@@ -488,20 +509,68 @@
         });
     }
 
+    function cargarAnosDisponiblesYSeleccionar(anoSeleccionado) {
+      fetch(baseUrl + '/administrador/editar-periodo?accion=obtener-anos')
+        .then(response => response.json())
+        .then(anos => {
+          const selectAno = document.getElementById('inputAno');
+          selectAno.innerHTML = '';
+          
+          anos.forEach(ano => {
+            const option = document.createElement('option');
+            option.value = ano;
+            option.textContent = ano;
+            if(ano == anoSeleccionado) option.selected = true;
+            selectAno.appendChild(option);
+          });
+        })
+        .catch(error => {
+          console.error('Error al cargar años:', error);
+          const selectAno = document.getElementById('inputAno');
+          selectAno.innerHTML = '<option value="">Error al cargar años</option>';
+        });
+    }
+
     function cerrarModal() {
       document.getElementById('modalOverlay').classList.remove('active');
     }
 
     // --- MODAL ACTIVAR ---
     function abrirModalActivar(id, nombre) {
-      document.getElementById('nombreActivar').textContent = nombre;
-      document.getElementById('nombreActivarConfirm').textContent = nombre;
-      document.getElementById('modalActivarOverlay').classList.add('active');
-      
-      // Guardar el ID del período a activar
-      document.querySelector('.btn-modal-activar').onclick = function() {
-        window.location.href = baseUrl + '/administrador/activar-periodo?accion=activar&id=' + id;
-      };
+      // Obtener el período activo actual vía AJAX
+      fetch(baseUrl + '/administrador/editar-periodo?accion=obtener-activo')
+        .then(response => response.json())
+        .then(data => {
+          // Actualizar los textos del modal con datos reales
+          document.getElementById('nombreActivar').textContent = nombre;
+          document.getElementById('nombreActivarConfirm').textContent = nombre;
+          
+          // Si hay un periodo activo, mostrar su nombre
+          if(data && data.nombre) {
+            document.getElementById('nombreActivo').textContent = data.nombre;
+          } else {
+            document.getElementById('nombreActivo').textContent = 'Ninguno';
+          }
+          
+          document.getElementById('modalActivarOverlay').classList.add('active');
+          
+          // Guardar el ID del período a activar en el botón
+          document.querySelector('.btn-modal-activar').onclick = function() {
+            window.location.href = baseUrl + '/administrador/activar-periodo?accion=activar&id=' + id;
+          };
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // Fallback en caso de error
+          document.getElementById('nombreActivar').textContent = nombre;
+          document.getElementById('nombreActivarConfirm').textContent = nombre;
+          document.getElementById('nombreActivo').textContent = 'Desconocido';
+          document.getElementById('modalActivarOverlay').classList.add('active');
+          
+          document.querySelector('.btn-modal-activar').onclick = function() {
+            window.location.href = baseUrl + '/administrador/activar-periodo?accion=activar&id=' + id;
+          };
+        });
     }
 
     function cerrarModalActivar() {
