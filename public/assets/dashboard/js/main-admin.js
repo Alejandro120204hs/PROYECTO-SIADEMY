@@ -366,3 +366,43 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+// ========================================
+// EVENTOS ADMIN - TOGGLE DE VISTA
+// ========================================
+document.addEventListener('DOMContentLoaded', function () {
+  const viewButtons = document.querySelectorAll('.btn-view');
+  const eventsContainer = document.getElementById('eventsContainer');
+
+  if (!viewButtons.length || !eventsContainer) return;
+
+  viewButtons.forEach((button) => {
+    button.addEventListener('click', function () {
+      viewButtons.forEach((item) => item.classList.remove('active'));
+      this.classList.add('active');
+
+      const view = this.getAttribute('data-view');
+      eventsContainer.classList.toggle('list-view', view === 'list');
+    });
+  });
+});
+
+// ========================================
+// ASIGNATURAS - TOGGLE DE VISTA
+// ========================================
+document.addEventListener('DOMContentLoaded', function () {
+  const subjectViewButtons = document.querySelectorAll('.view-btn');
+  const subjectsGrid = document.querySelector('.subjects-grid');
+
+  if (!subjectViewButtons.length || !subjectsGrid) return;
+
+  subjectViewButtons.forEach((button) => {
+    button.addEventListener('click', function () {
+      subjectViewButtons.forEach((item) => item.classList.remove('active'));
+      this.classList.add('active');
+
+      const view = this.getAttribute('data-view');
+      subjectsGrid.classList.toggle('list-view', view === 'list');
+    });
+  });
+});
