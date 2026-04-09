@@ -3,6 +3,14 @@
     require_once BASE_PATH . '/app/controllers/administrador/matricula.php';
     require_once BASE_PATH . '/app/controllers/administrador/estudiante_controller.php';
     require_once BASE_PATH . '/app/controllers/administrador/curso.php';
+
+     require_once BASE_PATH . '/app/controllers/perfil.php';
+     
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
     
     // Obtener datos de la matrícula a editar
     $matricula = mostrarMatriculaId($_GET['id']);
@@ -85,11 +93,9 @@
                     <div class="title">Editar Matrícula</div>
                 </div>
 
-                <div class="user">
-                    <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-                    <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-                    <div class="avatar" title="Admin">AD</div>
-                </div>
+                <?php
+                    include_once __DIR__ . '/../../layouts/boton_perfil_solo.php'
+                ?>
             </div>
 
             <div class="subtitulo">
@@ -206,11 +212,11 @@
                     </div>
 
                     <!-- Botones -->
-                    <div class="wizard-nav" style="margin-top: 30px;">
-                        <button type="button" class="btn-prev" onclick="window.location.href='administrador/panel-matriculas'">
+                    <div class="botones mt-4">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='<?= BASE_URL ?>/administrador-panel-matriculas'">
                             <i class="ri-arrow-left-line"></i> Cancelar
                         </button>
-                        <button type="submit" class="btn-next">
+                        <button type="submit" class="btn btn-success">
                             <i class="ri-save-line"></i> Guardar Cambios
                         </button>
                     </div>
@@ -225,6 +231,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-formulario.js"></script>
     
     <script>
         // Inicializar Choices.js
@@ -255,11 +262,6 @@
                     text: 'Por favor complete todos los campos requeridos'
                 });
             }
-        });
-
-        // Toggle sidebar
-        document.getElementById('toggleLeft').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('collapsed');
         });
     </script>
 

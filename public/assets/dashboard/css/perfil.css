@@ -1290,3 +1290,76 @@ a {
   }
 }
 
+/* Sidebar drawer en móvil */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 8, 30, 0.65);
+  z-index: 999;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.sidebar-overlay.active {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed !important;
+    left: -270px !important;
+    top: 0 !important;
+    height: 100dvh !important;
+    width: 260px !important;
+    min-width: 260px !important;
+    z-index: 1000;
+    transition: left 0.3s ease !important;
+    opacity: 1 !important;
+    padding: 24px 16px !important;
+    border-right: 1px solid rgba(255, 255, 255, .08) !important;
+    overflow-y: auto !important;
+  }
+
+  .sidebar.hidden {
+    left: -270px !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+
+  .sidebar.mobile-open {
+    left: 0 !important;
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* CUSTOM SCROLLBAR STYLES - Dark Theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0e142e;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2d3353;
+  border-radius: 10px;
+  border: 2px solid #0e142e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3d4463;
+}
+
+::-webkit-scrollbar-corner {
+  background: #0e142e;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2d3353 #0e142e;
+}
+
