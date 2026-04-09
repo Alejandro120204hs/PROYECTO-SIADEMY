@@ -8,7 +8,7 @@ require_once BASE_PATH . '/app/helpers/alert_helper.php';
  * Obtener la URL base del proyecto
  */
 function obtenerBaseUrl() {
-    return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . "/siademy";
+    return rtrim(BASE_URL, '/');
 }
 
 /**

@@ -1,7 +1,44 @@
 <?php 
 
+    if (!function_exists('normalizarRutaRedirect')) {
+        function normalizarRutaRedirect($redirect) {
+            if ($redirect === null || $redirect === '') {
+                return null;
+            }
+
+            // Si ya viene absoluta, no tocar.
+            if (preg_match('/^https?:\/\//i', $redirect)) {
+                return $redirect;
+            }
+
+            $baseUrl = defined('BASE_URL') ? rtrim(BASE_URL, '/') : '';
+            $path = trim((string)$redirect);
+
+            // Compatibilidad con rutas antiguas hardcodeadas en /siademy.
+            if ($path === '/siademy') {
+                $path = '/';
+            } elseif (strpos($path, '/siademy/') === 0) {
+                $path = substr($path, 8);
+            }
+
+            if ($path === '') {
+                $path = '/';
+            }
+
+            if ($path[0] !== '/') {
+                $path = '/' . $path;
+            }
+
+            return $baseUrl !== '' ? ($baseUrl . $path) : $path;
+        }
+    }
+
     if (!function_exists('mostrarSweetAlert')) {
         function mostrarSweetAlert($tipo, $titulo, $mensaje, $redirect = null) {
+        $redirectUrl = normalizarRutaRedirect($redirect);
+        $redirectJs = $redirectUrl
+            ? ('window.location.href = ' . json_encode($redirectUrl) . ';')
+            : 'window.history.back();';
         echo "
         <html>
             <head>
@@ -125,7 +162,7 @@
                             icon: 'swal2-icon-hide'
                         }
                     }).then((result) => {
-                        " . ($redirect ? "window.location.href = '$redirect';" : "window.history.back();") . "
+                        " . $redirectJs . "
                     });
                 </script>
 

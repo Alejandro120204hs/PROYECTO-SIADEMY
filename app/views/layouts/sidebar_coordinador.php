@@ -1,6 +1,11 @@
 <?php
   $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-  $currentPath = str_replace('/siademy', '', $requestUri);
+  $basePath = parse_url(BASE_URL, PHP_URL_PATH) ?: '';
+  if ($basePath !== '' && $basePath !== '/' && strpos($requestUri, $basePath) === 0) {
+    $currentPath = substr($requestUri, strlen($basePath));
+  } else {
+    $currentPath = $requestUri;
+  }
   $currentPath = strtok($currentPath, '?');
   $currentPath = rtrim($currentPath, '/');
   if ($currentPath === '') {

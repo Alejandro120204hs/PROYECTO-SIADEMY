@@ -5,13 +5,13 @@ if (session_status() === PHP_SESSION_NONE) {
     }
     // VALIDAMOS SI HAY UNA SESION ACTIVA
     if(!isset($_SESSION['user'])){
-        header('Location: /siademy/login');
+        header('Location: ' . BASE_URL . '/login');
         exit();
     }
 
     // VALIDAMOS QUE EL ROL SEA EL CORRESPONDIENTE
     if($_SESSION['user']['rol'] != 'Administrador'){
-        header('Location: /siademy/login');
+        header('Location: ' . BASE_URL . '/login');
         exit();
     }
 
