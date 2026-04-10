@@ -18,15 +18,6 @@
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   
   <style>
-    /* Layout de 2 columnas sin sidebar derecho */
-    .app {
-      grid-template-columns: 260px 1fr !important;
-    }
-
-    .app.hide-left {
-      grid-template-columns: 0 1fr !important;
-    }
-
     /* Estilos específicos para esta página */
     .form-card {
       background: #151d3e;
@@ -356,7 +347,7 @@
 </head>
 
 <body>
-  <div class="app" id="appGrid">
+  <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'; ?>
 
@@ -366,6 +357,9 @@
         <div class="topbar-left">
           <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
             <i class="ri-menu-2-line"></i>
+          </button>
+          <button class="btn-back" onclick="window.history.back()">
+            <i class="ri-arrow-left-line"></i> Volver
           </button>
           <div class="title">Agregar Asignatura</div>
         </div>
@@ -606,7 +600,7 @@
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/dashboard.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
   
   <script>
     $(document).ready(function() {
@@ -619,28 +613,20 @@
         }
       });
 
-      // Si hay un curso pre-seleccionado, hacer scroll hasta el formulario
+      // Si hay un curso pre-seleccionado, resaltar el input de curso
       <?php if(isset($_GET['curso']) && !empty($_GET['curso'])): ?>
-        // Resaltar visualmente el select de curso
-        $('#selectCurso').parent().find('.select2-container').css({
+        $('#inputCursoDisplay').css({
           'border': '2px solid #10b981',
-          'border-radius': '10px',
           'box-shadow': '0 0 0 3px rgba(16, 185, 129, 0.1)'
         });
 
-        // Remover el resaltado después de 3 segundos
         setTimeout(function() {
-          $('#selectCurso').parent().find('.select2-container').css({
+          $('#inputCursoDisplay').css({
             'border': '',
             'box-shadow': ''
           });
         }, 3000);
       <?php endif; ?>
-
-      // Toggle sidebar izquierdo
-      document.getElementById('toggleLeft').addEventListener('click', function() {
-        document.getElementById('appGrid').classList.toggle('hide-left');
-      });
     });
   </script>
 </body>
