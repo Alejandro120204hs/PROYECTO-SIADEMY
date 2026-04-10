@@ -23,15 +23,6 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     
     <style>
-        /* Layout de 2 columnas sin sidebar derecho */
-        .app {
-            grid-template-columns: 260px 1fr !important;
-        }
-
-        .app.hide-left {
-            grid-template-columns: 0 1fr !important;
-        }
-
         /* Estilos específicos para esta página */
         .form-card {
             background: #151d3e;
@@ -296,7 +287,7 @@
 </head>
 
 <body>
-    <div class="app" id="appGrid">
+    <div class="app hide-right" id="appGrid">
         <!-- LEFT SIDEBAR -->
         <?php include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'; ?>
 
@@ -306,6 +297,9 @@
                 <div class="topbar-left">
                     <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
                         <i class="ri-menu-2-line"></i>
+                    </button>
+                    <button class="btn-back" onclick="window.history.back()">
+                        <i class="ri-arrow-left-line"></i> Volver
                     </button>
                     <div class="title">Matricular Estudiante</div>
                 </div>
@@ -470,7 +464,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/dashboard.js"></script>
+    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
     
     <script>
         $(document).ready(function() {
@@ -537,10 +531,6 @@
                 }
             });
 
-            // Toggle sidebar izquierdo
-            $('#toggleLeft').on('click', function() {
-                $('#appGrid').toggleClass('hide-left');
-            });
         });
     </script>
 

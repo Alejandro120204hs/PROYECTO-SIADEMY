@@ -43,16 +43,17 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-        
+
         .subjects-table {
             width: 100% !important;
             max-width: 100% !important;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
-        
+
         .subjects-table table {
             width: 100% !important;
-            min-width: 100% !important;
+            min-width: 600px;
         }
 
         /* Ajustar el main para usar todo el ancho */
@@ -77,6 +78,73 @@
             padding-left: 28px !important;
             padding-right: 28px !important;
         }
+
+        /* Cabeceras de sección */
+        .section-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 28px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 980px) {
+            .main {
+                padding: 20px 0 32px 0 !important;
+            }
+
+            .student-profile-header,
+            .quick-stats,
+            .topbar {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+
+            .section-header-row {
+                padding-left: 20px;
+                padding-right: 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .section-header-row .btn-profile-action {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .academic-section .empty-box {
+                margin: 0 20px !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .main {
+                padding: 14px 0 24px 0 !important;
+            }
+
+            .student-profile-header,
+            .quick-stats,
+            .topbar {
+                padding-left: 14px !important;
+                padding-right: 14px !important;
+            }
+
+            .section-header-row {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .section-title {
+                font-size: 17px !important;
+            }
+
+            .academic-section .empty-box {
+                margin: 0 14px !important;
+                padding: 40px 20px !important;
+            }
+        }
     </style>
 </head>
 
@@ -89,6 +157,12 @@
         <main class="main">
             <div class="topbar">
                 <div class="topbar-left">
+                    <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
+                        <i class="ri-menu-2-line"></i>
+                    </button>
+                    <button class="btn-back" onclick="window.history.back()">
+                        <i class="ri-arrow-left-line"></i> Volver
+                    </button>
                     <div class="title">Detalle del Curso</div>
                 </div>
 
@@ -170,7 +244,7 @@
 
             <!-- SECCIÓN DE ASIGNATURAS -->
             <div class="academic-section" style="margin-bottom: 32px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 28px;">
+                <div class="section-header-row">
                     <h3 class="section-title">
                         <i class="ri-book-line" style="color: #6366f1; margin-right: 8px;"></i>
                         Asignaturas del Curso (<?= count($asignaturas) ?>)
@@ -266,7 +340,7 @@
                         </table>
                     </div>
                 <?php else: ?>
-                    <div style="text-align: center; padding: 60px 40px; background: rgba(79, 70, 229, 0.05); border-radius: 16px; margin: 0 28px;">
+                    <div class="empty-box" style="text-align: center; padding: 60px 40px; background: rgba(79, 70, 229, 0.05); border-radius: 16px; margin: 0 28px;">
                         <i class="ri-book-line" style="font-size: 64px; color: rgba(79, 70, 229, 0.3); margin-bottom: 16px;"></i>
                         <h3 style="color: #e6e9f4; margin: 0 0 8px 0; font-size: 20px;">No hay asignaturas asignadas</h3>
                         <p style="color: #97a1b6; font-size: 14px; margin: 0 0 20px 0;">Este curso aún no tiene asignaturas configuradas.</p>
@@ -280,7 +354,7 @@
 
             <!-- TABLA DE ESTUDIANTES -->
             <div class="academic-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 28px;">
+                <div class="section-header-row">
                     <h3 class="section-title">
                         <i class="ri-team-line" style="color: #6366f1; margin-right: 8px;"></i>
                         Estudiantes Matriculados (<?= $totalEstudiantes ?>)
@@ -345,7 +419,7 @@
                         </table>
                     </div>
                 <?php else: ?>
-                    <div style="text-align: center; padding: 80px 40px;">
+                    <div class="empty-box" style="text-align: center; padding: 80px 40px;">
                         <i class="ri-user-unfollow-line" style="font-size: 80px; color: rgba(79, 70, 229, 0.2); margin-bottom: 24px;"></i>
                         <h3 style="color: #e6e9f4; margin: 0 0 12px 0; font-size: 22px;">No hay estudiantes matriculados</h3>
                         <p style="color: #97a1b6; font-size: 15px; margin: 0 0 24px 0;">Este curso aún no tiene estudiantes matriculados para el año <?= $anioActual ?>.</p>
@@ -360,21 +434,9 @@
         </main>
     </div>
 
-    <script>
-        // Script vacío - funcionalidad futura
-    </script>
-        
-    <style>
-        .appGrid,
-        .app {
-            display: grid !important;
-            grid-template-columns: 260px 1fr !important;
-        }
-        
-        .main {
-            padding: 1rem !important;
-        }
-    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
 </body>
 
 </html>
