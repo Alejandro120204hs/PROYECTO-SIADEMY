@@ -3,6 +3,13 @@
     require_once BASE_PATH . '/app/controllers/administrador/curso.php';
     require_once BASE_PATH . '/app/models/administradores/matricula.php';
     require_once BASE_PATH . '/app/models/administradores/docente_asignatura.php';
+
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
     
     // Obtener el ID del curso
     $id_curso = $_GET['id'] ?? 0;
@@ -145,17 +152,63 @@
                 padding: 40px 20px !important;
             }
         }
+
+        /* Topbar de detalle curso: en movil, perfil fijo a la derecha del titulo */
+        @media (max-width: 768px) {
+            .topbar.topbar-curso-detalle {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                align-items: center;
+                column-gap: 8px;
+                row-gap: 0;
+                flex-wrap: nowrap;
+            }
+
+            .topbar.topbar-curso-detalle .topbar-left {
+                min-width: 0;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                overflow: hidden;
+                order: 1 !important;
+            }
+
+            .topbar.topbar-curso-detalle > .user {
+                order: 2 !important;
+                margin-left: 0 !important;
+                justify-self: end;
+                flex: 0 0 auto;
+            }
+
+            .topbar.topbar-curso-detalle .title {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .topbar.topbar-curso-detalle .btn-back {
+                padding: 9px 10px;
+                gap: 0;
+                font-size: 0;
+                flex: 0 0 auto;
+            }
+
+            .topbar.topbar-curso-detalle .btn-back i {
+                margin-right: 0;
+                font-size: 17px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div class="app" id="appGrid">
+    <div class="app hide-right" id="appGrid">
         <!-- LEFT SIDEBAR -->
         <?php include_once __DIR__ . '/../../layouts/sidebar_coordinador.php' ?>
 
         <!-- MAIN -->
         <main class="main">
-            <div class="topbar">
+            <div class="topbar topbar-curso-detalle">
                 <div class="topbar-left">
                     <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
                         <i class="ri-menu-2-line"></i>
@@ -166,11 +219,9 @@
                     <div class="title">Detalle del Curso</div>
                 </div>
 
-                <div class="user">
-                    <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-                    <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-                    <div class="avatar" title="Admin">AD</div>
-                </div>
+                <?php
+                    include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php';
+                ?>
             </div>
 
             <!-- COURSE PROFILE HEADER -->
