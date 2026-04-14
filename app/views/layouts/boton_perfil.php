@@ -1,29 +1,47 @@
+<?php
+  $perfilData = (isset($usuario) && is_array($usuario)) ? $usuario : [];
+  $perfilNombre = $perfilData['nombres'] ?? 'Usuario';
+  $perfilRol = $perfilData['rol'] ?? ($_SESSION['user']['rol'] ?? 'Usuario');
+  $perfilFoto = !empty($perfilData['foto']) ? $perfilData['foto'] : 'default.png';
+
+  $perfilDashboard = '/dashboard-perfil';
+  if ($perfilRol === 'Administrador') {
+    $perfilDashboard = '/administrador/dashboard';
+  } elseif ($perfilRol === 'superAdmin') {
+    $perfilDashboard = '/superAdmin-dashboard';
+  }
+?>
+
 <div class="user">
   <div class="user-info">
     <div class="user-details">
-      <span class="user-name"><?= $usuario['nombres'] ?></span>
-      <span class="user-role"><?= $usuario['rol'] ?></span>
+      <span class="user-name"><?= htmlspecialchars($perfilNombre) ?></span>
+      <span class="user-role"><?= htmlspecialchars($perfilRol) ?></span>
     </div>
   </div>
   <div class="avatar" id="userMenuBtn">
-    <img src="<?= BASE_URL ?>/public/uploads/usuarios/<?= $usuario['foto'] ?>"
+    <img src="<?= BASE_URL ?>/public/uploads/usuarios/<?= htmlspecialchars($perfilFoto) ?>"
       alt="foto" width="40px" height="40px" style="border-radius: 50%; cursor: pointer;">
   </div>
 
   <!-- Dropdown Menu -->
   <div class="user-dropdown" id="userDropdown">
     <div class="dropdown-header">
-      <img src="<?= BASE_URL ?>/public/uploads/usuarios/<?= $usuario['foto'] ?>"
+      <img src="<?= BASE_URL ?>/public/uploads/usuarios/<?= htmlspecialchars($perfilFoto) ?>"
         alt="foto" width="48px" height="48px" style="border-radius: 50%;">
       <div>
-        <strong><?= $usuario['nombres'] ?></strong>
-        <small><?= $usuario['rol'] ?></small>
+        <strong><?= htmlspecialchars($perfilNombre) ?></strong>
+        <small><?= htmlspecialchars($perfilRol) ?></small>
       </div>
     </div>
     <div class="dropdown-divider"></div>
     <a href="<?= BASE_URL ?>/dashboard-perfil" class="dropdown-item">
       <i class="ri-user-line"></i>
       <span>Ver Perfil</span>
+    </a>
+    <a href="<?= BASE_URL . $perfilDashboard ?>" class="dropdown-item">
+      <i class="ri-dashboard-line"></i>
+      <span>Ir al Panel</span>
     </a>
     <a href="<?= BASE_URL ?>/configuracion" class="dropdown-item">
       <i class="ri-settings-3-line"></i>

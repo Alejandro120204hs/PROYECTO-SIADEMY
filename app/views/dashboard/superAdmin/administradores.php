@@ -2,9 +2,12 @@
 
   // IMPORTAMOS LAS DEPENDENCIAS NECESARIAS
   require_once BASE_PATH . '/app/controllers/superAdmin/administradores.php';
+  require_once BASE_PATH . '/app/controllers/perfil.php';
 
   // LLAMAMOS LA FUNCION ESPECIFICA
   $datos = mostrarAdministradores();
+  $id = $_SESSION['user']['id'];
+  $usuario = mostrarPerfil($id);
 
 ?>
 
@@ -58,11 +61,9 @@
           </button>
         </div>
         
-        <div class="user">
-          <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-          <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-          <div class="avatar" title="Diego A.">DA</div>
-        </div>
+        <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php';
+        ?>
       </div>
 
       <!-- Tabla de Estudiantes -->

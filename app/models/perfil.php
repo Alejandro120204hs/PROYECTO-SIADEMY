@@ -14,27 +14,76 @@ class Perfil
         $this->conexion = $db->getConexion();
     }
 
-    //  ESTA FUNCION SE DUPLICA POR CADA ROL
-    public function mostrarPerfilAdmin($id)
+    private function ejecutarConsultaPerfil($consulta, $id)
     {
         try {
-            // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
-            // $consultar = "SELECT administrador.*, usuario.correo AS correo, usuario.rol AS rol, institucion.nombre AS nombre_institucion, institucion.direccion AS direccion_institucion FROM administrador INNER JOIN usuario ON administrador.id_usuario = usuario.id INNER JOIN institucion ON administrador.id_institucion = institucion.id WHERE administrador.id = :id LIMIT 1";
-            $consultar = "SELECT administrador.*, usuario.correo AS correo, usuario.rol AS rol, 
-              institucion.nombre AS nombre_institucion, institucion.direccion AS direccion_institucion 
-              FROM administrador 
-              INNER JOIN usuario ON administrador.id_usuario = usuario.id 
-              INNER JOIN institucion ON administrador.id_institucion = institucion.id 
-              WHERE usuario.id = :id LIMIT 1";
-
-            // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
-            $resultado = $this->conexion->prepare($consultar);
+            $resultado = $this->conexion->prepare($consulta);
             $resultado->bindParam(':id', $id);
             $resultado->execute();
-            return $resultado->fetch();
+            $usuario = $resultado->fetch(PDO::FETCH_ASSOC);
+            return $usuario ?: [];
         } catch (PDOException $e) {
-            error_log("Error en Acudiente::listar->" . $e->getMessage());
+            error_log("Error en Perfil::ejecutarConsultaPerfil -> " . $e->getMessage());
             return [];
         }
+    }
+
+    public function mostrarPerfilAdministrador($id)
+    {
+        $consulta = "SELECT 
+                administrador.*, 
+                usuario.correo AS correo, 
+                usuario.rol AS rol,
+                institucion.nombre AS nombre_institucion, 
+                institucion.direccion AS direccion_institucion
+            FROM administrador
+            INNER JOIN usuario ON administrador.id_usuario = usuario.id
+            INNER JOIN institucion ON administrador.id_institucion = institucion.id
+            WHERE usuario.id = :id
+            LIMIT 1";
+
+        return $this->ejecutarConsultaPerfil($consulta, $id);
+    }
+
+    public function mostrarPerfilSuperAdmin($id)
+    {
+        $consulta = "SELECT 
+                COALESCE(administrador.nombres, 'Super Administrador') AS nombres,
+                COALESCE(administrador.apellidos, '') AS apellidos,
+                administrador.documento,
+                administrador.telefono,
+                administrador.edad,
+                COALESCE(administrador.foto, 'default.png') AS foto,
+                usuario.correo AS correo,
+                usuario.rol AS rol,
+                institucion.nombre AS nombre_institucion,
+                institucion.direccion AS direccion_institucion
+            FROM usuario
+            LEFT JOIN administrador ON administrador.id_usuario = usuario.id
+            LEFT JOIN institucion ON institucion.id = COALESCE(administrador.id_institucion, usuario.id_institucion)
+            WHERE usuario.id = :id
+            LIMIT 1";
+
+        return $this->ejecutarConsultaPerfil($consulta, $id);
+    }
+
+    public function mostrarPerfilGenerico($id)
+    {
+        $consulta = "SELECT 
+                'Usuario' AS nombres,
+                '' AS apellidos,
+                NULL AS documento,
+                NULL AS telefono,
+                NULL AS edad,
+                'default.png' AS foto,
+                usuario.correo AS correo,
+                usuario.rol AS rol,
+                NULL AS nombre_institucion,
+                NULL AS direccion_institucion
+            FROM usuario
+            WHERE usuario.id = :id
+            LIMIT 1";
+
+        return $this->ejecutarConsultaPerfil($consulta, $id);
     }
 }

@@ -1,5 +1,20 @@
-<?php 
-  require_once BASE_PATH . '/app/helpers/session_administrador.php';
+<?php
+  require_once BASE_PATH . '/app/helpers/session_helper.php';
+
+  initSession();
+
+  if (!isset($_SESSION['user'])) {
+    header('Location: ' . BASE_URL . '/login');
+    exit();
+  }
+
+  $rolUsuario = $_SESSION['user']['rol'] ?? '';
+  if ($rolUsuario !== 'Administrador' && $rolUsuario !== 'superAdmin') {
+    header('Location: ' . BASE_URL . '/login');
+    exit();
+  }
+
+  $esSuperAdmin = $rolUsuario === 'superAdmin';
 
   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
     require_once BASE_PATH . '/app/controllers/perfil.php';
@@ -27,9 +42,11 @@
 <body>
   <div class="app" id="appGrid">
     <!-- LEFT SIDEBAR -->
-    <?php
-      include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'
-    ?>
+    <?php if ($esSuperAdmin): ?>
+      <?php include_once __DIR__ . '/../../layouts/sidebar_superAdmin.php'; ?>
+    <?php else: ?>
+      <?php include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'; ?>
+    <?php endif; ?>
 
     <!-- MAIN -->
     <main class="main">
