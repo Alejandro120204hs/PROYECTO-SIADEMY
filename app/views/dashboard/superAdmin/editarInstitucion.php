@@ -2,12 +2,15 @@
 
     // IMPORTAMOS LAS DEPENDENCIAS NECESARIAS
     require_once BASE_PATH . '/app/controllers/superAdmin/instituciones.php';
+    require_once BASE_PATH . '/app/controllers/perfil.php';
 
     // LLAMAMOS EL ID QUE VIENE A TRAVES DEL METODO GET
     $id = $_GET['id'];
 
     // LLAMAMOS A LA FUNCION ESPECIFICA
     $institucion = mostrarInstitucionId($id);
+    $idUsuario = $_SESSION['user']['id'];
+    $usuario = mostrarPerfil($idUsuario);
 
 ?>
 
@@ -43,11 +46,9 @@
                     
                 </div>
 
-                <div class="user">
-                    <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-                    <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-                    <div class="avatar" title="Diego A.">DA</div>
-                </div>
+                <?php
+                    include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php';
+                ?>
             </div>
             <div class="subtitulo"><p>Formulario de actualización, Completa los siguientes pasos para actualizar la institución en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>
 

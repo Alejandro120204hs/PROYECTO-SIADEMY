@@ -254,4 +254,42 @@ $(document).ready(function() {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
     }
+
+    // Dropdown de perfil
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    const userDropdown = document.getElementById('userDropdown');
+
+    if (userMenuBtn && userDropdown) {
+        const dropdownOverlay = document.querySelector('.dropdown-overlay') || document.createElement('div');
+        if (!dropdownOverlay.parentElement) {
+            dropdownOverlay.className = 'dropdown-overlay';
+            document.body.appendChild(dropdownOverlay);
+        }
+
+        function openDropdown() {
+            userDropdown.classList.add('show');
+            dropdownOverlay.classList.add('show');
+        }
+
+        function closeDropdown() {
+            userDropdown.classList.remove('show');
+            dropdownOverlay.classList.remove('show');
+        }
+
+        userMenuBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            userDropdown.classList.contains('show') ? closeDropdown() : openDropdown();
+        });
+
+        dropdownOverlay.addEventListener('click', closeDropdown);
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') closeDropdown();
+        });
+
+        userDropdown.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    }
 });

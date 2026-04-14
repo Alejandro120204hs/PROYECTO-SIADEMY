@@ -1,3 +1,29 @@
+<?php
+
+  require_once BASE_PATH . '/app/controllers/perfil.php';
+  require_once BASE_PATH . '/app/models/superAdmin/institucion.php';
+    
+    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
+    $id = $_SESSION['user']['id'];
+    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
+    $usuario = mostrarPerfil($id);
+
+    $objInstitucion = new Institucion();
+    $metricasDashboard = $objInstitucion->obtenerMetricasDashboard();
+    $totalesDashboard = $metricasDashboard['totales'] ?? ['total' => 0, 'activas' => 0, 'inactivas' => 0];
+    $chartDashboard = $metricasDashboard['chart'] ?? [];
+    $porcentajeActivas = ($totalesDashboard['total'] ?? 0) > 0
+      ? round((($totalesDashboard['activas'] ?? 0) / $totalesDashboard['total']) * 100, 1)
+      : 0;
+    $crecimientoDashboard = (float) ($chartDashboard['crecimiento'] ?? 0);
+    $nuevasEsteAnio = (int) ($chartDashboard['nuevasEsteAnio'] ?? 0);
+    $chartJson = json_encode($chartDashboard, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if ($chartJson === false) {
+      $chartJson = '{}';
+    }
+
+?>
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -11,7 +37,7 @@
 </head>
 
 <body>
-  <div class="app" id="appGrid">
+  <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
       include_once __DIR__ . '/../../layouts/sidebar_superAdmin.php'
@@ -30,32 +56,32 @@
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar escuela...">
         </div>
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+         <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
+        ?>
       </div>
 
       <!-- KPIs -->
       <div class="kpi-grid">
         <div class="kpi-card">
           <div class="kpi-label">Total Escuelas</div>
-          <div class="kpi-value">24</div>
-          <div class="kpi-info success"><i class="ri-arrow-up-line"></i> 3 nuevas este mes</div>
+          <div class="kpi-value"><?= (int) ($totalesDashboard['total'] ?? 0) ?></div>
+          <div class="kpi-info success"><i class="ri-building-2-line"></i> Multi institucional</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Escuelas Activas</div>
-          <div class="kpi-value">20</div>
-          <div class="kpi-info success"><i class="ri-checkbox-circle-line"></i> 83.3% del total</div>
+          <div class="kpi-value"><?= (int) ($totalesDashboard['activas'] ?? 0) ?></div>
+          <div class="kpi-info success"><i class="ri-checkbox-circle-line"></i> <?= $porcentajeActivas ?>% del total</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Pagos Pendientes</div>
-          <div class="kpi-value danger">7</div>
-          <div class="kpi-info danger"><i class="ri-error-warning-line"></i> Requieren atención</div>
+          <div class="kpi-value danger"><?= (int) ($totalesDashboard['inactivas'] ?? 0) ?></div>
+          <div class="kpi-info danger"><i class="ri-error-warning-line"></i> Instituciones inactivas</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">Ingresos del Mes</div>
-          <div class="kpi-value">$48,500</div>
-          <div class="kpi-info success"><i class="ri-arrow-up-line"></i> +12% vs mes anterior</div>
+          <div class="kpi-label">Crecimiento Anual</div>
+          <div class="kpi-value"><?= $crecimientoDashboard >= 0 ? '+' : '' ?><?= number_format($crecimientoDashboard, 1) ?>%</div>
+          <div class="kpi-info success"><i class="ri-arrow-up-line"></i> Vs año anterior</div>
         </div>
       </div>
 
@@ -79,15 +105,15 @@
         </div>
         <div class="chart-stats">
             <div class="stat-item">
-                <span class="stat-value success">+45.8%</span>
+              <span class="stat-value success"><?= $crecimientoDashboard >= 0 ? '+' : '' ?><?= number_format($crecimientoDashboard, 1) ?>%</span>
                 <span class="stat-label">Crecimiento anual</span>
             </div>
             <div class="stat-item">
-                <span class="stat-value">24</span>
+              <span class="stat-value"><?= (int) ($totalesDashboard['total'] ?? 0) ?></span>
                 <span class="stat-label">Total instituciones</span>
             </div>
             <div class="stat-item">
-                <span class="stat-value warning">+9</span>
+              <span class="stat-value warning">+<?= $nuevasEsteAnio ?></span>
                 <span class="stat-label">Nuevas este año</span>
             </div>
         </div>
@@ -100,87 +126,7 @@
     </main>
 
     <!-- RIGHT SIDEBAR -->
-    <aside class="rightbar" id="rightSidebar">
-      <div class="user">
-        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-        <div class="avatar" title="Super Admin">SA</div>
-      </div>
-
-      <div class="panel-title">Actividad Reciente</div>
-      <p class="muted">Últimas acciones del sistema</p>
-
-      <div class="msg">
-        <div class="avatar">🔒</div>
-        <div>
-          <strong>Escuela Bloqueada</strong>
-          <div class="muted">Colegio Los Andes • Por falta de pago</div>
-        </div>
-        <span class="time">1h</span>
-      </div>
-
-      <div class="msg">
-        <div class="avatar">✅</div>
-        <div>
-          <strong>Nuevo Pago Recibido</strong>
-          <div class="muted">Liceo Moderno • $1,800</div>
-        </div>
-        <span class="time">2h</span>
-      </div>
-
-      <div class="msg">
-        <div class="avatar">🏫</div>
-        <div>
-          <strong>Nueva Escuela</strong>
-          <div class="muted">Instituto del Pacífico • Yopal</div>
-        </div>
-        <span class="time">5h</span>
-      </div>
-
-      <!-- EVENTS SECTION -->
-      <div class="events-section">
-        <div class="panel-title">Alertas del Sistema</div>
-        <p class="muted">Notificaciones importantes</p>
-
-        <div class="event-item">
-          <div class="event-date danger-bg">
-            <span class="day">7</span>
-            <span class="month">Pendientes</span>
-          </div>
-          <div class="event-content">
-            <h4>Pagos Vencidos</h4>
-            <p>Hay 7 escuelas con pagos pendientes que requieren seguimiento</p>
-            <div class="event-time">⚠️ Acción requerida</div>
-          </div>
-        </div>
-
-        <div class="event-item">
-          <div class="event-date warning-bg">
-            <span class="day">4</span>
-            <span class="month">Bloqueadas</span>
-          </div>
-          <div class="event-content">
-            <h4>Escuelas Bloqueadas</h4>
-            <p>Instituciones temporalmente suspendidas por falta de pago</p>
-            <div class="event-time">🔒 Restablecer acceso tras pago</div>
-          </div>
-        </div>
-
-        <div class="event-item">
-          <div class="event-date success-bg">
-            <span class="day">20</span>
-            <span class="month">Activas</span>
-          </div>
-          <div class="event-content">
-            <h4>Escuelas Operando</h4>
-            <p>Instituciones con acceso completo al sistema</p>
-            <div class="event-time">✅ Estado: Normal</div>
-          </div>
-        </div>
-
-        <a href="#" class="btn-primary">Ver reporte completo</a>
-      </div>
-    </aside>
+    
   </div>
 
   <!-- Scripts -->
@@ -188,6 +134,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+    window.superAdminChartData = <?= $chartJson ?>;
+  </script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/superAdmin/main-superAdmin.js"></script>
 </body>
 </html>

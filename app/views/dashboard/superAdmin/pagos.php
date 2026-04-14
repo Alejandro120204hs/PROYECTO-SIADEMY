@@ -1,3 +1,10 @@
+<?php
+  require_once BASE_PATH . '/app/controllers/perfil.php';
+
+  $id = $_SESSION['user']['id'];
+  $usuario = mostrarPerfil($id);
+?>
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -12,7 +19,7 @@
 </head>
 
 <body>
-  <div class="app" id="appGrid">
+  <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
         include_once __DIR__ . '/../../layouts/sidebar_superAdmin.php';
@@ -31,9 +38,9 @@
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar escuela o referencia...">
         </div>
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+        <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'
+        ?>
       </div>
 
       <!-- KPIs -->
@@ -287,122 +294,7 @@
     </main>
 
     <!-- RIGHT SIDEBAR -->
-    <aside class="rightbar" id="rightSidebar">
-      <div class="user">
-        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-        <div class="avatar" title="Super Admin">SA</div>
-      </div>
-
-      <div class="panel-title">Detalles de Pago</div>
-      <p class="muted">Información completa de la transacción</p>
-
-      <div class="payment-detail">
-        <div class="payment-header">
-          <div class="payment-icon">
-            <i class="ri-bill-line"></i>
-          </div>
-          <div>
-            <h4>REF-001-2024</h4>
-            <div class="muted">Colegio San José</div>
-          </div>
-        </div>
-
-        <div class="detail-grid">
-          <div class="detail-item">
-            <div class="detail-label">Estado</div>
-            <div class="detail-value"><span class="badge bg-success">Pagado</span></div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Fecha de Pago</div>
-            <div class="detail-value">2024-10-15</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Vencimiento</div>
-            <div class="detail-value">2024-11-15</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Plan</div>
-            <div class="detail-value"><span class="badge bg-primary">Premium</span></div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Monto</div>
-            <div class="detail-value amount-large">$2,500</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Método</div>
-            <div class="detail-value">Transferencia Bancaria</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Referencia</div>
-            <div class="detail-value">TRF-789456123</div>
-          </div>
-        </div>
-
-        <div class="payment-actions">
-          <button class="btn btn-warning btn-sm full-width">
-            <i class="ri-download-line"></i> Descargar Factura
-          </button>
-          <button class="btn btn-info btn-sm full-width">
-            <i class="ri-eye-line"></i> Ver Comprobante
-          </button>
-        </div>
-      </div>
-
-      <!-- ALERTAS DE PAGOS -->
-      <div class="panel-title" style="margin-top: 30px;">Alertas de Pagos</div>
-      <p class="muted">Pagos que requieren atención</p>
-
-      <div class="alert-item danger">
-        <div class="alert-icon">
-          <i class="ri-error-warning-line"></i>
-        </div>
-        <div>
-          <strong>Pago Vencido</strong>
-          <div class="muted">Instituto Técnico Nacional • $3,800</div>
-        </div>
-        <span class="time">5 días</span>
-      </div>
-
-      <div class="alert-item warning">
-        <div class="alert-icon">
-          <i class="ri-time-line"></i>
-        </div>
-        <div>
-          <strong>Vence Pronto</strong>
-          <div class="muted">Colegio Los Andes • $2,200</div>
-        </div>
-        <span class="time">2 días</span>
-      </div>
-
-      <div class="alert-item info">
-        <div class="alert-icon">
-          <i class="ri-information-line"></i>
-        </div>
-        <div>
-          <strong>Pago Pendiente</strong>
-          <div class="muted">Colegio Moderno • $1,500</div>
-        </div>
-        <span class="time">7 días</span>
-      </div>
-
-      <!-- RESUMEN MENSUAL -->
-      <div class="summary-card">
-        <div class="panel-title">Resumen Mensual</div>
-        <div class="summary-item">
-          <div class="summary-label">Total Recibido</div>
-          <div class="summary-value success">$48,500</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Pendiente</div>
-          <div class="summary-value warning">$12,300</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Escuelas al Día</div>
-          <div class="summary-value">18/24</div>
-        </div>
-      </div>
-    </aside>
+    
   </div>
 
   <!-- Scripts -->

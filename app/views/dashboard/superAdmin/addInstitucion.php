@@ -1,3 +1,10 @@
+<?php
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+
+    $id = $_SESSION['user']['id'];
+    $usuario = mostrarPerfil($id);
+?>
+
 <!doctype html>
 <html lang="es">
 
@@ -30,11 +37,9 @@
                     
                 </div>
 
-                <div class="user">
-                    <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-                    <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-                    <div class="avatar" title="Diego A.">DA</div>
-                </div>
+                <?php
+                    include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php';
+                ?>
             </div>
             <div class="subtitulo"><p>Formulario de registro, Completa los siguientes pasos para registrar una nueva institución en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>
 
