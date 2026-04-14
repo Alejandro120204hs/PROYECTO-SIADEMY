@@ -216,6 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Toggle del dropdown
   if (userMenuBtn && userDropdown) {
+    userMenuBtn.dataset.dropdownInit = '1'; // marca para evitar doble registro
     userMenuBtn.addEventListener('click', function(e) {
       e.stopPropagation();
       const isOpen = userDropdown.classList.contains('show');

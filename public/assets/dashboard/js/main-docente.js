@@ -556,3 +556,16 @@ if (document.getElementById('calendarLargeGrid')) {
     eventCards.forEach(card => observer.observe(card));
   });
 }
+
+// Perfil: permite que el avatar del panel derecho abra el perfil si no viene como enlace.
+document.addEventListener('DOMContentLoaded', function() {
+  const profileAvatar = document.querySelector('.rightbar .user .avatar');
+  if (!profileAvatar || profileAvatar.tagName === 'A') {
+    return;
+  }
+
+  profileAvatar.style.cursor = 'pointer';
+  profileAvatar.addEventListener('click', function() {
+    window.location.href = (typeof BASE_URL !== 'undefined' ? BASE_URL : '') + '/dashboard-perfil';
+  });
+});

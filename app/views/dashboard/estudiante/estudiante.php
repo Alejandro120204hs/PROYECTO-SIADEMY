@@ -184,7 +184,7 @@
       <div class="user">
         <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
         <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-        <div class="avatar" title="Diego A.">DA</div>
+        <a href="<?= BASE_URL ?>/dashboard-perfil" class="avatar" title="Ir al perfil" style="text-decoration:none;color:inherit;">DA</a>
       </div>
 
       <div class="panel-title">Cursos Recientes</div>

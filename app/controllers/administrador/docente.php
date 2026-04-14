@@ -71,7 +71,7 @@
             exit();
             }
              // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
-            session_start();
+            if (session_status() === PHP_SESSION_NONE) { session_start(); }
             if(!isset($_SESSION['user']['id_institucion'])){
                 mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
                 exit();
@@ -159,7 +159,7 @@
             function mostrarDocentes(){   
                 // VERIFICAMOS SI LA SESIÓN YA ESTÁ INICIADA
                 if (session_status() === PHP_SESSION_NONE) {
-                    session_start();
+                    session_start(); // dentro de guard session_status()
                 }
 
                 // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO

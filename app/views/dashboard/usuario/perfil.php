@@ -145,30 +145,31 @@
 
           <div class="tab-content">
             <!-- FORMULARIO EDITAR PERFIL -->
-            <form class="tab-pane active" id="edit-profile-form">
+            <form class="tab-pane active" id="edit-profile-form" action="<?= BASE_URL ?>/configuracion" method="POST">
+              <input type="hidden" name="accion" value="actualizar-perfil">
               <div class="form-group">
                 <label for="fullName">Nombres</label>
-                <input type="text" id="fullName" value="<?= $usuario['nombres'] ?>" class="form-input">
+                <input type="text" name="nombres" id="fullName" value="<?= htmlspecialchars($usuario['nombres'] ?? '') ?>" class="form-input" required>
               </div>
 
               <div class="form-group">
-                <label for="fullName">Apellidos</label>
-                <input type="text" id="fullName" value="<?= $usuario['apellidos'] ?>" class="form-input">
+                <label for="lastName">Apellidos</label>
+                <input type="text" name="apellidos" id="lastName" value="<?= htmlspecialchars($usuario['apellidos'] ?? '') ?>" class="form-input" required>
               </div>
               
               <div class="form-group">
                 <label for="email">Correo Electrónico</label>
-                <input type="email" id="email" value="<?= $usuario['correo'] ?>" class="form-input">
+                <input type="email" name="correo" id="email" value="<?= htmlspecialchars($usuario['correo'] ?? '') ?>" class="form-input" required>
               </div>
               
               <div class="form-group">
                 <label for="phone">Teléfono</label>
-                <input type="tel" id="phone" value="<?= $usuario['telefono'] ?>" class="form-input">
+                <input type="tel" name="telefono" id="phone" value="<?= htmlspecialchars($usuario['telefono'] ?? '') ?>" class="form-input" required>
               </div>
               
               <div class="form-group">
                 <label for="location">Edad</label>
-                <input type="text" id="location" value="<?= $usuario['edad'] ?>" class="form-input">
+                <input type="number" name="edad" id="location" value="<?= htmlspecialchars($usuario['edad'] ?? '') ?>" class="form-input" min="1" max="120" required>
               </div>
               
               <div class="form-actions">
@@ -178,20 +179,21 @@
             </form>
 
             <!-- FORMULARIO CAMBIAR CONTRASEÑA -->
-            <form class="tab-pane" id="change-password-form" action="actualizar-clave" method="POST">
+            <form class="tab-pane" id="change-password-form" action="<?= BASE_URL ?>/actualizar-clave" method="POST">
+              <input type="hidden" name="accion" value="actualizar-clave">
               <div class="form-group">
                 <label for="currentPassword">Contraseña Actual</label>
-                <input type="password" name="cActual" id="currentPassword" class="form-input" placeholder="Ingresa tu contraseña actual">
+                <input type="password" name="cActual" id="currentPassword" class="form-input" placeholder="Ingresa tu contraseña actual" required>
               </div>
               
               <div class="form-group">
                 <label for="newPassword">Nueva Contraseña</label>
-                <input type="password" name="cNueva" id="newPassword" class="form-input" placeholder="Ingresa nueva contraseña">
+                <input type="password" name="cNueva" id="newPassword" class="form-input" placeholder="Ingresa nueva contraseña" minlength="8" required>
               </div>
               
               <div class="form-group">
                 <label for="confirmPassword">Confirmar Contraseña</label>
-                <input type="password" name="conClave" id="confirmPassword" class="form-input" placeholder="Confirma nueva contraseña">
+                <input type="password" name="conClave" id="confirmPassword" class="form-input" placeholder="Confirma nueva contraseña" minlength="8" required>
               </div>
               
               <div class="password-strength">
@@ -539,28 +541,15 @@
         strengthText.textContent = `Seguridad: ${strengthLabels[strength]}`;
     });
 
-    // Form submissions
-    document.getElementById('edit-profile-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Aquí iría la lógica para guardar los cambios del perfil
-        alert('Perfil actualizado correctamente');
-        closeModal();
-    });
-
+    // Form submissions (validación mínima en cliente)
     document.getElementById('change-password-form').addEventListener('submit', function(e) {
+      const newPasswordValue = document.getElementById('newPassword').value;
+      const confirmPasswordValue = document.getElementById('confirmPassword').value;
+
+      if (newPasswordValue !== confirmPasswordValue) {
         e.preventDefault();
-        const currentPassword = document.getElementById('currentPassword').value;
-        const newPassword = document.getElementById('newPassword').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-
-        if (newPassword !== confirmPassword) {
-            alert('Las contraseñas no coinciden');
-            return;
-        }
-
-        // Aquí iría la lógica para cambiar la contraseña
-        alert('Contraseña actualizada correctamente');
-        closeModal();
+        alert('Las contraseñas no coinciden');
+      }
     });
 
     // Avatar functionality
@@ -756,8 +745,8 @@
     updateGridState();
 
     // Si viene de /configuracion, abrir automáticamente el modal
-    <?php if(isset($activeTab) && $activeTab === 'edit-profile'): ?>
-        openModal('edit-profile');
+    <?php if(isset($activeTab) && ($activeTab === 'edit-profile' || $activeTab === 'change-password')): ?>
+      openModal('<?= $activeTab ?>');
     <?php endif; ?>
 });
   </script>

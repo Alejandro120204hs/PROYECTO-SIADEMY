@@ -182,7 +182,7 @@
       <div class="user">
         <button class="btn"><i class="ri-notification-3-line"></i></button>
         <button class="btn"><i class="ri-settings-3-line"></i></button>
-        <div class="avatar">MR</div>
+        <a href="<?= BASE_URL ?>/dashboard-perfil" class="avatar" title="Ir al perfil" style="text-decoration:none;color:inherit;">MR</a>
       </div>
 
       <div class="panel-title">Profesores</div>

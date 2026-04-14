@@ -46,7 +46,7 @@ switch($method){
 
 function asignarDocenteAsignatura($docenteAsignatura){
     // Capturar el ID de la institución del admin logueado
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
     if(!isset($_SESSION['user']['id_institucion'])){
         header('Location: ' . BASE_URL . '/login');
         exit();

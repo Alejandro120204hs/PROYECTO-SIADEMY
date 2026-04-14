@@ -67,7 +67,9 @@
         }
 
         // CAPTURAMOS EL ID DE LA INSTITUCION DEL ADMIN QUE INICIO SESION
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         if(!isset($_SESSION['user']['id_institucion'])){
             mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
             exit();
