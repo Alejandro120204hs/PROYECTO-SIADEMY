@@ -9,12 +9,13 @@
   }
 
   $rolUsuario = $_SESSION['user']['rol'] ?? '';
-  if ($rolUsuario !== 'Administrador' && $rolUsuario !== 'superAdmin') {
+  if ($rolUsuario !== 'Administrador' && $rolUsuario !== 'superAdmin' && $rolUsuario !== 'Docente') {
     header('Location: ' . BASE_URL . '/login');
     exit();
   }
 
   $esSuperAdmin = $rolUsuario === 'superAdmin';
+  $esDocente = $rolUsuario === 'Docente';
 
   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
     require_once BASE_PATH . '/app/controllers/perfil.php';
@@ -44,6 +45,8 @@
     <!-- LEFT SIDEBAR -->
     <?php if ($esSuperAdmin): ?>
       <?php include_once __DIR__ . '/../../layouts/sidebar_superAdmin.php'; ?>
+    <?php elseif ($esDocente): ?>
+      <?php include_once __DIR__ . '/../../layouts/sidebar_docente.php'; ?>
     <?php else: ?>
       <?php include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'; ?>
     <?php endif; ?>

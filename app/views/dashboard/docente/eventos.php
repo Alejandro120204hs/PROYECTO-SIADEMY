@@ -1,3 +1,13 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
+require_once BASE_PATH . '/app/controllers/perfil.php';
+$id = $_SESSION['user']['id'] ?? 0;
+$usuario = mostrarPerfil($id);
+?>
+
 <!doctype html>
 <html lang="es">
 
@@ -35,6 +45,7 @@
             <span>Nuevo Evento</span>
           </button>
         </div>
+        <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
         <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
           <i class="ri-layout-right-2-line"></i>
         </button>
@@ -585,7 +596,7 @@
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../../assets/dashboard/js/main-docente.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-docente.js"></script>
 
 </body>
 

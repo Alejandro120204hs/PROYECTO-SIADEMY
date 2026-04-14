@@ -3,10 +3,16 @@
   $perfilNombre = $perfilData['nombres'] ?? 'Usuario';
   $perfilRol = $perfilData['rol'] ?? ($_SESSION['user']['rol'] ?? 'Usuario');
   $perfilFoto = !empty($perfilData['foto']) ? $perfilData['foto'] : 'default.png';
+  $perfilFotoFolder = 'usuarios';
+  if ($perfilRol === 'Docente') {
+    $perfilFotoFolder = 'docentes';
+  }
 
   $perfilDashboard = '/dashboard-perfil';
   if ($perfilRol === 'Administrador') {
     $perfilDashboard = '/administrador/dashboard';
+  } elseif ($perfilRol === 'Docente') {
+    $perfilDashboard = '/docente/dashboard';
   } elseif ($perfilRol === 'superAdmin') {
     $perfilDashboard = '/superAdmin-dashboard';
   }
@@ -20,14 +26,14 @@
     </div>
   </div>
   <div class="avatar" id="userMenuBtn">
-    <img src="<?= BASE_URL ?>/public/uploads/usuarios/<?= htmlspecialchars($perfilFoto) ?>"
+    <img src="<?= BASE_URL ?>/public/uploads/<?= htmlspecialchars($perfilFotoFolder) ?>/<?= htmlspecialchars($perfilFoto) ?>"
       alt="foto" width="40px" height="40px" style="border-radius: 50%; cursor: pointer;">
   </div>
 
   <!-- Dropdown Menu -->
   <div class="user-dropdown" id="userDropdown">
     <div class="dropdown-header">
-      <img src="<?= BASE_URL ?>/public/uploads/usuarios/<?= htmlspecialchars($perfilFoto) ?>"
+      <img src="<?= BASE_URL ?>/public/uploads/<?= htmlspecialchars($perfilFotoFolder) ?>/<?= htmlspecialchars($perfilFoto) ?>"
         alt="foto" width="48px" height="48px" style="border-radius: 50%;">
       <div>
         <strong><?= htmlspecialchars($perfilNombre) ?></strong>
@@ -73,3 +79,70 @@
     </a>
   </div>
 </div>
+
+<?php if ($perfilRol === 'Docente'): ?>
+<script>
+  (function () {
+    if (window.__siademyProfileDropdownInit) {
+      return;
+    }
+    window.__siademyProfileDropdownInit = true;
+
+    function initProfileDropdown() {
+      const userMenuBtn = document.getElementById('userMenuBtn');
+      const userDropdown = document.getElementById('userDropdown');
+
+      if (!userMenuBtn || !userDropdown || userMenuBtn.dataset.dropdownInit === '1') {
+        return;
+      }
+
+      userMenuBtn.dataset.dropdownInit = '1';
+
+      const dropdownOverlay = document.querySelector('.dropdown-overlay') || document.createElement('div');
+      if (!dropdownOverlay.parentElement) {
+        dropdownOverlay.className = 'dropdown-overlay';
+        document.body.appendChild(dropdownOverlay);
+      }
+
+      function openUserDropdown() {
+        userDropdown.classList.add('show');
+        dropdownOverlay.classList.add('show');
+      }
+
+      function closeUserDropdown() {
+        userDropdown.classList.remove('show');
+        dropdownOverlay.classList.remove('show');
+      }
+
+      userMenuBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const isOpen = userDropdown.classList.contains('show');
+        if (isOpen) {
+          closeUserDropdown();
+        } else {
+          openUserDropdown();
+        }
+      });
+
+      dropdownOverlay.addEventListener('click', closeUserDropdown);
+
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && userDropdown.classList.contains('show')) {
+          closeUserDropdown();
+        }
+      });
+
+      userDropdown.addEventListener('click', function (event) {
+        event.stopPropagation();
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initProfileDropdown);
+    } else {
+      initProfileDropdown();
+    }
+  })();
+</script>
+<?php endif; ?>

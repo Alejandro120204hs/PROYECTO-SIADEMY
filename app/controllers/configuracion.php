@@ -9,7 +9,7 @@ initSession();
 redirectIfNoSession('/login');
 
 $rolUsuario = $_SESSION['user']['rol'] ?? '';
-if ($rolUsuario !== 'Administrador' && $rolUsuario !== 'superAdmin') {
+if ($rolUsuario !== 'Administrador' && $rolUsuario !== 'superAdmin' && $rolUsuario !== 'Docente') {
     header('Location: ' . BASE_URL . '/login');
     exit();
 }

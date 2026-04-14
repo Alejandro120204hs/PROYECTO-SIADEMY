@@ -67,6 +67,28 @@ class Perfil
         return $this->ejecutarConsultaPerfil($consulta, $id);
     }
 
+    public function mostrarPerfilDocente($id)
+    {
+        $consulta = "SELECT
+                docente.nombres AS nombres,
+                docente.apellidos AS apellidos,
+                docente.documento AS documento,
+                docente.telefono AS telefono,
+                NULL AS edad,
+                COALESCE(docente.foto, 'default.png') AS foto,
+                usuario.correo AS correo,
+                usuario.rol AS rol,
+                institucion.nombre AS nombre_institucion,
+                institucion.direccion AS direccion_institucion
+            FROM docente
+            INNER JOIN usuario ON docente.id_usuario = usuario.id
+            LEFT JOIN institucion ON institucion.id = docente.id_institucion
+            WHERE usuario.id = :id
+            LIMIT 1";
+
+        return $this->ejecutarConsultaPerfil($consulta, $id);
+    }
+
     public function mostrarPerfilGenerico($id)
     {
         $consulta = "SELECT 

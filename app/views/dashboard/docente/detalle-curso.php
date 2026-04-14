@@ -12,6 +12,7 @@
     
     // 3. CARGAR DEPENDENCIAS
     require_once BASE_PATH . '/app/controllers/administrador/curso.php';
+    require_once BASE_PATH . '/app/controllers/perfil.php';
     require_once BASE_PATH . '/app/models/administradores/matricula.php';
     require_once BASE_PATH . '/app/models/administradores/docente_asignatura.php';
     
@@ -48,6 +49,8 @@
         header('Location: ' . BASE_URL . '/login');
         exit;
     }
+
+    $usuario = mostrarPerfil($id_usuario_sesion);
     
     $id_docente = $docente_info['id'];
     $nombre_docente = $docente_info['nombres'] . ' ' . $docente_info['apellidos'];
@@ -376,12 +379,7 @@
                 <div class="topbar-left">
                     <div class="title">Detalle del Curso</div>
                 </div>
-
-                <div class="user">
-                    <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-                    <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-                    <div class="avatar" title="Admin">AD</div>
-                </div>
+                <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
             </div>
 
             <!-- COURSE PROFILE HEADER -->

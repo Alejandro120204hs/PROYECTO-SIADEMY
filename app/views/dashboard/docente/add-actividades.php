@@ -18,6 +18,11 @@ if (!isset($_GET['id_curso']) || empty($_GET['id_curso'])) {
     exit;
 }
 
+
+require_once BASE_PATH . '/app/controllers/perfil.php';
+$id = $_SESSION['user']['id'] ?? 0;
+$usuario = mostrarPerfil($id);
+
 $id_curso = $_GET['id_curso'];
 $id_institucion = $_SESSION['user']['id_institucion'];
 
@@ -81,12 +86,7 @@ try {
                     <div class="title">Agregar Actividad</div>
                     
                 </div>
-
-                <div class="user">
-                    <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-                    <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-                    <div class="avatar" title="Diego A.">DA</div>
-                </div>
+                <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
             </div>
             <div class="subtitulo"><p>Formulario de registro, Completa los siguientes pasos para registrar una nueva actividad en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>
 

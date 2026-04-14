@@ -14,6 +14,10 @@
                 $usuario = $objetoPerfil->mostrarPerfilAdministrador($id);
                 break;
 
+            case 'Docente':
+                $usuario = $objetoPerfil->mostrarPerfilDocente($id);
+                break;
+
             case 'superAdmin':
                 $usuario = $objetoPerfil->mostrarPerfilSuperAdmin($id);
                 break;

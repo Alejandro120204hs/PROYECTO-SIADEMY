@@ -12,6 +12,8 @@
     
     // 3. OBTENER ID DEL DOCENTE desde la tabla docentes
     $id_usuario_sesion = $_SESSION['user']['id'];
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    $usuario = mostrarPerfil($id_usuario_sesion);
     
     // TODO: Reemplazar con tu lógica real de BD
     // require_once BASE_PATH . '/config/database.php';
@@ -832,12 +834,7 @@
                 <div class="topbar-left">
                     <div class="title">Gestión de Asistencia</div>
                 </div>
-
-                <div class="user">
-                    <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-                    <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-                    <div class="avatar" title="Docente">DC</div>
-                </div>
+                <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
             </div>
 
             <!-- FILTROS - SECCIÓN PRINCIPAL -->
