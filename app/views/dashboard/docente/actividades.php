@@ -3,9 +3,12 @@
    // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
   require_once BASE_PATH . '/app/controllers/docente/curso.php';
   require_once BASE_PATH . '/app/controllers/docente/actividad.php';
+  require_once BASE_PATH . '/app/controllers/perfil.php';
 
   // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
   $datos = mostrarCursos();
+  $id = $_SESSION['user']['id'] ?? 0;
+  $usuario = mostrarPerfil($id);
   
   // Obtener actividades del curso seleccionado
   $actividades = [];
@@ -85,6 +88,9 @@
               Nueva Actividad</a>
             </button>
           </div>
+          <?php
+            include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php';
+          ?>
         </div>
 
         <!-- TEACHER INFO BAR -->

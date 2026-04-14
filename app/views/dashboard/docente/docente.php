@@ -2,9 +2,14 @@
   // require_once BASE_PATH . '/app/helpers/session_administrador.php';
    // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
   require_once BASE_PATH . '/app/controllers/docente/curso.php';
+  require_once BASE_PATH . '/app/controllers/perfil.php';
 
   // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
   $datos = mostrarCursos();
+  $estadisticas = obtenerEstadisticasDocenteDashboard();
+  $estudiantesBajoRendimiento = listarEstudiantesBajoRendimientoDocente(20);
+  $id = $_SESSION['user']['id'] ?? 0;
+  $usuario = mostrarPerfil($id);
 ?>
 
 <!doctype html>
@@ -50,6 +55,9 @@
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar">
         </div>
+        <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php';
+        ?>
       
       </div>
 
@@ -58,28 +66,28 @@
           <div class="icon"><i class="ri-user-3-line"></i></div>
           <div>
             <small>Estudiantes</small>
-            <strong>932</strong>
+            <strong><?= (int)($estadisticas['total_estudiantes'] ?? 0) ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-user-2-line"></i></div>
           <div>
             <small>Acudientes</small>
-            <strong>754</strong>
+            <strong><?= (int)($estadisticas['total_acudientes'] ?? 0) ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-user-star-line"></i></div>
           <div>
             <small>Cursos</small>
-            <strong>40</strong>
+            <strong><?= (int)($estadisticas['total_cursos'] ?? 0) ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-calendar-2-line"></i></div>
           <div>
             <small>Eventos</small>
-            <strong>32</strong>
+            <strong><?= (int)($estadisticas['total_eventos'] ?? 0) ?></strong>
           </div>
         </div>
       </section>
@@ -113,13 +121,13 @@
           <span class="badge bg-info"><?= $curso['total_estudiantes'] ?> estudiantes</span>
         </td>
         <td>
-          <small class="d-block">Lun - Mié - Vie</small>
-          <small class="text-muted">8:00 AM - 9:30 AM</small>
+          <small class="d-block"><?= htmlspecialchars($curso['jornada'] ?? 'Sin jornada', ENT_QUOTES, 'UTF-8') ?></small>
+          <small class="text-muted">Año académico actual</small>
         </td>
         <td class="text-center">
-          <button class="btn btn-sm btn-outline-light" title="Ver detalles">
+          <a href="<?= BASE_URL ?>/docente/detalle-curso?id=<?= urlencode((string)$curso['id']) ?>" class="btn btn-sm btn-outline-light" title="Ver detalles">
             <i class="ri-eye-line"></i>
-          </button>
+          </a>
         </td>
       </tr>
     <?php endforeach; ?>
@@ -151,85 +159,38 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Tony Soap</td>
-                <td><a href="#">ID 213423423</a></td>
-                <td>
-                  <small class="d-block text-muted">Clase</small>
-                  <strong>VII A</strong>
-                </td>
-                <td>Matemáticas</td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Imprimir">
-                    <i class="ri-printer-line"></i>
-                  </button>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Más opciones">
-                    <i class="ri-more-2-fill"></i>
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td>Jordan Nico</td>
-                <td><a href="#">ID 852910385</a></td>
-                <td>
-                  <small class="d-block text-muted">Clase</small>
-                  <strong>VII A</strong>
-                </td>
-                <td>Castellano</td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Imprimir">
-                    <i class="ri-printer-line"></i>
-                  </button>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Más opciones">
-                    <i class="ri-more-2-fill"></i>
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td>Karen Hope</td>
-                <td><a href="#">ID 43209847</a></td>
-                <td>
-                  <small class="d-block text-muted">Clase</small>
-                  <strong>VII A</strong>
-                </td>
-                <td>Inglés</td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Imprimir">
-                    <i class="ri-printer-line"></i>
-                  </button>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Más opciones">
-                    <i class="ri-more-2-fill"></i>
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td>Nadila Adja</td>
-                <td><a href="#">ID 462390130</a></td>
-                <td>
-                  <small class="d-block text-muted">Clase</small>
-                  <strong>VII A</strong>
-                </td>
-                <td>Historia</td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Imprimir">
-                    <i class="ri-printer-line"></i>
-                  </button>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-light" title="Más opciones">
-                    <i class="ri-more-2-fill"></i>
-                  </button>
-                </td>
-              </tr>
+              <?php if (!empty($estudiantesBajoRendimiento)): ?>
+                <?php foreach ($estudiantesBajoRendimiento as $estudiante): ?>
+                <tr>
+                  <td><?= htmlspecialchars(trim(($estudiante['nombres'] ?? '') . ' ' . ($estudiante['apellidos'] ?? '')), ENT_QUOTES, 'UTF-8') ?></td>
+                  <td><a href="#">ID <?= htmlspecialchars((string)($estudiante['documento'] ?? 'N/A'), ENT_QUOTES, 'UTF-8') ?></a></td>
+                  <td>
+                    <small class="d-block text-muted">Clase</small>
+                    <strong><?= htmlspecialchars((string)($estudiante['grado'] ?? ''), ENT_QUOTES, 'UTF-8') ?> <?= htmlspecialchars((string)($estudiante['curso'] ?? ''), ENT_QUOTES, 'UTF-8') ?></strong>
+                  </td>
+                  <td>
+                    <?= htmlspecialchars((string)($estudiante['asignatura'] ?? 'Sin asignatura'), ENT_QUOTES, 'UTF-8') ?>
+                    <?php if (isset($estudiante['promedio'])): ?>
+                      <small class="d-block text-danger">Promedio: <?= number_format((float)$estudiante['promedio'], 2) ?></small>
+                    <?php endif; ?>
+                  </td>
+                  <td class="text-center">
+                    <button class="btn btn-sm btn-outline-light" title="Imprimir">
+                      <i class="ri-printer-line"></i>
+                    </button>
+                  </td>
+                  <td class="text-center">
+                    <button class="btn btn-sm btn-outline-light" title="Más opciones">
+                      <i class="ri-more-2-fill"></i>
+                    </button>
+                  </td>
+                </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td colspan="6" class="text-center text-muted">No hay estudiantes en bajo rendimiento para tus cursos.</td>
+                </tr>
+              <?php endif; ?>
             </tbody>
           </table>
         </div>

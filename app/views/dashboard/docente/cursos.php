@@ -2,9 +2,12 @@
   // require_once BASE_PATH . '/app/helpers/session_administrador.php';
    // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
   require_once BASE_PATH . '/app/controllers/docente/curso.php';
+  require_once BASE_PATH . '/app/controllers/perfil.php';
 
   // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
   $datos = mostrarCursos();
+  $id = $_SESSION['user']['id'] ?? 0;
+  $usuario = mostrarPerfil($id);
 ?>
 <!doctype html>
 <html lang="es">
@@ -38,7 +41,9 @@
           </button>
           <div class="title">Mis Cursos</div>
         </div>
-       
+        <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php';
+        ?>
        
       </div>
 

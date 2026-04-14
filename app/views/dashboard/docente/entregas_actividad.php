@@ -1,3 +1,13 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once BASE_PATH . '/app/controllers/perfil.php';
+$id = $_SESSION['user']['id'] ?? 0;
+$usuario = mostrarPerfil($id);
+?>
+
 <!doctype html>
 <html lang="es">
 
@@ -37,6 +47,7 @@
                         <span class="breadcrumb-current">Entregas</span>
                     </div>
                 </div>
+                <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
             </div>
 
             <!-- HEADER INFO ACTIVIDAD -->
