@@ -84,12 +84,47 @@ function destroySession() {
 }
 
 /**
+ * Normaliza rutas de redirección para que funcionen en local y despliegue.
+ * Acepta rutas absolutas, relativas y legacy con prefijo /siademy.
+ */
+function normalizeSessionRedirectUrl($redirectUrl) {
+    if ($redirectUrl === null || $redirectUrl === '') {
+        return (defined('BASE_URL') ? rtrim(BASE_URL, '/') : '') . '/login';
+    }
+
+    $target = trim((string)$redirectUrl);
+
+    // URL absoluta: se respeta tal cual
+    if (preg_match('/^https?:\/\//i', $target)) {
+        return $target;
+    }
+
+    // Compatibilidad con rutas antiguas hardcodeadas
+    if ($target === '/siademy') {
+        $target = '/';
+    } elseif (strpos($target, '/siademy/') === 0) {
+        $target = substr($target, 8);
+    }
+
+    if ($target === '') {
+        $target = '/';
+    }
+
+    if ($target[0] !== '/') {
+        $target = '/' . $target;
+    }
+
+    $baseUrl = defined('BASE_URL') ? rtrim(BASE_URL, '/') : '';
+    return $baseUrl !== '' ? $baseUrl . $target : $target;
+}
+
+/**
  * Redirige al login si no hay sesión activa
  * @param string $baseUrl URL base para la redirección
  */
-function redirectIfNoSession($baseUrl = '/siademy/login') {
+function redirectIfNoSession($baseUrl = '/login') {
     if (!isSessionActive()) {
-        header('Location: ' . $baseUrl);
+        header('Location: ' . normalizeSessionRedirectUrl($baseUrl));
         exit();
     }
 }
@@ -99,9 +134,9 @@ function redirectIfNoSession($baseUrl = '/siademy/login') {
  * @param string $requiredRole El rol requerido
  * @param string $redirectUrl URL de redirección (opcional)
  */
-function redirectIfNotRole($requiredRole, $redirectUrl = '/siademy/login') {
+function redirectIfNotRole($requiredRole, $redirectUrl = '/login') {
     if (!hasRole($requiredRole)) {
-        header('Location: ' . $redirectUrl);
+        header('Location: ' . normalizeSessionRedirectUrl($redirectUrl));
         exit();
     }
 }

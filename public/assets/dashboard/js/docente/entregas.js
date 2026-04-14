@@ -4,6 +4,9 @@
  */
 
 $(document).ready(function() {
+    const pathName = window.location.pathname || '';
+    const docenteIndex = pathName.indexOf('/docente/');
+    const basePath = docenteIndex >= 0 ? pathName.substring(0, docenteIndex) : '';
     
     // ===================================
     // FILTRADO DE ESTUDIANTES
@@ -142,7 +145,7 @@ $(document).ready(function() {
         
         // Enviar datos al servidor
         $.ajax({
-            url: '/siademy/docente/calificar-actividad',
+            url: `${basePath}/docente/calificar-actividad`,
             type: 'POST',
             dataType: 'json',
             data: {
@@ -193,7 +196,7 @@ $(document).ready(function() {
         const idEntrega = $(this).data('id-entrega');
         
         // Abrir en nueva ventana para descargar
-        window.open(`/siademy/docente/descargar-entrega?id=${idEntrega}`, '_blank');
+        window.open(`${basePath}/docente/descargar-entrega?id=${idEntrega}`, '_blank');
     });
     
     
