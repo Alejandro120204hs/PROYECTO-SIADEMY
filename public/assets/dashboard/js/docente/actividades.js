@@ -298,5 +298,8 @@ function verificarResultadosTabla() {
 // ===== BOTÓN VER ENTREGAS =====
 $(document).on('click', '.btn-ver-entregas', function() {
   const idActividad = $(this).data('id');
-  window.location.href = `/siademy/docente/ver-entregas?id_actividad=${idActividad}`;
+  const pathName = window.location.pathname || '';
+  const docenteIndex = pathName.indexOf('/docente/');
+  const basePath = docenteIndex >= 0 ? pathName.substring(0, docenteIndex) : '';
+  window.location.href = `${basePath}/docente/ver-entregas?id_actividad=${idActividad}`;
 });
