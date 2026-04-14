@@ -137,6 +137,8 @@
     const userDropdown = document.getElementById('userDropdown');
 
     if (!userMenuBtn || !userDropdown) return;
+    if (userMenuBtn.dataset.dropdownInit) return; // ya inicializado por main-admin.js
+    userMenuBtn.dataset.dropdownInit = '1';
 
     const dropdownOverlay = document.querySelector('.dropdown-overlay') || document.createElement('div');
     if (!dropdownOverlay.parentElement) {

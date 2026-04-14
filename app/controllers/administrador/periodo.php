@@ -65,7 +65,7 @@ function registrarPeriodo(){
         // Si se envían arrays (nombre[] / fecha_inicio[] / fecha_fin[]), se procesan todos en bucle
 
         // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) { session_start(); }
         if(!isset($_SESSION['user']['id_institucion'])){
             mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
             exit();
@@ -236,7 +236,7 @@ function actualizarPeriodo(){
         }
 
         // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) { session_start(); }
         if(!isset($_SESSION['user']['id_institucion'])){
             mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
             exit();

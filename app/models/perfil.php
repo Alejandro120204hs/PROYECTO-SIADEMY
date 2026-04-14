@@ -86,4 +86,71 @@ class Perfil
 
         return $this->ejecutarConsultaPerfil($consulta, $id);
     }
+
+    public function actualizarCorreoUsuario($idUsuario, $correo)
+    {
+        try {
+            $consulta = "UPDATE usuario SET correo = :correo WHERE id = :id";
+            $resultado = $this->conexion->prepare($consulta);
+            $resultado->bindParam(':correo', $correo);
+            $resultado->bindParam(':id', $idUsuario, PDO::PARAM_INT);
+            return $resultado->execute();
+        } catch (PDOException $e) {
+            error_log("Error en Perfil::actualizarCorreoUsuario -> " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function actualizarDatosAdministradorPorUsuario($idUsuario, $data)
+    {
+        try {
+            $consulta = "UPDATE administrador
+                         SET nombres = :nombres,
+                             apellidos = :apellidos,
+                             telefono = :telefono,
+                             edad = :edad
+                         WHERE id_usuario = :id_usuario";
+
+            $resultado = $this->conexion->prepare($consulta);
+            $resultado->bindParam(':nombres', $data['nombres']);
+            $resultado->bindParam(':apellidos', $data['apellidos']);
+            $resultado->bindParam(':telefono', $data['telefono']);
+            $resultado->bindParam(':edad', $data['edad']);
+            $resultado->bindParam(':id_usuario', $idUsuario, PDO::PARAM_INT);
+
+            return $resultado->execute();
+        } catch (PDOException $e) {
+            error_log("Error en Perfil::actualizarDatosAdministradorPorUsuario -> " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function obtenerClaveUsuario($idUsuario)
+    {
+        try {
+            $consulta = "SELECT clave FROM usuario WHERE id = :id LIMIT 1";
+            $resultado = $this->conexion->prepare($consulta);
+            $resultado->bindParam(':id', $idUsuario, PDO::PARAM_INT);
+            $resultado->execute();
+            $fila = $resultado->fetch(PDO::FETCH_ASSOC);
+            return $fila['clave'] ?? null;
+        } catch (PDOException $e) {
+            error_log("Error en Perfil::obtenerClaveUsuario -> " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function actualizarClaveUsuario($idUsuario, $claveHash)
+    {
+        try {
+            $consulta = "UPDATE usuario SET clave = :clave WHERE id = :id";
+            $resultado = $this->conexion->prepare($consulta);
+            $resultado->bindParam(':clave', $claveHash);
+            $resultado->bindParam(':id', $idUsuario, PDO::PARAM_INT);
+            return $resultado->execute();
+        } catch (PDOException $e) {
+            error_log("Error en Perfil::actualizarClaveUsuario -> " . $e->getMessage());
+            return false;
+        }
+    }
 }
