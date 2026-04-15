@@ -10,6 +10,11 @@
     $perfilFotoFolder = 'estudiantes';
   }
 
+  $perfilFotoArchivo = (string)$perfilFoto;
+  $perfilFotoPath = '/public/uploads/' . $perfilFotoFolder . '/' . $perfilFotoArchivo;
+  $perfilFotoUrlPath = '/public/uploads/' . $perfilFotoFolder . '/' . rawurlencode($perfilFotoArchivo);
+  $perfilFotoVersion = @filemtime(BASE_PATH . $perfilFotoPath) ?: 1;
+
   $perfilDashboard = '/dashboard-perfil';
   if ($perfilRol === 'Administrador') {
     $perfilDashboard = '/administrador/dashboard';
@@ -280,14 +285,14 @@
     </div>
   </div>
   <div class="avatar" id="userMenuBtn">
-    <img src="<?= BASE_URL ?>/public/uploads/<?= htmlspecialchars($perfilFotoFolder) ?>/<?= htmlspecialchars($perfilFoto) ?>"
+    <img src="<?= BASE_URL . $perfilFotoUrlPath ?>?v=<?= $perfilFotoVersion ?>"
       alt="foto" width="40px" height="40px" style="border-radius: 50%; cursor: pointer;">
   </div>
 
   <!-- Dropdown Menu -->
   <div class="user-dropdown" id="userDropdown">
     <div class="dropdown-header">
-      <img src="<?= BASE_URL ?>/public/uploads/<?= htmlspecialchars($perfilFotoFolder) ?>/<?= htmlspecialchars($perfilFoto) ?>"
+      <img src="<?= BASE_URL . $perfilFotoUrlPath ?>?v=<?= $perfilFotoVersion ?>"
         alt="foto" width="48px" height="48px" style="border-radius: 50%;">
       <div>
         <strong><?= htmlspecialchars($perfilNombre) ?></strong>
