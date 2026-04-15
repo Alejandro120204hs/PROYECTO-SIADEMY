@@ -8,6 +8,17 @@
   $datos = mostrarCursos();
   $id = $_SESSION['user']['id'] ?? 0;
   $usuario = mostrarPerfil($id);
+
+  // Estadísticas calculadas para la info bar
+  $totalCursos      = count($datos ?? []);
+  $totalEstudiantes = !empty($datos) ? array_sum(array_column($datos, 'total_estudiantes')) : 0;
+  $asignaturasUnicas = !empty($datos)
+      ? implode(', ', array_unique(array_column($datos, 'nombre_asignatura')))
+      : '—';
+  $nombreDocente = htmlspecialchars(
+      trim(($usuario['nombres'] ?? '') . ' ' . ($usuario['apellidos'] ?? '')),
+      ENT_QUOTES, 'UTF-8'
+  );
 ?>
 <!doctype html>
 <html lang="es">
@@ -50,32 +61,24 @@
       <!-- TEACHER INFO BAR -->
       <div class="teacher-info-bar">
         <div class="teacher-profile">
-          
           <div>
-            <strong>Wilson Marroquín</strong>
-            <small>Profesor de Matemáticas</small>
+            <strong><?= $nombreDocente ?></strong>
+            <small>Docente · <?= htmlspecialchars($asignaturasUnicas, ENT_QUOTES, 'UTF-8') ?></small>
           </div>
         </div>
         <div class="teacher-stats">
           <div class="stat-item">
             <i class="ri-book-line"></i>
             <div>
-              <strong>6</strong>
+              <strong><?= (int)$totalCursos ?></strong>
               <small>Cursos activos</small>
             </div>
           </div>
           <div class="stat-item">
             <i class="ri-user-line"></i>
             <div>
-              <strong>177</strong>
+              <strong><?= (int)$totalEstudiantes ?></strong>
               <small>Estudiantes</small>
-            </div>
-          </div>
-          <div class="stat-item">
-            <i class="ri-time-line"></i>
-            <div>
-              <strong>24</strong>
-              <small>Horas semanales</small>
             </div>
           </div>
         </div>
@@ -142,13 +145,7 @@
                   <small>Estudiantes</small>
                 </div>
               </div>
-              <div class="curso-meta-item">
-                <i class="ri-time-line"></i>
-                <div>
-                  <strong>Lun-Mié-Vie</strong>
-                  <small>8:00 - 9:30 AM</small>
-                </div>
-              </div>
+
             </div>
 
             <div class="curso-ubicacion">
@@ -156,15 +153,7 @@
               <span><?= $curso['nombre_asignatura'] ?></span>
             </div>
 
-            <div class="curso-progress-section">
-              <div class="curso-progress-header">
-                <small>Progreso del período</small>
-                <strong class="curso-progress-percent">68%</strong>
-              </div>
-              <div class="curso-progress-bar">
-                <div class="curso-progress-fill" style="width: 68%;"></div>
-              </div>
-            </div>
+
           </div>
 
           <div class="curso-card-footer">
@@ -192,71 +181,7 @@
 
       </section>
 
-      <!-- UPCOMING CLASSES SECTION -->
-      <section class="datatable-card">
-        <h3>Próximas Clases de Hoy</h3>
-        <div class="upcoming-classes">
-          <div class="class-item">
-            <div class="class-time">
-              <i class="ri-time-line"></i>
-              <div>
-                <strong>8:00 AM</strong>
-                <small>90 min</small>
-              </div>
-            </div>
-            <div class="class-info">
-              <h4>Matemáticas Avanzadas</h4>
-              <p>Grado 10° A • Salón 203</p>
-            </div>
-            <div class="class-status">
-              <span class="status-badge next">Próxima</span>
-            </div>
-            <button class="btn-class-action">
-              <i class="ri-arrow-right-line"></i>
-            </button>
-          </div>
 
-          <div class="class-item">
-            <div class="class-time">
-              <i class="ri-time-line"></i>
-              <div>
-                <strong>10:00 AM</strong>
-                <small>60 min</small>
-              </div>
-            </div>
-            <div class="class-info">
-              <h4>Geometría Analítica</h4>
-              <p>Grado 9° A • Salón 105</p>
-            </div>
-            <div class="class-status">
-              <span class="status-badge pending">Pendiente</span>
-            </div>
-            <button class="btn-class-action">
-              <i class="ri-arrow-right-line"></i>
-            </button>
-          </div>
-
-          <div class="class-item">
-            <div class="class-time">
-              <i class="ri-time-line"></i>
-              <div>
-                <strong>2:00 PM</strong>
-                <small>90 min</small>
-              </div>
-            </div>
-            <div class="class-info">
-              <h4>Cálculo Diferencial</h4>
-              <p>Grado 11° A • Salón 301</p>
-            </div>
-            <div class="class-status">
-              <span class="status-badge pending">Pendiente</span>
-            </div>
-            <button class="btn-class-action">
-              <i class="ri-arrow-right-line"></i>
-            </button>
-          </div>
-        </div>
-      </section>
 
     </main>
 

@@ -26,7 +26,8 @@ class Actividad_docente {
                         tipo,
                         ponderacion,
                         fecha_entrega,
-                        estado
+                        estado,
+                        archivo
                     ) VALUES (
                         :id_institucion,
                         :id_docente,
@@ -37,7 +38,8 @@ class Actividad_docente {
                         :tipo,
                         :ponderacion,
                         :fecha_entrega,
-                        'activa'
+                        'activa',
+                        :archivo
                     )";
             
             $stmt = $this->conexion->prepare($sql);
@@ -51,6 +53,8 @@ class Actividad_docente {
             $stmt->bindParam(':tipo', $datos['tipo'], PDO::PARAM_STR);
             $stmt->bindParam(':ponderacion', $datos['ponderacion']);
             $stmt->bindParam(':fecha_entrega', $datos['fecha_entrega'], PDO::PARAM_STR);
+            $archivoVal = $datos['archivo'] ?? null;
+            $stmt->bindParam(':archivo', $archivoVal, PDO::PARAM_STR);
             
             $resultado = $stmt->execute();
             
@@ -139,14 +143,20 @@ class Actividad_docente {
      */
     public function actualizar($id, $datos) {
         try {
-            $sql = "UPDATE actividad SET
-                        titulo = :titulo,
-                        descripcion = :descripcion,
-                        tipo = :tipo,
-                        ponderacion = :ponderacion,
-                        fecha_entrega = :fecha_entrega,
-                        estado = :estado
-                    WHERE id = :id";
+            $campos = [
+                'titulo = :titulo',
+                'descripcion = :descripcion',
+                'tipo = :tipo',
+                'ponderacion = :ponderacion',
+                'fecha_entrega = :fecha_entrega',
+                'estado = :estado'
+            ];
+
+            if (array_key_exists('archivo', $datos)) {
+                $campos[] = 'archivo = :archivo';
+            }
+
+            $sql = "UPDATE actividad SET " . implode(', ', $campos) . " WHERE id = :id";
             
             $stmt = $this->conexion->prepare($sql);
             
@@ -157,6 +167,9 @@ class Actividad_docente {
             $stmt->bindParam(':ponderacion', $datos['ponderacion']);
             $stmt->bindParam(':fecha_entrega', $datos['fecha_entrega'], PDO::PARAM_STR);
             $stmt->bindParam(':estado', $datos['estado'], PDO::PARAM_STR);
+            if (array_key_exists('archivo', $datos)) {
+                $stmt->bindParam(':archivo', $datos['archivo'], PDO::PARAM_STR);
+            }
             
             return $stmt->execute();
             

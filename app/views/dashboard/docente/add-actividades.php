@@ -18,11 +18,6 @@ if (!isset($_GET['id_curso']) || empty($_GET['id_curso'])) {
     exit;
 }
 
-
-require_once BASE_PATH . '/app/controllers/perfil.php';
-$id = $_SESSION['user']['id'] ?? 0;
-$usuario = mostrarPerfil($id);
-
 $id_curso = $_GET['id_curso'];
 $id_institucion = $_SESSION['user']['id_institucion'];
 
@@ -86,7 +81,12 @@ try {
                     <div class="title">Agregar Actividad</div>
                     
                 </div>
-                <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
+
+                <div class="user">
+                    <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
+                    <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
+                    <div class="avatar" title="Diego A.">DA</div>
+                </div>
             </div>
             <div class="subtitulo"><p>Formulario de registro, Completa los siguientes pasos para registrar una nueva actividad en el sistema académico. <br> Al finalizar, revisa la información antes de confirmar el registro para evitar errores en la base de datos institucional.</p></div>
 
@@ -144,6 +144,8 @@ try {
                                     <label for="">Descripción</label>
                                     <textarea class="form-control" name="descripcion" rows="4" tabindex="5"></textarea>
                                 </div>
+
+                               
                             </div>
 
                             <!-- Ponderación y fecha -->
@@ -157,6 +159,11 @@ try {
                                 <div class="mb-3">
                                     <label for="">Fecha de entrega*</label>
                                     <input type="date" class="form-control" name="fecha_entrega" required tabindex="4">
+                                </div>
+
+                                 <div class="mb-3">
+                                    <label for="">Archivo adjunto <small class="text-muted">(opcional · PDF, JPG, PNG, DOC, DOCX · máx. 10 MB)</small></label>
+                                    <input type="file" class="form-control" name="archivo_actividad" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" tabindex="6">
                                 </div>
                             </div>
                         </div>

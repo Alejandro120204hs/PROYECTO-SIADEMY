@@ -10,11 +10,51 @@ require_once __DIR__ . '/../../../config/database.php';
 class ActividadEstudiante
 {
     private $conexion;
+    private $columnaTipoActividad = 'tipo';
+    private $columnaNotaCalificacion = 'nota';
 
     public function __construct()
     {
         $db = new Conexion();
         $this->conexion = $db->getConexion();
+        $this->columnaTipoActividad = $this->detectarColumnaExistente('actividad', ['tipo', 'tipo_actividad'], 'tipo');
+        $this->columnaNotaCalificacion = $this->detectarColumnaExistente('calificacion', ['nota', 'calificacion'], 'nota');
+    }
+
+    /**
+     * Detecta una columna existente de forma segura en una lista de candidatas.
+     */
+    private function detectarColumnaExistente($tabla, array $candidatas, $fallback)
+    {
+        try {
+            if (empty($candidatas)) {
+                return $fallback;
+            }
+
+            $placeholders = implode(',', array_fill(0, count($candidatas), '?'));
+            $sql = "SELECT COLUMN_NAME
+                    FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_SCHEMA = DATABASE()
+                      AND TABLE_NAME = ?
+                      AND COLUMN_NAME IN ($placeholders)";
+
+            $stmt = $this->conexion->prepare($sql);
+            $params = array_merge([$tabla], $candidatas);
+            $stmt->execute($params);
+
+            $encontradas = $stmt->fetchAll(PDO::FETCH_COLUMN) ?: [];
+
+            foreach ($candidatas as $col) {
+                if (in_array($col, $encontradas, true)) {
+                    return $col;
+                }
+            }
+
+            return $fallback;
+        } catch (PDOException $e) {
+            error_log('Error al detectar columna en ActividadEstudiante: ' . $e->getMessage());
+            return $fallback;
+        }
     }
 
     /**
@@ -28,13 +68,17 @@ class ActividadEstudiante
     public function obtenerActividadesPorMateria($id_estudiante, $id_asignatura_curso, $id_institucion)
     {
         try {
+            $colTipo = $this->columnaTipoActividad;
+            $colNota = $this->columnaNotaCalificacion;
+
             $sql = "SELECT 
                         a.id AS id_actividad,
                         a.titulo,
                         a.descripcion,
-                        a.tipo,
+                        a.$colTipo AS tipo,
                         a.ponderacion,
                         a.fecha_entrega,
+                        a.archivo,
                         a.estado AS estado_actividad,
                         asig.nombre AS nombre_asignatura,
                         asig.descripcion AS descripcion_asignatura,
@@ -44,12 +88,17 @@ class ActividadEstudiante
                         d.nombres AS docente_nombres,
                         d.apellidos AS docente_apellidos,
                         u.correo AS docente_correo,
+                        ea.id AS id_entrega,
+                        ea.estado AS estado_entrega_estudiante,
+                        ea.fecha_entrega AS fecha_entrega_estudiante,
+                        ea.archivo_ruta AS archivo_entrega,
                         cal.id AS id_calificacion,
-                        cal.nota,
+                        cal.$colNota AS nota,
                         cal.observacion,
-                        cal.fecha_registro AS fecha_calificacion,
-                        CASE 
+                        cal.fecha_calificacion,
+                        CASE
                             WHEN cal.id IS NOT NULL THEN 'Calificada'
+                            WHEN ea.id IS NOT NULL THEN 'Entregada'
                             WHEN a.fecha_entrega < CURDATE() AND a.estado = 'activa' THEN 'Vencida'
                             WHEN a.estado = 'activa' THEN 'Pendiente'
                             ELSE 'Cerrada'
@@ -63,7 +112,8 @@ class ActividadEstudiante
                     INNER JOIN usuario u ON d.id_usuario = u.id
                     INNER JOIN matricula m ON m.id_curso = c.id
                     INNER JOIN estudiante e ON m.id_estudiante = e.id
-                    LEFT JOIN calificacion cal ON cal.id_actividad = a.id AND cal.id_estudiante = e.id
+                    LEFT JOIN entrega_actividad ea ON ea.id_actividad = a.id AND ea.id_estudiante = e.id
+                    LEFT JOIN calificacion cal ON cal.id_entrega = ea.id
                     WHERE 
                         e.id = :id_estudiante
                         AND ac.id = :id_asignatura_curso
@@ -160,21 +210,27 @@ class ActividadEstudiante
     public function obtenerDetalleActividad($id_actividad, $id_estudiante)
     {
         try {
+            $colTipo = $this->columnaTipoActividad;
+            $colNota = $this->columnaNotaCalificacion;
+
             $sql = "SELECT 
                         a.*,
+                        a.$colTipo AS tipo,
                         asig.nombre AS nombre_asignatura,
                         CONCAT(d.nombres, ' ', d.apellidos) AS nombre_docente,
                         u.correo AS docente_correo,
+                        ea.id AS id_entrega,
                         cal.id AS id_calificacion,
-                        cal.nota,
+                        cal.$colNota AS nota,
                         cal.observacion,
-                        cal.fecha_registro AS fecha_calificacion
+                        cal.fecha_calificacion
                     FROM actividad a
                     INNER JOIN asignatura_curso ac ON a.id_asignatura_curso = ac.id
                     INNER JOIN asignatura asig ON ac.id_asignatura = asig.id
                     INNER JOIN docente d ON a.id_docente = d.id
                     INNER JOIN usuario u ON d.id_usuario = u.id
-                    LEFT JOIN calificacion cal ON cal.id_actividad = a.id AND cal.id_estudiante = :id_estudiante
+                    LEFT JOIN entrega_actividad ea ON ea.id_actividad = a.id AND ea.id_estudiante = :id_estudiante
+                    LEFT JOIN calificacion cal ON cal.id_entrega = ea.id
                     WHERE a.id = :id_actividad
                     LIMIT 1";
             

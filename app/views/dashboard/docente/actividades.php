@@ -25,6 +25,24 @@
       }
   }
   
+  // Stats calculados para la info bar y tabs
+  $totalActividades = count($actividades);
+  $totalActivas     = 0;
+  $totalCerradas    = 0;
+  foreach ($actividades as $a) {
+    if ($a['estado'] === 'activa')  $totalActivas++;
+    elseif ($a['estado'] === 'cerrada') $totalCerradas++;
+  }
+  $nombreDocente  = htmlspecialchars(trim(($usuario['nombres'] ?? '') . ' ' . ($usuario['apellidos'] ?? '')), ENT_QUOTES, 'UTF-8');
+  $asignaturaInfo = $info_curso ? htmlspecialchars($info_curso['nombre_asignatura'], ENT_QUOTES, 'UTF-8') : '';
+  // Años únicos para el filtro de período
+  $anosUnicos = [];
+  foreach ($actividades as $a) {
+    $anio = date('Y', strtotime($a['fecha_entrega']));
+    if (!in_array($anio, $anosUnicos)) $anosUnicos[] = $anio;
+  }
+  rsort($anosUnicos);
+
   // Función auxiliar para obtener icono según tipo
   function obtenerIconoTipo($tipo) {
       $iconos = [
@@ -97,30 +115,30 @@
         <div class="teacher-info-bar">
           <div class="teacher-profile">
             <div>
-              <strong>Wilson Marroquín</strong>
-              <small>Profesor de Matemáticas</small>
+              <strong><?= $nombreDocente ?></strong>
+              <small><?= $asignaturaInfo ? 'Docente · ' . $asignaturaInfo : 'Docente' ?></small>
             </div>
           </div>
           <div class="teacher-stats">
             <div class="stat-item">
               <i class="ri-file-list-3-line"></i>
               <div>
-                <strong id="totalActividades">24</strong>
+                <strong id="totalActividades"><?= (int)$totalActividades ?></strong>
                 <small>Actividades creadas</small>
               </div>
             </div>
             <div class="stat-item">
               <i class="ri-time-line"></i>
               <div>
-                <strong id="actividadesPendientes">8</strong>
-                <small>Por calificar</small>
+                <strong id="actividadesPendientes"><?= (int)$totalActivas ?></strong>
+                <small>Activas</small>
               </div>
             </div>
             <div class="stat-item">
               <i class="ri-check-double-line"></i>
               <div>
-                <strong id="actividadesCalificadas">16</strong>
-                <small>Calificadas</small>
+                <strong id="actividadesCalificadas"><?= (int)$totalCerradas ?></strong>
+                <small>Cerradas</small>
               </div>
             </div>
           </div>
@@ -132,27 +150,17 @@
           <button class="filter-tab-actividad active" data-estado="todas">
             <i class="ri-file-list-line"></i>
             Todas
-            <span class="badge-count">24</span>
+            <span class="badge-count"><?= (int)$totalActividades ?></span>
           </button>
-          <button class="filter-tab-actividad" data-estado="activas">
+          <button class="filter-tab-actividad" data-estado="activa">
             <i class="ri-time-line"></i>
             Activas
-            <span class="badge-count">12</span>
+            <span class="badge-count"><?= (int)$totalActivas ?></span>
           </button>
-          <button class="filter-tab-actividad" data-estado="por-calificar">
-            <i class="ri-edit-line"></i>
-            Por Calificar
-            <span class="badge-count">8</span>
-          </button>
-          <button class="filter-tab-actividad" data-estado="calificadas">
-            <i class="ri-check-double-line"></i>
-            Calificadas
-            <span class="badge-count">16</span>
-          </button>
-          <button class="filter-tab-actividad" data-estado="cerradas">
+          <button class="filter-tab-actividad" data-estado="cerrada">
             <i class="ri-lock-line"></i>
             Cerradas
-            <span class="badge-count">4</span>
+            <span class="badge-count"><?= (int)$totalCerradas ?></span>
           </button>
         </div>
 
@@ -160,10 +168,10 @@
           <div class="actividades-filter-select-wrapper">
             <i class="ri-calendar-line actividades-filter-icon"></i>
             <select id="periodFilter" class="actividades-filter-select">
-              <option value="todos">Todos los períodos</option>
-              <option value="1" selected>Período 1 - 2025</option>
-              <option value="2">Período 2 - 2025</option>
-              <option value="3">Período 3 - 2024</option>
+              <option value="todos">Todos los años</option>
+              <?php foreach ($anosUnicos as $anio): ?>
+              <option value="<?= $anio ?>"><?= $anio ?></option>
+              <?php endforeach; ?>
             </select>
           </div>
 
@@ -171,9 +179,14 @@
             <i class="ri-book-line actividades-filter-icon"></i>
             <select id="cursoFilter" class="actividades-filter-select">
               <option value="todos">Todos los cursos</option>
-              <option value="10a">10° A - Matemáticas</option>
-              <option value="10b">10° B - Matemáticas</option>
-              <option value="9a">9° A - Geometría</option>
+              <?php if (!empty($datos)): ?>
+                <?php foreach ($datos as $cursoOpt): ?>
+                  <option value="<?= $cursoOpt['grado'] . strtolower($cursoOpt['curso']) ?>"
+                    <?= ($id_curso_seleccionado == $cursoOpt['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($cursoOpt['grado'] . '° ' . $cursoOpt['curso'] . ' · ' . $cursoOpt['nombre_asignatura'], ENT_QUOTES, 'UTF-8') ?>
+                  </option>
+                <?php endforeach; ?>
+              <?php endif; ?>
             </select>
           </div>
 
@@ -216,7 +229,7 @@
               ?>
               <div class="actividad-card" 
                    data-estado="<?= $estadoClase ?>" 
-                   data-periodo="1" 
+                   data-periodo="<?= date('Y', strtotime($actividad['fecha_entrega'])) ?>" 
                    data-curso="<?= $actividad['grado'] . strtolower($actividad['curso']) ?>" 
                    data-titulo="<?= htmlspecialchars(strtolower($actividad['titulo'])) ?>" 
                    data-descripcion="<?= htmlspecialchars(strtolower($actividad['descripcion'])) ?>">
@@ -241,7 +254,7 @@
                     </div>
                     <div class="actividad-meta-item">
                       <i class="ri-calendar-line"></i>
-                      <span><strong>Período 1 - 2025</strong></span>
+                      <span><strong><?= date('Y', strtotime($actividad['fecha_entrega'])) ?></strong></span>
                     </div>
                     <div class="actividad-meta-item">
                       <i class="ri-calendar-check-line"></i>
@@ -272,7 +285,15 @@
                     <i class="ri-file-list-3-line"></i>
                     Ver Entregas
                   </button>
-                  <button class="btn-actividad-secondary btn-editar-actividad" data-id="<?= $actividad['id'] ?>">
+                  <button class="btn-actividad-secondary btn-editar-actividad"
+                          data-id="<?= $actividad['id'] ?>"
+                          data-titulo="<?= htmlspecialchars($actividad['titulo'], ENT_QUOTES, 'UTF-8') ?>"
+                          data-tipo="<?= htmlspecialchars($actividad['tipo'], ENT_QUOTES, 'UTF-8') ?>"
+                          data-descripcion="<?= htmlspecialchars($actividad['descripcion'], ENT_QUOTES, 'UTF-8') ?>"
+                          data-ponderacion="<?= $actividad['ponderacion'] ?>"
+                          data-fecha="<?= $actividad['fecha_entrega'] ?>"
+                      data-estado-act="<?= $actividad['estado'] ?>"
+                      data-archivo="<?= htmlspecialchars($actividad['archivo'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                     <i class="ri-edit-line"></i>
                     Editar
                   </button>
@@ -316,6 +337,8 @@
                   <?php else: ?>
                     <?php foreach ($actividades as $actividad): ?>
                       <tr data-estado="<?= strtolower($actividad['estado']) ?>" 
+                          data-periodo="<?= date('Y', strtotime($actividad['fecha_entrega'])) ?>"
+                          data-curso="<?= $actividad['grado'] . strtolower($actividad['curso']) ?>"
                           data-titulo="<?= htmlspecialchars(strtolower($actividad['titulo'])) ?>">
                         <td>
                           <span class="tabla-tipo-badge <?= strtolower($actividad['tipo']) ?>">
@@ -328,7 +351,7 @@
                           <small style="color: #97a1b6;"><?= htmlspecialchars(substr($actividad['descripcion'], 0, 60)) ?><?= strlen($actividad['descripcion']) > 60 ? '...' : '' ?></small>
                         </td>
                         <td><strong style="color: #a4b1ff;"><?= $actividad['grado'] ?>° <?= $actividad['curso'] ?></strong></td>
-                        <td><small style="color: #c7cbe1;">Período 1 - 2025</small></td>
+                        <td><small style="color: #c7cbe1;"><?= date('Y', strtotime($actividad['fecha_entrega'])) ?></small></td>
                         <td><small style="color: #c7cbe1;"><?= formatearFecha($actividad['fecha_entrega']) ?></small></td>
                         <td class="text-center">
                           <span class="tabla-valor-badge"><?= number_format($actividad['ponderacion'], 0) ?>%</span>
@@ -350,7 +373,15 @@
                           <button class="btn-tabla-action btn-ver-entregas" title="Ver entregas" data-id="<?= $actividad['id'] ?>">
                             <i class="ri-file-list-3-line"></i>
                           </button>
-                          <button class="btn-tabla-action btn-editar-actividad" title="Editar" data-id="<?= $actividad['id'] ?>">
+                          <button class="btn-tabla-action btn-editar-actividad" title="Editar"
+                                  data-id="<?= $actividad['id'] ?>"
+                                  data-titulo="<?= htmlspecialchars($actividad['titulo'], ENT_QUOTES, 'UTF-8') ?>"
+                                  data-tipo="<?= htmlspecialchars($actividad['tipo'], ENT_QUOTES, 'UTF-8') ?>"
+                                  data-descripcion="<?= htmlspecialchars($actividad['descripcion'], ENT_QUOTES, 'UTF-8') ?>"
+                                  data-ponderacion="<?= $actividad['ponderacion'] ?>"
+                                  data-fecha="<?= $actividad['fecha_entrega'] ?>"
+                              data-estado-act="<?= $actividad['estado'] ?>"
+                              data-archivo="<?= htmlspecialchars($actividad['archivo'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                             <i class="ri-edit-line"></i>
                           </button>
                         </td>
@@ -605,6 +636,71 @@
     </div>
 
     
+
+    <!-- MODAL EDITAR ACTIVIDAD -->
+    <div class="modal fade" id="modalEditarActividad" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background:#11193a;border:1px solid #1e2d5a;color:#e6e9f4;">
+          <div class="modal-header" style="border-bottom:1px solid #1e2d5a;">
+            <h5 class="modal-title" id="modalEditarLabel"><i class="ri-edit-line"></i> Editar Actividad</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <form id="formEditarActividad" action="<?= BASE_URL ?>/docente/actualizar_actividad" method="POST" enctype="multipart/form-data">
+            <div class="modal-body">
+              <input type="hidden" name="id" id="editId">
+              <input type="hidden" name="id_curso" id="editIdCurso" value="<?= htmlspecialchars($id_curso_seleccionado ?? '', ENT_QUOTES, 'UTF-8') ?>">
+              <input type="hidden" name="archivo_actual" id="editArchivoActual" value="">
+              <div class="row g-3">
+                <div class="col-md-8">
+                  <label class="form-label">Título *</label>
+                  <input type="text" class="form-control" name="titulo_actividad" id="editTitulo" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Tipo *</label>
+                  <select class="form-select" name="tipo_actividad" id="editTipo" required>
+                    <option value="Taller">Taller</option>
+                    <option value="Quiz">Quiz</option>
+                    <option value="Examen">Examen</option>
+                    <option value="Proyecto">Proyecto</option>
+                    <option value="Exposición">Exposición</option>
+                    <option value="Laboratorio">Laboratorio</option>
+                    <option value="Tarea">Tarea</option>
+                  </select>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">Descripción</label>
+                  <textarea class="form-control" name="descripcion" id="editDescripcion" rows="3"></textarea>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Ponderación (%) *</label>
+                  <input type="number" class="form-control" name="ponderacion" id="editPonderacion" min="0" max="100" step="0.01" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Fecha de entrega *</label>
+                  <input type="date" class="form-control" name="fecha_entrega" id="editFechaEntrega" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Estado *</label>
+                  <select class="form-select" name="estado" id="editEstado" required>
+                    <option value="activa">Activa</option>
+                    <option value="cerrada">Cerrada</option>
+                  </select>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">Archivo adjunto (opcional)</label>
+                  <input type="file" class="form-control" name="archivo_actividad" id="editArchivoActividad" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                  <small class="text-muted" id="editArchivoNombre">Archivo actual: ninguno</small>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" style="border-top:1px solid #1e2d5a;">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary"><i class="ri-save-line"></i> Guardar cambios</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

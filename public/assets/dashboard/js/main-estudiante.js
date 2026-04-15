@@ -5,10 +5,11 @@ const rightSidebar = document.getElementById('rightSidebar');
 const appGrid = document.getElementById('appGrid');
 const toggleLeft = document.getElementById('toggleLeft');
 const toggleRight = document.getElementById('toggleRight');
+const hasRightSidebar = !!rightSidebar;
 
 // Cargar estado desde localStorage
 let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
-let rightVisible = localStorage.getItem('rightSidebarVisible') !== 'false';
+let rightVisible = hasRightSidebar && localStorage.getItem('rightSidebarVisible') !== 'false';
 
 function updateGridState() {
   appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
@@ -30,6 +31,7 @@ function toggleLeftSidebar() {
 }
 
 function toggleRightSidebar() {
+  if (!hasRightSidebar) return;
   rightVisible = !rightVisible;
   rightSidebar.classList.toggle('hidden', !rightVisible);
   localStorage.setItem('rightSidebarVisible', rightVisible);
@@ -37,12 +39,12 @@ function toggleRightSidebar() {
 }
 
 // Event listeners
-toggleLeft.addEventListener('click', toggleLeftSidebar);
-toggleRight.addEventListener('click', toggleRightSidebar);
+if (toggleLeft) toggleLeft.addEventListener('click', toggleLeftSidebar);
+if (toggleRight && hasRightSidebar) toggleRight.addEventListener('click', toggleRightSidebar);
 
 // Aplicar estado inicial
 if (!leftVisible) leftSidebar.classList.add('hidden');
-if (!rightVisible) rightSidebar.classList.add('hidden');
+if (hasRightSidebar && !rightVisible) rightSidebar.classList.add('hidden');
 updateGridState();
 
 // Initialize DataTable

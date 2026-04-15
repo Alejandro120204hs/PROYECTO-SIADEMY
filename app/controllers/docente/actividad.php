@@ -57,8 +57,49 @@ function guardarActividad() {
         'descripcion' => htmlspecialchars(trim($_POST['descripcion']), ENT_QUOTES, 'UTF-8'),
         'tipo' => htmlspecialchars(trim($_POST['tipo_actividad']), ENT_QUOTES, 'UTF-8'),
         'ponderacion' => filter_var($_POST['ponderacion'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
-        'fecha_entrega' => $_POST['fecha_entrega']
+        'fecha_entrega' => $_POST['fecha_entrega'],
+        'archivo' => null
     ];
+
+    // Manejar archivo adjunto opcional
+    if (isset($_FILES['archivo_actividad']) && $_FILES['archivo_actividad']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $file = $_FILES['archivo_actividad'];
+        $extensionesPermitidas = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'];
+        $mimePermitidos = [
+            'application/pdf',
+            'image/jpeg',
+            'image/png',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            mostrarSweetAlert('error', 'Error de archivo', 'Error al subir el archivo adjunto');
+            exit;
+        }
+        if ($file['size'] > 10485760) { // 10 MB
+            mostrarSweetAlert('error', 'Error de archivo', 'El archivo excede el tamaño máximo permitido (10 MB)');
+            exit;
+        }
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, $extensionesPermitidas)) {
+            mostrarSweetAlert('error', 'Tipo no permitido', 'Solo se permiten archivos: PDF, JPG, PNG, DOC, DOCX');
+            exit;
+        }
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($file['tmp_name']);
+        if (!in_array($mime, $mimePermitidos)) {
+            mostrarSweetAlert('error', 'Tipo no permitido', 'El archivo no es un tipo válido');
+            exit;
+        }
+        $nombreArchivo = 'actividad_' . ($datos['id_docente']) . '_' . time() . '.' . $ext;
+        $destino = BASE_PATH . '/public/uploads/actividades/' . $nombreArchivo;
+        if (!move_uploaded_file($file['tmp_name'], $destino)) {
+            mostrarSweetAlert('error', 'Error', 'No se pudo guardar el archivo adjunto');
+            exit;
+        }
+        $datos['archivo'] = $nombreArchivo;
+    }
 
     // Validar que la ponderación esté entre 0 y 100
     if ($datos['ponderacion'] < 0 || $datos['ponderacion'] > 100) {
@@ -145,16 +186,75 @@ function actualizarActividad() {
         'estado' => $_POST['estado']
     ];
 
+    // Manejar reemplazo opcional de archivo adjunto
+    if (isset($_FILES['archivo_actividad']) && $_FILES['archivo_actividad']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $file = $_FILES['archivo_actividad'];
+        $extensionesPermitidas = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'];
+        $mimePermitidos = [
+            'application/pdf',
+            'image/jpeg',
+            'image/png',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            mostrarSweetAlert('error', 'Error de archivo', 'Error al subir el archivo adjunto');
+            exit;
+        }
+        if ($file['size'] > 10485760) {
+            mostrarSweetAlert('error', 'Error de archivo', 'El archivo excede el tamaño máximo permitido (10 MB)');
+            exit;
+        }
+
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, $extensionesPermitidas)) {
+            mostrarSweetAlert('error', 'Tipo no permitido', 'Solo se permiten archivos: PDF, JPG, PNG, DOC, DOCX');
+            exit;
+        }
+
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($file['tmp_name']);
+        if (!in_array($mime, $mimePermitidos)) {
+            mostrarSweetAlert('error', 'Tipo no permitido', 'El archivo no es un tipo válido');
+            exit;
+        }
+
+        $nombreArchivo = 'actividad_' . $id . '_' . time() . '.' . $ext;
+        $directorioDestino = BASE_PATH . '/public/uploads/actividades';
+        if (!is_dir($directorioDestino)) {
+            mkdir($directorioDestino, 0755, true);
+        }
+        $destino = $directorioDestino . '/' . $nombreArchivo;
+
+        if (!move_uploaded_file($file['tmp_name'], $destino)) {
+            mostrarSweetAlert('error', 'Error', 'No se pudo guardar el archivo adjunto');
+            exit;
+        }
+
+        // Intentar eliminar archivo anterior si existe
+        $archivoAnterior = trim($_POST['archivo_actual'] ?? '');
+        if ($archivoAnterior !== '') {
+            $rutaAnterior = $directorioDestino . '/' . basename($archivoAnterior);
+            if (is_file($rutaAnterior)) {
+                @unlink($rutaAnterior);
+            }
+        }
+
+        $datos['archivo'] = $nombreArchivo;
+    }
+
     $actividadModel = new Actividad_docente();
     $resultado = $actividadModel->actualizar($id, $datos);
 
-    if ($resultado) {
-        mostrarSweetAlert('success', '¡Éxito!', 'Actividad actualizada correctamente');
-    } else {
-        mostrarSweetAlert('error', 'Error', 'No se pudo actualizar la actividad');
-    }
+    $id_curso_red = isset($_POST['id_curso']) ? filter_var($_POST['id_curso'], FILTER_SANITIZE_NUMBER_INT) : '';
+    $redirect_url = obtenerBaseUrl() . '/docente/actividades?id_curso=' . $id_curso_red;
 
-    header('Location: ' . obtenerBaseUrl() . '/docente/actividades?id_curso=' . $_POST['id_curso']);
+    if ($resultado) {
+        mostrarSweetAlert('success', '¡Éxito!', 'Actividad actualizada correctamente', $redirect_url);
+    } else {
+        mostrarSweetAlert('error', 'Error', 'No se pudo actualizar la actividad', $redirect_url);
+    }
     exit;
 }
 

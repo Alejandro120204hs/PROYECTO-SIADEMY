@@ -406,12 +406,13 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 
 document.getElementById('toggleLeft').addEventListener('click', () => {
     const sidebar = document.getElementById('leftSidebar');
+    const rightSidebar = document.getElementById('rightSidebar');
     const app = document.getElementById('appGrid');
 
     sidebar.classList.toggle('hidden');
 
     if (sidebar.classList.contains('hidden')) {
-        if (document.getElementById('rightSidebar').classList.contains('hidden')) {
+        if (!rightSidebar || rightSidebar.classList.contains('hidden')) {
             app.classList.add('hide-both');
             app.classList.remove('hide-left', 'hide-right');
         } else {
@@ -419,7 +420,7 @@ document.getElementById('toggleLeft').addEventListener('click', () => {
             app.classList.remove('hide-right', 'hide-both');
         }
     } else {
-        if (document.getElementById('rightSidebar').classList.contains('hidden')) {
+        if (!rightSidebar || rightSidebar.classList.contains('hidden')) {
             app.classList.add('hide-right');
             app.classList.remove('hide-left', 'hide-both');
         } else {
@@ -428,8 +429,9 @@ document.getElementById('toggleLeft').addEventListener('click', () => {
     }
 });
 
-document.getElementById('toggleRight').addEventListener('click', () => {
+document.getElementById('toggleRight')?.addEventListener('click', () => {
     const rightbar = document.getElementById('rightSidebar');
+    if (!rightbar) return;
     const app = document.getElementById('appGrid');
 
     rightbar.classList.toggle('hidden');

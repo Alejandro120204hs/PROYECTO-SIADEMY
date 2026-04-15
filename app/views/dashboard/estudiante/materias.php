@@ -1,3 +1,8 @@
+<?php
+  require_once BASE_PATH . '/app/controllers/perfil.php';
+  $id = $_SESSION['user']['id'] ?? 0;
+  $usuario = mostrarPerfil($id);
+?>
 <!doctype html>
 <html lang="es">
 
@@ -14,7 +19,7 @@
 </head>
 
 <body>
-  <div class="app" id="appGrid">
+  <div class="app hide-right" id="appGrid">
     <!-- LEFT SIDEBAR -->
     <?php 
       include_once __DIR__ . '/../../layouts/sidebar_estudiante.php'
@@ -35,9 +40,9 @@
           <input type="text" id="searchInput" placeholder="Buscar materias, profesores...">
         </div>
 
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+     <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php';
+        ?>
       </div>
 
       <!-- STATS CARDS -->
@@ -174,101 +179,11 @@
             </div>
           <?php endforeach; ?>
         <?php endif; ?>
+      </div>
     </main>
 
     <!-- RIGHT SIDEBAR -->
-    <aside class="rightbar" id="rightSidebar">
-      <div class="user">
-        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-        <div class="avatar" title="Diego A.">DA</div>
-      </div>
-
-      <div class="panel-title">Acciones Rápidas</div>
-      <p class="muted">Accesos directos importantes</p>
-
-      <div class="quick-actions">
-        <div class="quick-action">
-          <div class="quick-action-icon blue">
-            <i class="ri-calendar-event-line"></i>
-          </div>
-          <div class="quick-action-content">
-            <strong>Ver Horario</strong>
-            <small>Horario semanal de clases</small>
-          </div>
-        </div>
-
-        <div class="quick-action">
-          <div class="quick-action-icon green">
-            <i class="ri-task-line"></i>
-          </div>
-          <div class="quick-action-content">
-            <strong>Actividades</strong>
-            <small><?= $estadisticas['actividades_pendientes'] ?> tareas pendientes</small>
-          </div>
-        </div>
-
-        <div class="quick-action">
-          <div class="quick-action-icon orange">
-            <i class="ri-bar-chart-line"></i>
-          </div>
-          <div class="quick-action-content">
-            <strong>Calificaciones</strong>
-            <small>Ver todas mis notas</small>
-          </div>
-        </div>
-
-        <div class="quick-action">
-          <div class="quick-action-icon red">
-            <i class="ri-download-line"></i>
-          </div>
-          <div class="quick-action-content">
-            <strong>Descargar Boletín</strong>
-            <small>PDF del período actual</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel-title" style="margin-top:24px">Próximas Entregas</div>
-      <p class="muted">Actividades por vencer</p>
-
-      <div class="deadline-list">
-        <?php if (empty($actividades_proximas)): ?>
-          <div style="text-align: center; padding: 20px; color: #97a1b6;">
-            <i class="ri-checkbox-circle-line" style="font-size: 32px; opacity: 0.5;"></i>
-            <p style="margin-top: 12px; font-size: 14px;">¡Estás al día con tus actividades!</p>
-          </div>
-        <?php else: ?>
-          <?php foreach ($actividades_proximas as $actividad): ?>
-            <?php 
-              $dias_restantes = floor((strtotime($actividad['fecha_entrega']) - time()) / (60 * 60 * 24));
-              $es_urgente = $dias_restantes <= 1;
-            ?>
-            <div class="deadline-item <?= $es_urgente ? 'urgent' : '' ?>">
-              <div class="deadline-date">
-                <span class="day"><?= date('d', strtotime($actividad['fecha_entrega'])) ?></span>
-                <span class="month"><?= obtenerMesAbreviado($actividad['fecha_entrega']) ?></span>
-              </div>
-              <div class="deadline-content">
-                <strong><?= htmlspecialchars($actividad['titulo']) ?></strong>
-                <small><?= htmlspecialchars($actividad['materia']) ?> - Prof. <?= htmlspecialchars($actividad['docente_nombres']) ?></small>
-                <div class="deadline-time">
-                  <i class="ri-time-line"></i> <?= formatearFechaProxima($actividad['fecha_entrega']) ?>
-                </div>
-              </div>
-            </div>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </div>
-
-      <button class="btn-primary">Ver todas las actividades</button>
-
-      <div class="tips-card">
-        <h4><i class="ri-lightbulb-line"></i> Consejo Académico</h4>
-        <p>Enfócate en mejorar las materias en riesgo. Contacta a tus profesores para recibir apoyo adicional y organiza
-          tu tiempo de estudio.</p>
-      </div>
-    </aside>
+   
   </div>
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

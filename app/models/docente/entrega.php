@@ -81,7 +81,7 @@ class EntregaDocente {
                     INNER JOIN matricula m ON ac.id_curso = m.id_curso
                     INNER JOIN estudiante e ON m.id_estudiante = e.id
                     LEFT JOIN entrega_actividad ea ON a.id = ea.id_actividad AND e.id = ea.id_estudiante
-                    LEFT JOIN calificacion cal ON a.id = cal.id_actividad AND e.id = cal.id_estudiante
+                    LEFT JOIN calificacion cal ON ea.id = cal.id_entrega
                     WHERE a.id = :id_actividad
                       AND a.id_institucion = :id_institucion
                     ORDER BY e.apellidos ASC, e.nombres ASC";
@@ -115,7 +115,7 @@ class EntregaDocente {
                     INNER JOIN matricula m ON ac.id_curso = m.id_curso
                     INNER JOIN estudiante e ON m.id_estudiante = e.id
                     LEFT JOIN entrega_actividad ea ON a.id = ea.id_actividad AND e.id = ea.id_estudiante
-                    LEFT JOIN calificacion cal ON a.id = cal.id_actividad AND e.id = cal.id_estudiante
+                    LEFT JOIN calificacion cal ON ea.id = cal.id_entrega
                     WHERE a.id = :id_actividad
                       AND a.id_institucion = :id_institucion";
             
@@ -134,22 +134,25 @@ class EntregaDocente {
     /**
      * Descargar información de archivo de entrega
      */
-    public function obtenerArchivoEntrega($id_entrega, $id_estudiante, $id_institucion) {
+        public function obtenerArchivoEntrega($id_entrega, $id_docente, $id_institucion) {
         try {
             $sql = "SELECT 
+                                                ea.id,
+                                                ea.archivo,
                         ea.archivo_ruta,
                         a.titulo AS titulo_actividad,
-                        CONCAT(e.nombres, ' ', e.apellidos) AS nombre_estudiante
+                                                CONCAT(e.nombres, ' ', e.apellidos) AS nombre_estudiante,
+                                                a.id_docente
                     FROM entrega_actividad ea
                     INNER JOIN actividad a ON ea.id_actividad = a.id
                     INNER JOIN estudiante e ON ea.id_estudiante = e.id
                     WHERE ea.id = :id_entrega
-                      AND ea.id_estudiante = :id_estudiante
+                                            AND a.id_docente = :id_docente
                       AND a.id_institucion = :id_institucion";
             
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':id_entrega', $id_entrega, PDO::PARAM_INT);
-            $stmt->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
+                        $stmt->bindParam(':id_docente', $id_docente, PDO::PARAM_INT);
             $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
             $stmt->execute();
             

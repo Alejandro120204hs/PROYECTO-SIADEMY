@@ -9,13 +9,15 @@
   }
 
   $rolUsuario = $_SESSION['user']['rol'] ?? '';
-  if ($rolUsuario !== 'Administrador' && $rolUsuario !== 'superAdmin' && $rolUsuario !== 'Docente') {
+  if ($rolUsuario !== 'Administrador' && $rolUsuario !== 'superAdmin' && $rolUsuario !== 'Docente' && $rolUsuario !== 'Estudiante') {
     header('Location: ' . BASE_URL . '/login');
     exit();
   }
 
   $esSuperAdmin = $rolUsuario === 'superAdmin';
   $esDocente = $rolUsuario === 'Docente';
+  $esEstudiante = $rolUsuario === 'Estudiante';
+  $perfilFotoFolder = $esDocente ? 'docentes' : ($esEstudiante ? 'estudiantes' : 'usuarios');
 
   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
     require_once BASE_PATH . '/app/controllers/perfil.php';
@@ -47,6 +49,8 @@
       <?php include_once __DIR__ . '/../../layouts/sidebar_superAdmin.php'; ?>
     <?php elseif ($esDocente): ?>
       <?php include_once __DIR__ . '/../../layouts/sidebar_docente.php'; ?>
+    <?php elseif ($esEstudiante): ?>
+      <?php include_once __DIR__ . '/../../layouts/sidebar_estudiante.php'; ?>
     <?php else: ?>
       <?php include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'; ?>
     <?php endif; ?>
@@ -75,7 +79,7 @@
         <div class="profile-content">
           <div class="profile-avatar-container">
             <div class="profile-avatar" id="profileAvatar">
-              <img src="<?= BASE_URL ?>/public/uploads/usuarios/<?= $usuario['foto'] ?>" 
+              <img src="<?= BASE_URL ?>/public/uploads/<?= $perfilFotoFolder ?>/<?= $usuario['foto'] ?>" 
               alt="foto">
               <div class="avatar-loading" id="avatarLoading">
                 <i class="ri-loader-4-line"></i>
@@ -404,7 +408,7 @@
     <aside class="rightbar" id="rightSidebar">
       <div class="user">
       
-        <div class="avatar" title="Profesor"><img src="<?= BASE_URL ?>/public/uploads/usuarios/<?= $usuario['foto'] ?>" 
+          <div class="avatar" title="Profesor"><img src="<?= BASE_URL ?>/public/uploads/<?= $perfilFotoFolder ?>/<?= $usuario['foto'] ?>" 
               alt="foto"  width="40px" height="40px" style="border-radius: 50%;"></div>
       </div>
 

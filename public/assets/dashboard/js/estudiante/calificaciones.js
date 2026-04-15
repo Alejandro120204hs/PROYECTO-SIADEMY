@@ -2,7 +2,7 @@
 // DATOS DE LAS MATERIAS Y EVALUACIONES
 // =============================================
 
-const materias = {
+const materias = window.calificacionesData?.materias || {
     1: { // Matemáticas
         nombre: 'Matemáticas',
         profesor: 'Prof. Carlos Méndez',
@@ -164,7 +164,7 @@ const materias = {
     }
 };
 
-const currentPeriod = 2; // Periodo actual
+const currentPeriod = Number(window.calificacionesData?.periodoActual || 2);
 
 // =============================================
 // FUNCIONES AUXILIARES
@@ -191,6 +191,9 @@ function getNotaClass(nota) {
 function showEvaluaciones(card, materiaId, numeroPeriodo) {
     const evaluacionesSection = card.querySelector('.evaluaciones-section');
     const materia = materias[materiaId];
+    if (!materia) {
+        return;
+    }
     const periodo = materia.periodos[numeroPeriodo];
 
     // Si no hay evaluaciones
@@ -319,6 +322,9 @@ function initializeCards() {
  */
 function initializeSearch() {
     const searchInput = document.getElementById('searchInput');
+    if (!searchInput) {
+        return;
+    }
 
     searchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase().trim();
@@ -327,6 +333,10 @@ function initializeSearch() {
         cards.forEach(card => {
             const materiaId = card.dataset.materiaId;
             const materia = materias[materiaId];
+            if (!materia) {
+                card.style.display = 'none';
+                return;
+            }
 
             // Buscar en nombre y profesor
             const materiaText = `${materia.nombre} ${materia.profesor}`.toLowerCase();
@@ -359,13 +369,18 @@ function initializeSidebarToggles() {
     const leftSidebar = document.getElementById('leftSidebar');
     const rightSidebar = document.getElementById('rightSidebar');
     const app = document.getElementById('appGrid');
+    const hasRightSidebar = !!rightSidebar;
+
+    if (!toggleLeft || !leftSidebar || !app) {
+        return;
+    }
 
     // Toggle del sidebar izquierdo
     toggleLeft.addEventListener('click', () => {
         leftSidebar.classList.toggle('hidden');
 
         if (leftSidebar.classList.contains('hidden')) {
-            if (rightSidebar.classList.contains('hidden')) {
+            if (!hasRightSidebar || rightSidebar.classList.contains('hidden')) {
                 app.classList.add('hide-both');
                 app.classList.remove('hide-left', 'hide-right');
             } else {
@@ -373,7 +388,7 @@ function initializeSidebarToggles() {
                 app.classList.remove('hide-right', 'hide-both');
             }
         } else {
-            if (rightSidebar.classList.contains('hidden')) {
+            if (!hasRightSidebar || rightSidebar.classList.contains('hidden')) {
                 app.classList.add('hide-right');
                 app.classList.remove('hide-left', 'hide-both');
             } else {
@@ -383,6 +398,10 @@ function initializeSidebarToggles() {
     });
 
     // Toggle del sidebar derecho
+    if (!toggleRight || !hasRightSidebar) {
+        return;
+    }
+
     toggleRight.addEventListener('click', () => {
         rightSidebar.classList.toggle('hidden');
 
