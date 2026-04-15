@@ -22,6 +22,9 @@
       $chartJson = '{}';
     }
 
+    $superAdminCssVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-superAdmin.css') ?: time();
+    $superAdminJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/superAdmin/main-superAdmin.js') ?: time();
+
 ?>
 
 <!doctype html>
@@ -33,7 +36,7 @@
   <?php 
     include_once __DIR__ . '/../../layouts/header_coordinador.php';
   ?>
-  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-superAdmin.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-superAdmin.css?v=<?= $superAdminCssVersion ?>">
 </head>
 
 <body>
@@ -137,6 +140,6 @@
   <script>
     window.superAdminChartData = <?= $chartJson ?>;
   </script>
-  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/superAdmin/main-superAdmin.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/superAdmin/main-superAdmin.js?v=<?= $superAdminJsVersion ?>"></script>
 </body>
 </html>
