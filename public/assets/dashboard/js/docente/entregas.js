@@ -4,6 +4,30 @@
  */
 
 $(document).ready(function() {
+        const modalCalificarEl = document.getElementById('modalCalificar');
+        const modalCalificar = modalCalificarEl ? new bootstrap.Modal(modalCalificarEl) : null;
+
+    // Alertas con el mismo look & feel del helper global
+    const swalBaseConfig = {
+        confirmButtonText: 'Aceptar',
+        background: '#11193a',
+        color: '#e6e9f4',
+        customClass: {
+            popup: 'siademy-swal-popup',
+            title: 'siademy-swal-title',
+            htmlContainer: 'siademy-swal-html',
+            confirmButton: 'siademy-swal-confirm',
+            cancelButton: 'siademy-swal-cancel'
+        }
+    };
+
+    function showSystemAlert(options) {
+        return Swal.fire({
+            ...swalBaseConfig,
+            ...options
+        });
+    }
+
     const pathName = window.location.pathname || '';
     const docenteIndex = pathName.indexOf('/docente/');
     const basePath = docenteIndex >= 0 ? pathName.substring(0, docenteIndex) : '';
@@ -18,7 +42,7 @@ $(document).ready(function() {
         // Agregar clase active al botón clickeado
         $(this).addClass('active');
         
-        const filtro = $(this).data('filtro');
+        const filtro = $(this).data('filter');
         
         // Mostrar todas las filas primero
         $('.entregas-table tbody tr').show();
@@ -49,7 +73,7 @@ $(document).ready(function() {
             
             if (nombreEstudiante.includes(valorBusqueda)) {
                 // Verificar también el filtro activo
-                const filtroActivo = $('.filter-btn-entrega.active').data('filtro');
+                const filtroActivo = $('.filter-btn-entrega.active').data('filter');
                 const estadoFila = $(this).data('estado');
                 
                 if (filtroActivo === 'todos' || estadoFila === filtroActivo) {
@@ -85,7 +109,7 @@ $(document).ready(function() {
         $('#observacionNota').val(observacionActual);
         
         // Mostrar el modal
-        $('#modalCalificar').modal('show');
+        modalCalificar?.show();
     });
     
     
@@ -129,12 +153,11 @@ $(document).ready(function() {
         const observacion = $('#observacionNota').val();
         
         // Validación
-        if (!nota || nota < 0 || nota > 5) {
-            Swal.fire({
+        if (Number.isNaN(nota) || nota < 0 || nota > 5) {
+            showSystemAlert({
                 icon: 'warning',
                 title: 'Nota inválida',
-                text: 'La nota debe estar entre 0 y 5',
-                confirmButtonColor: '#4f46e5'
+                text: 'La nota debe estar entre 0 y 5'
             });
             return;
         }
@@ -155,32 +178,29 @@ $(document).ready(function() {
             },
             success: function(data) {
                 if (data.success) {
-                    Swal.fire({
+                    modalCalificar?.hide();
+                    showSystemAlert({
                         icon: 'success',
                         title: '¡Calificación guardada!',
-                        text: 'La nota ha sido registrada exitosamente',
-                        confirmButtonColor: '#4f46e5',
-                        timer: 2000
+                        text: 'La nota ha sido registrada exitosamente'
                     }).then(() => {
                         // Recargar página para actualizar estadísticas
                         location.reload();
                     });
                 } else {
-                    Swal.fire({
+                    showSystemAlert({
                         icon: 'error',
                         title: 'Error',
-                        text: data.message || 'No se pudo guardar la calificación',
-                        confirmButtonColor: '#ef4444'
+                        text: data.message || 'No se pudo guardar la calificación'
                     });
                     btnGuardar.prop('disabled', false).html('<i class="ri-check-line"></i> Guardar Calificación');
                 }
             },
             error: function() {
-                Swal.fire({
+                showSystemAlert({
                     icon: 'error',
                     title: 'Error de conexión',
-                    text: 'No se pudo conectar con el servidor',
-                    confirmButtonColor: '#ef4444'
+                    text: 'No se pudo conectar con el servidor'
                 });
                 btnGuardar.prop('disabled', false).html('<i class="ri-check-line"></i> Guardar Calificación');
             }
@@ -209,18 +229,16 @@ $(document).ready(function() {
         const nombreEstudiante = $(this).closest('tr').find('.estudiante-info strong').text();
         
         if (!comentario || comentario.trim() === '') {
-            Swal.fire({
+            showSystemAlert({
                 icon: 'info',
                 title: 'Sin comentarios',
-                text: `${nombreEstudiante} no dejó comentarios en esta entrega`,
-                confirmButtonColor: '#4f46e5'
+                text: `${nombreEstudiante} no dejó comentarios en esta entrega`
             });
         } else {
-            Swal.fire({
+            showSystemAlert({
                 icon: 'info',
                 title: `Comentario de ${nombreEstudiante}`,
-                html: `<div style="text-align: left; padding: 10px; background: #f3f4f6; border-radius: 8px;">${comentario}</div>`,
-                confirmButtonColor: '#4f46e5',
+                html: `<div style="text-align:left; padding:12px; background:#0e142e; border:1px solid rgba(255,255,255,.08); border-radius:12px; color:#c8cede;">${comentario}</div>`,
                 width: '600px'
             });
         }
@@ -246,6 +264,36 @@ $(document).ready(function() {
     
     const style = document.createElement('style');
     style.textContent = `
+        .siademy-swal-popup {
+            font-family: 'Poppins', sans-serif !important;
+            border: 1px solid rgba(255, 255, 255, .08) !important;
+            border-radius: 18px !important;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, .25) !important;
+        }
+        .siademy-swal-title {
+            color: #e6e9f4 !important;
+            font-weight: 600 !important;
+            font-size: 24px !important;
+        }
+        .siademy-swal-html {
+            color: #c8cede !important;
+            font-size: 15px !important;
+        }
+        .siademy-swal-confirm {
+            background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 12px 28px !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, .4) !important;
+            transition: all 0.2s ease !important;
+        }
+        .siademy-swal-confirm:hover {
+            background: linear-gradient(135deg, #6366f1, #7c3aed) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(79, 70, 229, .5) !important;
+        }
         @keyframes rotating {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }

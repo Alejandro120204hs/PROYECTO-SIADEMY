@@ -151,6 +151,7 @@ $datos_entrega = [
     'id_actividad' => $id_actividad,
     'id_estudiante' => $id_estudiante,
     'archivo_ruta' => $ruta_relativa,
+    'archivo' => $nombre_archivo,
     'observaciones_estudiante' => $observaciones
 ];
 

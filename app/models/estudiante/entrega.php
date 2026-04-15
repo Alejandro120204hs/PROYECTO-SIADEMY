@@ -3,10 +3,31 @@ require_once __DIR__ . '/../../../config/database.php';
 
 class EntregaEstudiante {
     private $conn;
+    private $tieneColumnaArchivo = false;
 
     public function __construct() {
         $database = new Conexion();
         $this->conn = $database->getConexion();
+        $this->tieneColumnaArchivo = $this->detectarColumnaArchivo();
+    }
+
+    /**
+     * Detecta si la tabla entrega_actividad tiene la columna "archivo".
+     */
+    private function detectarColumnaArchivo() {
+        try {
+            $sql = "SELECT 1
+                    FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_SCHEMA = DATABASE()
+                      AND TABLE_NAME = 'entrega_actividad'
+                      AND COLUMN_NAME = 'archivo'
+                    LIMIT 1";
+            $stmt = $this->conn->query($sql);
+            return (bool) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Error al detectar columna archivo: " . $e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -14,7 +35,11 @@ class EntregaEstudiante {
      */
     public function verificarEntregaExistente($id_actividad, $id_estudiante) {
         try {
-            $sql = "SELECT id, archivo_ruta, fecha_entrega, estado 
+            $sql = "SELECT id, archivo_ruta, fecha_entrega, estado";
+            if ($this->tieneColumnaArchivo) {
+                $sql .= ", archivo";
+            }
+            $sql .= " 
                     FROM entrega_actividad 
                     WHERE id_actividad = :id_actividad 
                       AND id_estudiante = :id_estudiante";
@@ -36,15 +61,26 @@ class EntregaEstudiante {
      */
     public function crear($datos) {
         try {
-            $sql = "INSERT INTO entrega_actividad 
-                    (id_actividad, id_estudiante, archivo_ruta, observaciones_estudiante, estado) 
-                    VALUES 
-                    (:id_actividad, :id_estudiante, :archivo_ruta, :observaciones_estudiante, 'Entregado')";
+            if ($this->tieneColumnaArchivo) {
+                $sql = "INSERT INTO entrega_actividad 
+                        (id_actividad, id_estudiante, archivo_ruta, archivo, observaciones_estudiante, estado) 
+                        VALUES 
+                        (:id_actividad, :id_estudiante, :archivo_ruta, :archivo, :observaciones_estudiante, 'Entregado')";
+            } else {
+                $sql = "INSERT INTO entrega_actividad 
+                        (id_actividad, id_estudiante, archivo_ruta, observaciones_estudiante, estado) 
+                        VALUES 
+                        (:id_actividad, :id_estudiante, :archivo_ruta, :observaciones_estudiante, 'Entregado')";
+            }
             
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':id_actividad', $datos['id_actividad'], PDO::PARAM_INT);
             $stmt->bindParam(':id_estudiante', $datos['id_estudiante'], PDO::PARAM_INT);
             $stmt->bindParam(':archivo_ruta', $datos['archivo_ruta'], PDO::PARAM_STR);
+            if ($this->tieneColumnaArchivo) {
+                $archivoNombre = $datos['archivo'] ?? basename($datos['archivo_ruta']);
+                $stmt->bindParam(':archivo', $archivoNombre, PDO::PARAM_STR);
+            }
             $stmt->bindParam(':observaciones_estudiante', $datos['observaciones_estudiante'], PDO::PARAM_STR);
             
             return $stmt->execute();
@@ -60,7 +96,11 @@ class EntregaEstudiante {
     public function actualizar($id_actividad, $id_estudiante, $datos) {
         try {
             $sql = "UPDATE entrega_actividad 
-                    SET archivo_ruta = :archivo_ruta,
+                    SET archivo_ruta = :archivo_ruta,";
+            if ($this->tieneColumnaArchivo) {
+                $sql .= " archivo = :archivo,";
+            }
+            $sql .= "
                         observaciones_estudiante = :observaciones_estudiante,
                         fecha_entrega = CURRENT_TIMESTAMP,
                         estado = 'Entregado'
@@ -69,6 +109,10 @@ class EntregaEstudiante {
             
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':archivo_ruta', $datos['archivo_ruta'], PDO::PARAM_STR);
+            if ($this->tieneColumnaArchivo) {
+                $archivoNombre = $datos['archivo'] ?? basename($datos['archivo_ruta']);
+                $stmt->bindParam(':archivo', $archivoNombre, PDO::PARAM_STR);
+            }
             $stmt->bindParam(':observaciones_estudiante', $datos['observaciones_estudiante'], PDO::PARAM_STR);
             $stmt->bindParam(':id_actividad', $id_actividad, PDO::PARAM_INT);
             $stmt->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);

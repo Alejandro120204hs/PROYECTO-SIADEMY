@@ -435,6 +435,11 @@
                 guardarActividad();
                 break;
 
+            case '/docente/actualizar_actividad':
+                require BASE_PATH . '/app/controllers/docente/actividad.php';
+                actualizarActividad();
+                break;
+
             case '/docente/ver-entregas':
                 require BASE_PATH . '/app/controllers/docente/ver_entregas.php';
                 break;
@@ -475,7 +480,7 @@
                 break;
 
             case '/estudiante-panel-calificaciones':
-                require BASE_PATH . '/app/views/dashboard/estudiante/calificaciones.php';
+                require BASE_PATH . '/app/controllers/estudiante/calificaciones.php';
                 break;
 
             case '/estudiante-panel-profesores':

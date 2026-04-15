@@ -1,3 +1,8 @@
+<?php
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    $id = $_SESSION['user']['id'] ?? 0;
+    $usuario = mostrarPerfil($id);
+?>
 <!doctype html>
 <html lang="es">
 
@@ -35,9 +40,9 @@
                     <input type="text" id="searchInput" placeholder="Buscar profesor o materia...">
                 </div>
 
-                <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-                    <i class="ri-layout-right-2-line"></i>
-                </button>
+                <?php
+          include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php';
+        ?>
             </div>
 
             <!-- STATS CARDS -->
@@ -381,98 +386,7 @@
         </main>
 
         <!-- RIGHT SIDEBAR -->
-        <aside class="rightbar" id="rightSidebar">
-            <div class="user">
-                <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-                <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-                <div class="avatar" title="Diego A.">DA</div>
-            </div>
-
-            <div class="panel-title">Horario de Clases</div>
-            <p class="muted">Semana actual</p>
-
-            <div class="horario-list">
-                <div class="horario-item">
-                    <div class="horario-dia">Lun</div>
-                    <div class="horario-content">
-                        <strong>8:00 AM - Matemáticas</strong>
-                        <small>Prof. Carlos Méndez</small>
-                    </div>
-                </div>
-
-                <div class="horario-item">
-                    <div class="horario-dia">Mar</div>
-                    <div class="horario-content">
-                        <strong>9:00 AM - Física</strong>
-                        <small>Prof. Ana Rodríguez</small>
-                    </div>
-                </div>
-
-                <div class="horario-item">
-                    <div class="horario-dia">Mié</div>
-                    <div class="horario-content">
-                        <strong>10:00 AM - Química</strong>
-                        <small>Prof. Luis Torres</small>
-                    </div>
-                </div>
-
-                <div class="horario-item">
-                    <div class="horario-dia">Jue</div>
-                    <div class="horario-content">
-                        <strong>2:00 PM - Inglés</strong>
-                        <small>Prof. Patricia Gómez</small>
-                    </div>
-                </div>
-
-                <div class="horario-item">
-                    <div class="horario-dia">Vie</div>
-                    <div class="horario-content">
-                        <strong>3:00 PM - Programación</strong>
-                        <small>Prof. Diego Álvarez</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel-title" style="margin-top:24px">Próximas Citas</div>
-            <p class="muted">Asesorías programadas</p>
-
-            <div class="citas-list">
-                <div class="cita-item">
-                    <div class="cita-date">
-                        <span class="day">23</span>
-                        <span class="month">Nov</span>
-                    </div>
-                    <div class="cita-info">
-                        <strong>Asesoría Matemáticas</strong>
-                        <small>Prof. Carlos Méndez</small>
-                        <div class="cita-time">
-                            <i class="ri-time-line"></i> 2:00 PM - 3:00 PM
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cita-item">
-                    <div class="cita-date">
-                        <span class="day">25</span>
-                        <span class="month">Nov</span>
-                    </div>
-                    <div class="cita-info">
-                        <strong>Revisión Proyecto</strong>
-                        <small>Prof. Diego Álvarez</small>
-                        <div class="cita-time">
-                            <i class="ri-time-line"></i> 3:30 PM - 4:30 PM
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button class="btn-primary">Ver Horario Completo</button>
-
-            <div class="tips-card">
-                <h4><i class="ri-lightbulb-line"></i> Consejo</h4>
-                <p>Mantén una comunicación constante con tus profesores. Solicita asesorías cuando tengas dudas y aprovecha sus horarios de atención.</p>
-            </div>
-        </aside>
+       
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

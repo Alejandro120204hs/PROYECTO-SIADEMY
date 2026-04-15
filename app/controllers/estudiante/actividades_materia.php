@@ -63,6 +63,7 @@ $actividades = $actividadModel->obtenerActividadesPorMateria($id_estudiante, $id
 // Calcular estadísticas de actividades
 $total_actividades = count($actividades);
 $pendientes = 0;
+$entregadas = 0;
 $completadas = 0;
 $atrasadas = 0;
 
@@ -70,6 +71,9 @@ foreach ($actividades as $actividad) {
     switch ($actividad['estado_entrega']) {
         case 'Pendiente':
             $pendientes++;
+            break;
+        case 'Entregada':
+            $entregadas++;
             break;
         case 'Calificada':
             $completadas++;

@@ -18,6 +18,10 @@
                 $usuario = $objetoPerfil->mostrarPerfilDocente($id);
                 break;
 
+            case 'Estudiante':
+                $usuario = $objetoPerfil->mostrarPerfilEstudiante($id);
+                break;
+
             case 'superAdmin':
                 $usuario = $objetoPerfil->mostrarPerfilSuperAdmin($id);
                 break;

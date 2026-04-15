@@ -32,8 +32,23 @@ try {
     require_once BASE_PATH . '/app/models/docente/entrega.php';
     $modeloEntrega = new EntregaDocente();
     
-    // Datos del docente
-    $id_docente = $_SESSION['user']['id'];
+    // Resolver ID real del docente
+    $id_docente = $_SESSION['user']['id_docente'] ?? null;
+    if (!$id_docente) {
+        require_once BASE_PATH . '/config/database.php';
+        $db = new Conexion();
+        $conn = $db->getConexion();
+        $stmtDoc = $conn->prepare('SELECT id FROM docente WHERE id_usuario = :id_usuario LIMIT 1');
+        $stmtDoc->bindParam(':id_usuario', $_SESSION['user']['id'], PDO::PARAM_INT);
+        $stmtDoc->execute();
+        $doc = $stmtDoc->fetch(PDO::FETCH_ASSOC);
+        if (!$doc) {
+            http_response_code(403);
+            die('No se encontró el docente asociado al usuario actual');
+        }
+        $id_docente = (int)$doc['id'];
+    }
+
     $id_institucion = $_SESSION['user']['id_institucion'];
     
     // Obtener información del archivo
@@ -45,7 +60,24 @@ try {
     }
     
     // Construir la ruta completa del archivo
-    $rutaCompleta = BASE_PATH . '/public/uploads/' . $archivo['archivo_ruta'];
+    $rutaRelativa = trim((string)($archivo['archivo_ruta'] ?? ''));
+    if ($rutaRelativa === '' && !empty($archivo['archivo'])) {
+        $rutaRelativa = 'public/uploads/entregas/' . ltrim((string)$archivo['archivo'], '/');
+    }
+
+    if ($rutaRelativa === '') {
+        http_response_code(404);
+        die('La entrega no tiene archivo asociado');
+    }
+
+    $rutaNormalizada = str_replace('\\', '/', $rutaRelativa);
+    if (strpos($rutaNormalizada, 'public/uploads/') === 0) {
+        $rutaCompleta = BASE_PATH . '/' . $rutaNormalizada;
+    } elseif (strpos($rutaNormalizada, 'uploads/') === 0) {
+        $rutaCompleta = BASE_PATH . '/public/' . $rutaNormalizada;
+    } else {
+        $rutaCompleta = BASE_PATH . '/public/uploads/' . ltrim($rutaNormalizada, '/');
+    }
     
     // Verificar que el archivo existe físicamente
     if (!file_exists($rutaCompleta)) {
@@ -56,7 +88,11 @@ try {
     // Preparar nombre del archivo para descarga
     $nombreEstudiante = str_replace(' ', '_', $archivo['nombre_estudiante']);
     $tituloActividad = str_replace(' ', '_', $archivo['titulo_actividad']);
-    $nombreDescarga = "{$nombreEstudiante}-{$tituloActividad}.pdf";
+    $extension = strtolower(pathinfo($rutaCompleta, PATHINFO_EXTENSION));
+    if ($extension === '') {
+        $extension = 'pdf';
+    }
+    $nombreDescarga = "{$nombreEstudiante}-{$tituloActividad}.{$extension}";
     
     // Limpiar el buffer de salida
     if (ob_get_level()) {
@@ -64,7 +100,8 @@ try {
     }
     
     // Establecer headers para descarga
-    header('Content-Type: application/pdf');
+    $mime = mime_content_type($rutaCompleta) ?: 'application/octet-stream';
+    header('Content-Type: ' . $mime);
     header('Content-Disposition: attachment; filename="' . $nombreDescarga . '"');
     header('Content-Length: ' . filesize($rutaCompleta));
     header('Cache-Control: must-revalidate');

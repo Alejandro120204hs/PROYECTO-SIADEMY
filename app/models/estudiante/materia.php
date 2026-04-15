@@ -223,6 +223,143 @@ class MateriaEstudiante
     }
 
     /**
+     * Obtener resumen general para panel de calificaciones.
+     *
+     * @param int $id_estudiante ID del estudiante
+     * @param int $id_institucion ID de la institución
+     * @param int $anio Año académico
+     * @return array
+     */
+    public function obtenerResumenCalificaciones($id_estudiante, $id_institucion, $anio)
+    {
+        try {
+            $sql = "SELECT
+                        COUNT(DISTINCT a.id) AS total_materias,
+                        ROUND(AVG(cal.nota), 1) AS promedio_general,
+                        COUNT(DISTINCT act.id) AS total_evaluaciones,
+                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() AND cal.id IS NULL THEN 1 ELSE 0 END) AS pendientes
+                    FROM estudiante e
+                    INNER JOIN matricula m ON m.id_estudiante = e.id
+                    INNER JOIN curso c ON m.id_curso = c.id
+                    INNER JOIN asignatura_curso ac ON ac.id_curso = c.id
+                    INNER JOIN asignatura a ON ac.id_asignatura = a.id
+                    LEFT JOIN actividad act ON act.id_asignatura_curso = ac.id
+                    LEFT JOIN calificacion cal ON cal.id_actividad = act.id AND cal.id_estudiante = e.id
+                    WHERE e.id = :id_estudiante
+                    AND e.id_institucion = :id_institucion
+                    AND m.anio = :anio
+                    AND c.estado = 'Activo'";
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $resumen = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+            return [
+                'total_materias' => (int)($resumen['total_materias'] ?? 0),
+                'promedio_general' => (float)($resumen['promedio_general'] ?? 0),
+                'total_evaluaciones' => (int)($resumen['total_evaluaciones'] ?? 0),
+                'pendientes' => (int)($resumen['pendientes'] ?? 0),
+            ];
+        } catch (PDOException $e) {
+            error_log('Error en obtenerResumenCalificaciones: ' . $e->getMessage());
+            return [
+                'total_materias' => 0,
+                'promedio_general' => 0,
+                'total_evaluaciones' => 0,
+                'pendientes' => 0,
+            ];
+        }
+    }
+
+    /**
+     * Obtener el número del periodo académico activo.
+     *
+     * @param int $id_institucion ID de la institución
+     * @param int $anio Año académico
+     * @return int
+     */
+    public function obtenerPeriodoActualNumero($id_institucion, $anio)
+    {
+        try {
+            $sql = "SELECT numero_periodo
+                    FROM periodos_academicos
+                    WHERE institucion_id = :id_institucion
+                    AND ano_lectivo = :anio
+                    AND activo = 1
+                    LIMIT 1";
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+            $periodo = (int)($fila['numero_periodo'] ?? 1);
+
+            return ($periodo >= 1 && $periodo <= 4) ? $periodo : 1;
+        } catch (PDOException $e) {
+            error_log('Error en obtenerPeriodoActualNumero: ' . $e->getMessage());
+            return 1;
+        }
+    }
+
+    /**
+     * Obtener evaluaciones del estudiante agrupables por materia y periodo.
+     *
+     * @param int $id_estudiante ID del estudiante
+     * @param int $id_institucion ID de la institución
+     * @param int $anio Año académico
+     * @return array
+     */
+    public function obtenerEvaluacionesPorMateriaYPeriodo($id_estudiante, $id_institucion, $anio)
+    {
+        try {
+            $sql = "SELECT
+                        ac.id AS id_asignatura_curso,
+                        a.nombre AS materia,
+                        CONCAT(COALESCE(d.nombres, ''), ' ', COALESCE(d.apellidos, '')) AS docente_nombre,
+                        COALESCE(pa.numero_periodo, 1) AS numero_periodo,
+                        act.titulo AS evaluacion,
+                        act.fecha_entrega,
+                        act.ponderacion,
+                        cal.nota
+                    FROM estudiante e
+                    INNER JOIN matricula m ON m.id_estudiante = e.id
+                    INNER JOIN curso c ON m.id_curso = c.id
+                    INNER JOIN asignatura_curso ac ON ac.id_curso = c.id
+                    INNER JOIN asignatura a ON ac.id_asignatura = a.id
+                    LEFT JOIN docente_asignatura_curso dac ON dac.id_asignatura_curso = ac.id
+                    LEFT JOIN docente d ON dac.id_docente = d.id
+                    LEFT JOIN actividad act ON act.id_asignatura_curso = ac.id
+                    LEFT JOIN calificacion cal ON cal.id_actividad = act.id AND cal.id_estudiante = e.id
+                    LEFT JOIN periodos_academicos pa
+                        ON pa.institucion_id = e.id_institucion
+                        AND pa.ano_lectivo = m.anio
+                        AND act.fecha_entrega BETWEEN pa.fecha_inicio AND pa.fecha_fin
+                    WHERE e.id = :id_estudiante
+                    AND e.id_institucion = :id_institucion
+                    AND m.anio = :anio
+                    AND c.estado = 'Activo'
+                    ORDER BY a.nombre ASC, numero_periodo ASC, act.fecha_entrega ASC";
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Error en obtenerEvaluacionesPorMateriaYPeriodo: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
      * Calcular el estado de la nota según el promedio
      * 
      * @param float|null $promedio Promedio de la materia

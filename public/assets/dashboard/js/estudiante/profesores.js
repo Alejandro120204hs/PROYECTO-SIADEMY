@@ -7,12 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const appGrid = document.getElementById('appGrid');
     const toggleLeft = document.getElementById('toggleLeft');
     const toggleRight = document.getElementById('toggleRight');
+    const hasRightSidebar = !!rightSidebar;
 
     // Cargar estado desde localStorage
     let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
-    let rightVisible = localStorage.getItem('rightSidebarVisible') !== 'false';
+    let rightVisible = hasRightSidebar && localStorage.getItem('rightSidebarVisible') !== 'false';
 
     function updateGridState() {
+        if (!appGrid) return;
         appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
 
         if (!leftVisible && !rightVisible) {
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function toggleLeftSidebar() {
+        if (!leftSidebar) return;
         leftVisible = !leftVisible;
         leftSidebar.classList.toggle('hidden', !leftVisible);
         localStorage.setItem('leftSidebarVisible', leftVisible);
@@ -32,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function toggleRightSidebar() {
+        if (!hasRightSidebar) return;
         rightVisible = !rightVisible;
         rightSidebar.classList.toggle('hidden', !rightVisible);
         localStorage.setItem('rightSidebarVisible', rightVisible);
@@ -43,13 +47,13 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleLeft.addEventListener('click', toggleLeftSidebar);
     }
     
-    if (toggleRight) {
+    if (toggleRight && hasRightSidebar) {
         toggleRight.addEventListener('click', toggleRightSidebar);
     }
 
     // Aplicar estado inicial
     if (!leftVisible && leftSidebar) leftSidebar.classList.add('hidden');
-    if (!rightVisible && rightSidebar) rightSidebar.classList.add('hidden');
+    if (hasRightSidebar && !rightVisible) rightSidebar.classList.add('hidden');
     updateGridState();
 
     // ===========================================

@@ -7,6 +7,7 @@ $(document).ready(function() {
   inicializarSidebar();
   inicializarModales();
   inicializarToggleVista(); // ← AGREGAR ESTO
+  inicializarEditar();
 
   // Restaurar vista guardada (opcional)
   const vistaGuardada = localStorage.getItem('vistaActividades');
@@ -303,3 +304,40 @@ $(document).on('click', '.btn-ver-entregas', function() {
   const basePath = docenteIndex >= 0 ? pathName.substring(0, docenteIndex) : '';
   window.location.href = `${basePath}/docente/ver-entregas?id_actividad=${idActividad}`;
 });
+
+// ===== EDITAR ACTIVIDAD =====
+function inicializarEditar() {
+  $(document).on('click', '.btn-editar-actividad', function() {
+    const $btn = $(this);
+    const tipoActividad = ($btn.data('tipo') || '').toString().trim();
+    const estadoActividad = ($btn.data('estado-act') || '').toString().trim().toLowerCase();
+    const archivoActual = ($btn.data('archivo') || '').toString().trim();
+
+    $('#editId').val($btn.data('id'));
+    $('#editTitulo').val($btn.data('titulo'));
+    $('#editDescripcion').val($btn.data('descripcion'));
+    $('#editPonderacion').val($btn.data('ponderacion'));
+    $('#editFechaEntrega').val($btn.data('fecha'));
+
+    // Seleccionar tipo aunque el valor venga con distinta capitalizacion
+    let tipoEncontrado = false;
+    $('#editTipo option').each(function() {
+      if ($(this).val().toString().toLowerCase() === tipoActividad.toLowerCase()) {
+        $('#editTipo').val($(this).val());
+        tipoEncontrado = true;
+        return false;
+      }
+      return true;
+    });
+    if (!tipoEncontrado) {
+      $('#editTipo').val('Tarea');
+    }
+
+    $('#editEstado').val(estadoActividad === 'cerrada' ? 'cerrada' : 'activa');
+    $('#editArchivoActual').val(archivoActual);
+    $('#editArchivoActividad').val('');
+    $('#editArchivoNombre').text(`Archivo actual: ${archivoActual || 'ninguno'}`);
+
+    $('#modalEditarActividad').modal('show');
+  });
+}

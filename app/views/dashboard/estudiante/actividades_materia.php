@@ -1,3 +1,8 @@
+<?php
+    require_once BASE_PATH . '/app/controllers/perfil.php';
+    $id = $_SESSION['user']['id'] ?? 0;
+    $usuario = mostrarPerfil($id);
+?>
 <!doctype html>
 <html lang="es">
 
@@ -14,7 +19,7 @@
 </head>
 
 <body>
-    <div class="app" id="appGrid">
+    <div class="app hide-right" id="appGrid">
         <!-- LEFT SIDEBAR -->
         <?php include_once __DIR__ . '/../../layouts/sidebar_estudiante.php' ?>
 
@@ -39,9 +44,7 @@
                     <input type="text" id="searchInput" placeholder="Buscar actividades...">
                 </div>
 
-                <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-                    <i class="ri-layout-right-2-line"></i>
-                </button>
+                <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
             </div>
 
             <!-- HEADER INFO MATERIA -->
@@ -117,13 +120,16 @@
                     <button class="filter-btn active" data-filter="todas">
                         <i class="ri-apps-line"></i> Todas
                     </button>
-                    <button class="filter-btn" data-filter="pendientes">
+                    <button class="filter-btn" data-filter="pendiente">
                         <i class="ri-time-line"></i> Pendientes (<?= $pendientes ?>)
                     </button>
-                    <button class="filter-btn" data-filter="completadas">
+                    <button class="filter-btn" data-filter="entregada">
+                        <i class="ri-upload-cloud-line"></i> Entregadas (<?= $entregadas ?>)
+                    </button>
+                    <button class="filter-btn" data-filter="calificada">
                         <i class="ri-checkbox-circle-line"></i> Completadas (<?= $completadas ?>)
                     </button>
-                    <button class="filter-btn" data-filter="atrasadas">
+                    <button class="filter-btn" data-filter="vencida">
                         <i class="ri-error-warning-line"></i> Atrasadas (<?= $atrasadas ?>)
                     </button>
                 </div>
@@ -148,6 +154,7 @@
                 <?php else: ?>
                     <?php foreach ($actividades as $actividad): 
                         $estado_clase = strtolower($actividad['estado_entrega']);
+                        $estado_css = $estado_clase === 'vencida' ? 'atrasada' : $estado_clase;
                         $es_urgente = $actividad['dias_restantes'] <= 1 && $estado_clase === 'pendiente';
                         
                         // Iconos por tipo de actividad
@@ -175,21 +182,25 @@
                         $color = $colores_tipo[$actividad['tipo']] ?? '#6b7280';
                     ?>
                     
-                    <div class="actividad-card <?= $estado_clase ?>" 
+                    <div class="actividad-card <?= $estado_css ?>" 
                          data-status="<?= $estado_clase ?>" 
                          data-tipo="<?= strtolower($actividad['tipo']) ?>" 
                          data-fecha="<?= $actividad['fecha_entrega'] ?>">
                         
-                        <div class="actividad-priority <?= $es_urgente ? 'urgent' : ($estado_clase === 'atrasada' ? 'urgent' : ($estado_clase === 'pendiente' ? 'high' : 'low')) ?>"></div>
+                        <div class="actividad-priority <?= $es_urgente ? 'urgent' : ($estado_clase === 'vencida' ? 'urgent' : ($estado_clase === 'pendiente' ? 'high' : 'low')) ?>"></div>
                         
                         <div class="actividad-header">
                             <div class="actividad-icon" style="background: linear-gradient(135deg, <?= $color ?> 0%, <?= $color ?>dd 100%);">
                                 <i class="<?= $icono ?>"></i>
                             </div>
                             <div class="actividad-info">
-                                <?php if ($estado_clase === 'atrasada'): ?>
+                                <?php if ($estado_clase === 'vencida'): ?>
                                     <div class="actividad-badge atrasada">
                                         <i class="ri-error-warning-line"></i> Atrasada
+                                    </div>
+                                <?php elseif ($estado_clase === 'entregada'): ?>
+                                    <div class="actividad-badge completada">
+                                        <i class="ri-upload-cloud-line"></i> Entregada
                                     </div>
                                 <?php elseif ($estado_clase === 'calificada'): ?>
                                     <div class="actividad-badge completada">
@@ -213,9 +224,13 @@
                                     <div class="progress-circle complete">
                                         <span><?= number_format($actividad['nota'], 1) ?></span>
                                     </div>
-                                <?php elseif ($estado_clase === 'atrasada'): ?>
+                                <?php elseif ($estado_clase === 'vencida'): ?>
                                     <div class="progress-circle urgent">
                                         <span>0%</span>
+                                    </div>
+                                <?php elseif ($estado_clase === 'entregada'): ?>
+                                    <div class="progress-circle complete">
+                                        <span><i class="ri-check-line"></i></span>
                                     </div>
                                 <?php else: ?>
                                     <div class="progress-circle pending">
@@ -240,7 +255,12 @@
                                     <i class="ri-thumb-up-line"></i>
                                     <span>Calificación: <strong><?= number_format($actividad['nota'], 1) ?>/5.0</strong></span>
                                 </div>
-                            <?php elseif ($estado_clase === 'atrasada'): ?>
+                            <?php elseif ($estado_clase === 'entregada'): ?>
+                                <div class="meta-item success">
+                                    <i class="ri-upload-cloud-line"></i>
+                                    <span>Entregada: <strong><?= !empty($actividad['fecha_entrega_estudiante']) ? date('d M, Y H:i', strtotime($actividad['fecha_entrega_estudiante'])) : 'Registrada' ?></strong></span>
+                                </div>
+                            <?php elseif ($estado_clase === 'vencida'): ?>
                                 <div class="meta-item urgent">
                                     <i class="ri-time-line"></i>
                                     <span>Venció hace <?= abs($actividad['dias_restantes']) ?> día(s)</span>
@@ -259,16 +279,15 @@
                         </div>
 
                         <div class="actividad-actions">
-                            <?php if ($estado_clase === 'calificada'): ?>
-                                <button class="btn-actividad secondary">
-                                    <i class="ri-eye-line"></i> Ver Retroalimentación
-                                </button>
-                                <?php if ($actividad['observacion']): ?>
-                                <button class="btn-actividad secondary" onclick="alert('<?= htmlspecialchars($actividad['observacion']) ?>')">
-                                    <i class="ri-message-3-line"></i> Ver Comentario
-                                </button>
-                                <?php endif; ?>
-                            <?php else: ?>
+                            <?php
+                                $archivo_docente = trim((string)($actividad['archivo'] ?? ''));
+                                $archivo_docente_seguro = $archivo_docente !== '' ? basename($archivo_docente) : '';
+                                $archivo_docente_url = $archivo_docente_seguro !== ''
+                                    ? BASE_URL . '/public/uploads/actividades/' . rawurlencode($archivo_docente_seguro)
+                                    : '';
+                            ?>
+
+                            <?php if ($estado_clase !== 'calificada'): ?>
                                 <button class="btn-actividad primary" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#modalEntregarTarea"
@@ -277,10 +296,24 @@
                                         data-tipo="<?= htmlspecialchars($actividad['tipo']) ?>">
                                     <i class="ri-upload-line"></i> Entregar Tarea
                                 </button>
-                                <button class="btn-actividad secondary">
-                                    <i class="ri-eye-line"></i> Ver Detalles
-                                </button>
                             <?php endif; ?>
+
+                            <button class="btn-actividad secondary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalDetalleActividad"
+                                    data-detalle-titulo="<?= htmlspecialchars($actividad['titulo'], ENT_QUOTES, 'UTF-8') ?>"
+                                    data-detalle-descripcion="<?= htmlspecialchars($actividad['descripcion'], ENT_QUOTES, 'UTF-8') ?>"
+                                    data-detalle-tipo="<?= htmlspecialchars((string)($actividad['tipo'] ?: 'Sin tipo definido'), ENT_QUOTES, 'UTF-8') ?>"
+                                    data-detalle-fecha="<?= date('d M, Y', strtotime($actividad['fecha_entrega'])) ?>"
+                                    data-detalle-ponderacion="<?= (float)$actividad['ponderacion'] ?>"
+                                    data-detalle-docente="<?= htmlspecialchars($actividad['nombre_docente'], ENT_QUOTES, 'UTF-8') ?>"
+                                    data-detalle-estado="<?= htmlspecialchars($actividad['estado_entrega'], ENT_QUOTES, 'UTF-8') ?>"
+                                    data-detalle-nota="<?= $actividad['nota'] !== null ? number_format((float)$actividad['nota'], 1) : '' ?>"
+                                    data-detalle-observacion="<?= htmlspecialchars((string)($actividad['observacion'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
+                                    data-detalle-archivo-url="<?= htmlspecialchars($archivo_docente_url, ENT_QUOTES, 'UTF-8') ?>"
+                                    data-detalle-archivo-nombre="<?= htmlspecialchars($archivo_docente_seguro, ENT_QUOTES, 'UTF-8') ?>">
+                                <i class="ri-eye-line"></i> Ver Detalles
+                            </button>
                         </div>
                     </div>
                     
@@ -290,95 +323,85 @@
             </div>
         </main>
 
-        <!-- RIGHT SIDEBAR -->
-        <aside class="rightbar" id="rightSidebar">
-            <div class="user">
-                <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-                <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-                <div class="avatar" title="Estudiante">E</div>
-            </div>
 
-            <div class="panel-title">Información del Docente</div>
-            <p class="muted">Contacto</p>
+    </div>
 
-            <div class="profesor-info-card">
-                <div class="profesor-avatar-large">
-                    <?= strtoupper(substr($materia_info['docente_nombres'], 0, 1) . substr($materia_info['docente_apellidos'], 0, 1)) ?>
+    <!-- MODAL DETALLE ACTIVIDAD -->
+    <div class="modal fade" id="modalDetalleActividad" tabindex="-1" aria-labelledby="modalDetalleActividadLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background: #1a1d29; border: 1px solid #2a2d3a; border-radius: 16px;">
+                <div class="modal-header" style="border-bottom: 1px solid #2a2d3a; padding: 24px;">
+                    <h5 class="modal-title" id="modalDetalleActividadLabel" style="color: #fff; font-weight: 600;">
+                        <i class="ri-file-search-line" style="color: #3b82f6;"></i> Detalle de la Actividad
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
                 </div>
-                <h4 style="margin-top: 12px; color: #fff;">
-                    Prof. <?= htmlspecialchars($materia_info['docente_nombres'] . ' ' . $materia_info['docente_apellidos']) ?>
-                </h4>
-                <p style="color: #97a1b6; font-size: 14px;"><?= htmlspecialchars($materia_info['docente_correo']) ?></p>
-            </div>
+                <div class="modal-body" style="padding: 24px; color: #dbe2f2;">
+                    <h4 id="detalleTitulo" style="color: #fff; margin-bottom: 12px;"></h4>
+                    <p id="detalleDescripcion" style="color: #97a1b6; margin-bottom: 20px;"></p>
 
-            <div class="panel-title" style="margin-top:24px">Progreso en la Materia</div>
-            <p class="muted">Tu rendimiento</p>
-
-            <?php if ($total_actividades > 0): ?>
-            <div class="progress-card">
-                <div class="progress-header">
-                    <span>Actividades completadas</span>
-                    <strong><?= $completadas ?>/<?= $total_actividades ?></strong>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" style="width: <?= round(($completadas / $total_actividades) * 100) ?>%"></div>
-                </div>
-                <small class="progress-label"><?= round(($completadas / $total_actividades) * 100) ?>% completado</small>
-            </div>
-            <?php endif; ?>
-
-            <?php if ($materia_info['promedio']): ?>
-            <div class="stat-card-right success">
-                <div class="stat-icon-right">
-                    <i class="ri-medal-line"></i>
-                </div>
-                <div class="stat-content-right">
-                    <h3><?= number_format($materia_info['promedio'], 1) ?></h3>
-                    <p>Promedio Actual</p>
-                </div>
-            </div>
-            <?php endif; ?>
-
-            <div class="panel-title" style="margin-top:24px">Recordatorios</div>
-            <p class="muted">Próximas entregas</p>
-
-            <div class="reminder-list">
-                <?php 
-                $proximas = array_filter($actividades, function($act) {
-                    return $act['estado_entrega'] === 'Pendiente' && $act['dias_restantes'] <= 7;
-                });
-                $proximas = array_slice($proximas, 0, 3);
-                ?>
-                
-                <?php if (empty($proximas)): ?>
-                    <div style="text-align: center; padding: 20px; color: #97a1b6;">
-                        <i class="ri-checkbox-circle-line" style="font-size: 32px; opacity: 0.5;"></i>
-                        <p style="margin-top: 12px; font-size: 14px;">¡Estás al día!</p>
-                    </div>
-                <?php else: ?>
-                    <?php foreach ($proximas as $proxima): ?>
-                    <div class="reminder-item <?= $proxima['dias_restantes'] <= 1 ? 'urgent' : ($proxima['dias_restantes'] <= 3 ? 'warning' : 'info') ?>">
-                        <div class="reminder-icon <?= $proxima['dias_restantes'] <= 1 ? 'urgent' : ($proxima['dias_restantes'] <= 3 ? 'warning' : 'info') ?>">
-                            <i class="<?= $proxima['dias_restantes'] <= 1 ? 'ri-alarm-warning-line' : 'ri-time-line' ?>"></i>
+                    <div class="row g-3" style="margin-bottom: 18px;">
+                        <div class="col-md-6">
+                            <div style="background: #252836; border-radius: 10px; padding: 12px;">
+                                <small style="color:#97a1b6; display:block;">Tipo</small>
+                                <strong id="detalleTipo" style="color:#fff;"></strong>
+                            </div>
                         </div>
-                        <div class="reminder-content">
-                            <strong><?= htmlspecialchars($proxima['titulo']) ?></strong>
-                            <small><?= $proxima['dias_restantes'] == 0 ? 'Vence hoy' : ($proxima['dias_restantes'] == 1 ? 'Vence mañana' : 'En ' . $proxima['dias_restantes'] . ' días') ?></small>
+                        <div class="col-md-6">
+                            <div style="background: #252836; border-radius: 10px; padding: 12px;">
+                                <small style="color:#97a1b6; display:block;">Fecha de Entrega</small>
+                                <strong id="detalleFecha" style="color:#fff;"></strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="background: #252836; border-radius: 10px; padding: 12px;">
+                                <small style="color:#97a1b6; display:block;">Ponderación</small>
+                                <strong id="detallePonderacion" style="color:#fff;"></strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="background: #252836; border-radius: 10px; padding: 12px;">
+                                <small style="color:#97a1b6; display:block;">Docente</small>
+                                <strong id="detalleDocente" style="color:#fff;"></strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="background: #252836; border-radius: 10px; padding: 12px;">
+                                <small style="color:#97a1b6; display:block;">Estado</small>
+                                <strong id="detalleEstado" style="color:#fff;"></strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="background: #252836; border-radius: 10px; padding: 12px;">
+                                <small style="color:#97a1b6; display:block;">Nota</small>
+                                <strong id="detalleNota" style="color:#fff;">--</strong>
+                            </div>
                         </div>
                     </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
 
-            <button class="btn-primary" onclick="window.location.href='<?= BASE_URL ?>/estudiante-panel-materias'">
-                <i class="ri-arrow-left-line"></i> Volver a Materias
-            </button>
+                    <div id="detalleObservacionWrap" style="display:none; margin-bottom: 16px; background: #252836; border-radius: 10px; padding: 12px; border-left: 3px solid #3b82f6;">
+                        <small style="color:#97a1b6; display:block;">Retroalimentación del Docente</small>
+                        <div id="detalleObservacion" style="color:#fff; margin-top: 6px;"></div>
+                    </div>
 
-            <div class="tips-card">
-                <h4><i class="ri-lightbulb-line"></i> Consejo</h4>
-                <p>Organiza tu tiempo y prioriza las actividades con fechas más próximas. No dejes todo para el último momento.</p>
+                    <div style="background: #252836; border-radius: 10px; padding: 14px; border-left: 3px solid #10b981;">
+                        <small style="color:#97a1b6; display:block; margin-bottom: 8px;">Archivo Adjuntado por el Docente</small>
+                        <a id="detalleArchivoLink" href="#" target="_blank" rel="noopener" style="display:none; color:#10b981; text-decoration:none; font-weight:600;">
+                            <i class="ri-download-2-line"></i> <span id="detalleArchivoNombre"></span>
+                        </a>
+                        <div id="detalleArchivoVacio" style="color:#97a1b6;">
+                            <i class="ri-information-line"></i> El docente no adjuntó archivo en esta actividad.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #2a2d3a; padding: 16px 24px;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            style="background: #2a2d3a; border: none; padding: 10px 20px; border-radius: 8px; color: #97a1b6;">
+                        Cerrar
+                    </button>
+                </div>
             </div>
-        </aside>
+        </div>
     </div>
 
     <!-- MODAL ENTREGAR TAREA -->
@@ -470,6 +493,7 @@
         const modalEntregarTarea = document.getElementById('modalEntregarTarea');
         modalEntregarTarea.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
+            if (!button) return;
             const idActividad = button.getAttribute('data-id-actividad');
             const titulo = button.getAttribute('data-titulo');
             const tipo = button.getAttribute('data-tipo');
@@ -568,6 +592,61 @@
             btnEntregar.disabled = true;
             document.getElementById('observaciones').value = '';
         });
+
+        // Modal detalle de actividad
+        const modalDetalleActividad = document.getElementById('modalDetalleActividad');
+        if (modalDetalleActividad) {
+            modalDetalleActividad.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                if (!button) return;
+
+                const titulo = button.getAttribute('data-detalle-titulo') || 'Actividad';
+                const descripcion = button.getAttribute('data-detalle-descripcion') || 'Sin descripcion';
+                const tipo = button.getAttribute('data-detalle-tipo') || '-';
+                const fecha = button.getAttribute('data-detalle-fecha') || '-';
+                const ponderacion = button.getAttribute('data-detalle-ponderacion') || '0';
+                const docente = button.getAttribute('data-detalle-docente') || '-';
+                const estado = button.getAttribute('data-detalle-estado') || '-';
+                const nota = button.getAttribute('data-detalle-nota') || '';
+                const observacion = button.getAttribute('data-detalle-observacion') || '';
+                const archivoUrl = button.getAttribute('data-detalle-archivo-url') || '';
+                const archivoNombre = button.getAttribute('data-detalle-archivo-nombre') || '';
+
+                document.getElementById('detalleTitulo').textContent = titulo;
+                document.getElementById('detalleDescripcion').textContent = descripcion;
+                document.getElementById('detalleTipo').textContent = tipo;
+                document.getElementById('detalleFecha').textContent = fecha;
+                document.getElementById('detallePonderacion').textContent = `${ponderacion}%`;
+                document.getElementById('detalleDocente').textContent = docente;
+                document.getElementById('detalleEstado').textContent = estado;
+                document.getElementById('detalleNota').textContent = nota ? `${nota}/5.0` : '--';
+
+                const obsWrap = document.getElementById('detalleObservacionWrap');
+                const obsText = document.getElementById('detalleObservacion');
+                if (observacion) {
+                    obsText.textContent = observacion;
+                    obsWrap.style.display = 'block';
+                } else {
+                    obsText.textContent = '';
+                    obsWrap.style.display = 'none';
+                }
+
+                const archivoLink = document.getElementById('detalleArchivoLink');
+                const archivoNombreSpan = document.getElementById('detalleArchivoNombre');
+                const archivoVacio = document.getElementById('detalleArchivoVacio');
+                if (archivoUrl && archivoNombre) {
+                    archivoLink.href = archivoUrl;
+                    archivoNombreSpan.textContent = archivoNombre;
+                    archivoLink.style.display = 'inline-flex';
+                    archivoVacio.style.display = 'none';
+                } else {
+                    archivoLink.href = '#';
+                    archivoNombreSpan.textContent = '';
+                    archivoLink.style.display = 'none';
+                    archivoVacio.style.display = 'block';
+                }
+            });
+        }
     </script>
 </body>
 

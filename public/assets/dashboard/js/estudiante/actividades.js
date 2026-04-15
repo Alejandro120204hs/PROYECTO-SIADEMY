@@ -6,10 +6,11 @@ const rightSidebar = document.getElementById('rightSidebar');
 const appGrid = document.getElementById('appGrid');
 const toggleLeft = document.getElementById('toggleLeft');
 const toggleRight = document.getElementById('toggleRight');
+const hasRightSidebar = !!rightSidebar;
 
 // Estado inicial de los sidebars
 let leftVisible = true;
-let rightVisible = true;
+let rightVisible = hasRightSidebar;
 
 function updateGridState() {
     appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
@@ -30,6 +31,7 @@ function toggleLeftSidebar() {
 }
 
 function toggleRightSidebar() {
+    if (!hasRightSidebar) return;
     rightVisible = !rightVisible;
     rightSidebar.classList.toggle('hidden', !rightVisible);
     updateGridState();
@@ -147,10 +149,15 @@ sortSelect?.addEventListener('change', function () {
                 const fechaB = new Date(b.dataset.fecha);
                 return fechaA - fechaB;
 
-            case 'materia':
-                const materiaA = a.dataset.materia.toLowerCase();
-                const materiaB = b.dataset.materia.toLowerCase();
-                return materiaA.localeCompare(materiaB);
+            case 'tipo':
+                const tipoA = (a.dataset.tipo || '').toLowerCase();
+                const tipoB = (b.dataset.tipo || '').toLowerCase();
+                return tipoA.localeCompare(tipoB);
+
+            case 'ponderacion':
+                const ponderacionA = parseFloat(a.querySelector('.meta-item:last-child span')?.textContent.replace(/[^\d.]/g, '') || '0');
+                const ponderacionB = parseFloat(b.querySelector('.meta-item:last-child span')?.textContent.replace(/[^\d.]/g, '') || '0');
+                return ponderacionB - ponderacionA;
 
             case 'prioridad':
                 const getPriority = (card) => {
@@ -187,33 +194,7 @@ sortSelect?.addEventListener('change', function () {
 // ===========================================
 // ACTIVIDAD CARD ACTIONS
 // ===========================================
-document.querySelectorAll('.btn-actividad.primary').forEach(btn => {
-    btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        const card = this.closest('.actividad-card');
-        const actividad = card.querySelector('.actividad-title')?.textContent;
-        const status = card.getAttribute('data-status');
-
-        console.log('Acción principal:', actividad);
-
-        if (status === 'completada') {
-            alert(`Ver retroalimentación de: ${actividad}`);
-        } else {
-            alert(`Entregar/Continuar: ${actividad}`);
-        }
-    });
-});
-
-document.querySelectorAll('.btn-actividad.secondary').forEach(btn => {
-    btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        const card = this.closest('.actividad-card');
-        const actividad = card.querySelector('.actividad-title')?.textContent;
-
-        console.log('Ver detalles de:', actividad);
-        alert(`Ver detalles de: ${actividad}`);
-    });
-});
+// Las acciones principales (entregar/ver detalle) se manejan con modales Bootstrap en la vista.
 
 // ===========================================
 // CALENDAR EVENTS (Right Sidebar)
@@ -243,9 +224,9 @@ document.querySelectorAll('.reminder-item').forEach(item => {
 function updateStats() {
     const stats = {
         total: actividadCards.length,
-        pendientes: document.querySelectorAll('.actividad-card[data-status="pendientes"]').length,
-        completadas: document.querySelectorAll('.actividad-card[data-status="completadas"]').length,
-        atrasadas: document.querySelectorAll('.actividad-card[data-status="atrasadas"]').length
+        pendientes: document.querySelectorAll('.actividad-card[data-status="pendiente"]').length,
+        completadas: document.querySelectorAll('.actividad-card[data-status="calificada"]').length,
+        atrasadas: document.querySelectorAll('.actividad-card[data-status="vencida"]').length
     };
 
     const statElements = {

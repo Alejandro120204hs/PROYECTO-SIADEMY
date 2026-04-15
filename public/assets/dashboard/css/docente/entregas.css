@@ -504,3 +504,230 @@ h1, h2, h3, h4, h5, h6 {
         min-width: 900px;
     }
 }
+
+/* ===========================================
+   UI Refresh - Entregas Docente (Consistencia)
+   =========================================== */
+
+.main,
+.main * {
+    font-family: 'Poppins', 'Open Sans', sans-serif;
+}
+
+.actividad-entregas-header {
+    background: linear-gradient(135deg, rgba(29, 38, 84, 0.95) 0%, rgba(38, 43, 68, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 16px 42px rgba(6, 10, 30, 0.35);
+}
+
+.actividad-entregas-header h1 {
+    font-size: clamp(28px, 3vw, 46px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+}
+
+.actividad-entregas-header p {
+    font-size: 16px;
+    color: #9daccc;
+}
+
+.actividad-meta-info span {
+    color: #b8c3df;
+    font-size: 14px;
+}
+
+.actividad-meta-info span i {
+    color: #9eb2ff;
+}
+
+.entregas-stats-grid {
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+    gap: 22px;
+}
+
+.stat-card-entrega {
+    background: linear-gradient(145deg, rgba(31, 37, 65, 0.98), rgba(35, 39, 59, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    box-shadow: 0 14px 34px rgba(8, 12, 33, 0.35);
+}
+
+.stat-card-entrega:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(10, 14, 38, 0.4);
+    border-color: rgba(164, 177, 255, 0.5);
+}
+
+.stat-card-entrega .stat-content h3 {
+    font-size: clamp(26px, 2.2vw, 40px);
+    line-height: 1;
+}
+
+.stat-card-entrega .stat-content p {
+    color: #bdc8e4;
+    font-size: 14px;
+}
+
+.entregas-filters {
+    margin-bottom: 28px;
+}
+
+.filter-btn-entrega {
+    background: #1b223f;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    color: #c7d2ef;
+    border-radius: 12px;
+    min-height: 44px;
+    padding: 10px 20px;
+    font-weight: 500;
+}
+
+.filter-btn-entrega:hover {
+    background: #20294b;
+    border-color: rgba(164, 177, 255, 0.6);
+    color: #fff;
+}
+
+.filter-btn-entrega.active {
+    background: linear-gradient(135deg, #6157ff 0%, #4f46e5 100%);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.36);
+}
+
+.search-box-entrega input {
+    min-height: 44px;
+    border-radius: 12px;
+    background: #1b223f;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-box-entrega input::placeholder {
+    color: #9aa8c8;
+}
+
+.search-box-entrega input:focus {
+    background: #1f294b;
+    border-color: rgba(164, 177, 255, 0.6);
+}
+
+.entregas-table-container {
+    background: linear-gradient(160deg, rgba(27, 35, 66, 0.98) 0%, rgba(24, 31, 58, 0.98) 100%);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 18px 44px rgba(8, 12, 34, 0.38);
+}
+
+.entregas-table thead {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.entregas-table thead th {
+    font-size: 12px;
+    color: #9eabca;
+    letter-spacing: 0.08em;
+}
+
+.entregas-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.entregas-table tbody tr:hover {
+    background: rgba(79, 70, 229, 0.08);
+}
+
+.entregas-table tbody td {
+    color: #e8edff;
+}
+
+.estudiante-avatar {
+    width: 48px;
+    height: 48px;
+    border: 2px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 8px 18px rgba(14, 17, 43, 0.45);
+}
+
+.estudiante-info strong {
+    font-size: 15px;
+    color: #f5f7ff;
+}
+
+.estudiante-info small {
+    color: #a9b6d6;
+}
+
+.badge-estado,
+.badge-puntualidad {
+    border-radius: 999px;
+}
+
+.nota-display {
+    border-radius: 999px;
+    padding: 6px 16px;
+    background: linear-gradient(135deg, #ffb020, #f59e0b);
+}
+
+.acciones-btn-group {
+    gap: 10px;
+}
+
+.btn-accion-entrega {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #202948;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #b8c4e6;
+}
+
+.btn-accion-entrega:hover {
+    transform: translateY(-2px);
+}
+
+#modalCalificar .modal-content {
+    border: 1px solid rgba(255, 255, 255, 0.13) !important;
+    box-shadow: 0 24px 54px rgba(5, 9, 28, 0.6);
+}
+
+#modalCalificar .form-control {
+    background: #1f2643 !important;
+    border: 1px solid rgba(255, 255, 255, 0.11) !important;
+}
+
+#modalCalificar .form-control:focus {
+    border-color: rgba(164, 177, 255, 0.7) !important;
+    box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.2) !important;
+}
+
+@media (max-width: 1100px) {
+    .entregas-stats-grid {
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .actividad-header-content {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .actividad-entregas-header {
+        padding: 20px;
+    }
+
+    .entregas-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-buttons {
+        width: 100%;
+    }
+
+    .filter-btn-entrega {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .entregas-table {
+        min-width: 940px;
+    }
+}
