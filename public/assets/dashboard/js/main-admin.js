@@ -70,8 +70,35 @@ updateGridState();
 // ========================================
 // GRÁFICO (solo si existe)
 // ========================================
+const adminDashboardData = (typeof window !== 'undefined' && window.adminDashboardData)
+  ? window.adminDashboardData
+  : {};
+
 const ctx = document.getElementById('lineChart');
 if (ctx) {
+  const defaultMonths = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  const chartData = adminDashboardData.chart || {};
+  const totalsData = adminDashboardData.totals || {};
+  const labels = Array.isArray(chartData.labels) && chartData.labels.length === 12 ? chartData.labels : defaultMonths;
+  const currentSeries = Array.isArray(chartData.currentSeries) && chartData.currentSeries.length === 12
+    ? chartData.currentSeries
+    : new Array(12).fill(0);
+  const previousSeries = Array.isArray(chartData.previousSeries) && chartData.previousSeries.length === 12
+    ? chartData.previousSeries
+    : new Array(12).fill(0);
+
+  const weekTotalEl = document.getElementById('weekTotal');
+  const lastWeekTotalEl = document.getElementById('lastWeekTotal');
+  const numberFormatter = new Intl.NumberFormat('es-CO');
+
+  if (weekTotalEl && Number.isFinite(Number(totalsData.currentWeek))) {
+    weekTotalEl.textContent = numberFormatter.format(Number(totalsData.currentWeek));
+  }
+
+  if (lastWeekTotalEl && Number.isFinite(Number(totalsData.previousWeek))) {
+    lastWeekTotalEl.textContent = numberFormatter.format(Number(totalsData.previousWeek));
+  }
+
     const gradient1 = ctx.getContext('2d').createLinearGradient(0, 0, 0, 320);
     gradient1.addColorStop(0, 'rgba(255,107,107,.35)');
     gradient1.addColorStop(1, 'rgba(255,107,107,0)');
@@ -81,10 +108,10 @@ if (ctx) {
     gradient2.addColorStop(1, 'rgba(255,176,32,0)');
 
     const data = {
-        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+      labels,
         datasets: [{
-            label: 'Esta semana',
-            data: [20, 35, 55, 25, 15, 48, 62, 30, 22, 70, 85, 58],
+        label: `Eventos ${chartData.currentYear || 'Año actual'}`,
+        data: currentSeries,
             borderColor: '#ff6b6b',
             backgroundColor: gradient1,
             borderWidth: 3,
@@ -93,8 +120,8 @@ if (ctx) {
             tension: .45,
             fill: true
         }, {
-            label: 'La semana pasada',
-            data: [5, 28, 90, 12, 10, 40, 60, 35, 45, 68, 70, 60],
+            label: `Eventos ${chartData.previousYear || 'Año anterior'}`,
+            data: previousSeries,
             borderColor: '#ffb020',
             backgroundColor: gradient2,
             borderWidth: 3,
@@ -135,6 +162,194 @@ if (ctx) {
         }
     });
 }
+
+    // ========================================
+    // CALENDARIO ACADÉMICO - DASHBOARD ADMIN
+    // ========================================
+    const dashboardCalendarGrid = document.getElementById('calendarGrid');
+    if (dashboardCalendarGrid) {
+      const calendarEvents = Array.isArray(adminDashboardData?.calendar?.events)
+        ? adminDashboardData.calendar.events
+        : [];
+      const monthLabelElement = document.getElementById('calendarMonthLabel');
+      const dayEventsModalEl = document.getElementById('adminCalendarDayModal');
+      const dayEventsModalTitle = document.getElementById('adminCalendarDayModalLabel');
+      const dayEventsModalBody = document.getElementById('adminCalendarDayModalBody');
+      const prevMonthButton = document.getElementById('prevMonth');
+      const nextMonthButton = document.getElementById('nextMonth');
+      const dayHeaders = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+      const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+      let currentDate = new Date();
+      let currentMonth = currentDate.getMonth();
+      let currentYear = currentDate.getFullYear();
+
+      function escapeHtml(value) {
+        return String(value ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      const eventsByDate = calendarEvents.reduce((acc, eventItem) => {
+        const dateKey = String(eventItem?.date || '').slice(0, 10);
+        if (!dateKey) return acc;
+
+        if (!acc[dateKey]) acc[dateKey] = [];
+        acc[dateKey].push({
+          title: String(eventItem?.title || 'Evento académico'),
+          type: String(eventItem?.type || 'evento'),
+          timeStart: String(eventItem?.timeStart || ''),
+          timeEnd: String(eventItem?.timeEnd || ''),
+          location: String(eventItem?.location || '')
+        });
+        return acc;
+      }, {});
+
+      function toDisplayType(typeValue) {
+        const normalized = String(typeValue || '').trim();
+        if (!normalized) return 'Evento';
+        return normalized.charAt(0).toUpperCase() + normalized.slice(1).toLowerCase();
+      }
+
+      function getTypeIcon(typeValue) {
+        const type = String(typeValue || '').toLowerCase();
+        const iconMap = {
+          reuniones: 'ri-user-voice-line',
+          meeting: 'ri-user-voice-line',
+          meetings: 'ri-user-voice-line',
+          examen: 'ri-file-edit-line',
+          exam: 'ri-file-edit-line',
+          exams: 'ri-file-edit-line',
+          actividad: 'ri-basketball-line',
+          activities: 'ri-basketball-line',
+          taller: 'ri-briefcase-line',
+          conferencia: 'ri-presentation-line'
+        };
+
+        return iconMap[type] || 'ri-calendar-event-line';
+      }
+
+      function renderDayEvents(dateString) {
+        if (!dayEventsModalEl || !dayEventsModalTitle || !dayEventsModalBody) return;
+
+        const events = eventsByDate[dateString] || [];
+        const [year, month, day] = dateString.split('-');
+        dayEventsModalTitle.textContent = `Eventos del ${day}/${month}/${year}`;
+
+        if (events.length === 0) {
+          dayEventsModalBody.innerHTML =
+            '<div class="calendar-empty-day">'
+            + '<i class="ri-calendar-line" style="font-size:24px;"></i><br>No hay eventos para este día.</div>';
+
+          if (window.bootstrap && window.bootstrap.Modal) {
+            window.bootstrap.Modal.getOrCreateInstance(dayEventsModalEl).show();
+          }
+          return;
+        }
+
+        const items = events.map((eventItem) => {
+          const timeLabel = eventItem.timeStart
+            ? `${escapeHtml(eventItem.timeStart)}${eventItem.timeEnd ? ` - ${escapeHtml(eventItem.timeEnd)}` : ''}`
+            : 'Sin hora definida';
+          const typeLabel = toDisplayType(eventItem.type);
+          const typeIcon = getTypeIcon(eventItem.type);
+
+          return `
+            <article class="calendar-day-event-item">
+              <div class="event-top">
+                <div class="event-icon"><i class="${escapeHtml(typeIcon)}"></i></div>
+                <span class="event-type">${escapeHtml(typeLabel)}</span>
+              </div>
+              <h6>${escapeHtml(eventItem.title)}</h6>
+              <div class="calendar-day-event-meta">
+                <span><i class="ri-time-line"></i> ${timeLabel}</span>
+                <span><i class="ri-map-pin-line"></i> ${escapeHtml(eventItem.location || 'Ubicación por confirmar')}</span>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        dayEventsModalBody.innerHTML = `<div class="calendar-day-events-title">Total de eventos: ${events.length}</div><div class="calendar-day-events-list">${items}</div>`;
+
+        if (window.bootstrap && window.bootstrap.Modal) {
+          window.bootstrap.Modal.getOrCreateInstance(dayEventsModalEl).show();
+        }
+      }
+
+      function renderCalendar(month, year) {
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+        let html = '';
+
+        dayHeaders.forEach((day) => {
+          html += `<div class="calendar-day-header">${day}</div>`;
+        });
+
+        for (let offset = firstDay - 1; offset >= 0; offset--) {
+          html += `<div class="calendar-day other-month">${daysInPrevMonth - offset}</div>`;
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const hasEvent = Array.isArray(eventsByDate[dateString]) && eventsByDate[dateString].length > 0;
+          const isToday = day === currentDate.getDate()
+            && month === currentDate.getMonth()
+            && year === currentDate.getFullYear();
+
+          let classes = 'calendar-day';
+          if (isToday) classes += ' today';
+          if (hasEvent) classes += ' has-event';
+
+          html += `<div class="${classes}" data-date="${dateString}">${day}</div>`;
+        }
+
+        const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+        const trailingCells = totalCells - (firstDay + daysInMonth);
+        for (let day = 1; day <= trailingCells; day++) {
+          html += `<div class="calendar-day other-month">${day}</div>`;
+        }
+
+        dashboardCalendarGrid.innerHTML = html;
+
+        if (monthLabelElement) {
+          monthLabelElement.textContent = `${monthNames[month]} ${year}`;
+        }
+
+        dashboardCalendarGrid.querySelectorAll('.calendar-day[data-date]').forEach((dayElement) => {
+          dayElement.addEventListener('click', () => {
+            renderDayEvents(dayElement.getAttribute('data-date') || '');
+          });
+        });
+      }
+
+      if (prevMonthButton) {
+        prevMonthButton.addEventListener('click', () => {
+          currentMonth--;
+          if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+          }
+          renderCalendar(currentMonth, currentYear);
+        });
+      }
+
+      if (nextMonthButton) {
+        nextMonthButton.addEventListener('click', () => {
+          currentMonth++;
+          if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+          }
+          renderCalendar(currentMonth, currentYear);
+        });
+      }
+
+      renderCalendar(currentMonth, currentYear);
+    }
 
 
 // ========================================
@@ -374,6 +589,9 @@ document.head.appendChild(style);
 document.addEventListener('DOMContentLoaded', function () {
   const eventsContainer = document.getElementById('eventsContainer');
   const calendarGrid = document.getElementById('calendarLargeGrid');
+  const dayEventsModalEl = document.getElementById('dayEventsModal');
+  const dayEventsModalTitle = document.getElementById('dayEventsModalLabel');
+  const dayEventsModalBody = document.getElementById('dayEventsModalBody');
   const monthYearElement = document.getElementById('calendarMonthYear');
   const prevMonthBtn = document.getElementById('prevMonthEvents');
   const nextMonthBtn = document.getElementById('nextMonthEvents');
@@ -405,6 +623,102 @@ document.addEventListener('DOMContentLoaded', function () {
   const activeTab = filterTabs.find((tab) => tab.classList.contains('active'));
   let activeFilter = activeTab ? activeTab.dataset.filter : 'all';
 
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function showModalSafe(modalEl) {
+    if (!modalEl) return;
+
+    if (window.bootstrap && window.bootstrap.Modal) {
+      window.bootstrap.Modal.getOrCreateInstance(modalEl).show();
+      return;
+    }
+
+    modalEl.style.display = 'block';
+    modalEl.classList.add('show');
+    modalEl.removeAttribute('aria-hidden');
+    modalEl.setAttribute('aria-modal', 'true');
+    document.body.classList.add('modal-open');
+
+    if (!document.querySelector('.modal-backdrop')) {
+      const backdrop = document.createElement('div');
+      backdrop.className = 'modal-backdrop fade show';
+      backdrop.addEventListener('click', () => hideModalSafe(modalEl));
+      document.body.appendChild(backdrop);
+    }
+  }
+
+  function hideModalSafe(modalEl) {
+    if (!modalEl) return;
+
+    if (window.bootstrap && window.bootstrap.Modal) {
+      const instance = window.bootstrap.Modal.getInstance(modalEl);
+      if (instance) {
+        instance.hide();
+        return;
+      }
+    }
+
+    modalEl.classList.remove('show');
+    modalEl.style.display = 'none';
+    modalEl.setAttribute('aria-hidden', 'true');
+    modalEl.removeAttribute('aria-modal');
+    document.body.classList.remove('modal-open');
+
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) backdrop.remove();
+  }
+
+  function renderDayEventsModal(dateString, events) {
+    if (!dayEventsModalEl || !dayEventsModalTitle || !dayEventsModalBody) return;
+
+    const safeEvents = Array.isArray(events) ? events : [];
+    const [year, month, day] = String(dateString).split('-');
+    dayEventsModalTitle.textContent = `Eventos del ${day}/${month}/${year}`;
+
+    if (safeEvents.length === 0) {
+      dayEventsModalBody.innerHTML =
+        '<div style="border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:22px; text-align:center; color:#c5d1ee; background:#171f45;">'
+        + '<i class="ri-calendar-line" style="font-size:24px;"></i><br>No hay eventos para este día.</div>';
+      showModalSafe(dayEventsModalEl);
+      return;
+    }
+
+    const html = safeEvents.map((event) => {
+      const timeBlock = event.time
+        ? `<span><i class="ri-time-line"></i> ${escapeHtml(String(event.time).slice(0, 5))}</span>`
+        : '<span><i class="ri-time-line"></i> Sin hora</span>';
+
+      const eventTitle = escapeHtml(event.title || 'Evento académico');
+      const eventDescription = escapeHtml(event.description || 'Sin descripción');
+      const eventCategory = escapeHtml(event.category || 'event');
+      const eventIcon = escapeHtml(event.icon || 'ri-calendar-event-line');
+
+      return `
+        <article class="calendar-day-event-item" style="background:#171f45; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; color:#e6e9f4;">
+          <div class="event-top" style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+            <div class="event-icon" style="width:34px; height:34px; border-radius:10px; display:grid; place-items:center; font-size:18px; background:#232e60; color:#a4b1ff;"><i class="${eventIcon}"></i></div>
+            <span class="event-type" style="display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; color:#dbe2ff; background:rgba(79,70,229,.25); border:1px solid rgba(164,177,255,.25);">${eventCategory}</span>
+          </div>
+          <h6 style="margin:0 0 6px; font-size:16px; color:#fff;">${eventTitle}</h6>
+          <p style="margin:0; color:#b8c2df; font-size:14px; line-height:1.4;">${eventDescription}</p>
+          <div class="calendar-day-event-meta" style="margin-top:8px; display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:#9daccc;">
+            ${timeBlock}
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    dayEventsModalBody.innerHTML = `<div style="margin-bottom:10px; color:#c5d1ee; font-size:13px;">Total de eventos: ${safeEvents.length}</div><div class="calendar-day-events-list" style="display:grid; gap:12px;">${html}</div>`;
+    showModalSafe(dayEventsModalEl);
+  }
+
   function normalizeDate(dateValue) {
     if (!dateValue) return null;
 
@@ -427,8 +741,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const cardData = eventCards.map((card) => {
     const titleElement = card.querySelector('h4');
     const descriptionElement = card.querySelector('.event-card-body p');
+    const timeElement = card.querySelector('.event-meta .meta-item:nth-child(2) span');
     const title = titleElement ? titleElement.textContent.trim() : 'Evento';
     const description = descriptionElement ? descriptionElement.textContent.trim() : '';
+    const time = timeElement ? timeElement.textContent.trim() : '';
     const category = card.dataset.category || 'all';
     const dateValue = card.dataset.date || '';
     const dateObject = normalizeDate(dateValue);
@@ -437,6 +753,7 @@ document.addEventListener('DOMContentLoaded', function () {
       card,
       title,
       description,
+      time,
       category,
       dateValue,
       dateObject,
@@ -489,6 +806,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       accumulator[item.dateValue].push({
         title: item.title,
+        description: item.description,
+        time: item.time,
         category: item.category,
         icon: item.icon
       });
@@ -539,7 +858,7 @@ document.addEventListener('DOMContentLoaded', function () {
         eventsHTML += '</div>';
       }
 
-      calendarHTML += `<div class="${classes}"><div class="calendar-day-number">${day}</div>${eventsHTML}</div>`;
+      calendarHTML += `<div class="${classes}" data-date="${dateString}"><div class="calendar-day-number">${day}</div>${eventsHTML}</div>`;
     }
 
     const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
@@ -553,6 +872,25 @@ document.addEventListener('DOMContentLoaded', function () {
     if (monthYearElement) {
       monthYearElement.textContent = `${monthsEvents[month]} ${year}`;
     }
+
+    calendarGrid.querySelectorAll('.calendar-large-day[data-date]').forEach((dayElement) => {
+      dayElement.addEventListener('click', () => {
+        const selectedDate = dayElement.getAttribute('data-date') || '';
+        renderDayEventsModal(selectedDate, eventsData[selectedDate] || []);
+      });
+    });
+  }
+
+  if (dayEventsModalEl) {
+    dayEventsModalEl.querySelectorAll('[data-bs-dismiss="modal"]').forEach((button) => {
+      button.addEventListener('click', () => hideModalSafe(dayEventsModalEl));
+    });
+
+    dayEventsModalEl.addEventListener('click', (event) => {
+      if (event.target === dayEventsModalEl) {
+        hideModalSafe(dayEventsModalEl);
+      }
+    });
   }
 
   if (prevMonthBtn) {
