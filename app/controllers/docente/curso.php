@@ -74,6 +74,22 @@
         $objetoCurso = new Curso_docente();
         return $objetoCurso->listarEstudiantesBajoRendimiento($id_institucion, $id_docente, (int)$limite);
     }
+
+    function obtenerEventosCalendarioDocente(){
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $id_institucion = $_SESSION['user']['id_institucion'] ?? 0;
+        $id_docente = $_SESSION['user']['id'] ?? 0;
+
+        if ((int)$id_institucion <= 0 || (int)$id_docente <= 0) {
+            return [];
+        }
+
+        $objetoCurso = new Curso_docente();
+        return $objetoCurso->obtenerEventosCalendario((int)$id_institucion, (int)$id_docente);
+    }
     
 
 ?>

@@ -180,6 +180,10 @@ $(document).ready(function() {
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
+    const dayEventsModalEl = document.getElementById('dayEventsModal');
+    const dayEventsModal = dayEventsModalEl ? new bootstrap.Modal(dayEventsModalEl) : null;
+    const dayEventsModalTitle = document.getElementById('dayEventsModalLabel');
+    const dayEventsModalBody = document.getElementById('dayEventsModalBody');
 
     const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
       'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
@@ -187,13 +191,97 @@ $(document).ready(function() {
 
     const daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-    const events = {
-      '2024-10-28': 'Reunión de Padres',
-      '2024-10-30': 'Examen de Matemáticas',
-      '2024-11-02': 'Festival Cultural',
-      '2024-11-05': 'Día del Deporte',
-      '2024-11-10': 'Feria de Ciencias'
+    const rawCalendarEvents = Array.isArray(window.docenteCalendarEvents) ? window.docenteCalendarEvents : [];
+
+    const categoryByType = {
+      examen: 'Examen',
+      tarea: 'Tarea',
+      proyecto: 'Proyecto',
+      quiz: 'Quiz',
+      taller: 'Taller',
+      exposicion: 'Exposición',
+      exposición: 'Exposición',
+      laboratorio: 'Laboratorio',
+      reunion: 'Reunión',
+      reunión: 'Reunión',
+      actividad: 'Actividad',
+      evento: 'Evento'
     };
+
+    const iconByCategory = {
+      Examen: 'ri-file-edit-line',
+      Tarea: 'ri-file-list-3-line',
+      Proyecto: 'ri-folder-open-line',
+      Quiz: 'ri-questionnaire-line',
+      Taller: 'ri-tools-line',
+      Exposición: 'ri-presentation-line',
+      Laboratorio: 'ri-flask-line',
+      Reunión: 'ri-user-voice-line',
+      Actividad: 'ri-calendar-event-line',
+      Evento: 'ri-calendar-check-line'
+    };
+
+    function normalizarTipo(tipo) {
+      const base = String(tipo || '').trim();
+      const key = base.toLowerCase();
+      return categoryByType[key] || (base !== '' ? base : 'Evento');
+    }
+
+    const eventsByDate = rawCalendarEvents.reduce((acc, item) => {
+      const dateKey = String(item.fecha_evento || '').slice(0, 10);
+      if (!dateKey) return acc;
+
+      if (!acc[dateKey]) acc[dateKey] = [];
+      const tipo = normalizarTipo(item.tipo_evento);
+      acc[dateKey].push({
+        title: item.nombre_evento || 'Evento académico',
+        description: item.descripcion || 'Sin descripción',
+        type: tipo,
+        time: item.hora_inicio || '',
+        source: item.fuente || 'evento',
+        icon: iconByCategory[tipo] || 'ri-calendar-event-line'
+      });
+      return acc;
+    }, {});
+
+    function renderDayEventsModal(dateString, events) {
+      if (!dayEventsModal || !dayEventsModalTitle || !dayEventsModalBody) return;
+
+      const [year, month, day] = dateString.split('-');
+      dayEventsModalTitle.textContent = `Eventos del ${day}/${month}/${year}`;
+
+      if (!events || events.length === 0) {
+        dayEventsModalBody.innerHTML = '<div class="calendar-empty-day"><i class="ri-calendar-line"></i><br>No hay eventos para este día.</div>';
+        dayEventsModal.show();
+        return;
+      }
+
+      const html = events.map((event) => {
+        const timeBlock = event.time
+          ? `<span><i class="ri-time-line"></i> ${String(event.time).slice(0, 5)}</span>`
+          : '<span><i class="ri-time-line"></i> Sin hora</span>';
+
+        const sourceLabel = event.source === 'actividad' ? 'Tarea/Actividad' : 'Evento institucional';
+
+        return `
+          <article class="calendar-day-event-item">
+            <div class="event-top">
+              <div class="event-icon"><i class="${event.icon}"></i></div>
+              <span class="event-type">${event.type}</span>
+            </div>
+            <h6>${event.title}</h6>
+            <p>${event.description}</p>
+            <div class="calendar-day-event-meta">
+              ${timeBlock}
+              <span><i class="ri-information-line"></i> ${sourceLabel}</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      dayEventsModalBody.innerHTML = `<div class="calendar-day-events-list">${html}</div>`;
+      dayEventsModal.show();
+    }
 
     function generateCalendar(month, year) {
       const calendarGrid = document.getElementById('calendarGrid');
@@ -217,13 +305,14 @@ $(document).ready(function() {
       for (let day = 1; day <= daysInMonth; day++) {
         const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const isToday = day === currentDate.getDate() && month === currentDate.getMonth() && year === currentDate.getFullYear();
-        const hasEvent = events[dateString];
+        const hasEvent = Array.isArray(eventsByDate[dateString]) && eventsByDate[dateString].length > 0;
 
         let classes = 'calendar-day';
         if (isToday) classes += ' today';
         if (hasEvent) classes += ' has-event';
 
-        calendarHTML += `<div class="${classes}" title="${hasEvent || ''}">${day}</div>`;
+        const title = hasEvent ? `${eventsByDate[dateString].length} evento(s)` : 'Sin eventos';
+        calendarHTML += `<div class="${classes}" data-date="${dateString}" title="${title}">${day}</div>`;
       }
 
       const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
@@ -237,6 +326,14 @@ $(document).ready(function() {
       if (headerElement) {
         headerElement.textContent = `${months[month]} ${year}`;
       }
+
+      calendarGrid.querySelectorAll('.calendar-day[data-date]').forEach((dayEl) => {
+        dayEl.addEventListener('click', () => {
+          const dateString = dayEl.getAttribute('data-date');
+          const dayEvents = eventsByDate[dateString] || [];
+          renderDayEventsModal(dateString, dayEvents);
+        });
+      });
     }
 
     const prevMonthBtn = document.getElementById('prevMonth');
@@ -286,46 +383,74 @@ if (document.getElementById('calendarLargeGrid')) {
 
     const daysOfWeekEvents = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-    const eventsData = {
-      '2024-10-28': [
-        { title: 'Reunión de Padres', category: 'meetings', icon: 'ri-user-voice-line' }
-      ],
-      '2024-10-30': [
-        { title: 'Examen Matemáticas', category: 'exams', icon: 'ri-file-edit-line' }
-      ],
-      '2024-10-31': [
-        { title: 'Clase Mat. Avanzadas', category: 'exams', icon: 'ri-book-line' },
-        { title: 'Clase Física II', category: 'exams', icon: 'ri-flask-line' }
-      ],
-      '2024-11-02': [
-        { title: 'Festival Cultural', category: 'activities', icon: 'ri-music-2-line' }
-      ],
-      '2024-11-05': [
-        { title: 'Día del Deporte', category: 'activities', icon: 'ri-basketball-line' }
-      ],
-      '2024-11-08': [
-        { title: 'Examen Física II', category: 'exams', icon: 'ri-file-edit-line' }
-      ],
-      '2024-11-10': [
-        { title: 'Feria de Ciencias', category: 'activities', icon: 'ri-flask-line' }
-      ],
-      '2024-11-12': [
-        { title: 'Reunión Docentes', category: 'meetings', icon: 'ri-user-voice-line' }
-      ],
-      '2024-11-15': [
-        { title: 'Examen Cálculo', category: 'exams', icon: 'ri-file-edit-line' },
-        { title: 'Entrega Notas', category: 'meetings', icon: 'ri-calendar-check-line' }
-      ],
-      '2024-11-18': [
-        { title: 'Taller Padres', category: 'meetings', icon: 'ri-user-voice-line' }
-      ],
-      '2024-11-20': [
-        { title: 'Olimpiadas Mat.', category: 'activities', icon: 'ri-trophy-line' }
-      ],
-      '2024-11-22': [
-        { title: 'Examen Estadística', category: 'exams', icon: 'ri-file-edit-line' }
-      ]
-    };
+    const rawEvents = Array.isArray(window.docenteEventosData) ? window.docenteEventosData : [];
+    const dayEventsModalEl = document.getElementById('dayEventsModal');
+    const dayEventsModal = dayEventsModalEl ? new bootstrap.Modal(dayEventsModalEl) : null;
+    const dayEventsModalTitle = document.getElementById('dayEventsModalLabel');
+    const dayEventsModalBody = document.getElementById('dayEventsModalBody');
+
+    const eventsData = rawEvents.reduce((acc, item) => {
+      const dateKey = String(item.fecha_evento || '').slice(0, 10);
+      if (!dateKey) return acc;
+
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+
+      const category = item.category || 'activities';
+      const iconByCategory = {
+        meetings: 'ri-user-voice-line',
+        exams: 'ri-file-edit-line',
+        activities: 'ri-calendar-event-line'
+      };
+
+      acc[dateKey].push({
+        title: item.nombre_evento || 'Evento académico',
+        description: item.descripcion || 'Sin descripción',
+        category,
+        icon: item.icon || iconByCategory[category] || 'ri-calendar-event-line',
+        time: item.hora_inicio || '',
+        source: item.fuente || 'evento'
+      });
+
+      return acc;
+    }, {});
+
+    function renderDayEventsModal(dateString, events) {
+      if (!dayEventsModal || !dayEventsModalTitle || !dayEventsModalBody) return;
+
+      const [year, month, day] = dateString.split('-');
+      dayEventsModalTitle.textContent = `Eventos del ${day}/${month}/${year}`;
+
+      if (!events || events.length === 0) {
+        dayEventsModalBody.innerHTML = '<div class="calendar-empty-day"><i class="ri-calendar-line"></i><br>No hay eventos para este día.</div>';
+        dayEventsModal.show();
+        return;
+      }
+
+      const html = events.map((event) => {
+        const hour = event.time ? `<span><i class="ri-time-line"></i> ${String(event.time).slice(0, 5)}</span>` : '<span><i class="ri-time-line"></i> Sin hora</span>';
+        const sourceLabel = event.source === 'actividad' ? 'Actividad docente' : 'Evento institucional';
+
+        return `
+          <article class="calendar-day-event-item">
+            <div class="event-top">
+              <div class="event-icon"><i class="${event.icon}"></i></div>
+              <span class="event-type">${event.category}</span>
+            </div>
+            <h6>${event.title}</h6>
+            <p>${event.description}</p>
+            <div class="calendar-day-event-meta">
+              ${hour}
+              <span><i class="ri-information-line"></i> ${sourceLabel}</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      dayEventsModalBody.innerHTML = `<div class="calendar-day-events-list">${html}</div>`;
+      dayEventsModal.show();
+    }
 
     function generateEventsCalendar(month, year) {
       const calendarGrid = document.getElementById('calendarLargeGrid');
@@ -376,7 +501,7 @@ if (document.getElementById('calendarLargeGrid')) {
           eventsHTML += '</div>';
         }
 
-        calendarHTML += `<div class="${classes}">
+        calendarHTML += `<div class="${classes}" data-date="${dateString}">
           <div class="calendar-day-number">${day}</div>
           ${eventsHTML}
         </div>`;
@@ -396,6 +521,14 @@ if (document.getElementById('calendarLargeGrid')) {
       if (monthYearElement) {
         monthYearElement.textContent = `${monthsEvents[month]} ${year}`;
       }
+
+      calendarGrid.querySelectorAll('.calendar-large-day[data-date]').forEach((dayEl) => {
+        dayEl.addEventListener('click', () => {
+          const selectedDate = dayEl.getAttribute('data-date');
+          const dayEvents = eventsData[selectedDate] || [];
+          renderDayEventsModal(selectedDate, dayEvents);
+        });
+      });
     }
 
     const prevMonthBtn = document.getElementById('prevMonthEvents');
@@ -438,22 +571,35 @@ if (document.getElementById('calendarLargeGrid')) {
     // Filter Functionality
     const filterTabs = document.querySelectorAll('.filter-tab-event');
     const eventCards = document.querySelectorAll('.event-card');
+    let activeFilter = 'all';
+
+    function applyEventFilters() {
+      const searchTerm = (document.getElementById('searchEvents')?.value || '').toLowerCase().trim();
+
+      eventCards.forEach((card) => {
+        const category = (card.getAttribute('data-category') || '').toLowerCase();
+        const isUpcoming = card.getAttribute('data-upcoming') === '1';
+        const title = card.querySelector('h4')?.textContent.toLowerCase() || '';
+        const description = card.querySelector('p')?.textContent.toLowerCase() || '';
+
+        let passesFilter = true;
+        if (activeFilter === 'upcoming') {
+          passesFilter = isUpcoming;
+        } else if (activeFilter !== 'all') {
+          passesFilter = category === activeFilter;
+        }
+
+        const passesSearch = searchTerm === '' || title.includes(searchTerm) || description.includes(searchTerm);
+        card.style.display = (passesFilter && passesSearch) ? 'block' : 'none';
+      });
+    }
 
     filterTabs.forEach(tab => {
       tab.addEventListener('click', () => {
         filterTabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-
-        const filter = tab.getAttribute('data-filter');
-
-        eventCards.forEach(card => {
-          if (filter === 'all') {
-            card.style.display = 'block';
-          } else {
-            const category = card.getAttribute('data-category');
-            card.style.display = (category === filter) ? 'block' : 'none';
-          }
-        });
+        activeFilter = tab.getAttribute('data-filter') || 'all';
+        applyEventFilters();
       });
     });
 
@@ -461,14 +607,7 @@ if (document.getElementById('calendarLargeGrid')) {
     const searchInput = document.getElementById('searchEvents');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-
-        eventCards.forEach(card => {
-          const title = card.querySelector('h4')?.textContent.toLowerCase() || '';
-          const description = card.querySelector('p')?.textContent.toLowerCase() || '';
-
-          card.style.display = (title.includes(searchTerm) || description.includes(searchTerm)) ? 'block' : 'none';
-        });
+        applyEventFilters();
       });
     }
 
@@ -484,31 +623,6 @@ if (document.getElementById('calendarLargeGrid')) {
         const view = btn.getAttribute('data-view');
         if (eventsContainer) {
           eventsContainer.classList.toggle('list-view', view === 'list');
-        }
-      });
-    });
-
-    // New Event Button
-    const btnNewEvent = document.getElementById('btnNewEvent');
-    if (btnNewEvent) {
-      btnNewEvent.addEventListener('click', () => {
-        alert('Funcionalidad de crear nuevo evento (próximamente)');
-      });
-    }
-
-    // Event Card Actions
-    document.querySelectorAll('.btn-event-primary, .btn-event-secondary').forEach(btn => {
-      btn.addEventListener('click', () => {
-        console.log(`Acción: ${btn.textContent.trim()}`);
-      });
-    });
-
-    // Quick Actions
-    document.querySelectorAll('.quick-action').forEach(action => {
-      action.addEventListener('click', (e) => {
-        const actionText = e.currentTarget.querySelector('span');
-        if (actionText) {
-          console.log(`Acción rápida: ${actionText.textContent}`);
         }
       });
     });
@@ -529,6 +643,7 @@ if (document.getElementById('calendarLargeGrid')) {
     }
 
     sortEventsByDate();
+  applyEventFilters();
 
     // Scroll animations
     const observerOptions = {

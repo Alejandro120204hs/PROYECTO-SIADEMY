@@ -8,6 +8,7 @@
   $datos = mostrarCursos();
   $estadisticas = obtenerEstadisticasDocenteDashboard();
   $estudiantesBajoRendimiento = listarEstudiantesBajoRendimientoDocente(20);
+  $eventosCalendarioDocente = obtenerEventosCalendarioDocente();
   $id = $_SESSION['user']['id'] ?? 0;
   $usuario = mostrarPerfil($id);
 ?>
@@ -199,7 +200,7 @@
       <!-- CALENDAR SECTION -->
       <section class="calendar-card">
         <div class="calendar-header">
-          <h3>Calendario Académico</h3>
+          <h3 id="calendarCurrentMonth">Calendario Académico</h3>
           <div class="calendar-nav">
             <button id="prevMonth"><i class="ri-arrow-left-s-line"></i></button>
             <button id="nextMonth"><i class="ri-arrow-right-s-line"></i></button>
@@ -214,6 +215,20 @@
 
     </main>
 
+    <!-- MODAL EVENTOS DEL DIA -->
+    <div class="modal fade" id="dayEventsModal" tabindex="-1" aria-labelledby="dayEventsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content calendar-day-modal-content">
+          <div class="modal-header calendar-day-modal-header">
+            <h5 class="modal-title" id="dayEventsModalLabel">Eventos del día</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body" id="dayEventsModalBody">
+          </div>
+        </div>
+      </div>
+    </div>
+
   
   </div>
 
@@ -226,6 +241,9 @@
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+  window.docenteCalendarEvents = <?= json_encode($eventosCalendarioDocente, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+</script>
 <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-docente.js"></script>
 
 </body>

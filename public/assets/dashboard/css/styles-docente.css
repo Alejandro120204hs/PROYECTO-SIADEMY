@@ -543,6 +543,104 @@
       border-radius: 50%;
     }
 
+    .calendar-day-modal-content {
+      background: #11193a;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      color: #e6e9f4;
+      box-shadow: 0 14px 38px rgba(0, 0, 0, .35);
+    }
+
+    .calendar-day-modal-header {
+      border-bottom: 1px solid var(--border);
+      background: #0e142e;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+    }
+
+    #dayEventsModalLabel {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .calendar-day-modal-content .btn-close {
+      filter: invert(1) contrast(0.9);
+      opacity: .85;
+    }
+
+    .calendar-day-events-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .calendar-day-event-item {
+      background: #171f45;
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .calendar-day-event-item .event-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .calendar-day-event-item .event-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      background: #232e60;
+      color: #a4b1ff;
+    }
+
+    .calendar-day-event-item .event-type {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #dbe2ff;
+      background: rgba(79, 70, 229, .25);
+      border: 1px solid rgba(164, 177, 255, .25);
+    }
+
+    .calendar-day-event-item h6 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .calendar-day-event-item p {
+      margin: 0;
+      color: #b8c2df;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .calendar-day-event-meta {
+      margin-top: 8px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #9daccc;
+    }
+
+    .calendar-empty-day {
+      border: 1px dashed rgba(255, 255, 255, .2);
+      border-radius: 12px;
+      padding: 22px;
+      text-align: center;
+      color: #9daccc;
+      background: #171f45;
+    }
+
     /* DATATABLE STYLES */
     .datatable-card {
       background: #11193a;
