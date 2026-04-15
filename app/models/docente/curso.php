@@ -135,6 +135,56 @@
                 return [];
             }
         }
+
+        public function obtenerEventosCalendario($id_institucion, $id_docente){
+            try {
+                $consultar = "
+                    SELECT
+                        DATE(a.fecha_entrega) AS fecha_evento,
+                        COALESCE(NULLIF(a.tipo, ''), 'Tarea') AS tipo_evento,
+                        a.titulo AS nombre_evento,
+                        a.descripcion,
+                        NULL AS hora_inicio,
+                        'actividad' AS fuente
+                    FROM actividad a
+                    LEFT JOIN docente d
+                        ON (a.id_docente = d.id OR a.id_docente = d.id_usuario)
+                    WHERE a.id_institucion = :id_institucion_actividad
+                      AND a.fecha_entrega IS NOT NULL
+                      AND (
+                          a.id_docente = :id_docente_actividad
+                          OR d.id_usuario = :id_docente_actividad_usuario
+                      )
+
+                    UNION ALL
+
+                    SELECT
+                        DATE(ev.fecha_evento) AS fecha_evento,
+                        COALESCE(NULLIF(ev.tipo_evento, ''), 'Evento') AS tipo_evento,
+                        ev.nombre_evento,
+                        ev.descripcion,
+                        ev.hora_inicio,
+                        'evento' AS fuente
+                    FROM eventos ev
+                    WHERE ev.id_institucion = :id_institucion_evento
+                      AND ev.fecha_evento IS NOT NULL
+
+                    ORDER BY fecha_evento ASC, hora_inicio ASC, nombre_evento ASC
+                ";
+
+                $resultado = $this->conexion->prepare($consultar);
+                $resultado->bindParam(':id_institucion_actividad', $id_institucion, PDO::PARAM_INT);
+                $resultado->bindParam(':id_docente_actividad', $id_docente, PDO::PARAM_INT);
+                $resultado->bindParam(':id_docente_actividad_usuario', $id_docente, PDO::PARAM_INT);
+                $resultado->bindParam(':id_institucion_evento', $id_institucion, PDO::PARAM_INT);
+                $resultado->execute();
+
+                return $resultado->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                error_log('Error en Curso_docente::obtenerEventosCalendario -> ' . $e->getMessage());
+                return [];
+            }
+        }
     }
 
 ?>

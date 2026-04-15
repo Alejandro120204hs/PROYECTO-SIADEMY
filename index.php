@@ -459,7 +459,7 @@
             // --------------------------------------ROL: DOCENTE (MODULO EVENTO)---------------------------------------------
 
             case '/docente-eventos':
-                require BASE_PATH . '/app/views/dashboard/docente/eventos.php';
+                require BASE_PATH . '/app/controllers/docente/eventos.php';
                 break;
             
             // -----------------------------------ROL: ESTUDIANTE------------------------------------------
