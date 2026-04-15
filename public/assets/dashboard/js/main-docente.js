@@ -26,6 +26,45 @@ $(document).ready(function() {
     }
   }
 
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function applyDayModalFallbackTheme(modalEl) {
+    if (!modalEl) return;
+
+    const contentEl = modalEl.querySelector('.modal-content');
+    const headerEl = modalEl.querySelector('.modal-header');
+    const bodyEl = modalEl.querySelector('.modal-body');
+    const titleEl = modalEl.querySelector('.modal-title');
+
+    if (contentEl) {
+      contentEl.style.background = '#11193a';
+      contentEl.style.color = '#e6e9f4';
+      contentEl.style.border = '1px solid rgba(255,255,255,.08)';
+      contentEl.style.borderRadius = '18px';
+    }
+
+    if (headerEl) {
+      headerEl.style.background = '#0e142e';
+      headerEl.style.borderBottom = '1px solid rgba(255,255,255,.08)';
+    }
+
+    if (bodyEl) {
+      bodyEl.style.background = '#11193a';
+      bodyEl.style.color = '#e6e9f4';
+    }
+
+    if (titleEl) {
+      titleEl.style.color = '#ffffff';
+    }
+  }
+
   function hideModalSafe(modalEl) {
     if (!modalEl) return;
 
@@ -303,31 +342,42 @@ $(document).ready(function() {
     function renderDayEventsModal(dateString, events) {
       if (!dayEventsModalEl || !dayEventsModalTitle || !dayEventsModalBody) return;
 
+      applyDayModalFallbackTheme(dayEventsModalEl);
+
+      const safeEvents = Array.isArray(events) ? events : [];
+
       const [year, month, day] = dateString.split('-');
       dayEventsModalTitle.textContent = `Eventos del ${day}/${month}/${year}`;
 
-      if (!events || events.length === 0) {
-        dayEventsModalBody.innerHTML = '<div class="calendar-empty-day"><i class="ri-calendar-line"></i><br>No hay eventos para este día.</div>';
+      if (safeEvents.length === 0) {
+        dayEventsModalBody.innerHTML =
+          '<div style="border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:22px; text-align:center; color:#c5d1ee; background:#171f45;">' +
+          '<i class="ri-calendar-line" style="font-size:24px;"></i><br>No hay eventos para este día.' +
+          '</div>';
         showModalSafe(dayEventsModalEl);
         return;
       }
 
-      const html = events.map((event) => {
+      const html = safeEvents.map((event) => {
         const timeBlock = event.time
-          ? `<span><i class="ri-time-line"></i> ${String(event.time).slice(0, 5)}</span>`
+          ? `<span><i class="ri-time-line"></i> ${escapeHtml(String(event.time).slice(0, 5))}</span>`
           : '<span><i class="ri-time-line"></i> Sin hora</span>';
 
         const sourceLabel = event.source === 'actividad' ? 'Tarea/Actividad' : 'Evento institucional';
+        const eventType = escapeHtml(event.type || 'Evento');
+        const eventTitle = escapeHtml(event.title || 'Evento académico');
+        const eventDescription = escapeHtml(event.description || 'Sin descripción');
+        const eventIcon = escapeHtml(event.icon || 'ri-calendar-event-line');
 
         return `
-          <article class="calendar-day-event-item">
-            <div class="event-top">
-              <div class="event-icon"><i class="${event.icon}"></i></div>
-              <span class="event-type">${event.type}</span>
+          <article class="calendar-day-event-item" style="background:#171f45; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; color:#e6e9f4;">
+            <div class="event-top" style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+              <div class="event-icon" style="width:34px; height:34px; border-radius:10px; display:grid; place-items:center; font-size:18px; background:#232e60; color:#a4b1ff;"><i class="${eventIcon}"></i></div>
+              <span class="event-type" style="display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; color:#dbe2ff; background:rgba(79,70,229,.25); border:1px solid rgba(164,177,255,.25);">${eventType}</span>
             </div>
-            <h6>${event.title}</h6>
-            <p>${event.description}</p>
-            <div class="calendar-day-event-meta">
+            <h6 style="margin:0 0 6px; font-size:16px; color:#fff;">${eventTitle}</h6>
+            <p style="margin:0; color:#b8c2df; font-size:14px; line-height:1.4;">${eventDescription}</p>
+            <div class="calendar-day-event-meta" style="margin-top:8px; display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:#9daccc;">
               ${timeBlock}
               <span><i class="ri-information-line"></i> ${sourceLabel}</span>
             </div>
@@ -335,7 +385,7 @@ $(document).ready(function() {
         `;
       }).join('');
 
-      dayEventsModalBody.innerHTML = `<div class="calendar-day-events-list">${html}</div>`;
+      dayEventsModalBody.innerHTML = `<div style="margin-bottom:10px; color:#c5d1ee; font-size:13px;">Total de eventos: ${safeEvents.length}</div><div class="calendar-day-events-list" style="display:grid; gap:12px;">${html}</div>`;
       showModalSafe(dayEventsModalEl);
     }
 
@@ -486,28 +536,39 @@ if (document.getElementById('calendarLargeGrid')) {
     function renderDayEventsModal(dateString, events) {
       if (!dayEventsModalEl || !dayEventsModalTitle || !dayEventsModalBody) return;
 
+      applyDayModalFallbackTheme(dayEventsModalEl);
+
+      const safeEvents = Array.isArray(events) ? events : [];
+
       const [year, month, day] = dateString.split('-');
       dayEventsModalTitle.textContent = `Eventos del ${day}/${month}/${year}`;
 
-      if (!events || events.length === 0) {
-        dayEventsModalBody.innerHTML = '<div class="calendar-empty-day"><i class="ri-calendar-line"></i><br>No hay eventos para este día.</div>';
+      if (safeEvents.length === 0) {
+        dayEventsModalBody.innerHTML =
+          '<div style="border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:22px; text-align:center; color:#c5d1ee; background:#171f45;">' +
+          '<i class="ri-calendar-line" style="font-size:24px;"></i><br>No hay eventos para este día.' +
+          '</div>';
         showModalSafe(dayEventsModalEl);
         return;
       }
 
-      const html = events.map((event) => {
-        const hour = event.time ? `<span><i class="ri-time-line"></i> ${String(event.time).slice(0, 5)}</span>` : '<span><i class="ri-time-line"></i> Sin hora</span>';
+      const html = safeEvents.map((event) => {
+        const hour = event.time ? `<span><i class="ri-time-line"></i> ${escapeHtml(String(event.time).slice(0, 5))}</span>` : '<span><i class="ri-time-line"></i> Sin hora</span>';
         const sourceLabel = event.source === 'actividad' ? 'Actividad docente' : 'Evento institucional';
+        const eventCategory = escapeHtml(event.category || 'activities');
+        const eventTitle = escapeHtml(event.title || 'Evento académico');
+        const eventDescription = escapeHtml(event.description || 'Sin descripción');
+        const eventIcon = escapeHtml(event.icon || 'ri-calendar-event-line');
 
         return `
-          <article class="calendar-day-event-item">
-            <div class="event-top">
-              <div class="event-icon"><i class="${event.icon}"></i></div>
-              <span class="event-type">${event.category}</span>
+          <article class="calendar-day-event-item" style="background:#171f45; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; color:#e6e9f4;">
+            <div class="event-top" style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+              <div class="event-icon" style="width:34px; height:34px; border-radius:10px; display:grid; place-items:center; font-size:18px; background:#232e60; color:#a4b1ff;"><i class="${eventIcon}"></i></div>
+              <span class="event-type" style="display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; color:#dbe2ff; background:rgba(79,70,229,.25); border:1px solid rgba(164,177,255,.25);">${eventCategory}</span>
             </div>
-            <h6>${event.title}</h6>
-            <p>${event.description}</p>
-            <div class="calendar-day-event-meta">
+            <h6 style="margin:0 0 6px; font-size:16px; color:#fff;">${eventTitle}</h6>
+            <p style="margin:0; color:#b8c2df; font-size:14px; line-height:1.4;">${eventDescription}</p>
+            <div class="calendar-day-event-meta" style="margin-top:8px; display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:#9daccc;">
               ${hour}
               <span><i class="ri-information-line"></i> ${sourceLabel}</span>
             </div>
@@ -515,7 +576,7 @@ if (document.getElementById('calendarLargeGrid')) {
         `;
       }).join('');
 
-      dayEventsModalBody.innerHTML = `<div class="calendar-day-events-list">${html}</div>`;
+      dayEventsModalBody.innerHTML = `<div style="margin-bottom:10px; color:#c5d1ee; font-size:13px;">Total de eventos: ${safeEvents.length}</div><div class="calendar-day-events-list" style="display:grid; gap:12px;">${html}</div>`;
       showModalSafe(dayEventsModalEl);
     }
 
