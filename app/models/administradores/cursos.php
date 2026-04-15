@@ -44,7 +44,7 @@
         public function listar($id_institucion){
             try{
                 // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL PARA MOSTRAR LOS CURSOS
-                $consultar = "SELECT curso.*, nivel_academico.nombre  AS nivel_academico, docente.nombres AS nombres_docente, docente.apellidos AS apellidos_docente FROM curso INNER JOIN nivel_academico ON curso.id_nivel_academico = nivel_academico.id INNER JOIN docente ON curso.id_docente = docente.id WHERE curso.id_institucion = :id_institucion ORDER BY curso.estado ASC";
+                $consultar = "SELECT curso.*, nivel_academico.nombre AS nivel_academico, docente.nombres AS nombres_docente, docente.apellidos AS apellidos_docente, COUNT(DISTINCT matricula.id) AS total_estudiantes FROM curso INNER JOIN nivel_academico ON curso.id_nivel_academico = nivel_academico.id INNER JOIN docente ON curso.id_docente = docente.id LEFT JOIN matricula ON curso.id = matricula.id_curso WHERE curso.id_institucion = :id_institucion GROUP BY curso.id ORDER BY curso.estado ASC";
 
                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
                 $resultado = $this -> conexion -> prepare($consultar);

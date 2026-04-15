@@ -126,7 +126,7 @@
         <div class="calendar-view-header">
           <h3>
             <i class="ri-calendar-2-line"></i>
-            <span id="calendarMonthYear">Octubre 2024</span>
+            <span id="calendarMonthYear"></span>
           </h3>
           <div class="calendar-controls">
             <button class="btn-calendar-nav" id="prevMonthEvents">
@@ -248,6 +248,18 @@
         </div>
       </section>
     </main>
+
+    <div class="modal fade" id="dayEventsModal" tabindex="-1" aria-labelledby="dayEventsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content calendar-day-modal-content">
+          <div class="modal-header calendar-day-modal-header">
+            <h5 class="modal-title" id="dayEventsModalLabel">Eventos del día</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body" id="dayEventsModalBody"></div>
+        </div>
+      </div>
+    </div>
 
     
   </div>

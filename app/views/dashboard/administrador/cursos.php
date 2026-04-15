@@ -118,15 +118,14 @@
       <!-- COURSES GRID -->
       <section class="courses-section">
         <div class="courses-header">
-          <h3>Cursos Activos (24)</h3>
+          <h3>Cursos Activos (<?= $totalCursos ?>)</h3>
           <div class="view-toggle">
             <button class="view-btn active" data-view="grid"><i class="ri-grid-line"></i></button>
             <button class="view-btn" data-view="list"><i class="ri-list-check"></i></button>
           </div>
         </div>
 
-        <div class="courses-grid">
-          <!-- Course Card 1 -->
+        <div class="courses-grid" id="cursosGrid">
            <?php if(!empty($datos)): ?>
             <?php foreach($datos as $curso): ?>
           <div class="course-card">
@@ -141,7 +140,7 @@
             <div class="course-stats">
               <div class="stat">
                 <i class="ri-group-line"></i>
-                <span>35 estudiantes</span> <span class="cupo">Cupo Maximo: <?= $curso['cupo_maximo'] ?> <i class="ri-group-line"></i></span>
+                <span><?= (int)$curso['total_estudiantes'] ?> estudiantes</span> <span class="cupo">Cupo Maximo: <?= $curso['cupo_maximo'] ?> <i class="ri-group-line"></i></span>
               </div>
               <div class="stat">
                 <i class="ri-user-line"></i>
@@ -149,33 +148,58 @@
               </div>
             </div>
 
-            
-
-            <div class="course-alerts">
-              <div class="alert-item">
-                <i class="ri-error-warning-line"></i>
-                <span>3 estudiantes en riesgo</span>
-              </div>
-            </div>
-
             <div class="course-actions">
               <button class="btn-secondary" onclick="window.location.href='<?= BASE_URL ?>/administrador/detalle-curso?id=<?= $curso['id'] ?>'"><i class="bi bi-eye"></i></button>
               <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/editar-curso?id=<?= $curso['id'] ?>"><i class="bi bi-pencil-square"></i></a></button>
               <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/eliminar-curso?accion=eliminar&id=<?= $curso['id'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
-
             </div>
-
-            
           </div>
           <?php endforeach; ?>
               <?php else: ?>
                 <h2>No hay cursos registrados</h2>
               <?php endif; ?>
-
-         
-
-          
         </div>
+
+        <!-- TABLE VIEW -->
+        <div class="datatable-card table-scroll-x" id="cursosTabla" style="display:none;">
+          <table id="tablaCursos" class="table table-dark table-hover table-scroll-content">
+            <thead>
+              <tr>
+                <th>Grado</th>
+                <th>Curso</th>
+                <th>Nivel Académico</th>
+                <th>Docente</th>
+                <th>Estudiantes</th>
+                <th>Cupo Máximo</th>
+                <th>Estado</th>
+                <th width="130">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if(!empty($datos)): ?>
+              <?php foreach($datos as $curso): ?>
+              <tr>
+                <td><?= $curso['grado'] ?>°</td>
+                <td><?= $curso['curso'] ?></td>
+                <td><?= $curso['nivel_academico'] ?></td>
+                <td><?= $curso['nombres_docente'] . ' ' . $curso['apellidos_docente'] ?></td>
+                <td><?= (int)$curso['total_estudiantes'] ?></td>
+                <td><?= $curso['cupo_maximo'] ?></td>
+                <td><?= $curso['estado'] ?></td>
+                <td class="acciones">
+                  <a class="btn-action" href="<?= BASE_URL ?>/administrador/detalle-curso?id=<?= $curso['id'] ?>">Ver</a>
+                  <a class="btn-action" href="<?= BASE_URL ?>/administrador/editar-curso?id=<?= $curso['id'] ?>">Editar</a>
+                  <a class="btn-action" href="<?= BASE_URL ?>/administrador/eliminar-curso?accion=eliminar&id=<?= $curso['id'] ?>"><i class="bi bi-trash3-fill"></i></a>
+                </td>
+              </tr>
+              <?php endforeach; ?>
+              <?php else: ?>
+              <tr><td colspan="8">No hay cursos registrados</td></tr>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
+
       </section>
 
     </main>
@@ -185,20 +209,36 @@
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js?v=<?= $mainAdminJsVersion ?>"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-estudiante.js"></script>
   <script>
-    // Toggle view grid/list
-    document.querySelectorAll('.view-btn').forEach(btn => {
+    var tablaCursosInited = false;
+
+    document.querySelectorAll('.view-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.view-btn').forEach(function(b) { b.classList.remove('active'); });
         this.classList.add('active');
-        const view = this.dataset.view;
-        const grid = document.querySelector('.courses-grid');
+        var view = this.dataset.view;
+        var grid = document.getElementById('cursosGrid');
+        var tabla = document.getElementById('cursosTabla');
         if (view === 'list') {
-          grid.style.gridTemplateColumns = '1fr';
+          grid.style.display = 'none';
+          tabla.style.display = 'block';
+          if (!tablaCursosInited) {
+            $('#tablaCursos').DataTable({
+              language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+              },
+              pageLength: 10,
+              responsive: true
+            });
+            tablaCursosInited = true;
+          }
         } else {
-          grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(340px, 1fr))';
+          tabla.style.display = 'none';
+          grid.style.display = '';
         }
       });
     });
