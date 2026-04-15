@@ -6,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once BASE_PATH . '/app/controllers/perfil.php';
 $id = $_SESSION['user']['id'] ?? 0;
 $usuario = mostrarPerfil($id);
+$mainDocenteJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-docente.js') ?: time();
 ?>
 
 <!doctype html>
@@ -174,7 +175,7 @@ $usuario = mostrarPerfil($id);
   <script>
     window.docenteEventosData = <?= json_encode($eventosDocente, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
   </script>
-  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-docente.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-docente.js?v=<?= $mainDocenteJsVersion ?>"></script>
 </body>
 
 </html>

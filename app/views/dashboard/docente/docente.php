@@ -11,6 +11,7 @@
   $eventosCalendarioDocente = obtenerEventosCalendarioDocente();
   $id = $_SESSION['user']['id'] ?? 0;
   $usuario = mostrarPerfil($id);
+  $mainDocenteJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-docente.js') ?: time();
 ?>
 
 <!doctype html>
@@ -244,7 +245,7 @@
 <script>
   window.docenteCalendarEvents = <?= json_encode($eventosCalendarioDocente, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
 </script>
-<script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-docente.js"></script>
+<script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-docente.js?v=<?= $mainDocenteJsVersion ?>"></script>
 
 </body>
 

@@ -4,6 +4,51 @@
 
 $(document).ready(function() {
 
+  function showModalSafe(modalEl) {
+    if (!modalEl) return;
+
+    if (window.bootstrap && window.bootstrap.Modal) {
+      window.bootstrap.Modal.getOrCreateInstance(modalEl).show();
+      return;
+    }
+
+    modalEl.style.display = 'block';
+    modalEl.classList.add('show');
+    modalEl.removeAttribute('aria-hidden');
+    modalEl.setAttribute('aria-modal', 'true');
+    document.body.classList.add('modal-open');
+
+    if (!document.querySelector('.modal-backdrop')) {
+      const backdrop = document.createElement('div');
+      backdrop.className = 'modal-backdrop fade show';
+      backdrop.addEventListener('click', () => hideModalSafe(modalEl));
+      document.body.appendChild(backdrop);
+    }
+  }
+
+  function hideModalSafe(modalEl) {
+    if (!modalEl) return;
+
+    if (window.bootstrap && window.bootstrap.Modal) {
+      const instance = window.bootstrap.Modal.getInstance(modalEl);
+      if (instance) {
+        instance.hide();
+        return;
+      }
+    }
+
+    modalEl.classList.remove('show');
+    modalEl.style.display = 'none';
+    modalEl.setAttribute('aria-hidden', 'true');
+    modalEl.removeAttribute('aria-modal');
+    document.body.classList.remove('modal-open');
+
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+      backdrop.remove();
+    }
+  }
+
   // ========================================
   // SISTEMA DE TOGGLE PARA SIDEBARS
   // ========================================
@@ -181,9 +226,20 @@ $(document).ready(function() {
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
     const dayEventsModalEl = document.getElementById('dayEventsModal');
-    const dayEventsModal = dayEventsModalEl ? new bootstrap.Modal(dayEventsModalEl) : null;
     const dayEventsModalTitle = document.getElementById('dayEventsModalLabel');
     const dayEventsModalBody = document.getElementById('dayEventsModalBody');
+
+    if (dayEventsModalEl) {
+      dayEventsModalEl.querySelectorAll('[data-bs-dismiss="modal"]').forEach((btn) => {
+        btn.addEventListener('click', () => hideModalSafe(dayEventsModalEl));
+      });
+
+      dayEventsModalEl.addEventListener('click', (event) => {
+        if (event.target === dayEventsModalEl) {
+          hideModalSafe(dayEventsModalEl);
+        }
+      });
+    }
 
     const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
       'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
@@ -245,14 +301,14 @@ $(document).ready(function() {
     }, {});
 
     function renderDayEventsModal(dateString, events) {
-      if (!dayEventsModal || !dayEventsModalTitle || !dayEventsModalBody) return;
+      if (!dayEventsModalEl || !dayEventsModalTitle || !dayEventsModalBody) return;
 
       const [year, month, day] = dateString.split('-');
       dayEventsModalTitle.textContent = `Eventos del ${day}/${month}/${year}`;
 
       if (!events || events.length === 0) {
         dayEventsModalBody.innerHTML = '<div class="calendar-empty-day"><i class="ri-calendar-line"></i><br>No hay eventos para este día.</div>';
-        dayEventsModal.show();
+        showModalSafe(dayEventsModalEl);
         return;
       }
 
@@ -280,7 +336,7 @@ $(document).ready(function() {
       }).join('');
 
       dayEventsModalBody.innerHTML = `<div class="calendar-day-events-list">${html}</div>`;
-      dayEventsModal.show();
+      showModalSafe(dayEventsModalEl);
     }
 
     function generateCalendar(month, year) {
@@ -385,9 +441,20 @@ if (document.getElementById('calendarLargeGrid')) {
 
     const rawEvents = Array.isArray(window.docenteEventosData) ? window.docenteEventosData : [];
     const dayEventsModalEl = document.getElementById('dayEventsModal');
-    const dayEventsModal = dayEventsModalEl ? new bootstrap.Modal(dayEventsModalEl) : null;
     const dayEventsModalTitle = document.getElementById('dayEventsModalLabel');
     const dayEventsModalBody = document.getElementById('dayEventsModalBody');
+
+    if (dayEventsModalEl) {
+      dayEventsModalEl.querySelectorAll('[data-bs-dismiss="modal"]').forEach((btn) => {
+        btn.addEventListener('click', () => hideModalSafe(dayEventsModalEl));
+      });
+
+      dayEventsModalEl.addEventListener('click', (event) => {
+        if (event.target === dayEventsModalEl) {
+          hideModalSafe(dayEventsModalEl);
+        }
+      });
+    }
 
     const eventsData = rawEvents.reduce((acc, item) => {
       const dateKey = String(item.fecha_evento || '').slice(0, 10);
@@ -417,14 +484,14 @@ if (document.getElementById('calendarLargeGrid')) {
     }, {});
 
     function renderDayEventsModal(dateString, events) {
-      if (!dayEventsModal || !dayEventsModalTitle || !dayEventsModalBody) return;
+      if (!dayEventsModalEl || !dayEventsModalTitle || !dayEventsModalBody) return;
 
       const [year, month, day] = dateString.split('-');
       dayEventsModalTitle.textContent = `Eventos del ${day}/${month}/${year}`;
 
       if (!events || events.length === 0) {
         dayEventsModalBody.innerHTML = '<div class="calendar-empty-day"><i class="ri-calendar-line"></i><br>No hay eventos para este día.</div>';
-        dayEventsModal.show();
+        showModalSafe(dayEventsModalEl);
         return;
       }
 
@@ -449,7 +516,7 @@ if (document.getElementById('calendarLargeGrid')) {
       }).join('');
 
       dayEventsModalBody.innerHTML = `<div class="calendar-day-events-list">${html}</div>`;
-      dayEventsModal.show();
+      showModalSafe(dayEventsModalEl);
     }
 
     function generateEventsCalendar(month, year) {
