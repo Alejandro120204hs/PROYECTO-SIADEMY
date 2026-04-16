@@ -28,30 +28,7 @@
       <!-- CSS de Choices.js (colócalo en <head> o antes de tu CSS principal) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-tabla-formulario.css">
-
-    <style>
-                /* Igual altura */
-    .select-similar {
-        height: 45px;
-        padding: 8px 12px;
-        font-size: 15px;
-        border-radius: 3px;
-        border: 1px solid #ced4da;
-        background-color: #fff;
-        cursor: pointer;
-    }
-
-    /* Simular estilo de choices */
-    .select-similar:focus {
-        border-color: #86b7fe;
-        box-shadow: 0 0 0 3px rgba(13,110,253,.25);
-    }
-
-    /* Apariencia más parecida */
-    .select-similar:hover {
-        border-color: #999;
-    }
-</style>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/administrador/curso-form.css">
 </head>
 <body>
     <div class="app" id="appGrid">
@@ -73,7 +50,7 @@
 
                 <div class="user">
                    <?php
-          include_once __DIR__ . '/../../layouts/boton_perfil_solo.php'
+                include_once __DIR__ . '/../../layouts/boton_perfil_solo.php';
           ?>  
                 </div>
             </div>
@@ -208,93 +185,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="<?=BASE_URL ?>/public/assets/dashboard/js/main-formulario.js"></script>
-    <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const select = document.getElementById('selectAcudiente');
-
-    // Todas las opciones reales
-    const allChoices = Array.from(select.querySelectorAll('option'))
-        .filter(opt => opt.value !== '' && !opt.disabled)
-        .map(opt => ({
-            value: opt.value,
-            label: opt.textContent.trim()
-        }));
-
-    const choices = new Choices(select, {
-        searchEnabled: true,
-        shouldSort: false,
-        placeholder: true,
-        placeholderValue: 'Escriba el nombre del docente',
-        itemSelectText: '',
-        removeItemButton: false,
-        choices: [],
-        position: 'bottom'
-    });
-
-    /* ===========================
-       TABINDEX REAL (CLAVE)
-    =========================== */
-    setTimeout(() => {
-    const choicesWrapper = select.closest('.choices');
-    if (!choicesWrapper) return;
-
-    const inner = choicesWrapper.querySelector('.choices__inner');
-    const input = choicesWrapper.querySelector('input');
-
-    if (inner) {
-        inner.setAttribute('tabindex', '3');
-    }
-
-    if (input) {
-        input.setAttribute('tabindex', '-1'); // evita doble foco
-    }
-}, 50);
-
-
-    /* ===========================
-       MOSTRAR 4 AL ABRIR
-    =========================== */
-    select.addEventListener('showDropdown', function () {
-        choices.clearChoices();
-        choices.setChoices(allChoices.slice(0, 4), 'value', 'label', true);
-    });
-
-    /* ===========================
-       BUSCAR ESCRIBIENDO
-    =========================== */
-    select.addEventListener('search', function (event) {
-        const q = event.detail.value.trim().toLowerCase();
-        choices.clearChoices();
-
-        if (q.length === 0) {
-            choices.setChoices(allChoices.slice(0, 4), 'value', 'label', true);
-            return;
-        }
-
-        const filtered = allChoices
-            .filter(c => c.label.toLowerCase().includes(q))
-            .slice(0, 10);
-
-        if (filtered.length > 0) {
-            choices.setChoices(filtered, 'value', 'label', true);
-        } else {
-            choices.setChoices([
-                { value: '__no_results__', label: 'No se encontraron resultados', disabled: true }
-            ], 'value', 'label', true);
-        }
-    });
-
-    /* ===========================
-       BLOQUEAR "NO RESULTADOS"
-    =========================== */
-    select.addEventListener('choice', function (event) {
-        if (event.detail.choice?.value === '__no_results__') {
-            event.preventDefault();
-            choices.removeActiveItems();
-        }
-    });
-});
-</script>
+    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/administrador/add-curso.js"></script>
 
 </body>
 

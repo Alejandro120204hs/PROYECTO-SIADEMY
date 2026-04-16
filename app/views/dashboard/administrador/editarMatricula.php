@@ -30,50 +30,7 @@
     ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-tabla-formulario.css">
-
-    <style>
-        .select-similar {
-            height: 45px;
-            padding: 8px 12px;
-            font-size: 15px;
-            border-radius: 3px;
-            border: 1px solid #ced4da;
-            background-color: #fff;
-            cursor: pointer;
-        }
-
-        .select-similar:focus {
-            border-color: #86b7fe;
-            box-shadow: 0 0 0 3px rgba(13,110,253,.25);
-        }
-
-        .info-card {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-
-        .info-card h6 {
-            color: #856404;
-            margin-bottom: 10px;
-        }
-
-        .current-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-
-        .current-info h6 {
-            color: #495057;
-            border-bottom: 2px solid #dee2e6;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-    </style>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/administrador/editar-matricula.css">
 </head>
 
 <body>
@@ -232,38 +189,7 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-formulario.js"></script>
-    
-    <script>
-        // Inicializar Choices.js
-        const estudianteSelect = new Choices('#selectEstudiante', {
-            searchEnabled: true,
-            searchPlaceholderValue: 'Buscar estudiante...',
-            noResultsText: 'No se encontraron resultados',
-            itemSelectText: 'Click para seleccionar',
-        });
-
-        const cursoSelect = new Choices('#selectCurso', {
-            searchEnabled: true,
-            searchPlaceholderValue: 'Buscar curso...',
-            noResultsText: 'No se encontraron resultados',
-            itemSelectText: 'Click para seleccionar',
-        });
-
-        // Validación del formulario
-        document.getElementById('formEditarMatricula').addEventListener('submit', function(e) {
-            const estudiante = document.getElementById('selectEstudiante').value;
-            const curso = document.getElementById('selectCurso').value;
-            
-            if(!estudiante || !curso) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Campos incompletos',
-                    text: 'Por favor complete todos los campos requeridos'
-                });
-            }
-        });
-    </script>
+    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/administrador/editar-matricula.js"></script>
 
 </body>
 </html>

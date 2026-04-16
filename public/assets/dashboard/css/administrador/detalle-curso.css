@@ -1,0 +1,148 @@
+/* Ajustes de layout para vista detalle curso */
+.academic-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.subjects-table {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.subjects-table table {
+    width: 100% !important;
+    min-width: 600px;
+}
+
+.main {
+    padding: 28px 0 40px 0 !important;
+}
+
+.student-profile-header {
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+}
+
+.quick-stats {
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+}
+
+.topbar {
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+}
+
+.section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 28px;
+}
+
+@media (max-width: 980px) {
+    .main {
+        padding: 20px 0 32px 0 !important;
+    }
+
+    .student-profile-header,
+    .quick-stats,
+    .topbar {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+
+    .section-header-row {
+        padding-left: 20px;
+        padding-right: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .section-header-row .btn-profile-action {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .academic-section .empty-box {
+        margin: 0 20px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .main {
+        padding: 14px 0 24px 0 !important;
+    }
+
+    .student-profile-header,
+    .quick-stats,
+    .topbar {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    .section-header-row {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .section-title {
+        font-size: 17px !important;
+    }
+
+    .academic-section .empty-box {
+        margin: 0 14px !important;
+        padding: 40px 20px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .topbar.topbar-curso-detalle {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        column-gap: 8px;
+        row-gap: 0;
+        flex-wrap: nowrap;
+    }
+
+    .topbar.topbar-curso-detalle .topbar-left {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        overflow: hidden;
+        order: 1 !important;
+    }
+
+    .topbar.topbar-curso-detalle > .user {
+        order: 2 !important;
+        margin-left: 0 !important;
+        justify-self: end;
+        flex: 0 0 auto;
+    }
+
+    .topbar.topbar-curso-detalle .title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .topbar.topbar-curso-detalle .btn-back {
+        padding: 9px 10px;
+        gap: 0;
+        font-size: 0;
+        flex: 0 0 auto;
+    }
+
+    .topbar.topbar-curso-detalle .btn-back i {
+        margin-right: 0;
+        font-size: 17px;
+    }
+}

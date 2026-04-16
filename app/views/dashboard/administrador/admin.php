@@ -1,124 +1,8 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
+  require_once BASE_PATH . '/app/controllers/administrador/view_data.php';
 
-   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
-    require_once BASE_PATH . '/app/controllers/perfil.php';
-    
-    // IMPORTAMOS LOS MODELOS NECESARIOS
-    require_once BASE_PATH . '/app/models/administradores/estudiante.php';
-    require_once BASE_PATH . '/app/models/administradores/acudiente.php';
-    require_once BASE_PATH . '/app/models/administradores/docente.php';
-    require_once BASE_PATH . '/app/models/administradores/eventos.php';
-    require_once BASE_PATH . '/app/models/administradores/cursos.php';
-    require_once BASE_PATH . '/app/models/administradores/asignatura.php';
-    
-    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
-    $id = $_SESSION['user']['id'];
-    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
-    $usuario = mostrarPerfil($id);
-
-    // OBTENEMOS LA INSTITUCIÓN DEL ADMIN
-    $id_institucion = $_SESSION['user']['id_institucion'];
-
-    // INSTANCIAMOS LOS MODELOS
-    $objEstudiante = new Estudiante();
-    $objAcudiente = new Acudiente();
-    $objDocente = new Docente();
-    $objEvento = new Evento();
-    $objCurso = new Curso();
-    $objAsignatura = new Asignatura();
-
-    // CONTAMOS LOS REGISTROS POR INSTITUCIÓN
-    $totalEstudiantes = $objEstudiante->contar($id_institucion);
-    $totalAcudientes = $objAcudiente->contar($id_institucion);
-    $totalProfesores = $objDocente->contar($id_institucion);
-    $totalEventos = $objEvento->contar($id_institucion);
-    $totalCursos = $objCurso->contar($id_institucion);
-    $totalAsignaturas = $objAsignatura->contar($id_institucion);
-
-    // DATOS REALES PARA GRÁFICO Y CALENDARIO DEL DASHBOARD
-    $eventosInstitucion = $objEvento->listar($id_institucion);
-    $mesesAbreviados = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-    $anioActual = (int)date('Y');
-    $anioAnterior = $anioActual - 1;
-    $serieAnioActual = array_fill(0, 12, 0);
-    $serieAnioAnterior = array_fill(0, 12, 0);
-
-    $hoy = new DateTimeImmutable('today');
-    $inicioSemanaActual = $hoy->modify('monday this week');
-    $finSemanaActual = $hoy->modify('sunday this week');
-    $inicioSemanaAnterior = $inicioSemanaActual->modify('-7 days');
-    $finSemanaAnterior = $inicioSemanaActual->modify('-1 day');
-    $totalSemanaActual = 0;
-    $totalSemanaAnterior = 0;
-    $eventosCalendario = [];
-
-    foreach ($eventosInstitucion as $evento) {
-      $fechaCruda = (string)($evento['fecha_evento'] ?? '');
-      if ($fechaCruda === '') {
-        continue;
-      }
-
-      $fechaEvento = DateTimeImmutable::createFromFormat('Y-m-d', substr($fechaCruda, 0, 10));
-      if (!$fechaEvento) {
-        continue;
-      }
-
-      $anioEvento = (int)$fechaEvento->format('Y');
-      $mesEvento = (int)$fechaEvento->format('n') - 1;
-
-      if ($anioEvento === $anioActual && isset($serieAnioActual[$mesEvento])) {
-        $serieAnioActual[$mesEvento]++;
-      }
-
-      if ($anioEvento === $anioAnterior && isset($serieAnioAnterior[$mesEvento])) {
-        $serieAnioAnterior[$mesEvento]++;
-      }
-
-      if ($fechaEvento >= $inicioSemanaActual && $fechaEvento <= $finSemanaActual) {
-        $totalSemanaActual++;
-      }
-
-      if ($fechaEvento >= $inicioSemanaAnterior && $fechaEvento <= $finSemanaAnterior) {
-        $totalSemanaAnterior++;
-      }
-
-      $eventosCalendario[] = [
-        'id' => (int)($evento['id'] ?? 0),
-        'title' => (string)($evento['nombre_evento'] ?? 'Evento académico'),
-        'date' => $fechaEvento->format('Y-m-d'),
-        'timeStart' => !empty($evento['hora_inicio']) ? substr((string)$evento['hora_inicio'], 0, 5) : '',
-        'timeEnd' => !empty($evento['hora_fin']) ? substr((string)$evento['hora_fin'], 0, 5) : '',
-        'type' => (string)($evento['tipo_evento'] ?? 'evento'),
-        'location' => (string)($evento['ubicacion'] ?? '')
-      ];
-    }
-
-    usort($eventosCalendario, function ($a, $b) {
-      $claveA = ($a['date'] ?? '') . ' ' . ($a['timeStart'] ?? '');
-      $claveB = ($b['date'] ?? '') . ' ' . ($b['timeStart'] ?? '');
-      return strcmp($claveA, $claveB);
-    });
-
-    $dashboardData = [
-      'chart' => [
-        'labels' => $mesesAbreviados,
-        'currentYear' => $anioActual,
-        'previousYear' => $anioAnterior,
-        'currentSeries' => $serieAnioActual,
-        'previousSeries' => $serieAnioAnterior
-      ],
-      'totals' => [
-        'currentWeek' => $totalSemanaActual,
-        'previousWeek' => $totalSemanaAnterior
-      ],
-      'calendar' => [
-        'events' => $eventosCalendario
-      ]
-    ];
-
-    $adminCssVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-admin.css') ?: time();
-    $mainAdminJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-admin.js') ?: time();
+  extract(obtenerDataVistaAdminDashboard(), EXTR_SKIP);
 ?>
 
 <!doctype html>
@@ -136,7 +20,7 @@
 </head>
 
 <body>
-  <div class="app hide-right" id="appGrid">
+  <div class="app hide-right" id="appGrid" data-dashboard='<?= htmlspecialchars(json_encode($dashboardData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, "UTF-8") ?>'>
     <!-- LEFT SIDEBAR -->
     <!-- AQUI VA EL INCLUDE DEL SIDEBAR LEFT -->
      <?php
@@ -237,11 +121,6 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-
-  <script>
-    window.adminDashboardData = <?= json_encode($dashboardData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
-  </script>
-
 
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js?v=<?= $mainAdminJsVersion ?>"></script>
 </body>

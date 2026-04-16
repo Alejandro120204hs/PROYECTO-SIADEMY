@@ -1,16 +1,8 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
-  require_once BASE_PATH . '/app/controllers/administrador/matricula.php';
-   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
-    require_once BASE_PATH . '/app/controllers/perfil.php';
-    
-    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
-    $id = $_SESSION['user']['id'];
-    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
-    $usuario = mostrarPerfil($id);
+  require_once BASE_PATH . '/app/controllers/administrador/view_data.php';
 
-  // LLAMAMOS LA FUNCIÓN
-  $datos = mostrarMatriculas();
+  extract(obtenerDataVistaAdminMatriculas(), EXTR_SKIP);
   
 ?>
 
@@ -69,7 +61,7 @@
           <div class="icon"><i class="ri-graduation-cap-line"></i></div>
           <div>
             <small>Total Matrículas</small>
-            <strong><?= count($datos) ?></strong>
+            <strong><?= $totalMatriculas ?></strong>
           </div>
         </div>
         <div class="kpi">
@@ -83,20 +75,14 @@
           <div class="icon"><i class="ri-book-open-line"></i></div>
           <div>
             <small>Cursos Activos</small>
-            <strong><?php 
-                $cursos_unicos = array_unique(array_column($datos, 'id_curso'));
-                echo count($cursos_unicos);
-            ?></strong>
+            <strong><?= $totalCursosActivosConMatricula ?></strong>
           </div>
         </div>
         <div class="kpi">
           <div class="icon"><i class="ri-user-line"></i></div>
           <div>
             <small>Estudiantes Matriculados</small>
-            <strong><?php 
-                $estudiantes_unicos = array_unique(array_column($datos, 'id_estudiante'));
-                echo count($estudiantes_unicos);
-            ?></strong>
+            <strong><?= $totalEstudiantesMatriculados ?></strong>
           </div>
         </div>
       </div>
@@ -108,11 +94,7 @@
             <label for="filterAnio">Filtrar por Año:</label>
             <select id="filterAnio" class="form-select">
               <option value="">Todos los años</option>
-              <?php 
-                $anios = array_unique(array_column($datos, 'anio'));
-                rsort($anios);
-                foreach($anios as $anio): 
-              ?>
+              <?php foreach($aniosFiltro as $anio): ?>
                 <option value="<?= $anio ?>" <?= ($anio == date('Y')) ? 'selected' : '' ?>><?= $anio ?></option>
               <?php endforeach; ?>
             </select>
@@ -121,15 +103,7 @@
             <label for="filterCurso">Filtrar por Curso:</label>
             <select id="filterCurso" class="form-select">
               <option value="">Todos los cursos</option>
-              <?php 
-                $cursos = [];
-                foreach($datos as $dato){
-                    $key = $dato['grado'] . ' - ' . $dato['nombre_curso'];
-                    $cursos[$key] = $dato['id_curso'];
-                }
-                ksort($cursos);
-                foreach($cursos as $nombre => $id): 
-              ?>
+              <?php foreach($cursosFiltro as $nombre => $id): ?>
                 <option value="<?= $id ?>"><?= $nombre ?></option>
               <?php endforeach; ?>
             </select>
@@ -138,11 +112,7 @@
             <label for="filterNivel">Filtrar por Nivel:</label>
             <select id="filterNivel" class="form-select">
               <option value="">Todos los niveles</option>
-              <?php 
-                $niveles = array_unique(array_column($datos, 'nivel_academico'));
-                sort($niveles);
-                foreach($niveles as $nivel): 
-              ?>
+              <?php foreach($nivelesFiltro as $nivel): ?>
                 <option value="<?= $nivel ?>"><?= $nivel ?></option>
               <?php endforeach; ?>
             </select>
@@ -153,7 +123,7 @@
       <!-- TABLA DE MATRÍCULAS -->
       <section class="table-section">
         <div class="table-header">
-          <h3>Listado de Matrículas (<?= count($datos) ?>)</h3>
+          <h3>Listado de Matrículas (<?= $totalMatriculas ?>)</h3>
         </div>
 
         <div class="table-responsive">
