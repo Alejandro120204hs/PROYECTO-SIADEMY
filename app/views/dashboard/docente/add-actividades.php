@@ -1,55 +1,9 @@
 
 <?php
-// Iniciar sesión si no está iniciada
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once BASE_PATH . '/app/helpers/session_docente.php';
+require_once BASE_PATH . '/app/controllers/docente/view_data.php';
 
-// Verificar que el usuario esté autenticado
-if (!isset($_SESSION['user']) || $_SESSION['user']['rol'] !== 'Docente') {
-    header('Location: ' . BASE_URL . '/login');
-    exit;
-}
-
-// Verificar que se recibió el id_curso
-if (!isset($_GET['id_curso']) || empty($_GET['id_curso'])) {
-    // Redirigir a cursos si no hay id_curso
-    header('Location: ' . BASE_URL . '/docente-cursos');
-    exit;
-}
-
-$id_curso = $_GET['id_curso'];
-$id_institucion = $_SESSION['user']['id_institucion'];
-
-// Obtener información del curso seleccionado
-require_once BASE_PATH . '/config/database.php';
-$db = new Conexion();
-$conn = $db->getConexion();
-
-try {
-    $query = "SELECT c.*, 
-                     ac.id as id_asignatura_curso,
-                     a.nombre as nombre_asignatura,
-                     a.id as id_asignatura
-              FROM curso c
-              INNER JOIN asignatura_curso ac ON ac.id_curso = c.id
-              INNER JOIN asignatura a ON a.id = ac.id_asignatura
-              WHERE c.id = :id_curso
-              AND c.id_institucion = :id_institucion
-              LIMIT 1";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
-    $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
-    $stmt->execute();
-    $curso = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if (!$curso) {
-        header('Location: ' . BASE_URL . '/docente/cursos');
-        exit;
-    }
-} catch(PDOException $e) {
-    die("Error al consultar el curso: " . $e->getMessage());
-}
+extract(obtenerDataVistaDocenteAgregarActividad(), EXTR_SKIP);
 ?>
 <!doctype html>
 <html lang="es">
