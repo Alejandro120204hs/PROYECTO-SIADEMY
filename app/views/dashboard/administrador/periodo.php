@@ -1,44 +1,8 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
-  require_once BASE_PATH . '/app/models/administradores/periodo.php';
-  require_once BASE_PATH . '/app/controllers/perfil.php';
-  
-  // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
-  $id = $_SESSION['user']['id'];
-  // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
-  $usuario = mostrarPerfil($id);
+  require_once BASE_PATH . '/app/controllers/administrador/view_data.php';
 
-  // Obtener datos de periodos
-  $id_institucion = $_SESSION['user']['id_institucion'];
-  $objetoPeriodo = new Periodo();
-  
-  // Obtener KPIs
-  $kpis = $objetoPeriodo->obtenerKPIs($id_institucion);
-  
-  // Obtener periodo activo
-  $periodoActivo = $objetoPeriodo->obtenerPeriodoActivo($id_institucion);
-  
-  // Obtener años lectivos disponibles
-  $todosLosPeriodos = $objetoPeriodo->listar($id_institucion);
-  $anosDisponibles = [];
-  foreach($todosLosPeriodos as $periodo){
-    if(!in_array($periodo['ano_lectivo'], $anosDisponibles)){
-      $anosDisponibles[] = $periodo['ano_lectivo'];
-    }
-  }
-  sort($anosDisponibles, SORT_NUMERIC);
-  $anosDisponibles = array_reverse($anosDisponibles);
-  $adminCssVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-admin.css') ?: time();
-  $periodosCssVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-periodos.css') ?: time();
-  $mainAdminJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-admin.js') ?: time();
-  
-  // Año por defecto es el actual o el más reciente
-  $anoActual = isset($_GET['ano']) ? $_GET['ano'] : (end($anosDisponibles) ?: date('Y'));
-  
-  // Filtrar periodos por año
-  $periodosDelAno = array_filter($todosLosPeriodos, function($p) use ($anoActual) {
-    return $p['ano_lectivo'] == $anoActual;
-  });
+  extract(obtenerDataVistaAdminPeriodo(), EXTR_SKIP);
 ?>
 
 <!doctype html>
@@ -117,16 +81,7 @@
 
       <!-- PERIODO ACTIVO DESTACADO -->
       <section class="periodo-activo-banner">
-        <?php if($periodoActivo): 
-          $inicio = new DateTime($periodoActivo['fecha_inicio']);
-          $fin = new DateTime($periodoActivo['fecha_fin']);
-          $ahora = new DateTime();
-          $intervalo = $ahora->diff($fin);
-          $diasRestantes = $intervalo->days;
-          
-          $totalDias = $inicio->diff($fin)->days;
-          $diasRecorridos = $inicio->diff($ahora)->days;
-          $porcentaje = round(($diasRecorridos / $totalDias) * 100);
+        <?php if($periodoActivoResumen): 
         ?>
         
         <div class="banner-left">
@@ -135,11 +90,11 @@
           </div>
           <div class="banner-info">
             <span class="banner-label">Periodo Activo Actualmente</span>
-            <h3 class="banner-title"><?php echo htmlspecialchars($periodoActivo['nombre']); ?> · <?php echo $periodoActivo['ano_lectivo']; ?></h3>
+            <h3 class="banner-title"><?php echo htmlspecialchars($periodoActivoResumen['nombre']); ?> · <?php echo $periodoActivoResumen['ano_lectivo']; ?></h3>
             <div class="banner-fechas">
               <i class="ri-calendar-line"></i>
-              <span><?php echo date('j M Y', strtotime($periodoActivo['fecha_inicio'])); ?> &nbsp;→&nbsp; <?php echo date('j M Y', strtotime($periodoActivo['fecha_fin'])); ?></span>
-              <span class="banner-duracion"><?php echo $totalDias; ?> días</span>
+              <span><?php echo $periodoActivoResumen['fecha_inicio_fmt']; ?> &nbsp;→&nbsp; <?php echo $periodoActivoResumen['fecha_fin_fmt']; ?></span>
+              <span class="banner-duracion"><?php echo $periodoActivoResumen['total_dias']; ?> días</span>
             </div>
           </div>
         </div>
@@ -147,12 +102,12 @@
           <div class="banner-progress-wrap">
             <div class="banner-progress-label">
               <span>Progreso del periodo</span>
-              <strong><?php echo $porcentaje; ?>%</strong>
+              <strong><?php echo $periodoActivoResumen['porcentaje']; ?>%</strong>
             </div>
             <div class="banner-progress-bar">
-              <div class="banner-progress-fill" style="width: <?php echo $porcentaje; ?>%"></div>
+              <div class="banner-progress-fill" style="width: <?php echo $periodoActivoResumen['porcentaje']; ?>%"></div>
             </div>
-            <span class="banner-dias-restantes"><?php echo $diasRestantes; ?> días restantes</span>
+            <span class="banner-dias-restantes"><?php echo $periodoActivoResumen['dias_restantes']; ?> días restantes</span>
           </div>
         </div>
         <?php else: ?>
@@ -186,18 +141,16 @@
       <!-- LISTA DE PERIODOS -->
       <section class="periodos-section">
         <div class="periodos-header">
-          <h3>Periodos Registrados <span class="periodos-count"><?php echo count($periodosDelAno); ?></span></h3>
+          <h3>Periodos Registrados <span class="periodos-count"><?php echo $periodosCount; ?></span></h3>
         </div>
 
         <div class="periodos-list" id="periodosList">
           <?php 
-            if(count($periodosDelAno) > 0):
-              foreach($periodosDelAno as $periodo):
-                $estado = $periodo['estado'];
-                $activo = $periodo['activo'] == 1;
-                $inicio = new DateTime($periodo['fecha_inicio']);
-                $fin = new DateTime($periodo['fecha_fin']);
-                $diasDiferencia = $inicio->diff($fin)->days;
+            if($periodosCount > 0):
+              foreach($periodosRender as $item):
+                $periodo = $item['raw'];
+                $estado = $item['estado'];
+                $activo = $item['activo'];
           ?>
           <div class="periodo-card <?php echo $activo ? 'activo' : ''; ?>" data-estado="<?php echo $estado; ?>" data-id="<?php echo $periodo['id']; ?>">
             <?php if($activo): ?>
@@ -211,27 +164,19 @@
                 <div class="periodo-nombre-row">
                   <h4><?php echo htmlspecialchars($periodo['nombre']); ?></h4>
                   <span class="periodo-badge <?php echo $estado; ?>">
-                    <?php 
-                      if($estado == 'en_curso'): 
-                        echo '<i class="ri-radio-button-line"></i> Activo';
-                      elseif($estado == 'planificado'):
-                        echo '<i class="ri-time-line"></i> Próximo';
-                      else:
-                        echo '<i class="ri-checkbox-circle-fill"></i> Finalizado';
-                      endif;
-                    ?>
+                    <?php echo $item['estado_html']; ?>
                   </span>
                 </div>
                 <div class="periodo-meta">
-                  <span><i class="ri-calendar-line"></i> <?php echo date('j M Y', strtotime($periodo['fecha_inicio'])); ?> &nbsp;→&nbsp; <?php echo date('j M Y', strtotime($periodo['fecha_fin'])); ?></span>
+                  <span><i class="ri-calendar-line"></i> <?php echo $item['fecha_inicio_fmt']; ?> &nbsp;→&nbsp; <?php echo $item['fecha_fin_fmt']; ?></span>
                   <span class="periodo-sep">·</span>
-                  <span><i class="ri-time-line"></i> <?php echo $diasDiferencia; ?> días</span>
+                  <span><i class="ri-time-line"></i> <?php echo $item['dias_diferencia']; ?> días</span>
                   <span class="periodo-sep">·</span>
                   <span><i class="ri-book-open-line"></i> <?php echo $periodo['tipo_periodo']; ?></span>
                 </div>
                 <?php if($activo): ?>
                 <div class="periodo-progress-mini">
-                  <div class="periodo-progress-fill-mini" style="width: <?php echo $porcentaje ?? 50; ?>%"></div>
+                  <div class="periodo-progress-fill-mini" style="width: <?php echo $item['progreso_activo']; ?>%"></div>
                 </div>
                 <?php endif; ?>
               </div>

@@ -1,35 +1,9 @@
 <?php 
     require_once BASE_PATH . '/app/helpers/session_administrador.php';
-    require_once BASE_PATH . '/app/controllers/administrador/curso.php';
-    require_once BASE_PATH . '/app/models/administradores/matricula.php';
-    require_once BASE_PATH . '/app/models/administradores/docente_asignatura.php';
+    require_once BASE_PATH . '/app/controllers/administrador/view_data.php';
 
-    require_once BASE_PATH . '/app/controllers/perfil.php';
-    
-    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
-    $id = $_SESSION['user']['id'];
-    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
-    $usuario = mostrarPerfil($id);
-    
-    // Obtener el ID del curso
-    $id_curso = $_GET['id'] ?? 0;
-    
-    // Obtener información del curso
-    $curso = mostrarCursoId($id_curso);
-    
-    // Obtener estudiantes matriculados en el curso
-    $matriculaObj = new Matricula();
-    $anioActual = date('Y');
-    $estudiantes = $matriculaObj->listarPorCurso($id_curso, $anioActual);
-    
-    // Obtener asignaturas del curso con sus docentes
-    $docenteAsignaturaObj = new DocenteAsignatura();
-    $asignaturas = $docenteAsignaturaObj->obtenerAsignaturasPorCurso($id_curso);
-    
-    // Calcular estadísticas
-    $totalEstudiantes = count($estudiantes);
-    $cupoDisponible = $curso['cupo_maximo'] - $totalEstudiantes;
-    $porcentajeOcupacion = ($totalEstudiantes / $curso['cupo_maximo']) * 100;
+    $idCurso = $_GET['id'] ?? 0;
+    extract(obtenerDataVistaAdminDetalleCurso($idCurso), EXTR_SKIP);
 ?>
 
 <!doctype html>

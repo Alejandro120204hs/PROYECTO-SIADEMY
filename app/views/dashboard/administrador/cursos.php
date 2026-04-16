@@ -1,36 +1,8 @@
 <?php 
   require_once BASE_PATH . '/app/helpers/session_administrador.php';
-  require_once BASE_PATH . '/app/controllers/administrador/curso.php';
-   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
-    require_once BASE_PATH . '/app/controllers/perfil.php';
-    
-    // IMPORTAMOS LOS MODELOS NECESARIOS
-    require_once BASE_PATH . '/app/models/administradores/cursos.php';
-    require_once BASE_PATH . '/app/models/administradores/estudiante.php';
-    require_once BASE_PATH . '/app/models/administradores/docente.php';
-    
-    // LLAMAMOS EL ID QUE VIENE ATRAVEZ DEL METODO GET
-    $id = $_SESSION['user']['id'];
-    // LLAMAMOS LA FUNCION ESPECIFICA DEL CONTROLADOR
-    $usuario = mostrarPerfil($id);
+  require_once BASE_PATH . '/app/controllers/administrador/view_data.php';
 
-    // OBTENEMOS LA INSTITUCIÓN DEL ADMIN
-    $id_institucion = $_SESSION['user']['id_institucion'];
-
-    // INSTANCIAMOS LOS MODELOS
-    $objCurso = new Curso();
-    $objEstudiante = new Estudiante();
-    $objDocente = new Docente();
-
-    // CONTAMOS LOS REGISTROS POR INSTITUCIÓN
-    $totalCursos = $objCurso->contar($id_institucion);
-    $totalEstudiantes = $objEstudiante->contar($id_institucion);
-    $totalProfesores = $objDocente->contar($id_institucion);
-    $adminCssVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-admin.css') ?: time();
-    $mainAdminJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-admin.js') ?: time();
-
-  // LLAMAMOS LA FUNCION
-  $datos = mostrarCursos();
+  extract(obtenerDataVistaAdminCursos(), EXTR_SKIP);
   
 ?>
 
