@@ -1,68 +1,8 @@
-<?php 
-  // require_once BASE_PATH . '/app/helpers/session_administrador.php';
-   // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
-  require_once BASE_PATH . '/app/controllers/docente/curso.php';
-  require_once BASE_PATH . '/app/controllers/docente/actividad.php';
-  require_once BASE_PATH . '/app/controllers/perfil.php';
+<?php
+  require_once BASE_PATH . '/app/helpers/session_docente.php';
+  require_once BASE_PATH . '/app/controllers/docente/view_data.php';
 
-  // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
-  $datos = mostrarCursos();
-  $id = $_SESSION['user']['id'] ?? 0;
-  $usuario = mostrarPerfil($id);
-  
-  // Obtener actividades del curso seleccionado
-  $actividades = [];
-  $id_curso_seleccionado = null;
-  $info_curso = null;
-  
-  if (isset($_GET['id_curso']) && !empty($_GET['id_curso'])) {
-      $id_curso_seleccionado = $_GET['id_curso'];
-      $actividades = listarActividades();
-      
-      // Obtener info del curso para mostrar en el header
-      if (!empty($actividades)) {
-          $info_curso = $actividades[0]; // Tiene grado, curso, nombre_asignatura
-      }
-  }
-  
-  // Stats calculados para la info bar y tabs
-  $totalActividades = count($actividades);
-  $totalActivas     = 0;
-  $totalCerradas    = 0;
-  foreach ($actividades as $a) {
-    if ($a['estado'] === 'activa')  $totalActivas++;
-    elseif ($a['estado'] === 'cerrada') $totalCerradas++;
-  }
-  $nombreDocente  = htmlspecialchars(trim(($usuario['nombres'] ?? '') . ' ' . ($usuario['apellidos'] ?? '')), ENT_QUOTES, 'UTF-8');
-  $asignaturaInfo = $info_curso ? htmlspecialchars($info_curso['nombre_asignatura'], ENT_QUOTES, 'UTF-8') : '';
-  // Años únicos para el filtro de período
-  $anosUnicos = [];
-  foreach ($actividades as $a) {
-    $anio = date('Y', strtotime($a['fecha_entrega']));
-    if (!in_array($anio, $anosUnicos)) $anosUnicos[] = $anio;
-  }
-  rsort($anosUnicos);
-
-  // Función auxiliar para obtener icono según tipo
-  function obtenerIconoTipo($tipo) {
-      $iconos = [
-          'Taller' => 'ri-file-text-line',
-          'Quiz' => 'ri-file-list-3-line',
-          'Examen' => 'ri-file-paper-line',
-          'Proyecto' => 'ri-folder-line',
-          'Exposición' => 'ri-presentation-line',
-          'Laboratorio' => 'ri-flask-line',
-          'Tarea' => 'ri-file-edit-line'
-      ];
-      return $iconos[$tipo] ?? 'ri-file-line';
-  }
-  
-  // Función auxiliar para formatear fecha
-  function formatearFecha($fecha) {
-      $meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-      $timestamp = strtotime($fecha);
-      return date('d', $timestamp) . ' ' . $meses[date('n', $timestamp) - 1] . ' ' . date('Y', $timestamp);
-  }
+  extract(obtenerDataVistaDocenteActividades(), EXTR_SKIP);
 ?>
 <!doctype html>
   <html lang="es">
@@ -235,7 +175,7 @@
                    data-descripcion="<?= htmlspecialchars(strtolower($actividad['descripcion'])) ?>">
                 <div class="actividad-card-header">
                   <div class="actividad-tipo-badge <?= $tipoClase ?>">
-                    <i class="<?= obtenerIconoTipo($actividad['tipo']) ?>"></i>
+                    <i class="<?= docenteObtenerIconoTipoActividad($actividad['tipo']) ?>"></i>
                     <?= $tipoTexto ?>
                   </div>
                   <div class="actividad-estado-badge <?= $estadoClase ?>">
@@ -258,7 +198,7 @@
                     </div>
                     <div class="actividad-meta-item">
                       <i class="ri-calendar-check-line"></i>
-                      <span>Cierre: <strong><?= formatearFecha($actividad['fecha_entrega']) ?></strong></span>
+                      <span>Cierre: <strong><?= docenteFormatearFechaActividad($actividad['fecha_entrega']) ?></strong></span>
                     </div>
                     <div class="actividad-meta-item">
                       <i class="ri-percent-line"></i>
@@ -342,7 +282,7 @@
                           data-titulo="<?= htmlspecialchars(strtolower($actividad['titulo'])) ?>">
                         <td>
                           <span class="tabla-tipo-badge <?= strtolower($actividad['tipo']) ?>">
-                            <i class="<?= obtenerIconoTipo($actividad['tipo']) ?>"></i>
+                            <i class="<?= docenteObtenerIconoTipoActividad($actividad['tipo']) ?>"></i>
                           </span>
                         </td>
                         <td>
@@ -352,7 +292,7 @@
                         </td>
                         <td><strong style="color: #a4b1ff;"><?= $actividad['grado'] ?>° <?= $actividad['curso'] ?></strong></td>
                         <td><small style="color: #c7cbe1;"><?= date('Y', strtotime($actividad['fecha_entrega'])) ?></small></td>
-                        <td><small style="color: #c7cbe1;"><?= formatearFecha($actividad['fecha_entrega']) ?></small></td>
+                        <td><small style="color: #c7cbe1;"><?= docenteFormatearFechaActividad($actividad['fecha_entrega']) ?></small></td>
                         <td class="text-center">
                           <span class="tabla-valor-badge"><?= number_format($actividad['ponderacion'], 0) ?>%</span>
                         </td>

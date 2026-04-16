@@ -92,14 +92,16 @@ class Actividad_docente {
                     INNER JOIN asignatura_curso ac ON a.id_asignatura_curso = ac.id
                     INNER JOIN curso c ON ac.id_curso = c.id
                     INNER JOIN asignatura asig ON a.id_asignatura = asig.id
+                LEFT JOIN docente d ON d.id = a.id_docente
                     WHERE ac.id_curso = :id_curso 
-                    AND a.id_docente = :id_docente
+                AND (a.id_docente = :id_docente OR d.id_usuario = :id_usuario_docente)
                     AND a.id_institucion = :id_institucion
                     ORDER BY a.fecha_entrega DESC";
             
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
             $stmt->bindParam(':id_docente', $id_docente, PDO::PARAM_INT);
+            $stmt->bindParam(':id_usuario_docente', $id_docente, PDO::PARAM_INT);
             $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
             $stmt->execute();
             

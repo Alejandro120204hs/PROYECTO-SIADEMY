@@ -286,7 +286,15 @@ $(document).ready(function() {
 
     const daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-    const rawCalendarEvents = Array.isArray(window.docenteCalendarEvents) ? window.docenteCalendarEvents : [];
+    let rawCalendarEvents = Array.isArray(window.docenteCalendarEvents) ? window.docenteCalendarEvents : [];
+    if ((!rawCalendarEvents || rawCalendarEvents.length === 0) && appGrid && appGrid.dataset.calendarEvents) {
+      try {
+        const parsedCalendarEvents = JSON.parse(appGrid.dataset.calendarEvents);
+        rawCalendarEvents = Array.isArray(parsedCalendarEvents) ? parsedCalendarEvents : [];
+      } catch (error) {
+        rawCalendarEvents = [];
+      }
+    }
 
     const categoryByType = {
       examen: 'Examen',
@@ -489,7 +497,16 @@ if (document.getElementById('calendarLargeGrid')) {
 
     const daysOfWeekEvents = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-    const rawEvents = Array.isArray(window.docenteEventosData) ? window.docenteEventosData : [];
+    let rawEvents = Array.isArray(window.docenteEventosData) ? window.docenteEventosData : [];
+    const eventosAppGrid = document.getElementById('appGrid');
+    if ((!rawEvents || rawEvents.length === 0) && eventosAppGrid && eventosAppGrid.dataset.eventos) {
+      try {
+        const parsedEventos = JSON.parse(eventosAppGrid.dataset.eventos);
+        rawEvents = Array.isArray(parsedEventos) ? parsedEventos : [];
+      } catch (error) {
+        rawEvents = [];
+      }
+    }
     const dayEventsModalEl = document.getElementById('dayEventsModal');
     const dayEventsModalTitle = document.getElementById('dayEventsModalLabel');
     const dayEventsModalBody = document.getElementById('dayEventsModalBody');

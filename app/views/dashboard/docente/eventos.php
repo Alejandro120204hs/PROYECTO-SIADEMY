@@ -1,12 +1,8 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
+require_once BASE_PATH . '/app/helpers/session_docente.php';
+require_once BASE_PATH . '/app/controllers/docente/view_data.php';
 
-require_once BASE_PATH . '/app/controllers/perfil.php';
-$id = $_SESSION['user']['id'] ?? 0;
-$usuario = mostrarPerfil($id);
-$mainDocenteJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-docente.js') ?: time();
+extract(obtenerDataVistaDocenteEventos(), EXTR_SKIP);
 ?>
 
 <!doctype html>
@@ -25,7 +21,7 @@ $mainDocenteJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main
 </head>
 
 <body>
-  <div class="app hide-right" id="appGrid">
+  <div class="app hide-right" id="appGrid" data-eventos='<?= docenteJsonParaHtml($eventosDocente) ?>'>
     <?php include_once __DIR__ . '/../../layouts/sidebar_docente.php' ?>
 
     <main class="main">
@@ -172,9 +168,6 @@ $mainDocenteJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    window.docenteEventosData = <?= json_encode($eventosDocente, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
-  </script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-docente.js?v=<?= $mainDocenteJsVersion ?>"></script>
 </body>
 

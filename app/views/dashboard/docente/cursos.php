@@ -1,24 +1,8 @@
-<?php 
-  // require_once BASE_PATH . '/app/helpers/session_administrador.php';
-   // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
-  require_once BASE_PATH . '/app/controllers/docente/curso.php';
-  require_once BASE_PATH . '/app/controllers/perfil.php';
+<?php
+  require_once BASE_PATH . '/app/helpers/session_docente.php';
+  require_once BASE_PATH . '/app/controllers/docente/view_data.php';
 
-  // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
-  $datos = mostrarCursos();
-  $id = $_SESSION['user']['id'] ?? 0;
-  $usuario = mostrarPerfil($id);
-
-  // Estadísticas calculadas para la info bar
-  $totalCursos      = count($datos ?? []);
-  $totalEstudiantes = !empty($datos) ? array_sum(array_column($datos, 'total_estudiantes')) : 0;
-  $asignaturasUnicas = !empty($datos)
-      ? implode(', ', array_unique(array_column($datos, 'nombre_asignatura')))
-      : '—';
-  $nombreDocente = htmlspecialchars(
-      trim(($usuario['nombres'] ?? '') . ' ' . ($usuario['apellidos'] ?? '')),
-      ENT_QUOTES, 'UTF-8'
-  );
+  extract(obtenerDataVistaDocenteCursos(), EXTR_SKIP);
 ?>
 <!doctype html>
 <html lang="es">
@@ -90,20 +74,11 @@
           <i class="ri-filter-3-line cursos-filter-icon"></i>
           <select id="courseFilter" class="cursos-filter-select">
             <option value="all" selected>Todos los grados</option>
-            <?php 
-            // Obtener grados únicos para evitar duplicados
-            $gradosUnicos = [];
-            if (!empty($datos)):
-              foreach ($datos as $curso):
-                if (!in_array($curso['grado'], $gradosUnicos)):
-                  $gradosUnicos[] = $curso['grado'];
-            ?>
-            <option value="<?= $curso['grado'] ?>"><?= $curso['grado'] ?>°</option>
-            <?php 
-                endif;
-              endforeach; 
-            else: 
-            ?>
+            <?php if (!empty($gradosUnicos)): ?>
+              <?php foreach ($gradosUnicos as $grado): ?>
+                <option value="<?= $grado ?>"><?= $grado ?>°</option>
+              <?php endforeach; ?>
+            <?php else: ?>
             <option disabled>No hay cursos registrados</option>
             <?php endif; ?> 
            

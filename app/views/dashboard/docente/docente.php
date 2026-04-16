@@ -1,17 +1,8 @@
-<?php 
-  // require_once BASE_PATH . '/app/helpers/session_administrador.php';
-   // ENLAZAMOS LA DEPENDENCIA, EN ESTE CASO EL CONTROLADOR QUE TIENE LA FUNCION DE COSULTAR LOS DATOS
-  require_once BASE_PATH . '/app/controllers/docente/curso.php';
-  require_once BASE_PATH . '/app/controllers/perfil.php';
+<?php
+  require_once BASE_PATH . '/app/helpers/session_docente.php';
+  require_once BASE_PATH . '/app/controllers/docente/view_data.php';
 
-  // LLAMAMOS LA FUNCION ESPECIFICA QUE EXISTE EN DICHO CONTROLADOR
-  $datos = mostrarCursos();
-  $estadisticas = obtenerEstadisticasDocenteDashboard();
-  $estudiantesBajoRendimiento = listarEstudiantesBajoRendimientoDocente(20);
-  $eventosCalendarioDocente = obtenerEventosCalendarioDocente();
-  $id = $_SESSION['user']['id'] ?? 0;
-  $usuario = mostrarPerfil($id);
-  $mainDocenteJsVersion = @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-docente.js') ?: time();
+  extract(obtenerDataVistaDocenteDashboard(), EXTR_SKIP);
 ?>
 
 <!doctype html>
@@ -36,7 +27,7 @@
 </head>
 
 <body>
-  <div class="app hide-right" id="appGrid">
+  <div class="app hide-right" id="appGrid" data-calendar-events='<?= docenteJsonParaHtml($eventosCalendarioDocente) ?>'>
     <!-- LEFT SIDEBAR -->
     
     <?php 
@@ -242,9 +233,6 @@
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script>
-  window.docenteCalendarEvents = <?= json_encode($eventosCalendarioDocente, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
-</script>
 <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-docente.js?v=<?= $mainDocenteJsVersion ?>"></script>
 
 </body>
