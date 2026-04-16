@@ -190,7 +190,12 @@
 .status-pill.s-E { background:rgba(59,130,246,.15); color:#60a5fa; }
 .status-pill.s-null { background:rgba(107,114,128,.12); color:#9ca3af; }
 
-.att-actions { display: flex; gap: 6px; }
+.att-actions {
+  display: flex;
+  gap: 6px;
+  font-size: 0;
+  line-height: 0;
+}
 .att-btn {
   width: 36px; height: 36px;
   border: 1.5px solid transparent;

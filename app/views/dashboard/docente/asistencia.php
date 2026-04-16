@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIADEMY • Gestión de Asistencia</title>
+    <title>SIADEMY â€¢ GestiÃ³n de Asistencia</title>
     <?php include_once __DIR__ . '/../../layouts/header_coordinador.php' ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/docente/asistencia.css?v=<?= $asistenciaCssVersion ?>">
@@ -29,7 +29,7 @@
             <!-- TOPBAR -->
             <div class="topbar">
                 <div class="topbar-left">
-                    <div class="title">Gestión de Asistencia</div>
+                    <div class="title">GestiÃ³n de Asistencia</div>
                 </div>
                 <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
             </div>
@@ -60,7 +60,7 @@
                             </select>
                         </div>
 
-                        <!-- FILTRO 2: ASIGNATURA (se actualiza din├ímicamente) -->
+                        <!-- FILTRO 2: ASIGNATURA (se actualiza dinâ”œÃ­micamente) -->
                         <div class="filter-group">
                             <label class="filter-label">
                                 <i class="ri-book-2-line"></i>
@@ -93,7 +93,7 @@
                                    max="<?= date('Y-m-d') ?>">
                         </div>
 
-                        <!-- BOT├ôN APLICAR FILTROS -->
+                        <!-- BOTâ”œÃ´N APLICAR FILTROS -->
                         <div class="filter-group">
                             <button type="submit" class="filter-btn">
                                 <i class="ri-search-line"></i>
@@ -137,7 +137,7 @@
                     </div>
                 </div>
 
-                <!-- ESTAD├ìSTICAS -->
+                <!-- ESTADâ”œÃ¬STICAS -->
                 <div class="attendance-stats">
                     <div class="kpi-att presentes">
                         <div class="kpi-att-icon"><i class="ri-checkbox-circle-line"></i></div>
@@ -243,32 +243,10 @@
                                                 ?>
                                             </span>
                                         </td>
-                                                                    <div class="title">Gestión de Asistencia</div>
+                                        <td style="text-align: center;">
                                             <div class="att-actions">
-                                                <button type="button" class="att-btn presente <?= $estudiante['asistencia_hoy'] === 'P' ? 'active' : '' ?>" 
+                                                <button type="button" class="att-btn presente <?= $estudiante['asistencia_hoy'] === 'P' ? 'active' : '' ?>"
                                                         data-tooltip="Presente"
-                                                    <script>
-                                                        window.addEventListener('load', function() {
-                                                            document.documentElement.style.marginTop = '0';
-                                                            document.documentElement.style.paddingTop = '0';
-                                                            document.body.style.marginTop = '0';
-                                                            document.body.style.paddingTop = '0';
-
-                                                            var appGrid = document.getElementById('appGrid');
-                                                            if (appGrid) {
-                                                                appGrid.style.marginTop = '0';
-                                                                appGrid.style.paddingTop = '0';
-                                                            }
-
-                                                            var leftSidebar = document.getElementById('leftSidebar');
-                                                            if (leftSidebar) {
-                                                                leftSidebar.style.marginTop = '0';
-                                                                leftSidebar.style.top = '0';
-                                                            }
-
-                                                            window.scrollTo(0, 0);
-                                                        });
-                                                    </script>
                                                         data-type="P"
                                                         onclick="marcarAsistencia(<?= $estudiante['id'] ?>, 'P', this)">
                                                     <i class="ri-checkbox-circle-line"></i>
@@ -313,10 +291,10 @@
                 <div class="history-panel">
                     <div class="history-panel-header">
                         <h3 class="history-panel-title"><i class="ri-history-line"></i> Historial de Asistencia</h3>
-                        <span class="history-panel-sub">├Ültimos 20 registros</span>
+                        <span class="history-panel-sub">â”œÃœltimos 20 registros</span>
                     </div>
                     <?php if (empty($historial_asistencia)): ?>
-                        <div class="history-empty">No hay historial para este curso y asignatura todav├¡a.</div>
+                        <div class="history-empty">No hay historial para este curso y asignatura todavâ”œÂ¡a.</div>
                     <?php else: ?>
                         <div class="history-list">
                             <?php foreach ($historial_asistencia as $h): ?>
@@ -345,7 +323,7 @@
         </main>
     </div>
 
-    <!-- BOT├ôN GUARDAR FLOTANTE -->
+    <!-- BOTâ”œÃ´N GUARDAR FLOTANTE -->
     <?php if ($curso_seleccionado): ?>
         <button class="save-button-floating" id="saveButton">
             <i class="ri-save-line"></i>
@@ -356,7 +334,7 @@
         <div class="modal-overlay" id="confirmModal" aria-hidden="true">
             <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
                 <div class="modal-header">
-                    <h3 class="modal-title" id="confirmModalTitle"><i class="ri-error-warning-line"></i> Confirmar acci├│n</h3>
+                    <h3 class="modal-title" id="confirmModalTitle"><i class="ri-error-warning-line"></i> Confirmar acciâ”œâ”‚n</h3>
                     <button type="button" class="modal-close" id="confirmCloseBtn" aria-label="Cerrar">&times;</button>
                 </div>
                 <div class="modal-body" id="confirmModalMessage"></div>
