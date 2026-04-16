@@ -70,9 +70,21 @@ updateGridState();
 // ========================================
 // GRÁFICO (solo si existe)
 // ========================================
-const adminDashboardData = (typeof window !== 'undefined' && window.adminDashboardData)
-  ? window.adminDashboardData
-  : {};
+let adminDashboardData = {};
+
+const appGridDataNode = document.getElementById('appGrid');
+const dashboardDataRaw = appGridDataNode ? appGridDataNode.getAttribute('data-dashboard') : '';
+
+if (dashboardDataRaw) {
+  try {
+    adminDashboardData = JSON.parse(dashboardDataRaw);
+  } catch (error) {
+    adminDashboardData = {};
+  }
+} else if (typeof window !== 'undefined' && window.adminDashboardData) {
+  // Backward compatibility for pages that still inject this payload globally.
+  adminDashboardData = window.adminDashboardData;
+}
 
 const ctx = document.getElementById('lineChart');
 if (ctx) {

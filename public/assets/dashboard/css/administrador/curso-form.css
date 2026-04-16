@@ -1,0 +1,19 @@
+/* Estilos compartidos para add/editar curso */
+.select-similar {
+    height: 45px;
+    padding: 8px 12px;
+    font-size: 15px;
+    border-radius: 3px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.select-similar:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 3px rgba(13,110,253,.25);
+}
+
+.select-similar:hover {
+    border-color: #999;
+}
