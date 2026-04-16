@@ -15,7 +15,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['rol'] !== 'Docente') {
 
 // VALIDAR PARÁMETRO ID DE ACTIVIDAD
 if (!isset($_GET['id_actividad']) || empty($_GET['id_actividad'])) {
-    header('Location: ' . BASE_URL . '/docente-panel-actividades');
+    header('Location: ' . BASE_URL . '/docente/actividades');
     exit;
 }
 
@@ -23,7 +23,7 @@ $id_actividad = filter_var($_GET['id_actividad'], FILTER_VALIDATE_INT);
 $id_institucion = $_SESSION['user']['id_institucion'];
 
 if (!$id_actividad) {
-    header('Location: ' . BASE_URL . '/docente-panel-actividades');
+    header('Location: ' . BASE_URL . '/docente/actividades');
     exit;
 }
 
@@ -34,7 +34,7 @@ $entregaModel = new EntregaDocente();
 $info_actividad = $entregaModel->obtenerInfoActividad($id_actividad, $id_institucion);
 
 if (!$info_actividad) {
-    header('Location: ' . BASE_URL . '/docente-panel-actividades');
+    header('Location: ' . BASE_URL . '/docente/actividades');
     exit;
 }
 

@@ -25,6 +25,7 @@ class EntregaDocente {
                         asig.nombre AS nombre_asignatura,
                         c.grado,
                         c.curso AS nombre_curso,
+                        c.id AS id_curso,
                         CONCAT(d.nombres, ' ', d.apellidos) AS nombre_docente
                     FROM actividad a
                     INNER JOIN asignatura_curso ac ON a.id_asignatura_curso = ac.id
