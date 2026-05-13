@@ -2,7 +2,8 @@
     require_once BASE_PATH . '/app/helpers/session_docente.php';
     require_once BASE_PATH . '/app/controllers/docente/view_data.php';
 
-    extract(obtenerDataVistaDocenteAsistencia(), EXTR_SKIP);
+    $dataVistaDocenteAsistencia = obtenerDataVistaDocenteAsistencia();
+    extract($dataVistaDocenteAsistencia, EXTR_SKIP);
 ?>
 
 <!doctype html>
@@ -299,12 +300,13 @@
                             <?php foreach ($historial_asistencia as $h): ?>
                                 <?php
                                     $f = !empty($h['fecha']) ? date('d/m/Y', strtotime($h['fecha'])) : 'Sin fecha';
+                                    $fechaDb = !empty($h['fecha']) ? $h['fecha'] : '';
                                     $p = (int) ($h['presentes'] ?? 0);
                                     $a = (int) ($h['ausentes'] ?? 0);
                                     $j = (int) ($h['justificados'] ?? 0);
                                     $t = (int) ($h['total_registrados'] ?? 0);
                                 ?>
-                                <div class="history-item">
+                                <div class="history-item" data-fecha="<?= htmlspecialchars($fechaDb, ENT_QUOTES, 'UTF-8') ?>">
                                     <div class="history-date"><?= htmlspecialchars($f) ?></div>
                                     <div class="history-metrics">
                                         <span class="metric-chip p"><i class="ri-checkbox-circle-line"></i> <?= $p ?> Pres.</span>
@@ -312,6 +314,9 @@
                                         <span class="metric-chip j"><i class="ri-file-text-line"></i> <?= $j ?> Just.</span>
                                         <span class="metric-chip t"><i class="ri-group-line"></i> <?= $t ?> Reg.</span>
                                     </div>
+                                    <button class="btn-history-view" title="Ver estudiantes de este día" aria-label="Ver estudiantes">
+                                        <i class="ri-eye-line"></i> Ver
+                                    </button>
                                 </div>
                             <?php endforeach; ?>
                         </div>

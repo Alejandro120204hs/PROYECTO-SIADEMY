@@ -122,7 +122,7 @@
               <option value="todos">Todos los cursos</option>
               <?php if (!empty($datos)): ?>
                 <?php foreach ($datos as $cursoOpt): ?>
-                  <option value="<?= $cursoOpt['grado'] . strtolower($cursoOpt['curso']) ?>"
+                  <option value="<?= $cursoOpt['id'] ?>"
                     <?= ($id_curso_seleccionado == $cursoOpt['id']) ? 'selected' : '' ?>>
                     <?= htmlspecialchars($cursoOpt['grado'] . '° ' . $cursoOpt['curso'] . ' · ' . $cursoOpt['nombre_asignatura'], ENT_QUOTES, 'UTF-8') ?>
                   </option>
@@ -164,14 +164,14 @@
           <?php else: ?>
             <?php foreach ($actividades as $actividad): ?>
               <?php 
-                $estadoClase = strtolower($actividad['estado']);
+                $estadoClase = strtolower($actividad['estado_calculado']);
                 $tipoClase = strtolower($actividad['tipo']);
                 $tipoTexto = strtoupper($actividad['tipo']);
               ?>
               <div class="actividad-card" 
                    data-estado="<?= $estadoClase ?>" 
                    data-periodo="<?= date('Y', strtotime($actividad['fecha_entrega'])) ?>" 
-                   data-curso="<?= $actividad['grado'] . strtolower($actividad['curso']) ?>" 
+                   data-curso="<?= $actividad['id_curso'] ?>" 
                    data-titulo="<?= htmlspecialchars(strtolower($actividad['titulo'])) ?>" 
                    data-descripcion="<?= htmlspecialchars(strtolower($actividad['descripcion'])) ?>">
                 <div class="actividad-card-header">
@@ -180,7 +180,7 @@
                     <?= $tipoTexto ?>
                   </div>
                   <div class="actividad-estado-badge <?= $estadoClase ?>">
-                    <?= ucfirst($actividad['estado']) ?>
+                    <?= ucfirst($actividad['estado_calculado']) ?>
                   </div>
                 </div>
 
@@ -233,7 +233,7 @@
                           data-descripcion="<?= htmlspecialchars($actividad['descripcion'], ENT_QUOTES, 'UTF-8') ?>"
                           data-ponderacion="<?= $actividad['ponderacion'] ?>"
                           data-fecha="<?= $actividad['fecha_entrega'] ?>"
-                      data-estado-act="<?= $actividad['estado'] ?>"
+                      data-estado-act="<?= $actividad['estado_calculado'] ?>"
                       data-archivo="<?= htmlspecialchars($actividad['archivo'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                     <i class="ri-edit-line"></i>
                     Editar
@@ -277,9 +277,9 @@
                     </tr>
                   <?php else: ?>
                     <?php foreach ($actividades as $actividad): ?>
-                      <tr data-estado="<?= strtolower($actividad['estado']) ?>" 
+                      <tr data-estado="<?= strtolower($actividad['estado_calculado']) ?>" 
                           data-periodo="<?= date('Y', strtotime($actividad['fecha_entrega'])) ?>"
-                          data-curso="<?= $actividad['grado'] . strtolower($actividad['curso']) ?>"
+                          data-curso="<?= $actividad['id_curso'] ?>"
                           data-titulo="<?= htmlspecialchars(strtolower($actividad['titulo'])) ?>">
                         <td>
                           <span class="tabla-tipo-badge <?= strtolower($actividad['tipo']) ?>">
@@ -305,8 +305,8 @@
                         </td>
                         <td class="text-center">
                           <?php 
-                            $estadoClase = strtolower($actividad['estado']);
-                            $estadoTexto = ucfirst($actividad['estado']);
+                            $estadoClase = strtolower($actividad['estado_calculado']);
+                            $estadoTexto = ucfirst($actividad['estado_calculado']);
                           ?>
                           <span class="actividad-estado-badge <?= $estadoClase ?>"><?= $estadoTexto ?></span>
                         </td>
@@ -321,7 +321,7 @@
                                   data-descripcion="<?= htmlspecialchars($actividad['descripcion'], ENT_QUOTES, 'UTF-8') ?>"
                                   data-ponderacion="<?= $actividad['ponderacion'] ?>"
                                   data-fecha="<?= $actividad['fecha_entrega'] ?>"
-                              data-estado-act="<?= $actividad['estado'] ?>"
+                              data-estado-act="<?= $actividad['estado_calculado'] ?>"
                               data-archivo="<?= htmlspecialchars($actividad['archivo'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                             <i class="ri-edit-line"></i>
                           </button>
@@ -646,7 +646,7 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-      <script src="<?= BASE_URL ?>/public/assets/dashboard/js/docente/actividades.js"></script>
+      <script src="<?= BASE_URL ?>/public/assets/dashboard/js/docente/actividades.js?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/js/docente/actividades.js') ?: time() ?>"></script>
 
 
   </body>

@@ -3,7 +3,8 @@
     require_once BASE_PATH . '/app/controllers/docente/view_data.php';
 
     $idCurso = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-    extract(obtenerDataVistaDocenteDetalleCurso($idCurso), EXTR_SKIP);
+    $dataVistaDocenteDetalleCurso = obtenerDataVistaDocenteDetalleCurso($idCurso);
+    extract($dataVistaDocenteDetalleCurso, EXTR_SKIP);
 ?>
 
 <!doctype html>

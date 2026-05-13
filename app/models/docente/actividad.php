@@ -85,6 +85,7 @@ class Actividad_docente {
     public function listarPorCurso($id_curso, $id_docente, $id_institucion) {
         try {
             $sql = "SELECT a.*, 
+                           c.id as id_curso,
                            c.grado,
                            c.curso,
                            asig.nombre as nombre_asignatura

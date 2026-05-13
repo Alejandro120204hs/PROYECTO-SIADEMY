@@ -247,8 +247,9 @@
   border-radius: 12px;
   padding: 12px 14px;
   display: grid;
-  grid-template-columns: 170px 1fr;
+  grid-template-columns: 170px 1fr auto;
   gap: 12px;
+  align-items: center;
 }
 .history-date { color: #fff; font-weight: 700; font-size: 13px; }
 .history-metrics { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
@@ -257,6 +258,31 @@
 .metric-chip.a { background: rgba(239,68,68,.13); color: #f87171; }
 .metric-chip.j { background: rgba(59,130,246,.13); color: #60a5fa; }
 .metric-chip.t { background: rgba(245,158,11,.13); color: #fbbf24; }
+
+/* Botón para ver asistencia de una fecha */
+.btn-history-view {
+  padding: 8px 14px;
+  background: rgba(79,70,229,.2);
+  color: #6366f1;
+  border: 1px solid rgba(79,70,229,.4);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.btn-history-view:hover {
+  background: rgba(79,70,229,.3);
+  border-color: rgba(79,70,229,.6);
+  box-shadow: 0 4px 12px rgba(99,102,241,.25);
+}
+.btn-history-view:active {
+  transform: scale(0.98);
+}
 
 .save-button-floating {
   position: fixed; bottom: 28px; right: 28px;

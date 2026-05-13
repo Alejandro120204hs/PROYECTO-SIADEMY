@@ -321,6 +321,137 @@ function mostrarToast(mensaje, tipo) {
   }, 3000);
 }
 
+/**
+ * Ver asistencia de un día específico
+ * Obtiene todos los estudiantes y sus estados de asistencia para una fecha
+ */
+function verAsistenciaDelDia(fecha) {
+  const modal = document.getElementById('historyModal');
+  const modalTitle = document.getElementById('historyModalTitle');
+  const body = document.getElementById('historyModalBody');
+  
+  if (!modal || !body) {
+    mostrarToast('No se pudo abrir el modal de asistencia.', 'error');
+    return;
+  }
+
+  modal.classList.add('visible');
+  modal.setAttribute('aria-hidden', 'false');
+  body.innerHTML = '<div style="padding:20px;text-align:center;"><i class="ri-loader-4-line" style="font-size:32px;animation:spin 1s linear infinite;"></i><p style="margin-top:12px;color:#97a1b6;">Cargando asistencia...</p></div>';
+
+  if (modalTitle) {
+    modalTitle.innerHTML = `<i class="ri-calendar-line"></i> Asistencia del ${new Date(fecha + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
+  }
+
+  // Realizar solicitud al controlador
+  const params = new URLSearchParams({
+    curso: cursoSeleccionado,
+    asignatura: asignaturaSeleccionada,
+    fecha: fecha
+  });
+
+  fetch(`${baseUrl}/docente/obtener-asistencia-fecha?${params.toString()}`)
+    .then(resp => resp.json())
+    .then(data => {
+      if (!data.success) {
+        body.innerHTML = `<div class="history-empty" style="margin:20px;">${data.message || 'No se pudo cargar la asistencia.'}</div>`;
+        return;
+      }
+
+      const estudiantes = Array.isArray(data.estudiantes) ? data.estudiantes : [];
+      const conteos = data.conteos || { total: 0, presentes: 0, ausentes: 0, justificados: 0, sin_marcar: 0 };
+
+      if (estudiantes.length === 0) {
+        body.innerHTML = '<div class="history-empty" style="margin:20px;">No hay estudiantes registrados para este día.</div>';
+        return;
+      }
+
+      // Construir HTML de la tabla de estudiantes
+      const html = `
+        <div style="padding:20px;">
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+            <div style="text-align:center;padding:12px;background:rgba(16,185,129,.1);border-radius:10px;">
+              <div style="font-size:24px;font-weight:700;color:#34d399;">${conteos.presentes}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Presentes</div>
+            </div>
+            <div style="text-align:center;padding:12px;background:rgba(239,68,68,.1);border-radius:10px;">
+              <div style="font-size:24px;font-weight:700;color:#f87171;">${conteos.ausentes}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Ausentes</div>
+            </div>
+            <div style="text-align:center;padding:12px;background:rgba(59,130,246,.1);border-radius:10px;">
+              <div style="font-size:24px;font-weight:700;color:#60a5fa;">${conteos.justificados}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Justificados</div>
+            </div>
+            <div style="text-align:center;padding:12px;background:rgba(107,114,128,.1);border-radius:10px;">
+              <div style="font-size:24px;font-weight:700;color:#9ca3af;">${conteos.sin_marcar}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Sin marcar</div>
+            </div>
+            <div style="text-align:center;padding:12px;background:rgba(245,158,11,.1);border-radius:10px;">
+              <div style="font-size:24px;font-weight:700;color:#fbbf24;">${conteos.total}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Total</div>
+            </div>
+          </div>
+
+          <div style="max-height:400px;overflow-y:auto;">
+            <table style="width:100%;border-collapse:collapse;">
+              <thead style="position:sticky;top:0;background:#0e142e;border-bottom:1px solid var(--border);">
+                <tr>
+                  <th style="padding:10px;text-align:left;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;">Estudiante</th>
+                  <th style="padding:10px;text-align:center;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;width:120px;">Asistencia</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${estudiantes.map((est, idx) => {
+                  const badgeColor = est.estado === 'Presente' ? '#34d399' : (est.estado === 'Ausente' ? '#f87171' : (est.estado === 'Justificado' ? '#60a5fa' : '#9ca3af'));
+                  const badgeBg = est.estado === 'Presente' ? 'rgba(16,185,129,.1)' : (est.estado === 'Ausente' ? 'rgba(239,68,68,.1)' : (est.estado === 'Justificado' ? 'rgba(59,130,246,.1)' : 'rgba(107,114,128,.1)'));
+                  const icon = est.estado === 'Presente' ? 'ri-checkbox-circle-fill' : (est.estado === 'Ausente' ? 'ri-close-circle-fill' : (est.estado === 'Justificado' ? 'ri-file-text-fill' : 'ri-question-fill'));
+                  
+                  return `
+                    <tr style="border-bottom:1px solid var(--border);${idx % 2 === 0 ? 'background:#0e142e;' : 'background:#11193a;'}">
+                      <td style="padding:12px;color:#e6e9f4;font-weight:500;font-size:13px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                          <img src="${baseUrl}/public/uploads/estudiantes/${est.foto}" alt="Foto" 
+                               style="width:32px;height:32px;border-radius:50%;object-fit:cover;background:#2a2d3a;">
+                          <div>
+                            <div style="font-weight:600;color:#fff;">${est.nombres} ${est.apellidos}</div>
+                            <div style="font-size:11px;color:var(--muted);">Doc: ${est.documento}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td style="padding:12px;text-align:center;">
+                        <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:${badgeBg};color:${badgeColor};border-radius:999px;font-size:12px;font-weight:700;">
+                          <i class="${icon}" style="font-size:14px;"></i> ${est.estado_badge}
+                        </span>
+                      </td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      body.innerHTML = html;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      body.innerHTML = '<div class="history-empty" style="margin:20px;">Error de conexión al consultar asistencia.</div>';
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  `;
+  document.head.appendChild(style);
+});
+
+
 document.addEventListener('keydown', function(e) {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
@@ -367,6 +498,20 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.target === historyModal) cerrarModalHistorial();
     });
   }
+
+  // Delegated event: Ver asistencia de una fecha específica
+  document.addEventListener('click', function(e) {
+    const btnHistoryView = e.target.closest('.btn-history-view');
+    if (btnHistoryView) {
+      const historyItem = btnHistoryView.closest('.history-item');
+      if (historyItem) {
+        const fecha = historyItem.getAttribute('data-fecha');
+        if (fecha) {
+          verAsistenciaDelDia(fecha);
+        }
+      }
+    }
+  });
 });
 
 window.addEventListener('beforeunload', function(e) {

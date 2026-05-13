@@ -31,6 +31,27 @@ $(document).ready(function() {
     const pathName = window.location.pathname || '';
     const docenteIndex = pathName.indexOf('/docente/');
     const basePath = docenteIndex >= 0 ? pathName.substring(0, docenteIndex) : '';
+
+    function cumpleFiltroEstado(estadoFila, filtroActivo) {
+        const estado = (estadoFila || '').toString().toLowerCase();
+        const filtro = (filtroActivo || '').toString().toLowerCase();
+
+        if (filtro === 'todos') {
+            return true;
+        }
+
+        // "Entregados" debe incluir también los que ya fueron calificados.
+        if (filtro === 'entregado') {
+            return estado === 'entregado' || estado === 'calificado';
+        }
+
+        // "Pendientes" debe incluir los vencidos sin entrega.
+        if (filtro === 'pendiente') {
+            return estado === 'pendiente' || estado === 'atrasado';
+        }
+
+        return estado === filtro;
+    }
     
     // ===================================
     // FILTRADO DE ESTUDIANTES
@@ -51,7 +72,7 @@ $(document).ready(function() {
         if (filtro !== 'todos') {
             $('.entregas-table tbody tr').each(function() {
                 const estado = $(this).data('estado');
-                if (estado !== filtro) {
+                if (!cumpleFiltroEstado(estado, filtro)) {
                     $(this).hide();
                 }
             });
@@ -76,7 +97,7 @@ $(document).ready(function() {
                 const filtroActivo = $('.filter-btn-entrega.active').data('filter');
                 const estadoFila = $(this).data('estado');
                 
-                if (filtroActivo === 'todos' || estadoFila === filtroActivo) {
+                if (cumpleFiltroEstado(estadoFila, filtroActivo)) {
                     $(this).show();
                 } else {
                     $(this).hide();

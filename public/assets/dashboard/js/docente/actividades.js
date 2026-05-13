@@ -75,6 +75,7 @@ function aplicarFiltros() {
   const periodoSeleccionado = $('#periodFilter').val();
   const cursoSeleccionado = $('#cursoFilter').val();
   const textoBusqueda = $('#searchActividades').val().toLowerCase();
+  const cursoSeleccionadoNormalizado = (cursoSeleccionado || '').toString();
 
   // Filtrar CARDS
   $('.actividad-card').each(function() {
@@ -82,12 +83,13 @@ function aplicarFiltros() {
     const estado = $card.data('estado');
     const periodo = $card.data('periodo');
     const curso = $card.data('curso');
+    const cursoCardNormalizado = (curso ?? '').toString();
     const titulo = $card.data('titulo') || '';
     const descripcion = $card.data('descripcion') || '';
 
     let cumpleEstado = (estadoActivo === 'todas') || (estado === estadoActivo);
     let cumplePeriodo = (periodoSeleccionado === 'todos') || (periodo == periodoSeleccionado);
-    let cumpleCurso = (cursoSeleccionado === 'todos') || (curso === cursoSeleccionado);
+    let cumpleCurso = (cursoSeleccionadoNormalizado === 'todos') || (cursoCardNormalizado === cursoSeleccionadoNormalizado);
     let cumpleBusqueda = (textoBusqueda === '') || 
                          titulo.includes(textoBusqueda) || 
                          descripcion.includes(textoBusqueda);
@@ -249,18 +251,20 @@ function aplicarFiltrosTabla() {
   const periodoSeleccionado = $('#periodFilter').val();
   const cursoSeleccionado = $('#cursoFilter').val();
   const textoBusqueda = $('#searchActividades').val().toLowerCase();
+  const cursoSeleccionadoNormalizado = (cursoSeleccionado || '').toString();
 
   $('#tbodyActividades tr').each(function() {
     const $row = $(this);
     const estado = $row.data('estado');
     const periodo = $row.data('periodo');
     const curso = $row.data('curso');
+    const cursoFilaNormalizado = (curso ?? '').toString();
     const titulo = $row.data('titulo') || '';
     const descripcion = $row.data('descripcion') || '';
 
     let cumpleEstado = (estadoActivo === 'todas') || (estado === estadoActivo);
     let cumplePeriodo = (periodoSeleccionado === 'todos') || (periodo == periodoSeleccionado);
-    let cumpleCurso = (cursoSeleccionado === 'todos') || (curso === cursoSeleccionado);
+    let cumpleCurso = (cursoSeleccionadoNormalizado === 'todos') || (cursoFilaNormalizado === cursoSeleccionadoNormalizado);
     let cumpleBusqueda = (textoBusqueda === '') || 
                          titulo.includes(textoBusqueda) || 
                          descripcion.includes(textoBusqueda);

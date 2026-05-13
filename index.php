@@ -464,6 +464,10 @@
                 require BASE_PATH . '/app/controllers/docente/historial_asistencia.php';
                 break;
 
+            case '/docente/obtener-asistencia-fecha':
+                require BASE_PATH . '/app/controllers/docente/obtener_asistencia_fecha.php';
+                break;
+
             // --------------------------------------ROL: DOCENTE (MODULO EVENTO)---------------------------------------------
 
             case '/docente-eventos':
