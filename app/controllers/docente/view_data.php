@@ -165,6 +165,39 @@ function docenteObtenerIconoTipoActividad($tipo)
     return $iconos[$tipo] ?? 'ri-file-line';
 }
 
+function docenteDeterminarEstadoActividad($actividad)
+{
+    $estadoDB = (string)($actividad['estado'] ?? '');
+    $fechaEntrega = (string)($actividad['fecha_entrega'] ?? '');
+    
+    // Si la BD dice que está cerrada, retorna cerrada
+    if ($estadoDB === 'cerrada') {
+        return 'cerrada';
+    }
+    
+    // Si tiene estado 'activa', verificar si la fecha de entrega pasó
+    if ($estadoDB === 'activa') {
+        if (!empty($fechaEntrega)) {
+            $fecha = strtotime($fechaEntrega);
+            $hoy = strtotime(date('Y-m-d'));
+            
+            // Si la fecha de entrega es menor a hoy, la actividad está cerrada
+            if ($fecha < $hoy) {
+                return 'cerrada';
+            }
+        }
+        return 'activa';
+    }
+    
+    return $estadoDB;
+}
+
+function docenteFormatearEstadoActividad($actividad)
+{
+    $actividad['estado_calculado'] = docenteDeterminarEstadoActividad($actividad);
+    return $actividad;
+}
+
 function docenteFormatearFechaActividad($fecha)
 {
     $meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
@@ -257,11 +290,23 @@ function obtenerDataVistaDocenteActividades()
     $actividades = [];
     $infoCurso = null;
 
+    $actividadModel = new Actividad_docente();
+    
     if ($idCursoSeleccionado) {
-        $actividadModel = new Actividad_docente();
+        // Si hay curso seleccionado, traer solo sus actividades
         $actividades = $actividadModel->listarPorCurso($idCursoSeleccionado, $idDocente, $idInstitucion);
         if (!empty($actividades)) {
             $infoCurso = $actividades[0];
+        }
+    } else {
+        // Si NO hay curso seleccionado, traer actividades de TODOS los cursos
+        if (!empty($datos)) {
+            foreach ($datos as $curso) {
+                $cursosActividades = $actividadModel->listarPorCurso($curso['id'], $idDocente, $idInstitucion);
+                if (!empty($cursosActividades)) {
+                    $actividades = array_merge($actividades, $cursosActividades);
+                }
+            }
         }
     }
 
@@ -269,13 +314,20 @@ function obtenerDataVistaDocenteActividades()
     $totalActivas = 0;
     $totalCerradas = 0;
 
+    // Procesar cada actividad con lógica de estado dinámico basada en fechas
+    $actividadesConEstadoCalculado = [];
     foreach ($actividades as $actividad) {
-        if (($actividad['estado'] ?? '') === 'activa') {
+        $actividadConEstado = docenteFormatearEstadoActividad($actividad);
+        $actividadesConEstadoCalculado[] = $actividadConEstado;
+        
+        $estadoCalculado = $actividadConEstado['estado_calculado'];
+        if ($estadoCalculado === 'activa') {
             $totalActivas++;
-        } elseif (($actividad['estado'] ?? '') === 'cerrada') {
+        } elseif ($estadoCalculado === 'cerrada') {
             $totalCerradas++;
         }
     }
+    $actividades = $actividadesConEstadoCalculado;
 
     $usuario = obtenerPerfilDocenteDesdeSesion();
     $nombreDocente = htmlspecialchars(
