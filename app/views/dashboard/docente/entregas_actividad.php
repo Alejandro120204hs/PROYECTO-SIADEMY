@@ -6,6 +6,34 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once BASE_PATH . '/app/controllers/perfil.php';
 $id = $_SESSION['user']['id'] ?? 0;
 $usuario = mostrarPerfil($id);
+
+$info_actividad = isset($info_actividad) && is_array($info_actividad)
+    ? $info_actividad
+    : [
+        'id_curso' => 0,
+        'tipo' => '',
+        'titulo' => 'Actividad',
+        'descripcion' => '',
+        'nombre_asignatura' => '',
+        'grado' => '',
+        'nombre_curso' => '',
+        'fecha_entrega' => date('Y-m-d'),
+        'ponderacion' => 0,
+    ];
+
+$estadisticas = isset($estadisticas) && is_array($estadisticas)
+    ? $estadisticas
+    : [
+        'total_estudiantes' => 0,
+        'total_entregas' => 0,
+        'total_pendientes' => 0,
+        'total_calificadas' => 0,
+        'promedio_notas' => 0,
+    ];
+
+$porcentaje_entregas = isset($porcentaje_entregas) ? (int)$porcentaje_entregas : 0;
+$porcentaje_calificadas = isset($porcentaje_calificadas) ? (int)$porcentaje_calificadas : 0;
+$estudiantes = isset($estudiantes) && is_array($estudiantes) ? $estudiantes : [];
 ?>
 
 <!doctype html>

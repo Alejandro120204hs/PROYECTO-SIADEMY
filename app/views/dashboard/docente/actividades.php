@@ -2,7 +2,8 @@
   require_once BASE_PATH . '/app/helpers/session_docente.php';
   require_once BASE_PATH . '/app/controllers/docente/view_data.php';
 
-  extract(obtenerDataVistaDocenteActividades(), EXTR_SKIP);
+  $dataVistaDocenteActividades = obtenerDataVistaDocenteActividades();
+  extract($dataVistaDocenteActividades, EXTR_SKIP);
 ?>
 <!doctype html>
   <html lang="es">
