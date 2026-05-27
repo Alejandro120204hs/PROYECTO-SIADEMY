@@ -384,6 +384,12 @@
                 require BASE_PATH . '/app/views/dashboard/administrador/periodo.php';
                 break;
 
+            // -------------------------------ADMINISTRADOR(MODULO HORARIOS)-------------------------
+
+            case '/administrador/horarios':
+                require BASE_PATH . '/app/controllers/administrador/horario.php';
+                break;
+
             case '/administrador/guardar-periodo':
                 require BASE_PATH . '/app/controllers/administrador/periodo.php';
                 break;
@@ -475,6 +481,10 @@
             case '/docente-eventos':
                 require BASE_PATH . '/app/controllers/docente/eventos.php';
                 break;
+
+            case '/docente/horario':
+                require BASE_PATH . '/app/controllers/docente/horario.php';
+                break;
             
             // -----------------------------------ROL: ESTUDIANTE------------------------------------------
                 case '/estudiante/dashboard':
@@ -502,7 +512,11 @@
                 break;
 
             case '/estudiante-panel-profesores':
-                require BASE_PATH . '/app/views/dashboard/estudiante/misProfesores.php';
+                require BASE_PATH . '/app/controllers/estudiante/profesores.php';
+                break;
+
+            case '/estudiante-horario':
+                require BASE_PATH . '/app/controllers/estudiante/horario.php';
                 break;
 
 

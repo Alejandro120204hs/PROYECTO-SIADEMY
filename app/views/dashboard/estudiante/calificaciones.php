@@ -61,19 +61,7 @@
 
             <!-- ACCIONES -->
             <div class="actiones">
-                <div class="actions-bar">
-                    <button class="btn-progreso" id="progreso">
-                        <i class="ri-line-chart-line"></i>
-                        <span>Progreso</span>
-                    </button>
-                </div>
-
-                <div class="actions-bar">
-                    <button class="btn-download" id="downloadBoletin">
-                        <i class="ri-survey-line"></i>
-                        <span>Generar Boletín</span>
-                    </button>
-                </div>
+           
             </div>
 
             <!-- STATS CARDS -->
