@@ -116,6 +116,20 @@ function guardarActividad() {
 
     // Crear instancia del modelo
     $actividadModel = new Actividad_docente();
+
+    // Validar que la suma de ponderaciones no supere 100% para este asignatura-curso
+    $totalUsado = $actividadModel->obtenerTotalPonderacion((int)$datos['id_asignatura_curso']);
+    $disponible  = 100 - $totalUsado;
+    if (($totalUsado + $datos['ponderacion']) > 100) {
+        mostrarSweetAlert(
+            'error',
+            'Ponderación excedida',
+            "Las actividades de esta materia ya suman {$totalUsado}%. " .
+            "Solo puedes agregar hasta {$disponible}% más. " .
+            "Ajusta el valor o reduce la ponderación de otra actividad."
+        );
+        exit;
+    }
     
     // Intentar guardar la actividad
     $resultado = $actividadModel->crear($datos);
@@ -177,13 +191,25 @@ function actualizarActividad() {
 
     $id = filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT);
     
+    $fechaEntregaRaw = $_POST['fecha_entrega'] ?? '';
+
+    // Calcular el estado correcto basado en la fecha (no en el POST['estado']).
+    // Comparación solo de fechas, sin horas → inmune a desfases de zona horaria.
+    // Regla: fecha_entrega >= hoy → 'activa';  fecha_entrega < hoy → 'cerrada'.
+    $estadoCalculado = 'activa';
+    if (!empty($fechaEntregaRaw)) {
+        $fechaSolo       = date('Y-m-d', strtotime($fechaEntregaRaw));
+        $hoy             = date('Y-m-d');
+        $estadoCalculado = ($fechaSolo >= $hoy) ? 'activa' : 'cerrada';
+    }
+
     $datos = [
-        'titulo' => htmlspecialchars(trim($_POST['titulo_actividad']), ENT_QUOTES, 'UTF-8'),
-        'descripcion' => htmlspecialchars(trim($_POST['descripcion']), ENT_QUOTES, 'UTF-8'),
-        'tipo' => htmlspecialchars(trim($_POST['tipo_actividad']), ENT_QUOTES, 'UTF-8'),
-        'ponderacion' => filter_var($_POST['ponderacion'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
-        'fecha_entrega' => $_POST['fecha_entrega'],
-        'estado' => $_POST['estado']
+        'titulo'        => htmlspecialchars(trim($_POST['titulo_actividad']), ENT_QUOTES, 'UTF-8'),
+        'descripcion'   => htmlspecialchars(trim($_POST['descripcion']),      ENT_QUOTES, 'UTF-8'),
+        'tipo'          => htmlspecialchars(trim($_POST['tipo_actividad']),   ENT_QUOTES, 'UTF-8'),
+        'ponderacion'   => filter_var($_POST['ponderacion'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+        'fecha_entrega' => $fechaEntregaRaw,
+        'estado'        => $estadoCalculado,   // calculado por fecha, no por el campo del modal
     ];
 
     // Manejar reemplazo opcional de archivo adjunto
@@ -245,6 +271,32 @@ function actualizarActividad() {
     }
 
     $actividadModel = new Actividad_docente();
+
+    // Validar ponderación: la suma de todas las demás + la nueva no debe superar 100%
+    // Necesitamos el id_asignatura_curso de la actividad actual
+    $actividadActual = $actividadModel->obtenerPorId($id);
+    if ($actividadActual) {
+        $ponderacion_nueva = (float)$datos['ponderacion'];
+        // Sumar ponderaciones de todas las actividades EXCEPTO la que se edita
+        $totalOtras = $actividadModel->obtenerTotalPonderacion(
+            (int)$actividadActual['id_asignatura_curso'],
+            $id
+        );
+        if (($totalOtras + $ponderacion_nueva) > 100) {
+            $disponible = 100 - $totalOtras;
+            $id_curso_red = isset($_POST['id_curso']) ? filter_var($_POST['id_curso'], FILTER_SANITIZE_NUMBER_INT) : '';
+            $redirect_url = obtenerBaseUrl() . '/docente/actividades?id_curso=' . $id_curso_red;
+            mostrarSweetAlert(
+                'error',
+                'Ponderación excedida',
+                "Las otras actividades de esta materia ya suman {$totalOtras}%. " .
+                "El valor máximo para esta actividad es {$disponible}%.",
+                $redirect_url
+            );
+            exit;
+        }
+    }
+
     $resultado = $actividadModel->actualizar($id, $datos);
 
     $id_curso_red = isset($_POST['id_curso']) ? filter_var($_POST['id_curso'], FILTER_SANITIZE_NUMBER_INT) : '';

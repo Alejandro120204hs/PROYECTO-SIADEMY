@@ -74,37 +74,57 @@ foreach ($evaluaciones as $fila) {
     $ponderacion = isset($fila['ponderacion']) ? (float)$fila['ponderacion'] : 0;
 
     $calificaciones_materias[$idMateriaCurso]['periodos'][$periodo]['evaluaciones'][] = [
-        'nombre' => $fila['evaluacion'],
-        'fecha' => !empty($fila['fecha_entrega']) ? date('d M Y', strtotime($fila['fecha_entrega'])) : '-',
-        'nota' => $nota,
-        'peso' => rtrim(rtrim(number_format($ponderacion, 1), '0'), '.') . '%',
+        'nombre'      => $fila['evaluacion'],
+        'fecha'       => !empty($fila['fecha_entrega']) ? date('d M Y', strtotime($fila['fecha_entrega'])) : '-',
+        'nota'        => $nota,
+        'ponderacion' => $ponderacion,  // raw float para cálculo ponderado
+        'peso'        => rtrim(rtrim(number_format($ponderacion, 1), '0'), '.') . '%',
     ];
 }
 
 foreach ($calificaciones_materias as &$materia) {
     for ($p = 1; $p <= 4; $p++) {
-        $notas = [];
+        $sumaPonderada = 0.0;
+        $sumaPesos     = 0.0;
+        $notasSimples  = [];
+
         foreach ($materia['periodos'][$p]['evaluaciones'] as $evaluacion) {
-            if ($evaluacion['nota'] !== null) {
-                $notas[] = (float)$evaluacion['nota'];
+            if ($evaluacion['nota'] === null) {
+                continue; // actividad sin calificar — no se incluye en el promedio
             }
+            $nota       = (float)$evaluacion['nota'];
+            $peso       = (float)$evaluacion['ponderacion'];
+
+            $sumaPonderada += $nota * $peso;
+            $sumaPesos     += $peso;
+            $notasSimples[] = $nota;
         }
 
-        if (!empty($notas)) {
-            $promedio = round(array_sum($notas) / count($notas), 1);
-            $materia['periodos'][$p]['notaFinal'] = $promedio;
+        if (empty($notasSimples)) {
+            // Sin ninguna nota calificada — no se calcula promedio
+            continue;
+        }
 
-            if ($promedio >= 4.5) {
-                $materia['periodos'][$p]['estado'] = 'excelente';
-            } elseif ($promedio >= 4.0) {
-                $materia['periodos'][$p]['estado'] = 'bueno';
-            } elseif ($promedio >= 3.0) {
-                $materia['periodos'][$p]['estado'] = 'medio';
-            } elseif ($promedio >= 2.5) {
-                $materia['periodos'][$p]['estado'] = 'riesgo';
-            } else {
-                $materia['periodos'][$p]['estado'] = 'critico';
-            }
+        // Promedio ponderado cuando hay pesos definidos; simple como fallback
+        if ($sumaPesos > 0) {
+            $promedio = round($sumaPonderada / $sumaPesos, 1);
+        } else {
+            // Fallback: todas las ponderaciones son 0 → promedio simple
+            $promedio = round(array_sum($notasSimples) / count($notasSimples), 1);
+        }
+
+        $materia['periodos'][$p]['notaFinal'] = $promedio;
+
+        if ($promedio >= 4.5) {
+            $materia['periodos'][$p]['estado'] = 'excelente';
+        } elseif ($promedio >= 4.0) {
+            $materia['periodos'][$p]['estado'] = 'bueno';
+        } elseif ($promedio >= 3.0) {
+            $materia['periodos'][$p]['estado'] = 'medio';
+        } elseif ($promedio >= 2.5) {
+            $materia['periodos'][$p]['estado'] = 'riesgo';
+        } else {
+            $materia['periodos'][$p]['estado'] = 'critico';
         }
     }
 }

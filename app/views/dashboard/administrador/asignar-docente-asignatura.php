@@ -111,37 +111,20 @@
   <label>
     <i class="ri-team-line"></i> Curso
   </label>
-  <?php
-  // Obtener el ID del curso desde el parámetro GET
-  $curso_preseleccionado_id = $_GET['curso'] ?? null;
-  $curso_preseleccionado_texto = '';
-  
-  // Buscar el nombre completo del curso preseleccionado
-  if ($curso_preseleccionado_id) {
-    foreach ($cursos as $curso) {
-      if ($curso['id'] == $curso_preseleccionado_id) {
-        $curso_preseleccionado_texto = $curso['nombre_curso'] . ' - ' . $curso['jornada'];
-        if (isset($curso['director']) && $curso['director']) {
-          $curso_preseleccionado_texto .= ' (' . $curso['director'] . ')';
+  <?php $curso_preseleccionado_id = $_GET['curso'] ?? ''; ?>
+  <select class="form-select select2" name="curso" id="inputCurso" required>
+    <option value="">Seleccione un curso...</option>
+    <?php foreach ($cursos as $c): ?>
+      <?php
+        $texto = htmlspecialchars($c['nombre_curso'] . ' - ' . $c['jornada']);
+        if (!empty($c['director'])) {
+          $texto .= ' (' . htmlspecialchars($c['director']) . ')';
         }
-        break;
-      }
-    }
-  }
-  ?>
-  <input 
-    type="text" 
-    class="form-control" 
-    name="curso_display" 
-    id="inputCursoDisplay"
-    data-curso-preseleccionado="<?= !empty($curso_preseleccionado_id) ? '1' : '0' ?>"
-    value="<?= htmlspecialchars($curso_preseleccionado_texto) ?>" 
-    placeholder="Ingrese el curso..."
-    required
-    readonly
-  >
-  <!-- Campo oculto con el ID real -->
-  <input type="hidden" name="curso" id="inputCurso" value="<?= htmlspecialchars($curso_preseleccionado_id ?? '') ?>">
+        $selected = ($c['id'] == $curso_preseleccionado_id) ? 'selected' : '';
+      ?>
+      <option value="<?= $c['id'] ?>" <?= $selected ?>><?= $texto ?></option>
+    <?php endforeach; ?>
+  </select>
 </div>
           </div>
 

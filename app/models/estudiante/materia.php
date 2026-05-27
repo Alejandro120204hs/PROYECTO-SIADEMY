@@ -43,7 +43,8 @@ class MateriaEstudiante
                         u.correo AS docente_correo,
                         d.foto AS docente_foto,
                         COUNT(DISTINCT act.id) AS total_actividades,
-                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() THEN 1 ELSE 0 END) AS actividades_pendientes,
+                        -- Pendiente = activa, dentro de plazo Y el estudiante NO ha entregado todavía
+                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() AND ea.id IS NULL THEN 1 ELSE 0 END) AS actividades_pendientes,
                         ROUND(AVG(cal.nota), 1) AS promedio
                     FROM estudiante e
                     INNER JOIN matricula m ON m.id_estudiante = e.id
@@ -54,6 +55,7 @@ class MateriaEstudiante
                     INNER JOIN docente d ON dac.id_docente = d.id
                     INNER JOIN usuario u ON d.id_usuario = u.id
                     LEFT JOIN actividad act ON act.id_asignatura_curso = ac.id
+                    LEFT JOIN entrega_actividad ea  ON ea.id_actividad  = act.id AND ea.id_estudiante = e.id
                     LEFT JOIN calificacion cal ON cal.id_actividad = act.id AND cal.id_estudiante = e.id
                     WHERE e.id = :id_estudiante 
                     AND e.id_institucion = :id_institucion
@@ -100,15 +102,17 @@ class MateriaEstudiante
             $sql = "SELECT 
                         COUNT(DISTINCT a.id) AS total_materias,
                         ROUND(AVG(cal.nota), 1) AS promedio_general,
-                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() THEN 1 ELSE 0 END) AS actividades_pendientes
+                        -- Pendiente = activa, dentro de plazo Y sin entrega del estudiante
+                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() AND ea.id IS NULL THEN 1 ELSE 0 END) AS actividades_pendientes
                     FROM estudiante e
                     INNER JOIN matricula m ON m.id_estudiante = e.id
                     INNER JOIN curso c ON m.id_curso = c.id
                     INNER JOIN asignatura_curso ac ON ac.id_curso = c.id
                     INNER JOIN asignatura a ON ac.id_asignatura = a.id
                     LEFT JOIN actividad act ON act.id_asignatura_curso = ac.id
+                    LEFT JOIN entrega_actividad ea  ON ea.id_actividad  = act.id AND ea.id_estudiante = e.id
                     LEFT JOIN calificacion cal ON cal.id_actividad = act.id AND cal.id_estudiante = e.id
-                    WHERE e.id = :id_estudiante 
+                    WHERE e.id = :id_estudiante
                     AND e.id_institucion = :id_institucion
                     AND m.anio = :anio
                     AND c.estado = 'Activo'";
@@ -196,13 +200,13 @@ class MateriaEstudiante
                     INNER JOIN actividad act ON act.id_asignatura_curso = ac.id
                     INNER JOIN asignatura a ON act.id_asignatura = a.id
                     INNER JOIN docente d ON act.id_docente = d.id
-                    LEFT JOIN calificacion cal ON cal.id_actividad = act.id AND cal.id_estudiante = e.id
-                    WHERE e.id = :id_estudiante 
+                    LEFT JOIN entrega_actividad ea ON ea.id_actividad = act.id AND ea.id_estudiante = e.id
+                    WHERE e.id = :id_estudiante
                     AND e.id_institucion = :id_institucion
                     AND m.anio = :anio
                     AND act.estado = 'activa'
                     AND act.fecha_entrega >= CURDATE()
-                    AND cal.id IS NULL
+                    AND ea.id IS NULL
                     AND c.estado = 'Activo'
                     ORDER BY act.fecha_entrega ASC
                     LIMIT :limite";
@@ -237,13 +241,15 @@ class MateriaEstudiante
                         COUNT(DISTINCT a.id) AS total_materias,
                         ROUND(AVG(cal.nota), 1) AS promedio_general,
                         COUNT(DISTINCT act.id) AS total_evaluaciones,
-                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() AND cal.id IS NULL THEN 1 ELSE 0 END) AS pendientes
+                        -- Pendiente = sin entrega del estudiante, activa y dentro de plazo
+                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() AND ea.id IS NULL THEN 1 ELSE 0 END) AS pendientes
                     FROM estudiante e
                     INNER JOIN matricula m ON m.id_estudiante = e.id
                     INNER JOIN curso c ON m.id_curso = c.id
                     INNER JOIN asignatura_curso ac ON ac.id_curso = c.id
                     INNER JOIN asignatura a ON ac.id_asignatura = a.id
                     LEFT JOIN actividad act ON act.id_asignatura_curso = ac.id
+                    LEFT JOIN entrega_actividad ea  ON ea.id_actividad  = act.id AND ea.id_estudiante = e.id
                     LEFT JOIN calificacion cal ON cal.id_actividad = act.id AND cal.id_estudiante = e.id
                     WHERE e.id = :id_estudiante
                     AND e.id_institucion = :id_institucion

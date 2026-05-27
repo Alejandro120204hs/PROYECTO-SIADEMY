@@ -293,11 +293,13 @@ function obtenerDataVistaAdminPeriodo()
 
 function obtenerDataVistaAdminDetalleCurso($idCurso)
 {
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
     $idCurso = (int) $idCurso;
+    $idInstitucion = (int) ($_SESSION['user']['id_institucion'] ?? 0);
     $curso = (new Curso())->listarCursoId($idCurso);
 
     $anioActual = date('Y');
-    $estudiantes = (new Matricula())->listarPorCurso($idCurso, $anioActual);
+    $estudiantes = (new Matricula())->listarPorCurso($idCurso, $anioActual, $idInstitucion);
     $asignaturas = (new DocenteAsignatura())->obtenerAsignaturasPorCurso($idCurso);
 
     $totalEstudiantes = count($estudiantes);
@@ -308,10 +310,12 @@ function obtenerDataVistaAdminDetalleCurso($idCurso)
     return [
         'usuario' => obtenerPerfilAdminDesdeSesion(),
         'curso' => $curso,
+        'id_curso' => $idCurso,
         'estudiantes' => $estudiantes,
         'asignaturas' => $asignaturas,
         'totalEstudiantes' => $totalEstudiantes,
         'cupoDisponible' => $cupoDisponible,
         'porcentajeOcupacion' => $porcentajeOcupacion,
+        'anioActual' => $anioActual,
     ];
 }

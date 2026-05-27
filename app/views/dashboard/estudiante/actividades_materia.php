@@ -2,6 +2,26 @@
     require_once BASE_PATH . '/app/controllers/perfil.php';
     $id = $_SESSION['user']['id'] ?? 0;
     $usuario = mostrarPerfil($id);
+
+    $materia_info = isset($materia_info) && is_array($materia_info)
+        ? $materia_info
+        : [
+            'materia' => 'Materia',
+            'descripcion' => '',
+            'docente_nombres' => '',
+            'docente_apellidos' => '',
+            'grado' => '',
+            'curso' => '',
+            'promedio' => null,
+        ];
+
+    $actividades = isset($actividades) && is_array($actividades) ? $actividades : [];
+    $total_actividades = isset($total_actividades) ? (int)$total_actividades : 0;
+    $pendientes = isset($pendientes) ? (int)$pendientes : 0;
+    $entregadas = isset($entregadas) ? (int)$entregadas : 0;
+    $completadas = isset($completadas) ? (int)$completadas : 0;
+    $atrasadas = isset($atrasadas) ? (int)$atrasadas : 0;
+    $id_asignatura_curso = isset($id_asignatura_curso) ? (int)$id_asignatura_curso : 0;
 ?>
 <!doctype html>
 <html lang="es">

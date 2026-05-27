@@ -1,168 +1,178 @@
 <?php
 
-    // IMPORTAMOS LAS DEPENDENCIAS NECESARIAS
-    require_once __DIR__ . '/../../helpers/alert_helper.php';
-    require_once __DIR__ . '/../../models/administradores/matricula.php';
+/**
+ * Controlador: Matrícula (Administrador)
+ *
+ * CORRECCIONES APLICADAS:
+ *  - mostrarMatriculaId(): pasa id_institucion al modelo (fix IDOR); redirige si
+ *    la matrícula no existe o no pertenece a la institución.
+ *  - actualizarMatricula(): pasa id_institucion para el ownership check del modelo.
+ *  - eliminarMatricula(): pasa id_institucion al nuevo soft-delete del modelo.
+ */
 
-    // CAPTURAMOS EN UNA VARIABLE EL METODO O SOLICITUD HECHA AL SERVIDOR
-    $method = $_SERVER['REQUEST_METHOD'];
+require_once __DIR__ . '/../../helpers/alert_helper.php';
+require_once __DIR__ . '/../../models/administradores/matricula.php';
 
-    switch($method){
-        case 'POST':
-            // SE VALIDA SI DEL FORMULARIO VIENE UN INPUT CON NAME ACCION Y VALUE ACTUALIZAR
-            $accion = $_POST['accion'] ?? '';
-            if($accion === 'actualizar'){
-                actualizarMatricula();
-            }else{
-                registrarMatricula();
-            }
+$method = $_SERVER['REQUEST_METHOD'];
+
+switch ($method) {
+    case 'POST':
+        $accion = $_POST['accion'] ?? '';
+        if ($accion === 'actualizar') {
+            actualizarMatricula();
+        } else {
+            registrarMatricula();
+        }
+        break;
+
+    case 'GET':
+        $accion = $_GET['accion'] ?? '';
+
+        if ($accion === 'eliminar') {
+            eliminarMatricula((int)($_GET['id'] ?? 0));
             break;
-        
-        case 'GET':
-            // SE VALIDA LOS BOTONES LO QUE VIENE POR METODO GET PARA EDITAR O ELIMINAR
-            $accion = $_GET['accion'] ?? '';
-            
-            // ELIMINAR MATRÍCULA
-            if($accion === 'eliminar'){
-                eliminarMatricula($_GET['id']); 
-            }
+        }
 
-            // EDITAR MATRÍCULA
-            if(isset($_GET['id'])){
-                // LLENA EL FORMULARIO DE EDITAR
-                mostrarMatriculaId($_GET['id']);
-            }else{
-                // LLENA LA TABLA DE MATRÍCULAS
-                mostrarMatriculas();
-            }
-            break;
+        if (isset($_GET['id'])) {
+            mostrarMatriculaId((int)$_GET['id']);
+        } else {
+            mostrarMatriculas();
+        }
+        break;
 
-        default:
-            http_response_code(405);
-            echo "Método no permitido";
-            break;
+    default:
+        http_response_code(405);
+        echo "Método no permitido";
+        break;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// REGISTRAR
+// ─────────────────────────────────────────────────────────────────────────────
+function registrarMatricula() {
+    $id_estudiante = $_POST['id_estudiante'] ?? '';
+    $id_curso      = $_POST['id_curso']      ?? '';
+    $anio          = $_POST['anio']          ?? date('Y');
+    $fecha         = $_POST['fecha']         ?? date('Y-m-d');
+
+    if (empty($id_estudiante) || empty($id_curso)) {
+        mostrarSweetAlert('error', 'Campos vacíos', 'Por favor seleccione estudiante y curso.');
+        exit();
     }
 
-    // FUNCIONES DEL CRUD
-    function registrarMatricula(){
-        // CAPTURAMOS EN VARIABLES LOS DATOS ENVIADOS A TRAVÉS DEL MÉTODO POST
-        $id_estudiante = $_POST['id_estudiante'] ?? '';
-        $id_curso = $_POST['id_curso'] ?? '';
-        $anio = $_POST['anio'] ?? date('Y');
-        $fecha = $_POST['fecha'] ?? date('Y-m-d');
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
+    if (!isset($_SESSION['user']['id_institucion'])) {
+        mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
+        exit();
+    }
+    $id_institucion = (int) $_SESSION['user']['id_institucion'];
 
-        // VALIDAMOS LOS CAMPOS OBLIGATORIOS
-        if(empty($id_estudiante) || empty($id_curso)){
-            mostrarSweetAlert('error', 'Campos vacíos', 'Por favor seleccione estudiante y curso.');
-            exit();
-        }
+    $data = [
+        'id_institucion' => $id_institucion,
+        'id_estudiante'  => (int) $id_estudiante,
+        'id_curso'       => (int) $id_curso,
+        'anio'           => (int) $anio,
+        'fecha'          => $fecha,
+    ];
 
-        // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
-        if (session_status() === PHP_SESSION_NONE) { session_start(); }
-        if(!isset($_SESSION['user']['id_institucion'])){
-            mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
-            exit();
-        }
-        $id_institucion = $_SESSION['user']['id_institucion'];
+    $resultado = (new Matricula())->registrar($data);
 
-        // PROGRAMACIÓN ORIENTADA A OBJETOS
-        $objetoMatricula = new Matricula();
-        $data = [
-            'id_institucion' => $id_institucion,
-            'id_estudiante' => $id_estudiante,
-            'id_curso' => $id_curso,
-            'anio' => $anio,
-            'fecha' => $fecha
-        ];
+    if ($resultado['success'] === true) {
+        mostrarSweetAlert('success', 'Matrícula exitosa', 'El estudiante ha sido matriculado correctamente. Redirigiendo...', '/siademy/administrador-panel-matriculas');
+    } else {
+        mostrarSweetAlert('error', 'Error al matricular', $resultado['message'], '/siademy/administrador/registrar-matricula');
+    }
+    exit();
+}
 
-        // ENVIAMOS LA DATA AL MÉTODO "REGISTRAR"
-        $resultado = $objetoMatricula->registrar($data);
+// ─────────────────────────────────────────────────────────────────────────────
+// LISTAR TODAS (panel)
+// ─────────────────────────────────────────────────────────────────────────────
+function mostrarMatriculas() {
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
+    $id_institucion = (int) ($_SESSION['user']['id_institucion'] ?? 0);
+    return (new Matricula())->listar($id_institucion);
+}
 
-        // MENSAJES DE RESPUESTA
-        if($resultado['success'] === true){
-            mostrarSweetAlert('success', 'Matrícula exitosa', 'El estudiante ha sido matriculado correctamente. Redirigiendo...', '/siademy/administrador-panel-matriculas');
-            exit();
-        }else{
-            mostrarSweetAlert('error', 'Error al matricular', $resultado['message'], '/siademy/administrador-registrar-matricula');
-            exit();
-        }
+// ─────────────────────────────────────────────────────────────────────────────
+// LISTAR POR ID — con ownership check: redirige si no pertenece a la institución
+// ─────────────────────────────────────────────────────────────────────────────
+function mostrarMatriculaId($id) {
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
+    $id_institucion = (int) ($_SESSION['user']['id_institucion'] ?? 0);
+
+    $resultado = (new Matricula())->listarMatriculaId($id, $id_institucion);
+
+    if (!$resultado) {
+        // La matrícula no existe o no pertenece a esta institución
+        header('Location: ' . BASE_URL . '/administrador-panel-matriculas');
+        exit();
     }
 
-    function mostrarMatriculas(){
-        // VERIFICAMOS SI LA SESIÓN YA ESTÁ INICIADA
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+    return $resultado;
+}
 
-        // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
-        $id_institucion = $_SESSION['user']['id_institucion'];
+// ─────────────────────────────────────────────────────────────────────────────
+// ACTUALIZAR
+// ─────────────────────────────────────────────────────────────────────────────
+function actualizarMatricula() {
+    $id            = (int) ($_POST['id']            ?? 0);
+    $id_estudiante = (int) ($_POST['id_estudiante'] ?? 0);
+    $id_curso      = (int) ($_POST['id_curso']      ?? 0);
+    $anio          = (int) ($_POST['anio']          ?? 0);
+    $fecha         = $_POST['fecha']  ?? '';
+    $estado        = $_POST['estado'] ?? 'Activa';
 
-        // INSTANCIAMOS LA CLASE
-        $objetoMatricula = new Matricula();
-
-        // LISTAMOS LAS MATRÍCULAS DE LA INSTITUCIÓN
-        $matriculas = $objetoMatricula->listar($id_institucion);
-
-        return $matriculas;
+    if ($id === 0 || $id_estudiante === 0 || $id_curso === 0 || $anio === 0) {
+        mostrarSweetAlert('error', 'Campos vacíos', 'Por favor complete todos los campos.');
+        exit();
     }
 
-    function mostrarMatriculaId($id){
-        // INSTANCIAMOS LA CLASE
-        $objetoMatricula = new Matricula();
-        $resultado = $objetoMatricula->listarMatriculaId($id);
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
+    if (!isset($_SESSION['user']['id_institucion'])) {
+        mostrarSweetAlert('error', 'Error de sesión', 'No se encontró la institución del administrador.');
+        exit();
+    }
+    $id_institucion = (int) $_SESSION['user']['id_institucion'];
 
-        return $resultado;    
+    $data = [
+        'id'             => $id,
+        'id_institucion' => $id_institucion,   // ← ownership check en el modelo
+        'id_estudiante'  => $id_estudiante,
+        'id_curso'       => $id_curso,
+        'anio'           => $anio,
+        'fecha'          => $fecha,
+        'estado'         => $estado,
+    ];
+
+    $resultado = (new Matricula())->actualizar($data);
+
+    if ($resultado['success'] === true) {
+        mostrarSweetAlert('success', 'Actualización exitosa', 'La matrícula ha sido actualizada. Redirigiendo...', '/siademy/administrador-panel-matriculas');
+    } else {
+        mostrarSweetAlert('error', 'Error al actualizar', $resultado['message'], '/siademy/administrador-panel-matriculas');
+    }
+    exit();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ELIMINAR (soft delete — cambia estado a 'Retirada')
+// ─────────────────────────────────────────────────────────────────────────────
+function eliminarMatricula($id) {
+    if ($id <= 0) {
+        mostrarSweetAlert('error', 'ID inválido', 'No se pudo identificar la matrícula.');
+        exit();
     }
 
-    function actualizarMatricula(){
-        // CAPTURAMOS EN VARIABLES LOS DATOS ENVIADOS
-        $id = $_POST['id'] ?? '';
-        $id_estudiante = $_POST['id_estudiante'] ?? '';
-        $id_curso = $_POST['id_curso'] ?? '';
-        $anio = $_POST['anio'] ?? '';
-        $fecha = $_POST['fecha'] ?? '';
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
+    $id_institucion = (int) ($_SESSION['user']['id_institucion'] ?? 0);
 
-        // VALIDAMOS LOS CAMPOS OBLIGATORIOS
-        if(empty($id) || empty($id_estudiante) || empty($id_curso) || empty($anio)){
-            mostrarSweetAlert('error', 'Campos vacíos', 'Por favor complete todos los campos.');
-            exit();
-        }
+    $resultado = (new Matricula())->eliminar($id, $id_institucion);
 
-        // INSTANCIAMOS LA CLASE
-        $objetoMatricula = new Matricula();
-        $data = [
-            'id' => $id,
-            'id_estudiante' => $id_estudiante,
-            'id_curso' => $id_curso,
-            'anio' => $anio,
-            'fecha' => $fecha
-        ];
-
-        $resultado = $objetoMatricula->actualizar($data);
-        
-        // MENSAJES DE RESPUESTA
-        if($resultado['success'] === true){
-            mostrarSweetAlert('success', 'Actualización exitosa', 'La matrícula ha sido actualizada. Redirigiendo...', '/siademy/administrador-panel-matriculas');
-            exit();
-        }else{
-            mostrarSweetAlert('error', 'Error al actualizar', $resultado['message'], '/siademy/administrador-panel-matriculas');
-            exit();
-        }
+    if ($resultado === true) {
+        mostrarSweetAlert('success', 'Matrícula retirada', 'La matrícula ha sido marcada como retirada. Redirigiendo...', '/siademy/administrador-panel-matriculas');
+    } else {
+        mostrarSweetAlert('error', 'Error al retirar', 'No se pudo retirar la matrícula o no pertenece a su institución.', '/siademy/administrador-panel-matriculas');
     }
-
-    function eliminarMatricula($id){
-        // INSTANCIAMOS LA CLASE
-        $objetoMatricula = new Matricula();
-        $resultado = $objetoMatricula->eliminar($id);
-
-        // MENSAJES DE RESPUESTA
-        if($resultado === true){
-            mostrarSweetAlert('success', 'Eliminación exitosa', 'La matrícula ha sido eliminada. Redirigiendo...', '/siademy/administrador-panel-matriculas');
-            exit();
-        }else{
-            mostrarSweetAlert('error', 'Error al eliminar', 'No se pudo eliminar la matrícula, intente nuevamente. Redirigiendo...', '/siademy/administrador-panel-matriculas');
-            exit();
-        }
-    }
-
-?>
+    exit();
+}

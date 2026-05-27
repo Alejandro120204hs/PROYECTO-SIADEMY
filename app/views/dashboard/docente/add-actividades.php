@@ -107,8 +107,36 @@ extract($dataVistaDocenteAgregarActividad, EXTR_SKIP);
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="">Ponderación / Valor porcentual (%)*</label>
-                                    <input type="number" class="form-control" name="ponderacion" min="0" max="100" step="0.01" required tabindex="3">
-                                    <small class="form-text text-muted">Valor porcentual de la actividad al total del periodo (0-100%)</small>
+                                    <input type="number" class="form-control" name="ponderacion"
+                                           min="0" max="<?= $ponderacion_disponible ?>"
+                                           step="0.01" required tabindex="3"
+                                           id="inputPonderacion">
+                                    <?php if ($ponderacion_usada > 0): ?>
+                                        <!-- Barra de ponderación usada -->
+                                        <div style="margin-top:8px;">
+                                            <div style="display:flex; justify-content:space-between; font-size:12px; color:#94a3b8; margin-bottom:4px;">
+                                                <span>Usado: <strong style="color:#f59e0b;"><?= number_format($ponderacion_usada, 1) ?>%</strong></span>
+                                                <span>Disponible: <strong style="color:#10b981;"><?= number_format($ponderacion_disponible, 1) ?>%</strong></span>
+                                            </div>
+                                            <div style="background:#1e293b; border-radius:6px; height:8px; overflow:hidden;">
+                                                <div style="background: linear-gradient(90deg,#f59e0b,#ef4444); width:<?= min(100, $ponderacion_usada) ?>%; height:100%; border-radius:6px; transition:width 0.3s;"></div>
+                                            </div>
+                                        </div>
+                                        <?php if ($ponderacion_disponible <= 0): ?>
+                                            <small class="form-text" style="color:#ef4444;">
+                                                <i class="ri-error-warning-line"></i> Las actividades de esta materia ya suman 100%. No puedes agregar más.
+                                            </small>
+                                        <?php else: ?>
+                                            <small class="form-text" style="color:#10b981;">
+                                                Puedes asignar hasta <strong><?= number_format($ponderacion_disponible, 1) ?>%</strong> a esta actividad.
+                                            </small>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <small class="form-text text-muted">
+                                            Valor porcentual de la actividad sobre la nota total del período (0–100%).
+                                            Aún no hay actividades creadas para esta materia.
+                                        </small>
+                                    <?php endif; ?>
                                 </div>
                                 
                                 <div class="mb-3">

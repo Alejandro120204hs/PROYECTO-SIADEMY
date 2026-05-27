@@ -70,7 +70,7 @@ class AsistenciaDocente {
     // -------------------------------------------------------
     // Devuelve cada estudiante matriculado en el curso con
     // su estado de asistencia para la fecha+asignatura dada.
-    // Estado devuelto: 'Presente' | 'Ausente' | 'Justificado' | null
+    // Estado devuelto: 'Presente' | 'Ausente' | 'Justificado' | 'Tarde' | null
     // -------------------------------------------------------
     public function obtenerEstudiantesConAsistencia(
         int    $id_curso,
@@ -157,7 +157,9 @@ class AsistenciaDocente {
     // Guarda (INSERT o UPDATE) un lote de registros de
     // asistencia para una sesión dada.
     //
-    // $registros = [ ['id_estudiante' => N, 'estado' => 'Presente'|'Ausente'|'Justificado'], ... ]
+    // $registros = [ ['id_estudiante' => N, 'estado' => 'Presente'|'Ausente'|'Justificado'|'Tarde'], ... ]
+    // PREREQUISITO: ALTER TABLE asistencia MODIFY COLUMN estado
+    //   ENUM('Presente','Ausente','Justificado','Tarde') NOT NULL DEFAULT 'Presente';
     // -------------------------------------------------------
     public function guardarAsistencia(
         array  $registros,
@@ -270,9 +272,10 @@ class AsistenciaDocente {
         try {
             $sql = "SELECT
                         cal.fecha,
-                        SUM(CASE WHEN a.estado = 'Presente' THEN 1 ELSE 0 END)    AS presentes,
-                        SUM(CASE WHEN a.estado = 'Ausente' THEN 1 ELSE 0 END)     AS ausentes,
+                        SUM(CASE WHEN a.estado = 'Presente'    THEN 1 ELSE 0 END) AS presentes,
+                        SUM(CASE WHEN a.estado = 'Ausente'     THEN 1 ELSE 0 END) AS ausentes,
                         SUM(CASE WHEN a.estado = 'Justificado' THEN 1 ELSE 0 END) AS justificados,
+                        SUM(CASE WHEN a.estado = 'Tarde'       THEN 1 ELSE 0 END) AS tardes,
                         COUNT(a.id_estudiante) AS total_registrados
                     FROM asistencia a
                     INNER JOIN calendario cal

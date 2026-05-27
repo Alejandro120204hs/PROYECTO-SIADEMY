@@ -66,9 +66,11 @@ class EntregaDocente {
                         cal.nota,
                         cal.observacion AS observacion_docente,
                         a.fecha_entrega AS fecha_limite,
-                        CASE 
+                        CASE
                             WHEN ea.id IS NULL THEN 'Pendiente'
-                            WHEN ea.fecha_entrega <= a.fecha_entrega THEN 'A tiempo'
+                            -- Comparar solo DATE: un envío a las 22:30 del día de vencimiento
+                            -- es 'A tiempo' porque DATE('2026-05-26 22:30') = '2026-05-26' <= '2026-05-26'
+                            WHEN DATE(ea.fecha_entrega) <= a.fecha_entrega THEN 'A tiempo'
                             ELSE 'Tarde'
                         END AS puntualidad,
                         CASE
