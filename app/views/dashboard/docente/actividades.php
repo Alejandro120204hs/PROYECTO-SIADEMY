@@ -199,7 +199,7 @@
                     </div>
                     <div class="actividad-meta-item">
                       <i class="ri-calendar-check-line"></i>
-                      <span>Cierre: <strong><?= docenteFormatearFechaActividad($actividad['fecha_entrega']) ?></strong></span>
+                      <span>Cierre: <strong><?= docenteFormatearFechaActividad(date('Y-m-d', strtotime($actividad['fecha_entrega'] . ' +1 day'))) ?></strong></span>
                     </div>
                     <div class="actividad-meta-item">
                       <i class="ri-percent-line"></i>
@@ -207,16 +207,22 @@
                     </div>
                   </div>
 
+                  <?php
+                    $totalMat   = (int)($actividad['total_matriculados'] ?? 0);
+                    $totalEntr  = (int)($actividad['total_entregas']     ?? 0);
+                    $totalPend  = max(0, $totalMat - $totalEntr);
+                    $porcentaje = $totalMat > 0 ? round(($totalEntr / $totalMat) * 100) : 0;
+                  ?>
                   <div class="actividad-progreso-section">
                     <div class="actividad-progreso-header">
                       <small>Entregas recibidas</small>
                       <div class="actividad-progreso-stats">
-                        <span class="entregadas">0/0</span>
-                        <span class="pendientes">0 pendientes</span>
+                        <span class="entregadas"><?= $totalEntr ?>/<?= $totalMat ?></span>
+                        <span class="pendientes"><?= $totalPend ?> pendiente<?= $totalPend !== 1 ? 's' : '' ?></span>
                       </div>
                     </div>
                     <div class="actividad-progreso-bar">
-                      <div class="actividad-progreso-fill" style="width: 0%"></div>
+                      <div class="actividad-progreso-fill" style="width: <?= $porcentaje ?>%"></div>
                     </div>
                   </div>
                 </div>
@@ -293,14 +299,19 @@
                         </td>
                         <td><strong style="color: #a4b1ff;"><?= $actividad['grado'] ?>° <?= $actividad['curso'] ?></strong></td>
                         <td><small style="color: #c7cbe1;"><?= date('Y', strtotime($actividad['fecha_entrega'])) ?></small></td>
-                        <td><small style="color: #c7cbe1;"><?= docenteFormatearFechaActividad($actividad['fecha_entrega']) ?></small></td>
+                        <td><small style="color: #c7cbe1;"><?= docenteFormatearFechaActividad(date('Y-m-d', strtotime($actividad['fecha_entrega'] . ' +1 day'))) ?></small></td>
                         <td class="text-center">
                           <span class="tabla-valor-badge"><?= number_format($actividad['ponderacion'], 0) ?>%</span>
                         </td>
                         <td class="text-center">
+                          <?php
+                            $tMat  = (int)($actividad['total_matriculados'] ?? 0);
+                            $tEntr = (int)($actividad['total_entregas']     ?? 0);
+                            $tPct  = $tMat > 0 ? round(($tEntr / $tMat) * 100) : 0;
+                          ?>
                           <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                            <span style="color: #97a1b6; font-weight: 600;">0/0</span>
-                            <small style="color: #97a1b6;">--%</small>
+                            <span style="color: #97a1b6; font-weight: 600;"><?= $tEntr ?>/<?= $tMat ?></span>
+                            <small style="color: #97a1b6;"><?= $tPct ?>%</small>
                           </div>
                         </td>
                         <td class="text-center">

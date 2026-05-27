@@ -1,186 +1,232 @@
-<?php 
+<?php
 
-    // IMPORTAMOS LAS DEPENDENCIAS NECESARIAS
-    require_once __DIR__ . '/../../../config/database.php';
+/**
+ * Modelo: Docente
+ * Gestión de docentes por institución.
+ *
+ * CORRECCIONES APLICADAS:
+ *  - registrar() usa beginTransaction/commit/rollBack para garantizar integridad
+ *    entre INSERT usuario + INSERT docente.
+ *  - die() reemplazado por error_log() + return false para no exponer estructura de BD.
+ */
 
-    class Docente{
-        // LLAMAMOS LA BASE DE DATOS
-        private $conexion;
+require_once __DIR__ . '/../../../config/database.php';
 
-        public function __construct(){
-            $db = new Conexion();
-            $this -> conexion = $db -> getConexion();
-        }
+class Docente {
 
-        public function registrar($data){
-            try{
+    private $conexion;
 
-                // INSERTAMOS DATOS EN LA TABLA USUARIO
-                $insertarUsuario = "INSERT INTO usuario(id_institucion,correo,clave,rol,estado)VALUES(:id_institucion,:correo,:clave,'Docente','Activo')";
-                
-                // SE GENERA LA CONTRASEÑA
-                $resultadoUusario = $this->conexion->prepare($insertarUsuario);
-                $resultadoUusario->bindParam(':id_institucion', $data['id_institucion']);
-                $resultadoUusario->bindParam(':correo', $data['correo']);
+    public function __construct() {
+        $db = new Conexion();
+        $this->conexion = $db->getConexion();
+    }
 
-                 $clave = password_hash($data['documento'],PASSWORD_DEFAULT);
-                 $resultadoUusario->bindParam(':clave',$clave);
+    // -----------------------------------------------------------------
+    // REGISTRAR — transacción protege el doble INSERT usuario + docente
+    // -----------------------------------------------------------------
+    public function registrar($data) {
+        try {
+            $this->conexion->beginTransaction();
 
-                 $resultadoUusario->execute();
-                 $id_usuario = $this->conexion->lastInsertId();
+            // 1. Insertar en tabla usuario
+            $insertarUsuario = "INSERT INTO usuario
+                                    (id_institucion, correo, clave, rol, estado)
+                                VALUES
+                                    (:id_institucion, :correo, :clave, 'Docente', 'Activo')";
 
+            $stmtUsuario = $this->conexion->prepare($insertarUsuario);
+            $stmtUsuario->bindParam(':id_institucion', $data['id_institucion']);
+            $stmtUsuario->bindParam(':correo',         $data['correo']);
+            $clave = password_hash($data['documento'], PASSWORD_DEFAULT);
+            $stmtUsuario->bindParam(':clave', $clave);
+            $stmtUsuario->execute();
 
-                // INSERTAR DATOS EN TABLA ACUDIENTE
-                 $insertar ="INSERT INTO docente(id_institucion,id_usuario,nombres,apellidos,tipo_documento,documento,fecha_nacimiento,genero,telefono,direccion,ciudad,profesion,tipo_contrato,fecha_ingreso,fecha_fin_contrato,foto) VALUES(:id_institucion,:id_usuario,:nombres,:apellidos,:tipo_documento,:documento,:fecha_nacimiento,:genero,:telefono,:direccion,:ciudad,:profesion,:tipo_contrato,:fecha_ingreso,:fecha_fin_contrato,:foto)";
+            $id_usuario = $this->conexion->lastInsertId();
 
-                
+            // 2. Insertar en tabla docente
+            $insertarDocente = "INSERT INTO docente
+                                    (id_institucion, id_usuario, nombres, apellidos,
+                                     tipo_documento, documento, fecha_nacimiento, genero,
+                                     telefono, direccion, ciudad, profesion,
+                                     tipo_contrato, fecha_ingreso, fecha_fin_contrato, foto)
+                                VALUES
+                                    (:id_institucion, :id_usuario, :nombres, :apellidos,
+                                     :tipo_documento, :documento, :fecha_nacimiento, :genero,
+                                     :telefono, :direccion, :ciudad, :profesion,
+                                     :tipo_contrato, :fecha_ingreso, :fecha_fin_contrato, :foto)";
 
-                    $resultado = $this->conexion->prepare($insertar);
+            $stmtDocente = $this->conexion->prepare($insertarDocente);
+            $stmtDocente->bindParam(':id_institucion',    $data['id_institucion']);
+            $stmtDocente->bindParam(':id_usuario',        $id_usuario);
+            $stmtDocente->bindParam(':nombres',           $data['nombres']);
+            $stmtDocente->bindParam(':apellidos',         $data['apellidos']);
+            $stmtDocente->bindParam(':tipo_documento',    $data['tipo_documento']);
+            $stmtDocente->bindParam(':documento',         $data['documento']);
+            $stmtDocente->bindParam(':fecha_nacimiento',  $data['fecha_nacimiento']);
+            $stmtDocente->bindParam(':genero',            $data['genero']);
+            $stmtDocente->bindParam(':telefono',          $data['telefono']);
+            $stmtDocente->bindParam(':direccion',         $data['direccion']);
+            $stmtDocente->bindParam(':ciudad',            $data['ciudad']);
+            $stmtDocente->bindParam(':profesion',         $data['profesion']);
+            $stmtDocente->bindParam(':tipo_contrato',     $data['tipo_contrato']);
+            $stmtDocente->bindParam(':fecha_ingreso',     $data['fecha_ingreso']);
+            $stmtDocente->bindParam(':fecha_fin_contrato',$data['fecha_fin_contrato']);
+            $stmtDocente->bindParam(':foto',              $data['foto']);
+            $stmtDocente->execute();
 
-                    $resultado->bindParam(':id_institucion', $data['id_institucion']);
-                    $resultado->bindParam(':id_usuario', $id_usuario);
-                    $resultado->bindParam(':nombres', $data['nombres']);
-                    $resultado->bindParam(':apellidos', $data['apellidos']);
-                    $resultado->bindParam(':tipo_documento', $data['tipo_documento']);
-                    $resultado->bindParam(':documento', $data['documento']);
-                    $resultado->bindParam(':fecha_nacimiento', $data['fecha_nacimiento']);
-                    $resultado->bindParam(':genero', $data['genero']);
-                    $resultado->bindParam(':telefono', $data['telefono']);
-                    $resultado->bindParam(':direccion', $data['direccion']);
-                    $resultado->bindParam(':ciudad', $data['ciudad']);
-                    $resultado->bindParam(':profesion', $data['profesion']);
-                    $resultado->bindParam(':tipo_contrato', $data['tipo_contrato']);
-                    $resultado->bindParam(':fecha_ingreso', $data['fecha_ingreso']);
-                    $resultado->bindParam(':fecha_fin_contrato', $data['fecha_fin_contrato']);
-                    $resultado->bindParam(':foto', $data['foto']);
+            $this->conexion->commit();
+            return true;
 
-
-
-             
-
-                return $resultado -> execute();
-
-
-            }catch(PDOException $e){
-                die("Error en Docente::registrar->" . $e->getMessage());
-            }
-        }
-
-
-        public function listar($id_institucion){
-
-            try{
-
-                // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
-                $consultar = "SELECT docente.*, usuario.correo AS correo, usuario.estado AS estado FROM docente INNER JOIN usuario ON docente.id_usuario = usuario.id WHERE docente.id_institucion = :id_institucion  ORDER BY apellidos ASC";
-
-                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
-                $resultado = $this->conexion->prepare($consultar);
-                $resultado -> bindParam(':id_institucion', $id_institucion);
-                $resultado -> execute();
-                return $resultado -> fetchAll();
-
-            }catch(PDOException $e){
-                error_log("Error en Docente::listar->" . $e->getMessage());
-                return[];
-            }
-        }
-
-            public function listarId($id){
-
-                try{
-                   
-                $consultar = "SELECT docente.*, usuario.correo AS correo, usuario.estado AS estado FROM docente INNER JOIN usuario ON docente.id_usuario = usuario.id WHERE docente.id = :id LIMIT 1";
-
-                    // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
-                    $resultado = $this -> conexion -> prepare($consultar);
-                    $resultado -> bindParam(':id',$id);
-                    $resultado -> execute();
-                    return $resultado -> fetch();
-
-                }catch(PDOException $e){
-                    die("Error en Docente::listar->" . $e->getMessage());
-                    return [];
-                }
-            }
-
-
-            public function actualizar($data){
-            try{
-
-                // ACTUALIZAR USUARIO
-                $actualizarUsuario = "UPDATE usuario SET correo=:correo, estado=:estado WHERE id=:id_usuario";
-
-                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
-                $resultado = $this -> conexion -> prepare($actualizarUsuario);
-                $resultado -> bindParam(':correo',$data['correo']);
-                $resultado -> bindParam(':estado',$data['estado']); 
-                $resultado -> bindParam(':id_usuario',$data['id_usuario']);
-
-                $resultadoUsuario = $resultado -> execute();
-
-
-                // DEFINIMOS EN UNA VARIABLE LA CONSULTA DE SQL SEGUN SEA EL CASO
-                $actualizar = "UPDATE docente SET nombres=:nombres, apellidos=:apellidos, tipo_documento=:tipo_documento, fecha_nacimiento=:fecha_nacimiento, genero=:genero, telefono=:telefono, direccion=:direccion, ciudad=:ciudad, profesion=:profesion, tipo_contrato=:tipo_contrato, fecha_ingreso=:fecha_ingreso, fecha_fin_contrato=:fecha_fin_contrato WHERE id_usuario = :id_usuario";
-
-                // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
-                    $resultado2 = $this->conexion->prepare($actualizar);
-                    $resultado2->bindParam(':id_usuario',$data['id_usuario']);
-                    $resultado2->bindParam(':nombres', $data['nombres']);
-                    $resultado2->bindParam(':apellidos', $data['apellidos']);
-                    $resultado2->bindParam(':tipo_documento', $data['tipo_documento']);
-                    $resultado2->bindParam(':fecha_nacimiento', $data['fecha_nacimiento']);
-                    $resultado2->bindParam(':genero', $data['genero']);
-                    $resultado2->bindParam(':telefono', $data['telefono']);
-                    $resultado2->bindParam(':direccion', $data['direccion']);
-                    $resultado2->bindParam(':ciudad', $data['ciudad']);
-                    $resultado2->bindParam(':profesion', $data['profesion']);
-                    $resultado2->bindParam(':tipo_contrato', $data['tipo_contrato']);
-                    $resultado2->bindParam(':fecha_ingreso', $data['fecha_ingreso']);
-                    $resultado2->bindParam(':fecha_fin_contrato', $data['fecha_fin_contrato']);
-
-                    $resultadoAdministrador = $resultado2 -> execute();
-
-                 // EJECUTAMOS EL ACTUALIZAR
-
-                 if($resultadoUsuario && $resultadoAdministrador){
-                    return true;
-                }else{
-                    return false;
-                }
-
-            }catch(PDOException $e){
-                error_log("Error en Docente::actualizar->" . $e->getMessage());
-                return false;
-            }
-        }
-
-        public function eliminar($id){
-            try{
-
-                $actualizar = "UPDATE usuario SET estado = 'Inactivo' WHERE id=:id";
-                 // PREPARAMOS LA ACCION A EJECUTAR Y LA EJECUTAMOS
-                $resultado = $this -> conexion -> prepare($actualizar);
-                $resultado -> bindParam(':id',$id);
-                return $resultado -> execute();
-            }catch(PDOException $e){
-                die("Error en Docente::actualizar->" . $e->getMessage());
-
-            }
-        }
-
-        public function contar($id_institucion){
-            try{
-                $consultar = "SELECT COUNT(*) as total FROM docente INNER JOIN usuario ON docente.id_usuario = usuario.id WHERE docente.id_institucion = :id_institucion AND usuario.estado = 'Activo'";
-                $resultado = $this->conexion->prepare($consultar);
-                $resultado->bindParam(':id_institucion', $id_institucion);
-                $resultado->execute();
-                $fila = $resultado->fetch();
-                return $fila['total'] ?? 0;
-            }catch(PDOException $e){
-                error_log("Error en Docente::contar->" . $e->getMessage());
-                return 0;
-            }
+        } catch (PDOException $e) {
+            $this->conexion->rollBack();
+            error_log("Error en Docente::registrar -> " . $e->getMessage());
+            return false;
         }
     }
-        ?>
+
+    // -----------------------------------------------------------------
+    // LISTAR — filtra siempre por id_institucion (aislamiento multi-tenant)
+    // -----------------------------------------------------------------
+    public function listar($id_institucion) {
+        try {
+            $consultar = "SELECT
+                              docente.*,
+                              usuario.correo AS correo,
+                              usuario.estado AS estado
+                          FROM docente
+                          INNER JOIN usuario ON docente.id_usuario = usuario.id
+                          WHERE docente.id_institucion = :id_institucion
+                          ORDER BY apellidos ASC";
+
+            $stmt = $this->conexion->prepare($consultar);
+            $stmt->bindParam(':id_institucion', $id_institucion);
+            $stmt->execute();
+            return $stmt->fetchAll();
+
+        } catch (PDOException $e) {
+            error_log("Error en Docente::listar -> " . $e->getMessage());
+            return [];
+        }
+    }
+
+    // -----------------------------------------------------------------
+    // LISTAR POR ID
+    // -----------------------------------------------------------------
+    public function listarId($id) {
+        try {
+            $consultar = "SELECT
+                              docente.*,
+                              usuario.correo AS correo,
+                              usuario.estado AS estado
+                          FROM docente
+                          INNER JOIN usuario ON docente.id_usuario = usuario.id
+                          WHERE docente.id = :id
+                          LIMIT 1";
+
+            $stmt = $this->conexion->prepare($consultar);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+
+        } catch (PDOException $e) {
+            error_log("Error en Docente::listarId -> " . $e->getMessage());
+            return null;
+        }
+    }
+
+    // -----------------------------------------------------------------
+    // ACTUALIZAR — transacción protege el doble UPDATE usuario + docente
+    // -----------------------------------------------------------------
+    public function actualizar($data) {
+        try {
+            $this->conexion->beginTransaction();
+
+            // Actualizar usuario
+            $actualizarUsuario = "UPDATE usuario
+                                  SET correo = :correo, estado = :estado
+                                  WHERE id = :id_usuario";
+            $stmtU = $this->conexion->prepare($actualizarUsuario);
+            $stmtU->bindParam(':correo',    $data['correo']);
+            $stmtU->bindParam(':estado',    $data['estado']);
+            $stmtU->bindParam(':id_usuario',$data['id_usuario']);
+            $stmtU->execute();
+
+            // Actualizar docente
+            $actualizarDocente = "UPDATE docente
+                                  SET nombres           = :nombres,
+                                      apellidos         = :apellidos,
+                                      tipo_documento    = :tipo_documento,
+                                      fecha_nacimiento  = :fecha_nacimiento,
+                                      genero            = :genero,
+                                      telefono          = :telefono,
+                                      direccion         = :direccion,
+                                      ciudad            = :ciudad,
+                                      profesion         = :profesion,
+                                      tipo_contrato     = :tipo_contrato,
+                                      fecha_ingreso     = :fecha_ingreso,
+                                      fecha_fin_contrato= :fecha_fin_contrato
+                                  WHERE id_usuario = :id_usuario";
+            $stmtD = $this->conexion->prepare($actualizarDocente);
+            $stmtD->bindParam(':id_usuario',        $data['id_usuario']);
+            $stmtD->bindParam(':nombres',           $data['nombres']);
+            $stmtD->bindParam(':apellidos',         $data['apellidos']);
+            $stmtD->bindParam(':tipo_documento',    $data['tipo_documento']);
+            $stmtD->bindParam(':fecha_nacimiento',  $data['fecha_nacimiento']);
+            $stmtD->bindParam(':genero',            $data['genero']);
+            $stmtD->bindParam(':telefono',          $data['telefono']);
+            $stmtD->bindParam(':direccion',         $data['direccion']);
+            $stmtD->bindParam(':ciudad',            $data['ciudad']);
+            $stmtD->bindParam(':profesion',         $data['profesion']);
+            $stmtD->bindParam(':tipo_contrato',     $data['tipo_contrato']);
+            $stmtD->bindParam(':fecha_ingreso',     $data['fecha_ingreso']);
+            $stmtD->bindParam(':fecha_fin_contrato',$data['fecha_fin_contrato']);
+            $stmtD->execute();
+
+            $this->conexion->commit();
+            return true;
+
+        } catch (PDOException $e) {
+            $this->conexion->rollBack();
+            error_log("Error en Docente::actualizar -> " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // -----------------------------------------------------------------
+    // ELIMINAR (soft delete)
+    // -----------------------------------------------------------------
+    public function eliminar($id) {
+        try {
+            $sql  = "UPDATE usuario SET estado = 'Inactivo' WHERE id = :id";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            return $stmt->execute();
+
+        } catch (PDOException $e) {
+            error_log("Error en Docente::eliminar -> " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // -----------------------------------------------------------------
+    // CONTAR — filtra por institución y usuarios Activos
+    // -----------------------------------------------------------------
+    public function contar($id_institucion) {
+        try {
+            $sql  = "SELECT COUNT(*) AS total
+                     FROM docente
+                     INNER JOIN usuario ON docente.id_usuario = usuario.id
+                     WHERE docente.id_institucion = :id_institucion
+                       AND usuario.estado = 'Activo'";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id_institucion', $id_institucion);
+            $stmt->execute();
+            $fila = $stmt->fetch();
+            return $fila['total'] ?? 0;
+
+        } catch (PDOException $e) {
+            error_log("Error en Docente::contar -> " . $e->getMessage());
+            return 0;
+        }
+    }
+}

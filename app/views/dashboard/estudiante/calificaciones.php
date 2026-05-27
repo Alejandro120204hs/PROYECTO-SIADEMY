@@ -2,6 +2,21 @@
     require_once BASE_PATH . '/app/controllers/perfil.php';
     $id = $_SESSION['user']['id'] ?? 0;
     $usuario = mostrarPerfil($id);
+
+    $resumen_calificaciones = isset($resumen_calificaciones) && is_array($resumen_calificaciones)
+        ? $resumen_calificaciones
+        : [
+            'promedio_general' => 0,
+            'total_materias' => 0,
+            'total_evaluaciones' => 0,
+            'pendientes' => 0,
+        ];
+
+    $calificaciones_materias = isset($calificaciones_materias) && is_array($calificaciones_materias)
+        ? $calificaciones_materias
+        : [];
+
+    $periodo_actual = isset($periodo_actual) ? (int)$periodo_actual : 1;
 ?>
 <!doctype html>
 <html lang="es">

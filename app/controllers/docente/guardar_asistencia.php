@@ -65,10 +65,13 @@ if ($id_docente === 0) {
 }
 
 // Mapeo de códigos de la vista → enum de la BD
+// IMPORTANTE: la columna asistencia.estado debe incluir 'Tarde' en su ENUM.
+// Si aún no existe, ejecutar: ALTER TABLE asistencia
+//   MODIFY COLUMN estado ENUM('Presente','Ausente','Justificado','Tarde') NOT NULL DEFAULT 'Presente';
 $mapaEstados = [
     'P' => 'Presente',
     'A' => 'Ausente',
-    'T' => 'Ausente',      // Tardanza se almacena como Ausente
+    'T' => 'Tarde',        // Tardanza se almacena como estado propio (no confundir con Ausente)
     'E' => 'Justificado',
 ];
 

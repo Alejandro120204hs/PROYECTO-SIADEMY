@@ -138,6 +138,7 @@
                 <th>Nivel</th>
                 <th>Año</th>
                 <th>Fecha Matrícula</th>
+                <th>Estado Matrícula</th>
                 <th>Estado Curso</th>
                 <th>Acciones</th>
               </tr>
@@ -162,6 +163,21 @@
                     <td><?= $matricula['anio'] ?></td>
                     <td><?= date('d/m/Y', strtotime($matricula['fecha'])) ?></td>
                     <td>
+                      <?php
+                        $em = $matricula['estado_matricula'] ?? 'Activa';
+                        $emClass = match($em) {
+                            'Activa'     => 'badge-success',
+                            'Retirada'   => 'badge-danger',
+                            'Cancelada'  => 'badge-secondary',
+                            'Egresado'   => 'badge-info',
+                            'Repitente'  => 'badge-warning',
+                            'Trasladado' => 'badge-primary',
+                            default      => 'badge-secondary',
+                        };
+                      ?>
+                      <span class="badge <?= $emClass ?>"><?= htmlspecialchars($em) ?></span>
+                    </td>
+                    <td>
                       <?php if($matricula['estado_curso'] == 'Activo'): ?>
                         <span class="badge badge-success">Activo</span>
                       <?php else: ?>
@@ -184,7 +200,7 @@
                 <?php endforeach; ?>
               <?php else: ?>
                 <tr>
-                  <td colspan="9" class="text-center">No hay matrículas registradas</td>
+                  <td colspan="10" class="text-center">No hay matrículas registradas</td>
                 </tr>
               <?php endif; ?>
             </tbody>

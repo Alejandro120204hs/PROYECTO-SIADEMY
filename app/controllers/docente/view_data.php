@@ -167,29 +167,26 @@ function docenteObtenerIconoTipoActividad($tipo)
 
 function docenteDeterminarEstadoActividad($actividad)
 {
-    $estadoDB = (string)($actividad['estado'] ?? '');
     $fechaEntrega = (string)($actividad['fecha_entrega'] ?? '');
-    
-    // Si la BD dice que está cerrada, retorna cerrada
-    if ($estadoDB === 'cerrada') {
-        return 'cerrada';
+
+    // Estado determinado SOLO por la fecha (comparación de fechas, sin horas).
+    // Esto es inmune a problemas de zona horaria entre PHP y el servidor.
+    //
+    // Regla exacta:
+    //   fecha_entrega >= hoy  → ACTIVA  (hoy puedo entregar, mañana ya no)
+    //   fecha_entrega <  hoy  → CERRADA (el día de entrega ya pasó)
+    //
+    // Ejemplo: fecha_entrega = 26 mayo, hoy = 26 mayo → ACTIVA
+    //          fecha_entrega = 26 mayo, hoy = 27 mayo → CERRADA
+
+    if (!empty($fechaEntrega)) {
+        $fechaSolo = date('Y-m-d', strtotime($fechaEntrega)); // solo la fecha, sin hora
+        $hoy       = date('Y-m-d');                           // hoy, sin hora
+        return ($fechaSolo >= $hoy) ? 'activa' : 'cerrada';
     }
-    
-    // Si tiene estado 'activa', verificar si la fecha de entrega pasó
-    if ($estadoDB === 'activa') {
-        if (!empty($fechaEntrega)) {
-            $fecha = strtotime($fechaEntrega);
-            $hoy = strtotime(date('Y-m-d'));
-            
-            // Si la fecha de entrega es menor a hoy, la actividad está cerrada
-            if ($fecha < $hoy) {
-                return 'cerrada';
-            }
-        }
-        return 'activa';
-    }
-    
-    return $estadoDB;
+
+    // Sin fecha de entrega: respetar lo que dice la BD
+    return (string)($actividad['estado'] ?? 'activa');
 }
 
 function docenteFormatearEstadoActividad($actividad)
@@ -395,8 +392,18 @@ function obtenerDataVistaDocenteAgregarActividad()
         exit;
     }
 
+    // Calcular ponderación ya usada para este asignatura-curso
+    $ponderacionUsada = 0;
+    if (!empty($curso['id_asignatura_curso'])) {
+        $ponderacionUsada = (new Actividad_docente())->obtenerTotalPonderacion(
+            (int)$curso['id_asignatura_curso']
+        );
+    }
+
     return [
-        'curso' => $curso,
+        'curso'                  => $curso,
+        'ponderacion_usada'      => $ponderacionUsada,
+        'ponderacion_disponible' => max(0, 100 - $ponderacionUsada),
     ];
 }
 
@@ -439,7 +446,7 @@ function obtenerDataVistaDocenteAsistencia()
         }
     }
 
-    $mapaEstadoVista = ['Presente' => 'P', 'Ausente' => 'A', 'Justificado' => 'E'];
+    $mapaEstadoVista = ['Presente' => 'P', 'Ausente' => 'A', 'Justificado' => 'E', 'Tarde' => 'T'];
     $estudiantes = [];
     $historialAsistencia = [];
 
@@ -540,7 +547,7 @@ function obtenerDataVistaDocenteDetalleCurso($idCurso)
     $anioActual = (int) date('Y');
 
     $matriculaObj = new Matricula();
-    $estudiantes = $matriculaObj->listarPorCurso($idCurso, $anioActual) ?: [];
+    $estudiantes = $matriculaObj->listarPorCurso($idCurso, $anioActual, $idInstitucion) ?: [];
 
     $docenteAsignaturaObj = new DocenteAsignatura();
     $asignaturas = $docenteAsignaturaObj->obtenerAsignaturasPorCurso($idCurso) ?: [];
