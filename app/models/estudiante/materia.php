@@ -27,8 +27,12 @@ class MateriaEstudiante
      */
     public function obtenerMateriasConEstadisticas($id_estudiante, $id_institucion, $anio)
     {
+        // Fecha de PHP (timezone America/Bogota configurado en config.php).
+        // Las actividades vencidas sin entrega cuentan como nota 0 en el promedio.
+        $fechaHoy = date('Y-m-d');
+
         try {
-            $sql = "SELECT 
+            $sql = "SELECT
                         a.id AS id_asignatura,
                         a.nombre AS materia,
                         a.descripcion,
@@ -43,9 +47,29 @@ class MateriaEstudiante
                         u.correo AS docente_correo,
                         d.foto AS docente_foto,
                         COUNT(DISTINCT act.id) AS total_actividades,
-                        -- Pendiente = activa, dentro de plazo Y el estudiante NO ha entregado todavía
-                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() AND ea.id IS NULL THEN 1 ELSE 0 END) AS actividades_pendientes,
-                        ROUND(AVG(cal.nota), 1) AS promedio
+                        -- Pendiente = sin entrega, dentro de plazo (fecha PHP)
+                        SUM(CASE WHEN ea.id IS NULL AND DATE(act.fecha_entrega) >= :fecha_pend THEN 1 ELSE 0 END) AS actividades_pendientes,
+                        -- Promedio PONDERADO: SUM(nota×ponderacion) / SUM(ponderacion usada)
+                        -- Las vencidas sin entrega cuentan como nota 0 con su ponderación completa.
+                        -- Las pendientes (dentro de plazo, sin entrega) quedan excluidas del denominador.
+                        -- Fórmula canónica usada también en el boletín (BoletinEstudiante::obtenerMateriasPorPeriodo).
+                        ROUND(
+                            SUM(CASE
+                                WHEN cal.nota IS NOT NULL                                                    THEN cal.nota * act.ponderacion
+                                WHEN ea.id IS NULL AND DATE(act.fecha_entrega) < :fecha_prom_num             THEN 0
+                                ELSE NULL
+                            END)
+                            /
+                            NULLIF(
+                                SUM(CASE
+                                    WHEN cal.nota IS NOT NULL                                                THEN act.ponderacion
+                                    WHEN ea.id IS NULL AND DATE(act.fecha_entrega) < :fecha_prom_den         THEN act.ponderacion
+                                    ELSE 0
+                                END),
+                                0
+                            ),
+                            1
+                        ) AS promedio
                     FROM estudiante e
                     INNER JOIN matricula m ON m.id_estudiante = e.id
                     INNER JOIN curso c ON m.id_curso = c.id
@@ -57,18 +81,21 @@ class MateriaEstudiante
                     LEFT JOIN actividad act ON act.id_asignatura_curso = ac.id
                     LEFT JOIN entrega_actividad ea  ON ea.id_actividad  = act.id AND ea.id_estudiante = e.id
                     LEFT JOIN calificacion cal ON cal.id_actividad = act.id AND cal.id_estudiante = e.id
-                    WHERE e.id = :id_estudiante 
+                    WHERE e.id = :id_estudiante
                     AND e.id_institucion = :id_institucion
                     AND m.anio = :anio
                     AND c.estado = 'Activo'
-                    GROUP BY a.id, a.nombre, a.descripcion, ac.id, c.id, c.grado, c.curso, 
+                    GROUP BY a.id, a.nombre, a.descripcion, ac.id, c.id, c.grado, c.curso,
                              d.id, d.nombres, d.apellidos, u.correo, d.foto
                     ORDER BY a.nombre ASC";
 
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
+            $stmt->bindParam(':id_estudiante',  $id_estudiante,  PDO::PARAM_INT);
             $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
-            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+            $stmt->bindParam(':anio',           $anio,           PDO::PARAM_INT);
+            $stmt->bindParam(':fecha_pend',     $fechaHoy,       PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_prom_num', $fechaHoy,       PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_prom_den', $fechaHoy,       PDO::PARAM_STR);
             $stmt->execute();
 
             $materias = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -98,12 +125,34 @@ class MateriaEstudiante
      */
     public function obtenerEstadisticasGenerales($id_estudiante, $id_institucion, $anio)
     {
+        // Fecha PHP (America/Bogota). Actividades vencidas sin entrega cuentan como 0.
+        $fechaHoy = date('Y-m-d');
+
         try {
-            $sql = "SELECT 
+            $sql = "SELECT
                         COUNT(DISTINCT a.id) AS total_materias,
-                        ROUND(AVG(cal.nota), 1) AS promedio_general,
-                        -- Pendiente = activa, dentro de plazo Y sin entrega del estudiante
-                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() AND ea.id IS NULL THEN 1 ELSE 0 END) AS actividades_pendientes
+                        -- Promedio PONDERADO: SUM(nota×ponderacion) / SUM(ponderacion usada)
+                        -- Las vencidas sin entrega cuentan como nota 0 con su ponderación completa.
+                        -- Fórmula canónica idéntica a BoletinEstudiante::obtenerMateriasPorPeriodo.
+                        ROUND(
+                            SUM(CASE
+                                WHEN cal.nota IS NOT NULL                                                THEN cal.nota * act.ponderacion
+                                WHEN ea.id IS NULL AND DATE(act.fecha_entrega) < :fecha_prom_gen_num    THEN 0
+                                ELSE NULL
+                            END)
+                            /
+                            NULLIF(
+                                SUM(CASE
+                                    WHEN cal.nota IS NOT NULL                                           THEN act.ponderacion
+                                    WHEN ea.id IS NULL AND DATE(act.fecha_entrega) < :fecha_prom_gen_den THEN act.ponderacion
+                                    ELSE 0
+                                END),
+                                0
+                            ),
+                            1
+                        ) AS promedio_general,
+                        -- Pendiente = sin entrega, dentro de plazo (fecha PHP)
+                        SUM(CASE WHEN ea.id IS NULL AND DATE(act.fecha_entrega) >= :fecha_pend_gen THEN 1 ELSE 0 END) AS actividades_pendientes
                     FROM estudiante e
                     INNER JOIN matricula m ON m.id_estudiante = e.id
                     INNER JOIN curso c ON m.id_curso = c.id
@@ -118,45 +167,70 @@ class MateriaEstudiante
                     AND c.estado = 'Activo'";
 
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
-            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
-            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+            $stmt->bindParam(':id_estudiante',       $id_estudiante,  PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion',      $id_institucion, PDO::PARAM_INT);
+            $stmt->bindParam(':anio',                $anio,           PDO::PARAM_INT);
+            $stmt->bindParam(':fecha_prom_gen_num',  $fechaHoy,       PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_prom_gen_den',  $fechaHoy,       PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_pend_gen',      $fechaHoy,       PDO::PARAM_STR);
             $stmt->execute();
 
             $stats = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Contar materias en riesgo (promedio < 3.0)
+            // Contar materias con bajo rendimiento (promedio <= 3.0).
+            // Incluye vencidas sin entrega como 0, igual que el promedio general.
+            // Subquery de materias en riesgo — usa la misma fórmula ponderada canónica.
             $sqlRiesgo = "SELECT COUNT(*) AS en_riesgo
                           FROM (
-                              SELECT a.id, ROUND(AVG(cal.nota), 1) AS promedio
+                              SELECT a.id,
+                                     ROUND(
+                                         SUM(CASE
+                                             WHEN cal.nota IS NOT NULL                                              THEN cal.nota * act.ponderacion
+                                             WHEN ea.id IS NULL AND DATE(act.fecha_entrega) < :fecha_riesgo_num    THEN 0
+                                             ELSE NULL
+                                         END)
+                                         /
+                                         NULLIF(
+                                             SUM(CASE
+                                                 WHEN cal.nota IS NOT NULL                                          THEN act.ponderacion
+                                                 WHEN ea.id IS NULL AND DATE(act.fecha_entrega) < :fecha_riesgo_den THEN act.ponderacion
+                                                 ELSE 0
+                                             END),
+                                             0
+                                         ),
+                                         1
+                                     ) AS promedio
                               FROM estudiante e
-                              INNER JOIN matricula m ON m.id_estudiante = e.id
-                              INNER JOIN curso c ON m.id_curso = c.id
+                              INNER JOIN matricula m  ON m.id_estudiante = e.id
+                              INNER JOIN curso c      ON m.id_curso = c.id
                               INNER JOIN asignatura_curso ac ON ac.id_curso = c.id
-                              INNER JOIN asignatura a ON ac.id_asignatura = a.id
-                              LEFT JOIN actividad act ON act.id_asignatura_curso = ac.id
+                              INNER JOIN asignatura a  ON ac.id_asignatura = a.id
+                              LEFT JOIN actividad act  ON act.id_asignatura_curso = ac.id
+                              LEFT JOIN entrega_actividad ea ON ea.id_actividad = act.id AND ea.id_estudiante = e.id
                               LEFT JOIN calificacion cal ON cal.id_actividad = act.id AND cal.id_estudiante = e.id
-                              WHERE e.id = :id_estudiante 
+                              WHERE e.id = :id_estudiante
                               AND e.id_institucion = :id_institucion
                               AND m.anio = :anio
                               AND c.estado = 'Activo'
                               GROUP BY a.id
-                              HAVING promedio < 3.0 AND promedio IS NOT NULL
+                              HAVING promedio <= 3.0 AND promedio IS NOT NULL
                           ) AS materias_riesgo";
 
             $stmtRiesgo = $this->conexion->prepare($sqlRiesgo);
-            $stmtRiesgo->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
-            $stmtRiesgo->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
-            $stmtRiesgo->bindParam(':anio', $anio, PDO::PARAM_INT);
+            $stmtRiesgo->bindParam(':id_estudiante',    $id_estudiante,  PDO::PARAM_INT);
+            $stmtRiesgo->bindParam(':id_institucion',   $id_institucion, PDO::PARAM_INT);
+            $stmtRiesgo->bindParam(':anio',             $anio,           PDO::PARAM_INT);
+            $stmtRiesgo->bindParam(':fecha_riesgo_num', $fechaHoy,       PDO::PARAM_STR);
+            $stmtRiesgo->bindParam(':fecha_riesgo_den', $fechaHoy,       PDO::PARAM_STR);
             $stmtRiesgo->execute();
 
             $riesgo = $stmtRiesgo->fetch(PDO::FETCH_ASSOC);
             $stats['en_riesgo'] = $riesgo['en_riesgo'] ?? 0;
 
             // Valores por defecto
-            $stats['total_materias'] = $stats['total_materias'] ?? 0;
-            $stats['promedio_general'] = $stats['promedio_general'] ?? 0;
-            $stats['actividades_pendientes'] = $stats['actividades_pendientes'] ?? 0;
+            $stats['total_materias']         = $stats['total_materias']         ?? 0;
+            $stats['promedio_general']        = $stats['promedio_general']        ?? 0;
+            $stats['actividades_pendientes']  = $stats['actividades_pendientes']  ?? 0;
 
             return $stats;
 
@@ -182,8 +256,11 @@ class MateriaEstudiante
      */
     public function obtenerActividadesProximas($id_estudiante, $id_institucion, $anio, $limite = 5)
     {
+        // Usar fecha PHP (timezone America/Bogota) en lugar de CURDATE() de MySQL.
+        $fechaHoy = date('Y-m-d');
+
         try {
-            $sql = "SELECT 
+            $sql = "SELECT
                         act.id,
                         act.titulo,
                         act.descripcion,
@@ -192,30 +269,32 @@ class MateriaEstudiante
                         a.nombre AS materia,
                         d.nombres AS docente_nombres,
                         d.apellidos AS docente_apellidos,
-                        DATEDIFF(act.fecha_entrega, CURDATE()) AS dias_restantes
+                        DATEDIFF(act.fecha_entrega, :fecha_prox) AS dias_restantes
                     FROM estudiante e
                     INNER JOIN matricula m ON m.id_estudiante = e.id
                     INNER JOIN curso c ON m.id_curso = c.id
                     INNER JOIN asignatura_curso ac ON ac.id_curso = c.id
                     INNER JOIN actividad act ON act.id_asignatura_curso = ac.id
-                    INNER JOIN asignatura a ON act.id_asignatura = a.id
+                    INNER JOIN asignatura a ON ac.id_asignatura = a.id
                     INNER JOIN docente d ON act.id_docente = d.id
                     LEFT JOIN entrega_actividad ea ON ea.id_actividad = act.id AND ea.id_estudiante = e.id
                     WHERE e.id = :id_estudiante
                     AND e.id_institucion = :id_institucion
                     AND m.anio = :anio
                     AND act.estado = 'activa'
-                    AND act.fecha_entrega >= CURDATE()
+                    AND DATE(act.fecha_entrega) >= :fecha_prox2
                     AND ea.id IS NULL
                     AND c.estado = 'Activo'
                     ORDER BY act.fecha_entrega ASC
                     LIMIT :limite";
 
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
+            $stmt->bindParam(':id_estudiante',  $id_estudiante,  PDO::PARAM_INT);
             $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
-            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
-            $stmt->bindParam(':limite', $limite, PDO::PARAM_INT);
+            $stmt->bindParam(':anio',           $anio,           PDO::PARAM_INT);
+            $stmt->bindParam(':fecha_prox',     $fechaHoy,       PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_prox2',    $fechaHoy,       PDO::PARAM_STR);
+            $stmt->bindParam(':limite',         $limite,         PDO::PARAM_INT);
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -236,13 +315,35 @@ class MateriaEstudiante
      */
     public function obtenerResumenCalificaciones($id_estudiante, $id_institucion, $anio)
     {
+        // Usar fecha PHP (timezone America/Bogota).
+        // Actividades vencidas sin entrega cuentan como 0 (consistente con el dashboard).
+        $fechaHoy = date('Y-m-d');
+
         try {
             $sql = "SELECT
                         COUNT(DISTINCT a.id) AS total_materias,
-                        ROUND(AVG(cal.nota), 1) AS promedio_general,
+                        -- Promedio PONDERADO: SUM(nota×ponderacion) / SUM(ponderacion usada)
+                        -- Fórmula canónica idéntica a BoletinEstudiante::obtenerMateriasPorPeriodo.
+                        ROUND(
+                            SUM(CASE
+                                WHEN cal.nota IS NOT NULL                                                  THEN cal.nota * act.ponderacion
+                                WHEN ea.id IS NULL AND DATE(act.fecha_entrega) < :fecha_res_prom_num       THEN 0
+                                ELSE NULL
+                            END)
+                            /
+                            NULLIF(
+                                SUM(CASE
+                                    WHEN cal.nota IS NOT NULL                                              THEN act.ponderacion
+                                    WHEN ea.id IS NULL AND DATE(act.fecha_entrega) < :fecha_res_prom_den   THEN act.ponderacion
+                                    ELSE 0
+                                END),
+                                0
+                            ),
+                            1
+                        ) AS promedio_general,
                         COUNT(DISTINCT act.id) AS total_evaluaciones,
-                        -- Pendiente = sin entrega del estudiante, activa y dentro de plazo
-                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() AND ea.id IS NULL THEN 1 ELSE 0 END) AS pendientes
+                        -- Pendiente = sin entrega, dentro de plazo (fecha PHP)
+                        SUM(CASE WHEN ea.id IS NULL AND DATE(act.fecha_entrega) >= :fecha_res_pend THEN 1 ELSE 0 END) AS pendientes
                     FROM estudiante e
                     INNER JOIN matricula m ON m.id_estudiante = e.id
                     INNER JOIN curso c ON m.id_curso = c.id
@@ -257,9 +358,12 @@ class MateriaEstudiante
                     AND c.estado = 'Activo'";
 
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
-            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
-            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+            $stmt->bindParam(':id_estudiante',      $id_estudiante,  PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion',     $id_institucion, PDO::PARAM_INT);
+            $stmt->bindParam(':anio',               $anio,           PDO::PARAM_INT);
+            $stmt->bindParam(':fecha_res_prom_num', $fechaHoy,       PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_res_prom_den', $fechaHoy,       PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_res_pend',     $fechaHoy,       PDO::PARAM_STR);
             $stmt->execute();
 
             $resumen = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
@@ -366,8 +470,55 @@ class MateriaEstudiante
     }
 
     /**
+     * Obtener todas las actividades del estudiante para el calendario del año académico.
+     * Incluye actividades pasadas, presentes y futuras — sin filtro de entrega.
+     *
+     * @param int $id_estudiante  ID del estudiante
+     * @param int $id_institucion ID de la institución
+     * @param int $anio           Año académico
+     * @return array
+     */
+    public function obtenerActividadesParaCalendario($id_estudiante, $id_institucion, $anio)
+    {
+        try {
+            $sql = "SELECT
+                        act.id,
+                        act.titulo,
+                        COALESCE(act.descripcion, '') AS descripcion,
+                        act.fecha_entrega,
+                        COALESCE(NULLIF(TRIM(act.tipo), ''), 'Actividad') AS tipo,
+                        a.nombre AS materia
+                    FROM estudiante e
+                    INNER JOIN matricula m    ON m.id_estudiante = e.id
+                    INNER JOIN curso c        ON m.id_curso = c.id
+                    INNER JOIN asignatura_curso ac ON ac.id_curso = c.id
+                    INNER JOIN actividad act  ON act.id_asignatura_curso = ac.id
+                    INNER JOIN asignatura a   ON act.id_asignatura = a.id
+                    WHERE e.id              = :id_estudiante
+                    AND e.id_institucion    = :id_institucion
+                    AND m.anio              = :anio
+                    AND c.estado            = 'Activo'
+                    AND YEAR(act.fecha_entrega) = :anio_cal
+                    ORDER BY act.fecha_entrega ASC";
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id_estudiante',  $id_estudiante,  PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->bindParam(':anio',           $anio,           PDO::PARAM_INT);
+            $stmt->bindParam(':anio_cal',       $anio,           PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            error_log("Error en obtenerActividadesParaCalendario: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
      * Calcular el estado de la nota según el promedio
-     * 
+     *
      * @param float|null $promedio Promedio de la materia
      * @return string Estado de la nota (excelente, bien, riesgo, critico)
      */
@@ -376,16 +527,22 @@ class MateriaEstudiante
         if ($promedio === null) {
             return 'sin-nota';
         }
-        if ($promedio >= 4.0) {
-            return 'excelente';
+        $p = (float)$promedio;
+        // Escala académica definida:
+        //   Superior     : 4.5 – 5.0
+        //   Alto         : 4.0 – 4.4
+        //   Básico       : 3.1 – 3.9
+        //   Bajo         : 0.0 – 3.0  (incluye exactamente 3.0)
+        if ($p >= 4.5) {
+            return 'superior';
         }
-        if ($promedio >= 3.0) {
-            return 'bien';
+        if ($p >= 4.0) {
+            return 'alto';
         }
-        if ($promedio >= 2.5) {
-            return 'riesgo';
+        if ($p > 3.0) {
+            return 'basico';
         }
-        return 'critico';
+        return 'bajo';
     }
 
     /**

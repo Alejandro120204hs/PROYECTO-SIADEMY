@@ -3,6 +3,7 @@
 // CONTROLADOR PARA GESTIONAR ACTIVIDADES DEL DOCENTE
 require_once BASE_PATH . '/app/models/docente/actividad.php';
 require_once BASE_PATH . '/app/helpers/alert_helper.php';
+require_once BASE_PATH . '/app/helpers/docente_helper.php';
 
 /**
  * Obtener la URL base del proyecto
@@ -47,18 +48,27 @@ function guardarActividad() {
         exit;
     }
 
+    // Resolver el id_docente real desde la tabla `docente`.
+    // NUNCA usar $_SESSION['user']['id'] como id_docente: son columnas de tablas distintas.
+    $idInstitucion = (int)($_SESSION['user']['id_institucion'] ?? 0);
+    $idDocente     = resolverIdDocente((int)$_SESSION['user']['id'], $idInstitucion);
+    if ($idDocente === null) {
+        mostrarSweetAlert('error', 'Error de sesión', 'No se encontró el perfil del docente. Por favor, cierre sesión e inicie de nuevo.');
+        exit;
+    }
+
     // Preparar datos para insertar
     $datos = [
-        'id_institucion' => $_SESSION['user']['id_institucion'],
-        'id_docente' => $_SESSION['user']['id_docente'] ?? $_SESSION['user']['id'], // Usar id_docente si existe
+        'id_institucion'      => $idInstitucion,
+        'id_docente'          => $idDocente,
         'id_asignatura_curso' => filter_var($_POST['id_asignatura_curso'], FILTER_SANITIZE_NUMBER_INT),
-        'id_asignatura' => filter_var($_POST['id_asignatura'], FILTER_SANITIZE_NUMBER_INT),
-        'titulo' => htmlspecialchars(trim($_POST['titulo_actividad']), ENT_QUOTES, 'UTF-8'),
-        'descripcion' => htmlspecialchars(trim($_POST['descripcion']), ENT_QUOTES, 'UTF-8'),
-        'tipo' => htmlspecialchars(trim($_POST['tipo_actividad']), ENT_QUOTES, 'UTF-8'),
-        'ponderacion' => filter_var($_POST['ponderacion'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
-        'fecha_entrega' => $_POST['fecha_entrega'],
-        'archivo' => null
+        'id_asignatura'       => filter_var($_POST['id_asignatura'],       FILTER_SANITIZE_NUMBER_INT),
+        'titulo'              => htmlspecialchars(trim($_POST['titulo_actividad']), ENT_QUOTES, 'UTF-8'),
+        'descripcion'         => htmlspecialchars(trim($_POST['descripcion']),      ENT_QUOTES, 'UTF-8'),
+        'tipo'                => htmlspecialchars(trim($_POST['tipo_actividad']),   ENT_QUOTES, 'UTF-8'),
+        'ponderacion'         => filter_var($_POST['ponderacion'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+        'fecha_entrega'       => $_POST['fecha_entrega'],
+        'archivo'             => null
     ];
 
     // Manejar archivo adjunto opcional
@@ -163,20 +173,26 @@ function listarActividades() {
         return [];
     }
 
-    $id_curso = filter_var($_GET['id_curso'], FILTER_SANITIZE_NUMBER_INT);
-    $id_docente = $_SESSION['user']['id_docente'] ?? $_SESSION['user']['id']; // Usar id_docente si existe
-    $id_institucion = $_SESSION['user']['id_institucion'];
+    $id_curso       = filter_var($_GET['id_curso'], FILTER_SANITIZE_NUMBER_INT);
+    $id_institucion = (int)($_SESSION['user']['id_institucion'] ?? 0);
+    $id_docente     = resolverIdDocente((int)$_SESSION['user']['id'], $id_institucion) ?? 0;
 
     $actividadModel = new Actividad_docente();
-    return $actividadModel->listarPorCurso($id_curso, $id_docente, $id_institucion);
+    return $actividadModel->listarPorCurso($id_curso, $id_docente, $id_institucion, (int)date('Y'));
 }
 
 /**
- * Obtener una actividad por ID
+ * Obtener una actividad por ID, filtrando siempre por institución.
+ *
+ * @param int      $id             ID de la actividad
+ * @param int|null $id_institucion Si es null se toma de la sesión activa
  */
-function obtenerActividad($id) {
+function obtenerActividad($id, $id_institucion = null) {
+    if ($id_institucion === null) {
+        $id_institucion = (int)($_SESSION['user']['id_institucion'] ?? 0);
+    }
     $actividadModel = new Actividad_docente();
-    return $actividadModel->obtenerPorId($id);
+    return $actividadModel->obtenerPorId($id, $id_institucion);
 }
 
 /**
@@ -270,11 +286,19 @@ function actualizarActividad() {
         $datos['archivo'] = $nombreArchivo;
     }
 
+    // Resolver identidad del docente y la institución para la verificación de propiedad.
+    $idInstitucion = (int)($_SESSION['user']['id_institucion'] ?? 0);
+    $idDocente     = resolverIdDocente((int)$_SESSION['user']['id'], $idInstitucion);
+    if ($idDocente === null) {
+        mostrarSweetAlert('error', 'Error de sesión', 'No se encontró el perfil del docente. Por favor, cierre sesión e inicie de nuevo.');
+        exit;
+    }
+
     $actividadModel = new Actividad_docente();
 
-    // Validar ponderación: la suma de todas las demás + la nueva no debe superar 100%
-    // Necesitamos el id_asignatura_curso de la actividad actual
-    $actividadActual = $actividadModel->obtenerPorId($id);
+    // Validar ponderación: la suma de todas las demás + la nueva no debe superar 100%.
+    // obtenerPorId ahora requiere id_institucion para garantizar aislamiento.
+    $actividadActual = $actividadModel->obtenerPorId($id, $idInstitucion);
     if ($actividadActual) {
         $ponderacion_nueva = (float)$datos['ponderacion'];
         // Sumar ponderaciones de todas las actividades EXCEPTO la que se edita
@@ -297,7 +321,8 @@ function actualizarActividad() {
         }
     }
 
-    $resultado = $actividadModel->actualizar($id, $datos);
+    // Pasar id_docente e id_institucion para que el UPDATE verifique propiedad.
+    $resultado = $actividadModel->actualizar($id, $datos, $idDocente, $idInstitucion);
 
     $id_curso_red = isset($_POST['id_curso']) ? filter_var($_POST['id_curso'], FILTER_SANITIZE_NUMBER_INT) : '';
     $redirect_url = obtenerBaseUrl() . '/docente/actividades?id_curso=' . $id_curso_red;
@@ -319,11 +344,20 @@ function eliminarActividad() {
         exit;
     }
 
-    $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
-    $id_curso = filter_var($_GET['id_curso'], FILTER_SANITIZE_NUMBER_INT);
+    $id         = filter_var($_GET['id'],      FILTER_SANITIZE_NUMBER_INT);
+    $id_curso   = filter_var($_GET['id_curso'], FILTER_SANITIZE_NUMBER_INT);
+
+    // Resolver identidad del docente para verificar propiedad antes de eliminar.
+    $idInstitucion = (int)($_SESSION['user']['id_institucion'] ?? 0);
+    $idDocente     = resolverIdDocente((int)$_SESSION['user']['id'], $idInstitucion);
+    if ($idDocente === null) {
+        mostrarSweetAlert('error', 'Error de sesión', 'No se encontró el perfil del docente. Por favor, cierre sesión e inicie de nuevo.');
+        header('Location: ' . obtenerBaseUrl() . '/docente/actividades?id_curso=' . $id_curso);
+        exit;
+    }
 
     $actividadModel = new Actividad_docente();
-    $resultado = $actividadModel->eliminar($id);
+    $resultado = $actividadModel->eliminar($id, $idDocente, $idInstitucion);
 
     if ($resultado) {
         mostrarSweetAlert('success', '¡Éxito!', 'Actividad eliminada correctamente');
@@ -344,12 +378,21 @@ function cambiarEstadoActividad() {
         exit;
     }
 
-    $id = filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT);
-    $estado = htmlspecialchars(trim($_POST['estado']), ENT_QUOTES, 'UTF-8');
+    $id       = filter_var($_POST['id'],     FILTER_SANITIZE_NUMBER_INT);
+    $estado   = htmlspecialchars(trim($_POST['estado']), ENT_QUOTES, 'UTF-8');
     $id_curso = filter_var($_POST['id_curso'], FILTER_SANITIZE_NUMBER_INT);
 
+    // Resolver identidad del docente para verificar propiedad.
+    $idInstitucion = (int)($_SESSION['user']['id_institucion'] ?? 0);
+    $idDocente     = resolverIdDocente((int)$_SESSION['user']['id'], $idInstitucion);
+    if ($idDocente === null) {
+        mostrarSweetAlert('error', 'Error de sesión', 'No se encontró el perfil del docente.');
+        header('Location: ' . obtenerBaseUrl() . '/docente/actividades?id_curso=' . $id_curso);
+        exit;
+    }
+
     $actividadModel = new Actividad_docente();
-    $resultado = $actividadModel->cambiarEstado($id, $estado);
+    $resultado = $actividadModel->cambiarEstado($id, $estado, $idDocente, $idInstitucion);
 
     if ($resultado) {
         mostrarSweetAlert('success', '¡Éxito!', 'Estado actualizado correctamente');

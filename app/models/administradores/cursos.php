@@ -37,7 +37,8 @@
                 return $resultado -> execute();
 
             }catch(PDOException $e){
-                die("Error en Estudiante::registrar->" . $e->getMessage());
+                error_log("Error en Curso::registrar -> " . $e->getMessage());
+                return false;
             }
         }
 
@@ -53,8 +54,8 @@
                 return $resultado -> fetchAll();
 
             }catch(PDOException $e){
-                die("Error en Acudiente::listar->" . $e->getMessage());
-                return[];
+                error_log("Error en Curso::listar -> " . $e->getMessage());
+                return [];
             }
         }
 
@@ -68,7 +69,8 @@
                 return $resultado -> execute();
 
             }catch(PDOException $e){
-                die("Error en Estudiante::registrar->" . $e->getMessage());
+                error_log("Error en Curso::eliminar -> " . $e->getMessage());
+                return false;
             }
         }
 
@@ -83,8 +85,8 @@
                 $resultado -> execute();
                 return $resultado -> fetch();
             }catch(PDOException $e){
-                die("Error en Curso::listarCursoId->" . $e->getMessage());
-                return[];
+                error_log("Error en Curso::listarCursoId -> " . $e->getMessage());
+                return [];
             }
         }
 
@@ -107,7 +109,8 @@
                 return $resultado -> execute();
 
             }catch(PDOException $e){
-                die("Error en Curso::actualizar->" . $e->getMessage());
+                error_log("Error en Curso::actualizar -> " . $e->getMessage());
+                return false;
             }
         }
 

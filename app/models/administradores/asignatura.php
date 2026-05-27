@@ -109,7 +109,8 @@
                 $resultado -> bindParam(':id',$id);
                 return $resultado -> execute();
             }catch(PDOException $e){
-                die("Error en Asignatura::eliminar->" . $e->getMessage());
+                error_log("Error en Asignatura::eliminar -> " . $e->getMessage());
+                return false;
             }
         }
 

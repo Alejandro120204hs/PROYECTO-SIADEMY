@@ -323,18 +323,25 @@ function inicializarEditar() {
     $('#editPonderacion').val($btn.data('ponderacion'));
     $('#editFechaEntrega').val($btn.data('fecha'));
 
-    // Seleccionar tipo aunque el valor venga con distinta capitalizacion
-    let tipoEncontrado = false;
-    $('#editTipo option').each(function() {
-      if ($(this).val().toString().toLowerCase() === tipoActividad.toLowerCase()) {
-        $('#editTipo').val($(this).val());
-        tipoEncontrado = true;
-        return false;
+    // Seleccionar tipo aunque el valor venga con distinta capitalización.
+    // Si el tipo está vacío (dato corrupto en BD), dejar el placeholder para
+    // forzar al docente a elegir explícitamente.
+    if (!tipoActividad) {
+      $('#editTipo').val('');
+    } else {
+      let tipoEncontrado = false;
+      $('#editTipo option').each(function() {
+        if ($(this).val().toString().toLowerCase() === tipoActividad.toLowerCase()) {
+          $('#editTipo').val($(this).val());
+          tipoEncontrado = true;
+          return false;
+        }
+        return true;
+      });
+      if (!tipoEncontrado) {
+        // Valor desconocido: dejar placeholder para que el docente elija
+        $('#editTipo').val('');
       }
-      return true;
-    });
-    if (!tipoEncontrado) {
-      $('#editTipo').val('Tarea');
     }
 
     $('#editEstado').val(estadoActividad === 'cerrada' ? 'cerrada' : 'activa');

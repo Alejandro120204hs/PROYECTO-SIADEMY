@@ -54,6 +54,31 @@ if (!$estudiante) {
 }
 
 $id_estudiante = $estudiante['id'];
+$anioActual    = (int)date('Y');
+
+// ── Validar matrícula ────────────────────────────────────────────────────────
+// Verificar que el estudiante esté matriculado activamente en el curso al que
+// pertenece la actividad. Impide que un estudiante de otro curso entregue
+// actividades que no le corresponden.
+$sql_matricula = "SELECT m.id
+                  FROM matricula m
+                  INNER JOIN asignatura_curso ac ON ac.id_curso = m.id_curso
+                  WHERE m.id_estudiante  = :id_estudiante
+                    AND ac.id            = :id_asignatura_curso
+                    AND m.anio           = :anio
+                    AND m.estado        != 'Retirada'
+                  LIMIT 1";
+$stmt_mat = $conn->prepare($sql_matricula);
+$stmt_mat->bindParam(':id_estudiante',       $id_estudiante,       PDO::PARAM_INT);
+$stmt_mat->bindParam(':id_asignatura_curso', $id_asignatura_curso, PDO::PARAM_INT);
+$stmt_mat->bindParam(':anio',                $anioActual,          PDO::PARAM_INT);
+$stmt_mat->execute();
+
+if (!$stmt_mat->fetch(PDO::FETCH_ASSOC)) {
+    mostrarSweetAlert('error', 'Acceso denegado', 'No estás matriculado en el curso de esta actividad.', BASE_URL . '/estudiante-panel-materias');
+    exit();
+}
+// ────────────────────────────────────────────────────────────────────────────
 
 // Instanciar modelo
 $entregaModel = new EntregaEstudiante();
@@ -63,6 +88,14 @@ $info_actividad = $entregaModel->obtenerInfoActividad($id_actividad);
 
 if (!$info_actividad) {
     mostrarSweetAlert('error', 'Error', 'Actividad no encontrada', BASE_URL . '/estudiante-materia-detalle?id=' . $id_asignatura_curso);
+    exit();
+}
+
+// Bloquear entrega si el plazo ya venció
+// Regla: el plazo cierra al terminar el día de fecha_entrega.
+//        Si hoy > fecha_entrega  →  ya vencida, no se puede entregar.
+if (!empty($info_actividad['fecha_entrega']) && date('Y-m-d') > $info_actividad['fecha_entrega']) {
+    mostrarSweetAlert('error', 'Plazo vencido', 'El plazo de entrega de esta actividad ya expiró. No es posible enviar archivos.', BASE_URL . '/estudiante-materia-detalle?id=' . $id_asignatura_curso);
     exit();
 }
 

@@ -52,6 +52,10 @@
             <i class="ri-bar-chart-line"></i> Calificaciones
         </a>
 
+        <a class="<?= navEstudianteIsActive($currentPath, ['/estudiante-boletin']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/estudiante-boletin">
+            <i class="ri-file-paper-2-line"></i> Mi Boletín
+        </a>
+
         <div class="spacer"></div>
         <div class="section">Académico y seguimiento</div>
 

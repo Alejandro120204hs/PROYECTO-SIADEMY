@@ -34,6 +34,11 @@ class ActividadEstudiante
      */
     public function obtenerActividadesPorMateria($id_estudiante, $id_asignatura_curso, $id_institucion)
     {
+        // Usar la fecha de PHP (ya configurada con timezone America/Bogota en config.php)
+        // para evitar discrepancias con el timezone del servidor MySQL.
+        $fechaHoy = date('Y-m-d');
+        $anioHoy  = (int)date('Y');
+
         try {
             $sql = "SELECT
                         a.id            AS id_actividad,
@@ -62,14 +67,13 @@ class ActividadEstudiante
                         cal.fecha_calificacion,
                         CASE
                             WHEN cal.id IS NOT NULL THEN 'Calificada'
-                            WHEN ea.id IS NOT NULL THEN 'Entregada'
-                            -- Vencida solo si la fecha de entrega ya pasó POR COMPLETO (ayer o antes)
-                            -- DATE(fecha_entrega) < CURDATE() excluye el día de hoy: hoy sigue abierta
-                            WHEN DATE(a.fecha_entrega) < CURDATE() AND a.estado = 'activa' THEN 'Vencida'
-                            WHEN a.estado = 'activa' THEN 'Pendiente'
-                            ELSE 'Cerrada'
+                            WHEN ea.id  IS NOT NULL THEN 'Entregada'
+                            -- :fecha_hoy viene de PHP (timezone America/Bogota), no CURDATE() de MySQL.
+                            -- Vencida = plazo expirado sin entrega (no depende de actividad.estado).
+                            WHEN DATE(a.fecha_entrega) < :fecha_hoy_case THEN 'Vencida'
+                            ELSE 'Pendiente'
                         END AS estado_entrega,
-                        DATEDIFF(a.fecha_entrega, CURDATE()) AS dias_restantes
+                        DATEDIFF(a.fecha_entrega, :fecha_hoy_diff) AS dias_restantes
                     FROM actividad a
                     INNER JOIN asignatura_curso ac ON a.id_asignatura_curso = ac.id
                     INNER JOIN asignatura asig     ON ac.id_asignatura = asig.id
@@ -83,21 +87,26 @@ class ActividadEstudiante
                     WHERE
                         e.id = :id_estudiante
                         AND ac.id = :id_asignatura_curso
-                        AND m.anio = YEAR(CURDATE())
+                        AND m.anio = :anio_hoy
                         AND a.id_institucion = :id_institucion
                     ORDER BY
                         CASE
-                            WHEN cal.id IS NULL AND a.estado = 'activa' AND a.fecha_entrega >= CURDATE() THEN 1
-                            WHEN cal.id IS NULL AND a.estado = 'activa' AND a.fecha_entrega < CURDATE()  THEN 2
+                            WHEN cal.id IS NULL AND DATE(a.fecha_entrega) >= :fecha_hoy_ord THEN 1
+                            WHEN cal.id IS NULL AND DATE(a.fecha_entrega) <  :fecha_hoy_ord2 THEN 2
                             WHEN cal.id IS NOT NULL THEN 3
                             ELSE 4
                         END,
                         a.fecha_entrega DESC";
 
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':id_estudiante',      $id_estudiante,      PDO::PARAM_INT);
-            $stmt->bindParam(':id_asignatura_curso', $id_asignatura_curso, PDO::PARAM_INT);
-            $stmt->bindParam(':id_institucion',      $id_institucion,      PDO::PARAM_INT);
+            $stmt->bindParam(':id_estudiante',       $id_estudiante,       PDO::PARAM_INT);
+            $stmt->bindParam(':id_asignatura_curso',  $id_asignatura_curso, PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion',       $id_institucion,      PDO::PARAM_INT);
+            $stmt->bindParam(':anio_hoy',             $anioHoy,             PDO::PARAM_INT);
+            $stmt->bindParam(':fecha_hoy_case',       $fechaHoy,            PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_hoy_diff',       $fechaHoy,            PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_hoy_ord',        $fechaHoy,            PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_hoy_ord2',       $fechaHoy,            PDO::PARAM_STR);
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -118,6 +127,10 @@ class ActividadEstudiante
      */
     public function obtenerInfoMateriaConEstadisticas($id_estudiante, $id_asignatura_curso, $id_institucion)
     {
+        // Usar fechas de PHP (timezone America/Bogota) en lugar de CURDATE() de MySQL.
+        $fechaHoy = date('Y-m-d');
+        $anioHoy  = (int)date('Y');
+
         try {
             $sql = "SELECT
                         a.id            AS id_asignatura,
@@ -132,16 +145,30 @@ class ActividadEstudiante
                         u.correo        AS docente_correo,
                         d.foto          AS docente_foto,
                         COUNT(DISTINCT act.id) AS total_actividades,
-                        -- Pendiente  = sin entrega, activa, dentro de plazo
-                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega >= CURDATE() AND ea.id IS NULL THEN 1 ELSE 0 END) AS actividades_pendientes,
-                        -- Vencida    = sin entrega, plazo ya expiró
-                        SUM(CASE WHEN act.estado = 'activa' AND act.fecha_entrega <  CURDATE() AND ea.id IS NULL THEN 1 ELSE 0 END) AS actividades_vencidas,
+                        -- Pendiente = sin entrega, dentro de plazo (fecha PHP)
+                        SUM(CASE WHEN ea.id IS NULL AND DATE(act.fecha_entrega) >= :fecha_pend THEN 1 ELSE 0 END) AS actividades_pendientes,
+                        -- Vencida   = sin entrega, plazo ya expiró (fecha PHP)
+                        SUM(CASE WHEN ea.id IS NULL AND DATE(act.fecha_entrega) <  :fecha_venc THEN 1 ELSE 0 END) AS actividades_vencidas,
                         -- Completada = entregó (con o sin calificación)
                         SUM(CASE WHEN ea.id IS NOT NULL THEN 1 ELSE 0 END) AS actividades_completadas,
-                        -- Promedio PONDERADO: suma(nota * ponderacion) / suma(ponderaciones calificadas)
+                        -- Promedio PONDERADO: SUM(nota×ponderacion) / SUM(ponderacion usada)
+                        -- Las vencidas sin entrega cuentan como nota 0 con su ponderación completa.
+                        -- Fórmula canónica idéntica a BoletinEstudiante::obtenerMateriasPorPeriodo.
                         ROUND(
-                            SUM(CASE WHEN cal.id IS NOT NULL THEN cal.nota * act.ponderacion ELSE 0 END) /
-                            NULLIF(SUM(CASE WHEN cal.id IS NOT NULL THEN act.ponderacion ELSE 0 END), 0),
+                            SUM(CASE
+                                WHEN cal.nota IS NOT NULL                                              THEN cal.nota * act.ponderacion
+                                WHEN ea.id IS NULL AND DATE(act.fecha_entrega) < :fecha_prom_num       THEN 0
+                                ELSE NULL
+                            END)
+                            /
+                            NULLIF(
+                                SUM(CASE
+                                    WHEN cal.nota IS NOT NULL                                          THEN act.ponderacion
+                                    WHEN ea.id IS NULL AND DATE(act.fecha_entrega) < :fecha_prom_den   THEN act.ponderacion
+                                    ELSE 0
+                                END),
+                                0
+                            ),
                             1
                         ) AS promedio
                     FROM estudiante e
@@ -156,9 +183,9 @@ class ActividadEstudiante
                     LEFT JOIN entrega_actividad ea ON ea.id_actividad = act.id AND ea.id_estudiante = e.id
                     LEFT JOIN calificacion cal     ON cal.id_actividad = act.id AND cal.id_estudiante = e.id
                     WHERE
-                        e.id = :id_estudiante
-                        AND ac.id = :id_asignatura_curso
-                        AND m.anio = YEAR(CURDATE())
+                        e.id             = :id_estudiante
+                        AND ac.id        = :id_asignatura_curso
+                        AND m.anio       = :anio_hoy
                         AND e.id_institucion = :id_institucion
                     GROUP BY a.id, ac.id, c.id, d.id
                     LIMIT 1";
@@ -167,6 +194,11 @@ class ActividadEstudiante
             $stmt->bindParam(':id_estudiante',       $id_estudiante,       PDO::PARAM_INT);
             $stmt->bindParam(':id_asignatura_curso',  $id_asignatura_curso, PDO::PARAM_INT);
             $stmt->bindParam(':id_institucion',       $id_institucion,      PDO::PARAM_INT);
+            $stmt->bindParam(':anio_hoy',             $anioHoy,             PDO::PARAM_INT);
+            $stmt->bindParam(':fecha_pend',           $fechaHoy,            PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_venc',           $fechaHoy,            PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_prom_num',       $fechaHoy,            PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_prom_den',       $fechaHoy,            PDO::PARAM_STR);
             $stmt->execute();
 
             return $stmt->fetch(PDO::FETCH_ASSOC);

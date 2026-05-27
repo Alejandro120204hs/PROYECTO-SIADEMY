@@ -14,13 +14,25 @@ class Actividad_docente {
     /**
      * Crear una nueva actividad
      */
+    /**
+     * Crear una nueva actividad.
+     *
+     * El campo `id_periodo` es opcional (nullable). Si la columna ya existe en BD
+     * tras ejecutar la migración add_id_periodo_to_actividad.sql, se almacena el
+     * período pasado en $datos['id_periodo']; si no se pasa, queda NULL y el
+     * período se sigue infiriendo por rango de fechas (retrocompatible).
+     */
     public function crear($datos) {
         try {
+            // id_periodo es nullable — usa NULL si no se provee.
+            $idPeriodo = isset($datos['id_periodo']) ? (int)$datos['id_periodo'] : null;
+
             $sql = "INSERT INTO actividad (
                         id_institucion,
                         id_docente,
                         id_asignatura,
                         id_asignatura_curso,
+                        id_periodo,
                         titulo,
                         descripcion,
                         tipo,
@@ -33,6 +45,7 @@ class Actividad_docente {
                         :id_docente,
                         :id_asignatura,
                         :id_asignatura_curso,
+                        :id_periodo,
                         :titulo,
                         :descripcion,
                         :tipo,
@@ -41,20 +54,21 @@ class Actividad_docente {
                         'activa',
                         :archivo
                     )";
-            
+
             $stmt = $this->conexion->prepare($sql);
-            
-            $stmt->bindParam(':id_institucion', $datos['id_institucion'], PDO::PARAM_INT);
-            $stmt->bindParam(':id_docente', $datos['id_docente'], PDO::PARAM_INT);
-            $stmt->bindParam(':id_asignatura', $datos['id_asignatura'], PDO::PARAM_INT);
+
+            $stmt->bindParam(':id_institucion',    $datos['id_institucion'],    PDO::PARAM_INT);
+            $stmt->bindParam(':id_docente',        $datos['id_docente'],        PDO::PARAM_INT);
+            $stmt->bindParam(':id_asignatura',     $datos['id_asignatura'],     PDO::PARAM_INT);
             $stmt->bindParam(':id_asignatura_curso', $datos['id_asignatura_curso'], PDO::PARAM_INT);
-            $stmt->bindParam(':titulo', $datos['titulo'], PDO::PARAM_STR);
-            $stmt->bindParam(':descripcion', $datos['descripcion'], PDO::PARAM_STR);
-            $stmt->bindParam(':tipo', $datos['tipo'], PDO::PARAM_STR);
-            $stmt->bindParam(':ponderacion', $datos['ponderacion']);
-            $stmt->bindParam(':fecha_entrega', $datos['fecha_entrega'], PDO::PARAM_STR);
+            $stmt->bindValue(':id_periodo',        $idPeriodo,                  $idPeriodo !== null ? PDO::PARAM_INT : PDO::PARAM_NULL);
+            $stmt->bindParam(':titulo',            $datos['titulo'],            PDO::PARAM_STR);
+            $stmt->bindParam(':descripcion',       $datos['descripcion'],       PDO::PARAM_STR);
+            $stmt->bindParam(':tipo',              $datos['tipo'],              PDO::PARAM_STR);
+            $stmt->bindParam(':ponderacion',       $datos['ponderacion']);
+            $stmt->bindParam(':fecha_entrega',     $datos['fecha_entrega'],     PDO::PARAM_STR);
             $archivoVal = $datos['archivo'] ?? null;
-            $stmt->bindParam(':archivo', $archivoVal, PDO::PARAM_STR);
+            $stmt->bindParam(':archivo',           $archivoVal,                 PDO::PARAM_STR);
             
             $resultado = $stmt->execute();
             
@@ -80,20 +94,29 @@ class Actividad_docente {
     }
 
     /**
-     * Listar actividades por curso y docente
+     * Listar actividades por curso y docente.
+     *
+     * @param int      $id_curso       ID del curso
+     * @param int      $id_docente     ID real de la tabla `docente` (no id_usuario)
+     * @param int      $id_institucion ID de la institución (aislamiento multiinstitucional)
+     * @param int|null $anio           Año académico; si es null se usa el año actual de PHP
      */
-    public function listarPorCurso($id_curso, $id_docente, $id_institucion) {
+    public function listarPorCurso($id_curso, $id_docente, $id_institucion, $anio = null) {
+        // Usar año de PHP (timezone America/Bogota configurado en config.php)
+        // en lugar de YEAR(CURDATE()) de MySQL para evitar desfases horarios.
+        $anio = $anio ?? (int)date('Y');
+
         try {
             $sql = "SELECT a.*,
                            c.id  AS id_curso,
                            c.grado,
                            c.curso,
                            asig.nombre AS nombre_asignatura,
-                           -- Total estudiantes matriculados en el curso (año actual)
+                           -- Total estudiantes matriculados en el curso (año dado por PHP)
                            (SELECT COUNT(DISTINCT m2.id_estudiante)
                             FROM matricula m2
                             WHERE m2.id_curso = c.id
-                              AND m2.anio = YEAR(CURDATE())) AS total_matriculados,
+                              AND m2.anio = :anio_mat) AS total_matriculados,
                            -- Total entregas recibidas para esta actividad
                            (SELECT COUNT(DISTINCT ea2.id_estudiante)
                             FROM entrega_actividad ea2
@@ -102,21 +125,20 @@ class Actividad_docente {
                     INNER JOIN asignatura_curso ac ON a.id_asignatura_curso = ac.id
                     INNER JOIN curso c             ON ac.id_curso = c.id
                     INNER JOIN asignatura asig     ON a.id_asignatura = asig.id
-                    LEFT JOIN  docente d            ON d.id = a.id_docente
-                    WHERE ac.id_curso = :id_curso
-                      AND (a.id_docente = :id_docente OR d.id_usuario = :id_usuario_docente)
-                      AND a.id_institucion = :id_institucion
+                    WHERE ac.id_curso       = :id_curso
+                      AND a.id_docente      = :id_docente
+                      AND a.id_institucion  = :id_institucion
                     ORDER BY a.fecha_entrega DESC";
-            
+
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
-            $stmt->bindParam(':id_docente', $id_docente, PDO::PARAM_INT);
-            $stmt->bindParam(':id_usuario_docente', $id_docente, PDO::PARAM_INT);
+            $stmt->bindParam(':id_curso',       $id_curso,       PDO::PARAM_INT);
+            $stmt->bindParam(':id_docente',     $id_docente,     PDO::PARAM_INT);
             $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->bindParam(':anio_mat',       $anio,           PDO::PARAM_INT);
             $stmt->execute();
-            
+
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
+
         } catch(PDOException $e) {
             error_log("Error en listarPorCurso: " . $e->getMessage());
             return [];
@@ -124,11 +146,15 @@ class Actividad_docente {
     }
 
     /**
-     * Obtener una actividad por ID
+     * Obtener una actividad por ID, filtrando siempre por institución.
+     *
+     * @param int $id             ID de la actividad
+     * @param int $id_institucion ID de la institución (aislamiento multiinstitucional)
+     * @return array|false|null   Fila de la actividad, o null/false si no pertenece a la institución
      */
-    public function obtenerPorId($id) {
+    public function obtenerPorId($id, $id_institucion) {
         try {
-            $sql = "SELECT a.*, 
+            $sql = "SELECT a.*,
                            c.grado,
                            c.curso,
                            asig.nombre as nombre_asignatura
@@ -136,14 +162,16 @@ class Actividad_docente {
                     INNER JOIN asignatura_curso ac ON a.id_asignatura_curso = ac.id
                     INNER JOIN curso c ON ac.id_curso = c.id
                     INNER JOIN asignatura asig ON a.id_asignatura = asig.id
-                    WHERE a.id = :id";
-            
+                    WHERE a.id             = :id
+                      AND a.id_institucion = :id_institucion";
+
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id',             $id,             PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
             $stmt->execute();
-            
+
             return $stmt->fetch(PDO::FETCH_ASSOC);
-            
+
         } catch(PDOException $e) {
             error_log("Error en obtenerPorId: " . $e->getMessage());
             return null;
@@ -151,9 +179,20 @@ class Actividad_docente {
     }
 
     /**
-     * Actualizar una actividad
+     * Actualizar una actividad, verificando propiedad (docente + institución).
+     *
+     * Si el id de la actividad no pertenece al docente y a la institución indicados,
+     * MySQL no actualizará ninguna fila y el método devolverá true (execute sin error)
+     * pero rowCount() será 0.  El controlador comprueba esto para detectar intentos
+     * de modificar actividades ajenas.
+     *
+     * @param int   $id             ID de la actividad a actualizar
+     * @param array $datos          Campos a actualizar
+     * @param int   $id_docente     ID real de la tabla `docente` (propietario esperado)
+     * @param int   $id_institucion ID de la institución (aislamiento multiinstitucional)
+     * @return bool
      */
-    public function actualizar($id, $datos) {
+    public function actualizar($id, $datos, $id_docente, $id_institucion) {
         try {
             $campos = [
                 'titulo = :titulo',
@@ -168,23 +207,29 @@ class Actividad_docente {
                 $campos[] = 'archivo = :archivo';
             }
 
-            $sql = "UPDATE actividad SET " . implode(', ', $campos) . " WHERE id = :id";
-            
+            $sql = "UPDATE actividad
+                       SET " . implode(', ', $campos) . "
+                     WHERE id             = :id
+                       AND id_docente     = :id_docente
+                       AND id_institucion = :id_institucion";
+
             $stmt = $this->conexion->prepare($sql);
-            
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->bindParam(':titulo', $datos['titulo'], PDO::PARAM_STR);
-            $stmt->bindParam(':descripcion', $datos['descripcion'], PDO::PARAM_STR);
-            $stmt->bindParam(':tipo', $datos['tipo'], PDO::PARAM_STR);
-            $stmt->bindParam(':ponderacion', $datos['ponderacion']);
-            $stmt->bindParam(':fecha_entrega', $datos['fecha_entrega'], PDO::PARAM_STR);
-            $stmt->bindParam(':estado', $datos['estado'], PDO::PARAM_STR);
+
+            $stmt->bindParam(':id',             $id,             PDO::PARAM_INT);
+            $stmt->bindParam(':id_docente',     $id_docente,     PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->bindParam(':titulo',         $datos['titulo'],         PDO::PARAM_STR);
+            $stmt->bindParam(':descripcion',    $datos['descripcion'],    PDO::PARAM_STR);
+            $stmt->bindParam(':tipo',           $datos['tipo'],           PDO::PARAM_STR);
+            $stmt->bindParam(':ponderacion',    $datos['ponderacion']);
+            $stmt->bindParam(':fecha_entrega',  $datos['fecha_entrega'],  PDO::PARAM_STR);
+            $stmt->bindParam(':estado',         $datos['estado'],         PDO::PARAM_STR);
             if (array_key_exists('archivo', $datos)) {
                 $stmt->bindParam(':archivo', $datos['archivo'], PDO::PARAM_STR);
             }
-            
+
             return $stmt->execute();
-            
+
         } catch(PDOException $e) {
             error_log("Error en actualizar: " . $e->getMessage());
             return false;
@@ -192,16 +237,31 @@ class Actividad_docente {
     }
 
     /**
-     * Eliminar una actividad
+     * Eliminar una actividad, verificando propiedad (docente + institución).
+     *
+     * El DELETE solo afecta filas que coincidan con id, id_docente e id_institucion
+     * simultáneamente, evitando que un docente de otra institución elimine
+     * actividades que no le pertenecen (IDOR).
+     *
+     * @param int $id             ID de la actividad a eliminar
+     * @param int $id_docente     ID real de la tabla `docente` (propietario esperado)
+     * @param int $id_institucion ID de la institución (aislamiento multiinstitucional)
+     * @return bool
      */
-    public function eliminar($id) {
+    public function eliminar($id, $id_docente, $id_institucion) {
         try {
-            $sql = "DELETE FROM actividad WHERE id = :id";
+            $sql = "DELETE FROM actividad
+                     WHERE id             = :id
+                       AND id_docente     = :id_docente
+                       AND id_institucion = :id_institucion";
+
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            
+            $stmt->bindParam(':id',             $id,             PDO::PARAM_INT);
+            $stmt->bindParam(':id_docente',     $id_docente,     PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+
             return $stmt->execute();
-            
+
         } catch(PDOException $e) {
             error_log("Error en eliminar: " . $e->getMessage());
             return false;
@@ -243,17 +303,30 @@ class Actividad_docente {
     }
 
     /**
-     * Cambiar estado de la actividad
+     * Cambiar estado de la actividad, verificando propiedad (docente + institución).
+     *
+     * @param int    $id             ID de la actividad
+     * @param string $estado         Nuevo estado ('activa' | 'cerrada')
+     * @param int    $id_docente     ID real de la tabla `docente` (propietario esperado)
+     * @param int    $id_institucion ID de la institución (aislamiento multiinstitucional)
+     * @return bool
      */
-    public function cambiarEstado($id, $estado) {
+    public function cambiarEstado($id, $estado, $id_docente, $id_institucion) {
         try {
-            $sql = "UPDATE actividad SET estado = :estado WHERE id = :id";
+            $sql = "UPDATE actividad
+                       SET estado = :estado
+                     WHERE id             = :id
+                       AND id_docente     = :id_docente
+                       AND id_institucion = :id_institucion";
+
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->bindParam(':estado', $estado, PDO::PARAM_STR);
-            
+            $stmt->bindParam(':id',             $id,             PDO::PARAM_INT);
+            $stmt->bindParam(':estado',         $estado,         PDO::PARAM_STR);
+            $stmt->bindParam(':id_docente',     $id_docente,     PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+
             return $stmt->execute();
-            
+
         } catch(PDOException $e) {
             error_log("Error en cambiarEstado: " . $e->getMessage());
             return false;

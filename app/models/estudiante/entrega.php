@@ -153,6 +153,8 @@ class EntregaEstudiante {
                         a.id_asignatura,
                         a.id_asignatura_curso,
                         a.id_institucion,
+                        a.fecha_entrega,
+                        a.estado,
                         ac.id_curso,
                         c.id            AS curso_id,
                         c.grado,

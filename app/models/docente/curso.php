@@ -43,7 +43,7 @@
                 return $resultado -> fetchAll(PDO::FETCH_ASSOC);
 
             }catch(PDOException $e){
-                die("Error en Curso::listar->" . $e->getMessage());
+                error_log("Error en Curso_docente::listar -> " . $e->getMessage());
                 return [];
             }
         }

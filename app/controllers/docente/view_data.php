@@ -8,6 +8,7 @@ require_once __DIR__ . '/../../models/administradores/cursos.php';
 require_once __DIR__ . '/../../models/administradores/matricula.php';
 require_once __DIR__ . '/../../models/administradores/docente_asignatura.php';
 require_once BASE_PATH . '/config/database.php';
+require_once BASE_PATH . '/app/helpers/docente_helper.php';
 
 function obtenerPerfilDocenteDesdeSesion()
 {
@@ -276,9 +277,10 @@ function obtenerDataVistaDocenteCursos()
 
 function obtenerDataVistaDocenteActividades()
 {
-    $idInstitucion = (int) ($_SESSION['user']['id_institucion'] ?? 0);
-    $idUsuarioDocente = (int) ($_SESSION['user']['id'] ?? 0);
-    $idDocente = (int) ($_SESSION['user']['id_docente'] ?? $idUsuarioDocente);
+    $idInstitucion    = (int) ($_SESSION['user']['id_institucion'] ?? 0);
+    $idUsuarioDocente = (int) ($_SESSION['user']['id']            ?? 0);
+    // Resolver el id real de la tabla `docente`. Nunca mezclar con id_usuario.
+    $idDocente = resolverIdDocente($idUsuarioDocente, $idInstitucion) ?? 0;
 
     $objetoCurso = new Curso_docente();
     $datos = $objetoCurso->listar($idInstitucion, $idUsuarioDocente);
@@ -289,9 +291,11 @@ function obtenerDataVistaDocenteActividades()
 
     $actividadModel = new Actividad_docente();
     
+    $anioActual = (int) date('Y');
+
     if ($idCursoSeleccionado) {
         // Si hay curso seleccionado, traer solo sus actividades
-        $actividades = $actividadModel->listarPorCurso($idCursoSeleccionado, $idDocente, $idInstitucion);
+        $actividades = $actividadModel->listarPorCurso($idCursoSeleccionado, $idDocente, $idInstitucion, $anioActual);
         if (!empty($actividades)) {
             $infoCurso = $actividades[0];
         }
@@ -299,7 +303,7 @@ function obtenerDataVistaDocenteActividades()
         // Si NO hay curso seleccionado, traer actividades de TODOS los cursos
         if (!empty($datos)) {
             foreach ($datos as $curso) {
-                $cursosActividades = $actividadModel->listarPorCurso($curso['id'], $idDocente, $idInstitucion);
+                $cursosActividades = $actividadModel->listarPorCurso($curso['id'], $idDocente, $idInstitucion, $anioActual);
                 if (!empty($cursosActividades)) {
                     $actividades = array_merge($actividades, $cursosActividades);
                 }
@@ -750,27 +754,31 @@ function obtenerDataVistaDocenteDetalleCurso($idCurso)
                             a.id,
                             a.id_asignatura,
                             a.titulo,
-                            a.tipo,
+                            COALESCE(NULLIF(TRIM(a.tipo), ''), 'Sin tipo') AS tipo,
                             a.estado,
                             a.fecha_entrega,
                             a.ponderacion,
                             COUNT(DISTINCT ea.id) AS total_entregas,
-                            COUNT(DISTINCT c.id) AS total_calificadas,
-                            AVG(c.nota) AS promedio_notas
+                            COUNT(DISTINCT c.id)  AS total_calificadas,
+                            AVG(c.nota)           AS promedio_notas
                         FROM actividad a
                         INNER JOIN asignatura_curso ac ON a.id_asignatura_curso = ac.id
-                        LEFT JOIN entrega_actividad ea ON ea.id_actividad = a.id
-                        LEFT JOIN calificacion c ON c.id_entrega = ea.id
+                        LEFT JOIN  entrega_actividad ea ON ea.id_actividad = a.id
+                        LEFT JOIN  calificacion c       ON c.id_entrega = ea.id
                         WHERE ac.id_curso = :id_curso
-                          AND a.id_docente = :id_docente
                           AND a.id_institucion = :id_institucion
+                          AND (
+                              a.id_docente = :id_docente
+                           OR a.id_docente = :id_usuario_sesion
+                          )
                         GROUP BY a.id, a.id_asignatura, a.titulo, a.tipo, a.estado, a.fecha_entrega, a.ponderacion
                         ORDER BY a.fecha_entrega DESC, a.id DESC";
 
         $stmtActividades = $pdo->prepare($sqlActividades);
-        $stmtActividades->bindValue(':id_curso', $idCurso, PDO::PARAM_INT);
-        $stmtActividades->bindValue(':id_docente', $idDocente, PDO::PARAM_INT);
-        $stmtActividades->bindValue(':id_institucion', $idInstitucion, PDO::PARAM_INT);
+        $stmtActividades->bindValue(':id_curso',       $idCurso,        PDO::PARAM_INT);
+        $stmtActividades->bindValue(':id_docente',     $idDocente,      PDO::PARAM_INT);
+        $stmtActividades->bindValue(':id_usuario_sesion', $idUsuarioSesion, PDO::PARAM_INT);
+        $stmtActividades->bindValue(':id_institucion', $idInstitucion,  PDO::PARAM_INT);
         $stmtActividades->execute();
 
         $actividadesCurso = $stmtActividades->fetchAll(PDO::FETCH_ASSOC) ?: [];
@@ -788,7 +796,7 @@ function obtenerDataVistaDocenteDetalleCurso($idCurso)
             $actividadDetalle = [
                 'id' => (int) $actividad['id'],
                 'titulo' => (string) ($actividad['titulo'] ?? 'Actividad sin titulo'),
-                'tipo' => (string) ($actividad['tipo'] ?? 'Sin tipo'),
+                'tipo' => trim((string)($actividad['tipo'] ?? '')) ?: 'Sin tipo',
                 'estado' => (string) ($actividad['estado'] ?? 'activa'),
                 'fecha_entrega' => (string) ($actividad['fecha_entrega'] ?? ''),
                 'ponderacion' => isset($actividad['ponderacion']) ? (float) $actividad['ponderacion'] : 0,

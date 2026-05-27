@@ -237,7 +237,7 @@
                                 <?php endif; ?>
                                 
                                 <h3 class="actividad-title"><?= htmlspecialchars($actividad['titulo']) ?></h3>
-                                <p class="actividad-materia"><?= htmlspecialchars($actividad['tipo']) ?> • Prof. <?= htmlspecialchars($actividad['nombre_docente']) ?></p>
+                                <p class="actividad-materia"><?= htmlspecialchars(trim((string)($actividad['tipo'] ?? '')) ?: 'Sin tipo') ?> • Prof. <?= htmlspecialchars($actividad['nombre_docente']) ?></p>
                             </div>
                             <div class="actividad-status">
                                 <?php if ($actividad['nota']): ?>
@@ -307,9 +307,14 @@
                                     : '';
                             ?>
 
-                            <?php if ($estado_clase !== 'calificada'): ?>
-                                <button class="btn-actividad primary" 
-                                        data-bs-toggle="modal" 
+                            <?php if ($estado_clase === 'vencida'): ?>
+                                <!-- Plazo expirado: no se permite entregar -->
+                                <button class="btn-actividad primary" disabled style="opacity:0.45; cursor:not-allowed;" title="El plazo de esta actividad ya venció">
+                                    <i class="ri-lock-line"></i> Plazo vencido
+                                </button>
+                            <?php elseif ($estado_clase !== 'calificada'): ?>
+                                <button class="btn-actividad primary"
+                                        data-bs-toggle="modal"
                                         data-bs-target="#modalEntregarTarea"
                                         data-id-actividad="<?= $actividad['id_actividad'] ?>"
                                         data-titulo="<?= htmlspecialchars($actividad['titulo']) ?>"
