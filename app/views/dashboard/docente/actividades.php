@@ -163,10 +163,12 @@
             </div>
           <?php else: ?>
             <?php foreach ($actividades as $actividad): ?>
-              <?php 
+              <?php
                 $estadoClase = strtolower($actividad['estado_calculado']);
-                $tipoClase = strtolower($actividad['tipo']);
-                $tipoTexto = strtoupper($actividad['tipo']);
+                $tipoRaw    = trim((string)($actividad['tipo'] ?? ''));
+                $tipoRaw    = $tipoRaw !== '' ? $tipoRaw : 'Sin tipo';
+                $tipoClase  = strtolower($tipoRaw);
+                $tipoTexto  = strtoupper($tipoRaw);
               ?>
               <div class="actividad-card" 
                    data-estado="<?= $estadoClase ?>" 
@@ -288,8 +290,10 @@
                           data-curso="<?= $actividad['id_curso'] ?>"
                           data-titulo="<?= htmlspecialchars(strtolower($actividad['titulo'])) ?>">
                         <td>
-                          <span class="tabla-tipo-badge <?= strtolower($actividad['tipo']) ?>">
-                            <i class="<?= docenteObtenerIconoTipoActividad($actividad['tipo']) ?>"></i>
+                          <?php $tipoTabla = trim((string)($actividad['tipo'] ?? '')); $tipoTabla = $tipoTabla !== '' ? $tipoTabla : 'Sin tipo'; ?>
+                          <span class="tabla-tipo-badge <?= strtolower($tipoTabla) ?>" title="<?= htmlspecialchars($tipoTabla) ?>">
+                            <i class="<?= docenteObtenerIconoTipoActividad($tipoTabla) ?>"></i>
+                            <small><?= htmlspecialchars($tipoTabla) ?></small>
                           </span>
                         </td>
                         <td>
@@ -610,6 +614,7 @@
                 <div class="col-md-4">
                   <label class="form-label">Tipo *</label>
                   <select class="form-select" name="tipo_actividad" id="editTipo" required>
+                    <option value="">-- Seleccionar tipo --</option>
                     <option value="Taller">Taller</option>
                     <option value="Quiz">Quiz</option>
                     <option value="Examen">Examen</option>

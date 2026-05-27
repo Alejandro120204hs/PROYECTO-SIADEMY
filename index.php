@@ -2,6 +2,8 @@
 
         // index.php - Router principal, EN LARAVEL SE TIENE UN ARCHIVO DIFERENTE POR CADA CARPETA
 
+        // Cargar variables de entorno (.env) ANTES que cualquier otro archivo.
+        require_once __DIR__ . '/config/env_loader.php';
         require_once __DIR__ . '/config/config.php';
         require_once BASE_PATH . '/app/helpers/session_helper.php';
 
@@ -493,6 +495,10 @@
 
             case '/estudiante-panel-calificaciones':
                 require BASE_PATH . '/app/controllers/estudiante/calificaciones.php';
+                break;
+
+            case '/estudiante-boletin':
+                require BASE_PATH . '/app/controllers/estudiante/boletin.php';
                 break;
 
             case '/estudiante-panel-profesores':

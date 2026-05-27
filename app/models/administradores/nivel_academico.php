@@ -25,7 +25,7 @@
             return $resultado -> fetchAll();
             
             }catch(PDOException $e){
-                die("Error en Acudiente::actualizar->" . $e->getMessage());
+                error_log("Error en Nivel::listar -> " . $e->getMessage());
                 return [];
             }
 

@@ -1,0 +1,653 @@
+/* ==========================================================================
+   SIADEMY — Boletín Académico del Estudiante
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg:          #0f1e4a;
+    --bg-2:        #0b1736;
+    --card:        #11193a;
+    --card-2:      #0d1533;
+    --border:      rgba(255, 255, 255, .08);
+    --brand:       #4f46e5;
+    --muted:       #8b91a3;
+    --text:        #e6e9f4;
+
+    /* Estado notas */
+    --superior-bg: rgba(16, 185, 129, .18);
+    --superior-clr:#34d399;
+    --alto-bg:     rgba(6, 182, 212, .18);
+    --alto-clr:    #22d3ee;
+    --basico-bg:   rgba(245, 158, 11, .18);
+    --basico-clr:  #fbbf24;
+    --bajo-bg:     rgba(239, 68, 68, .18);
+    --bajo-clr:    #f87171;
+    --sinnota-bg:  rgba(100, 116, 139, .18);
+    --sinnota-clr: #94a3b8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ==========================================================================
+   LAYOUT
+   ========================================================================== */
+.app {
+    display: grid;
+    grid-template-columns: 260px 1fr 360px;
+    min-height: 100dvh;
+    transition: grid-template-columns .3s ease;
+}
+.app.hide-left  { grid-template-columns: 0 1fr 360px; }
+.app.hide-right { grid-template-columns: 260px 1fr 0; }
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+.sidebar {
+    background: linear-gradient(180deg, #161821 0%, #101117 100%);
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    overflow: hidden;
+    transition: all .3s ease;
+}
+.sidebar.hidden { padding: 0; width: 0; min-width: 0; border: none; opacity: 0; }
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    margin-bottom: 18px;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.nav {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.nav a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    color: #d7d9df;
+    position: relative;
+    transition: all .2s ease;
+}
+.nav a.active, .nav a:hover {
+    background: #1d2030;
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.nav i { width: 22px; height: 22px; font-size: 22px; color: #aab1c1; }
+.nav a .badge {
+    position: absolute;
+    right: 12px;
+    background: var(--brand);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+}
+.spacer { height: 18px; }
+.nav .section {
+    color: #8b91a3;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    padding: 6px 10px;
+}
+
+/* ==========================================================================
+   MAIN
+   ========================================================================== */
+.main {
+    padding: 28px 28px 60px;
+    overflow-y: auto;
+}
+
+/* TOPBAR */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.toggle-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    color: #98a2b3;
+    font-size: 20px;
+    transition: all .2s ease;
+}
+.toggle-btn:hover { background: #151d3e; color: #fff; }
+.title { font-size: 28px; font-weight: 700; }
+
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 80px 24px;
+    text-align: center;
+    color: var(--muted);
+    background: rgba(17,25,58,.5);
+    border: 1px dashed var(--border);
+    border-radius: 20px;
+    margin-top: 20px;
+}
+.empty-state i { font-size: 52px; color: #3b4674; }
+.empty-state h3 { font-size: 20px; font-weight: 600; color: var(--text); }
+.empty-state p   { font-size: 14px; max-width: 420px; }
+
+/* ==========================================================================
+   STUDENT HEADER
+   ========================================================================== */
+.student-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(135deg, #13214e 0%, #1a2e6b 100%);
+    border: 1px solid rgba(79,70,229,.3);
+    border-radius: 20px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.25);
+}
+
+.student-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand), #818cf8);
+    display: grid;
+    place-items: center;
+    font-size: 30px;
+    color: #fff;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 3px solid rgba(255,255,255,.15);
+}
+.student-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.student-info { flex: 1; }
+.student-info h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+.student-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.student-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #c5d1ee;
+    background: rgba(255,255,255,.07);
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.1);
+}
+.student-meta span i { font-size: 14px; color: #a4b1ff; }
+
+/* Print button */
+.btn-print {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background: var(--brand);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all .25s ease;
+    box-shadow: 0 4px 16px rgba(79,70,229,.4);
+    font-family: 'Poppins', sans-serif;
+}
+.btn-print:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(79,70,229,.55);
+}
+.btn-print i { font-size: 18px; }
+
+/* ==========================================================================
+   PERIOD TABS
+   ========================================================================== */
+.period-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.period-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s ease;
+    font-family: 'Poppins', sans-serif;
+}
+.period-tab:hover {
+    background: #151d3e;
+    color: var(--text);
+    border-color: rgba(79,70,229,.4);
+}
+.period-tab.active {
+    background: linear-gradient(135deg, var(--brand), #818cf8);
+    border-color: transparent;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(79,70,229,.4);
+}
+.period-tab i { font-size: 16px; }
+.tab-avg {
+    display: inline-block;
+    background: rgba(255,255,255,.2);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+.period-tab:not(.active) .tab-avg {
+    background: rgba(79,70,229,.15);
+    color: #a4b1ff;
+}
+
+/* ==========================================================================
+   PERIOD CONTENT
+   ========================================================================== */
+.periodo-content { display: none; }
+.periodo-content.active { display: block; }
+
+/* ==========================================================================
+   PERIOD STATS PILLS
+   ========================================================================== */
+.periodo-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.15);
+}
+.stat-pill > i {
+    font-size: 24px;
+    color: #a4b1ff;
+    background: rgba(79,70,229,.15);
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+.stat-label {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 3px;
+}
+.stat-val {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+}
+.stat-val.prom-superior { color: var(--superior-clr); }
+.stat-val.prom-alto     { color: var(--alto-clr); }
+.stat-val.prom-basico   { color: var(--basico-clr); }
+.stat-val.prom-bajo     { color: var(--bajo-clr); }
+.stat-val.prom-sinnota  { color: var(--muted); }
+.period-dates { font-size: 13px !important; }
+
+/* ==========================================================================
+   EMPTY PERIOD
+   ========================================================================== */
+.empty-period {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 48px 24px;
+    color: var(--muted);
+    background: rgba(17,25,58,.4);
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    text-align: center;
+}
+.empty-period i { font-size: 36px; color: #2d3a6b; }
+.empty-period p { font-size: 14px; }
+
+/* ==========================================================================
+   MATERIAS TABLE
+   ========================================================================== */
+.materias-table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(0,0,0,.2);
+}
+
+.materias-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.materias-table thead tr {
+    background: linear-gradient(90deg, #0d1533 0%, #111d45 100%);
+    border-bottom: 1px solid var(--border);
+}
+.materias-table thead th {
+    padding: 14px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: #8b99c4;
+    white-space: nowrap;
+}
+.materias-table thead th.text-center { text-align: center; }
+
+.materias-table tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    transition: background .15s ease;
+}
+.materias-table tbody tr:last-child { border-bottom: none; }
+.materias-table tbody tr:hover { background: rgba(79,70,229,.06); }
+
+.materias-table tbody td {
+    padding: 14px 18px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+.materias-table tbody td.text-center { text-align: center; }
+
+.td-materia {
+    font-weight: 600;
+    color: #fff;
+    font-size: 15px !important;
+}
+.td-docente { color: #9aa5c4; font-size: 13px !important; }
+
+/* Eval counts */
+.eval-counts {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+.eval-counts span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+.ec-ok      { background: rgba(16,185,129,.15); color: #34d399; }
+.ec-fail    { background: rgba(239,68,68,.15);  color: #f87171; }
+.ec-pending { background: rgba(245,158,11,.15); color: #fbbf24; }
+.eval-counts span i { font-size: 12px; }
+
+/* Nota badge */
+.nota-badge {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    min-width: 52px;
+    text-align: center;
+}
+.nota-badge.nota-superior { background: var(--superior-bg); color: var(--superior-clr); }
+.nota-badge.nota-alto     { background: var(--alto-bg);     color: var(--alto-clr);     }
+.nota-badge.nota-basico   { background: var(--basico-bg);   color: var(--basico-clr);   }
+.nota-badge.nota-bajo     { background: var(--bajo-bg);     color: var(--bajo-clr);     }
+.nota-badge.nota-sin      { background: var(--sinnota-bg);  color: var(--sinnota-clr);  }
+
+/* Estado badge */
+.estado-badge {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.estado-badge.superior { background: var(--superior-bg); color: var(--superior-clr); border: 1px solid rgba(52,211,153,.2); }
+.estado-badge.alto     { background: var(--alto-bg);     color: var(--alto-clr);     border: 1px solid rgba(34,211,238,.2); }
+.estado-badge.basico   { background: var(--basico-bg);   color: var(--basico-clr);   border: 1px solid rgba(251,191,36,.2); }
+.estado-badge.bajo     { background: var(--bajo-bg);     color: var(--bajo-clr);     border: 1px solid rgba(248,113,113,.2); }
+.estado-badge.sin-nota { background: var(--sinnota-bg);  color: var(--sinnota-clr);  border: 1px solid rgba(148,163,184,.2); }
+
+/* ==========================================================================
+   PRINT — pantalla: ocultar sección de impresión
+   ========================================================================== */
+.print-only { display: none; }
+
+/* ==========================================================================
+   @MEDIA PRINT
+   ========================================================================== */
+@media print {
+    /* Ocultar todo lo de la app */
+    .app, .sidebar, .topbar, .toggle-btn,
+    .student-header .btn-print,
+    .period-tabs,
+    .student-header .btn-print { display: none !important; }
+
+    /* Mostrar sección de impresión */
+    .print-only {
+        display: block !important;
+        background: #fff;
+        color: #000;
+        font-family: 'Poppins', 'Arial', sans-serif;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    body {
+        background: #fff !important;
+        color: #000 !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Header del boletín */
+    .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0 12px;
+        border-bottom: 2px solid #1e3a8a;
+        margin-bottom: 16px;
+    }
+    .print-logo { height: 60px; }
+    .print-inst-info { text-align: center; }
+    .print-inst-name { font-size: 16px; font-weight: 700; color: #1e3a8a; }
+    .print-doc-title  { font-size: 13px; font-weight: 600; color: #374151; margin-top: 2px; }
+    .print-year-badge {
+        background: #1e3a8a;
+        color: #fff;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* Info del estudiante */
+    .print-student-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background: #f8faff;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .print-student-table td, .print-student-table th {
+        padding: 7px 12px;
+        border: 1px solid #d1d5db;
+        font-size: 12px;
+    }
+    .print-student-table th {
+        background: #1e3a8a;
+        color: #fff;
+        font-weight: 600;
+        text-align: left;
+        width: 120px;
+    }
+
+    /* Período */
+    .print-period-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #1e3a8a;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 6px;
+        padding: 8px 14px;
+        margin: 18px 0 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Tabla de materias (impresión) */
+    .print-grades-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+        font-size: 11px;
+    }
+    .print-grades-table thead tr { background: #1e3a8a; color: #fff; }
+    .print-grades-table thead th {
+        padding: 7px 10px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 11px;
+    }
+    .print-grades-table thead th.tc { text-align: center; }
+    .print-grades-table tbody td {
+        padding: 6px 10px;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 11px;
+    }
+    .print-grades-table tbody td.tc { text-align: center; }
+    .print-grades-table tbody tr:nth-child(even) { background: #f9fafb; }
+
+    .print-prom-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 700;
+        font-size: 12px;
+    }
+    .print-prom-badge.superior { background: #d1fae5; color: #065f46; }
+    .print-prom-badge.alto     { background: #cffafe; color: #155e75; }
+    .print-prom-badge.basico   { background: #fef3c7; color: #92400e; }
+    .print-prom-badge.bajo     { background: #fee2e2; color: #991b1b; }
+    .print-prom-badge.sin-nota { background: #f3f4f6; color: #6b7280; }
+
+    /* Asistencia resumen */
+    .print-attendance {
+        font-size: 11px;
+        color: #374151;
+        text-align: right;
+        margin-bottom: 6px;
+        padding: 4px 0;
+        border-top: 1px dashed #d1d5db;
+    }
+
+    /* Footer con firmas */
+    .print-footer {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #d1d5db;
+        page-break-inside: avoid;
+    }
+    .print-signature { text-align: center; }
+    .print-sig-line {
+        width: 160px;
+        border-bottom: 1px solid #374151;
+        margin: 0 auto 6px;
+    }
+    .print-sig-label { font-size: 11px; color: #374151; font-weight: 500; }
+
+    /* Salto de página entre períodos */
+    .print-period-block { page-break-inside: avoid; }
+    .print-period-block + .print-period-block { page-break-before: auto; }
+}

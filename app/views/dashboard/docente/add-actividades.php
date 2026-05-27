@@ -84,7 +84,7 @@ extract($dataVistaDocenteAgregarActividad, EXTR_SKIP);
                                  <div class="mb-3">
                                     <label for="">Tipo de actividad*</label>
                                     <select class="selector" name="tipo_actividad" required tabindex="2">
-                                        <option selected>Seleccione el tipo de actividad</option>
+                                        <option value="" selected disabled>Seleccione el tipo de actividad</option>
                                         <option value="Taller">Taller</option>
                                         <option value="Quiz">Quiz</option>
                                         <option value="Examen">Examen</option>

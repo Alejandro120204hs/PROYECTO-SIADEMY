@@ -32,8 +32,8 @@
                 return $resultado -> execute();
 
             }catch(PDOException $e){
-                die("Error en Institucion::registrar->" . $e->getMessage());
-                
+                error_log("Error en Institucion::registrar -> " . $e->getMessage());
+                return false;
             }
         }
 
@@ -47,7 +47,7 @@
             $resultado -> execute();
             return $resultado -> fetchAll();
             }catch(PDOException $e){
-                die("Error en Institucion::consultar->" . $e->getMessage());
+                error_log("Error en Institucion::listar -> " . $e->getMessage());
                 return [];
             }
         }
@@ -62,8 +62,8 @@
                 $resultado -> bindParam(':id',$id);
                 return $resultado -> execute();
             }catch(PDOException $e){
-                die("Error en Institucion::consultar->" . $e->getMessage());
-
+                error_log("Error en Institucion::eliminar -> " . $e->getMessage());
+                return false;
             }
         }
 
@@ -77,7 +77,7 @@
                 $resultado -> execute();    
                 return $resultado -> fetch();
             }catch(PDOException $e){
-                die("Error en Institucion::consultar->" . $e->getMessage());
+                error_log("Error en Institucion::listarInstitucionId -> " . $e->getMessage());
                 return [];
             }
         }
@@ -99,7 +99,7 @@
                 $resultado -> bindParam(':tipo',$data['tipo']);
                 return $resultado -> execute();
             }catch(PDOException $e){
-                die("Error en Institucion::editar->" . $e->getMessage());
+                error_log("Error en Institucion::actualizar -> " . $e->getMessage());
                 return false;
             }
         }
