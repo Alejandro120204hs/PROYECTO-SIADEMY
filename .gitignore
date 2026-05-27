@@ -1,5 +1,2 @@
-config/config.php
-config/database.php
-.htaccess
 .env
 public/uploads/
