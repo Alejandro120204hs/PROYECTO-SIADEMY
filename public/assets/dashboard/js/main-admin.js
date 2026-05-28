@@ -996,17 +996,23 @@ document.addEventListener('DOMContentLoaded', function () {
 // ========================================
 document.addEventListener('DOMContentLoaded', function () {
   const subjectViewButtons = document.querySelectorAll('.view-btn');
-  const subjectsGrid = document.querySelector('.subjects-grid');
+  const viewGrid = document.getElementById('viewGrid');
+  const viewList = document.getElementById('viewList');
 
-  if (!subjectViewButtons.length || !subjectsGrid) return;
+  if (!subjectViewButtons.length || !viewGrid || !viewList) return;
 
-  subjectViewButtons.forEach((button) => {
-    button.addEventListener('click', function () {
-      subjectViewButtons.forEach((item) => item.classList.remove('active'));
-      this.classList.add('active');
+  function applyView(view) {
+    viewGrid.style.display = view === 'list' ? 'none'  : '';
+    viewList.style.display = view === 'list' ? 'block' : 'none';
+    subjectViewButtons.forEach(btn =>
+      btn.classList.toggle('active', btn.getAttribute('data-view') === view)
+    );
+    localStorage.setItem('asignaturasView', view);
+  }
 
-      const view = this.getAttribute('data-view');
-      subjectsGrid.classList.toggle('list-view', view === 'list');
-    });
-  });
+  subjectViewButtons.forEach(btn =>
+    btn.addEventListener('click', () => applyView(btn.getAttribute('data-view')))
+  );
+
+  applyView(localStorage.getItem('asignaturasView') || 'grid');
 });

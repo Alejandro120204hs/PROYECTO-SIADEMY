@@ -96,9 +96,8 @@
           </div>
         </div>
 
-        <div class="subjects-grid">
-          <!-- Subject Card 1 -->
-
+        <!-- VISTA GRID (cards) -->
+        <div class="subjects-grid" id="viewGrid">
           <?php if(!empty($asignaturas)): ?>
           <?php foreach($asignaturas as $asignatura): ?>
 
@@ -147,15 +146,83 @@
               <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/eliminar-asignatura?accion=eliminar&id=<?= (int)$asignatura['id'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
             </div>
           </div>
-              <?php endforeach; ?>
-              <?php else: ?>
-
-                  <h3>No hay asignaturas registradas</h3>
-
-              <?php endif; ?>
-
-
+          <?php endforeach; ?>
+          <?php else: ?>
+            <p style="color:#8b91a3;padding:24px;">No hay asignaturas registradas</p>
+          <?php endif; ?>
         </div>
+
+        <!-- VISTA TABLA -->
+        <div id="viewList" style="display:none; padding: 0 0 24px;">
+          <div class="datatable-card table-scroll-x">
+            <table class="table table-dark table-hover" style="margin:0;">
+              <thead>
+                <tr>
+                  <th>Asignatura</th>
+                  <th>Estado</th>
+                  <th style="text-align:center">Profesores</th>
+                  <th style="text-align:center">Cursos</th>
+                  <th style="text-align:center">Promedio</th>
+                  <th style="text-align:center">Estudiantes</th>
+                  <th style="text-align:center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if(!empty($asignaturas)): ?>
+                <?php foreach($asignaturas as $asignatura): ?>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="ri-calculator-line" style="color:#fff;font-size:15px;"></i>
+                      </div>
+                      <div>
+                        <strong style="font-size:14px;"><?= htmlspecialchars($asignatura['nombre']) ?></strong>
+                        <?php if($asignatura['descripcion']): ?>
+                          <br><small style="color:#8b91a3;"><?= htmlspecialchars($asignatura['descripcion']) ?></small>
+                        <?php endif; ?>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <?php if($asignatura['estado'] === 'Activo'): ?>
+                      <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;">Activo</span>
+                    <?php else: ?>
+                      <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;">Inactivo</span>
+                    <?php endif; ?>
+                  </td>
+                  <td style="text-align:center;"><?= (int)$asignatura['stat_docentes'] ?></td>
+                  <td style="text-align:center;"><?= (int)$asignatura['stat_cursos'] ?></td>
+                  <td style="text-align:center;">
+                    <?php
+                      $prom = $asignatura['stat_promedio'];
+                      if ($prom !== '—') {
+                        $p = (float)$prom;
+                        $c = $p >= 4.5 ? '#10b981' : ($p >= 4.0 ? '#3b82f6' : ($p > 3.0 ? '#f59e0b' : '#ef4444'));
+                        echo '<strong style="color:'.$c.'">'.number_format($p,1).'</strong>';
+                      } else {
+                        echo '<span style="color:#8b91a3;">—</span>';
+                      }
+                    ?>
+                  </td>
+                  <td style="text-align:center;"><?= (int)$asignatura['stat_estudiantes'] ?></td>
+                  <td style="text-align:center;">
+                    <div class="acciones">
+                      <a class="btn-action" href="<?= BASE_URL ?>/administrador/detalle-asignatura?id=<?= (int)$asignatura['id'] ?>" title="Ver detalle"><i class="bi bi-eye"></i></a>
+                      <a class="btn-action" href="<?= BASE_URL ?>/administrador/editar-asignatura?id=<?= (int)$asignatura['id'] ?>" title="Editar"><i class="bi bi-pencil-square"></i></a>
+                      <a class="btn-action" href="<?= BASE_URL ?>/administrador/eliminar-asignatura?accion=eliminar&id=<?= (int)$asignatura['id'] ?>" title="Eliminar" onclick="return confirm('¿Eliminar esta asignatura?')"><i class="bi bi-trash3-fill"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <?php endforeach; ?>
+                <?php else: ?>
+                <tr><td colspan="7" style="text-align:center;color:#8b91a3;padding:32px;">No hay asignaturas registradas</td></tr>
+                <?php endif; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </section>
 
     </main>

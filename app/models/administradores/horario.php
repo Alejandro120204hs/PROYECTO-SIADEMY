@@ -233,14 +233,20 @@ class HorarioModel
     //  Retorna array con las colisiones encontradas (vacío = sin conflicto).
     // ─────────────────────────────────────────────────────────────────────────
     public function verificarConflictos(
-        int    $id_institucion,
-        int    $id_dac,
-        int    $dia_semana,
-        string $hora_inicio,
-        string $hora_fin,
-        ?int   $excluir_id = null
+        int     $id_institucion,
+        int     $id_dac,
+        int     $dia_semana,
+        string  $hora_inicio,
+        string  $hora_fin,
+        ?int    $excluir_id = null,
+        ?string $aula       = null
     ): array {
         $conflictos = [];
+
+        // ── Validación básica de horas ────────────────────────────────────────
+        if ($hora_inicio >= $hora_fin) {
+            return [['tipo' => 'hora', 'mensaje' => 'La hora de inicio debe ser menor que la hora de fin.']];
+        }
 
         // ── Obtener id_docente e id_curso del DAC ────────────────────────────
         try {
@@ -251,11 +257,11 @@ class HorarioModel
                  WHERE dac.id = :id_dac AND dac.id_institucion = :id_institucion
                  LIMIT 1"
             );
-            $stmtDac->bindValue(':id_dac',          $id_dac,          PDO::PARAM_INT);
-            $stmtDac->bindValue(':id_institucion',   $id_institucion,  PDO::PARAM_INT);
+            $stmtDac->bindValue(':id_dac',         $id_dac,         PDO::PARAM_INT);
+            $stmtDac->bindValue(':id_institucion',  $id_institucion, PDO::PARAM_INT);
             $stmtDac->execute();
             $dac = $stmtDac->fetch(PDO::FETCH_ASSOC);
-            if (!$dac) return [['tipo' => 'error', 'mensaje' => 'Asignación no encontrada.']];
+            if (!$dac) return [['tipo' => 'error', 'mensaje' => 'Asignación docente-asignatura no encontrada.']];
         } catch (PDOException $e) {
             return [['tipo' => 'error', 'mensaje' => 'Error al verificar conflictos.']];
         }
@@ -263,8 +269,10 @@ class HorarioModel
         $id_docente = (int) $dac['id_docente'];
         $id_curso   = (int) $dac['id_curso'];
 
-        $baseWhere = "h.dia_semana = :dia
-                      AND h.estado = 'activo'
+        // ── Cláusula de solapamiento de intervalos (estándar académico) ───────
+        // Dos bloques se solapan si: inicio_nuevo < fin_existente AND fin_nuevo > inicio_existente
+        $baseWhere = "h.dia_semana  = :dia
+                      AND h.estado  = 'activo'
                       AND h.hora_inicio < :hora_fin
                       AND h.hora_fin    > :hora_inicio";
         if ($excluir_id !== null) {
@@ -282,15 +290,16 @@ class HorarioModel
 
         try {
             // ── 1. Conflicto de DOCENTE ──────────────────────────────────────
-            $sqlDoc = "SELECT h.id, h.hora_inicio, h.hora_fin, asig.nombre AS asignatura,
-                              CONCAT(c.grado, '-', c.curso) AS curso
+            $sqlDoc = "SELECT h.hora_inicio, h.hora_fin,
+                              asig.nombre AS asignatura,
+                              CONCAT(c.grado, '°', c.curso) AS curso
                        FROM horario h
                        INNER JOIN docente_asignatura_curso dac2 ON h.id_docente_asignatura_curso = dac2.id
                        INNER JOIN asignatura_curso ac2           ON dac2.id_asignatura_curso = ac2.id
                        INNER JOIN asignatura asig                ON ac2.id_asignatura = asig.id
                        INNER JOIN curso c                        ON ac2.id_curso = c.id
-                       WHERE dac2.id_docente = :id_docente
-                         AND h.id_institucion = :id_institucion
+                       WHERE dac2.id_docente   = :id_docente
+                         AND h.id_institucion  = :id_institucion
                          AND $baseWhere
                        LIMIT 1";
             $s1 = $this->pdo->prepare($sqlDoc);
@@ -301,18 +310,18 @@ class HorarioModel
             if ($row = $s1->fetch(PDO::FETCH_ASSOC)) {
                 $conflictos[] = [
                     'tipo'    => 'docente',
-                    'mensaje' => "El docente ya tiene clase de <strong>{$row['asignatura']}</strong> en <strong>{$row['curso']}</strong> de {$row['hora_inicio']} a {$row['hora_fin']}.",
+                    'mensaje' => "El docente ya tiene clase de <strong>{$row['asignatura']}</strong> en {$row['curso']} de {$row['hora_inicio']} a {$row['hora_fin']}.",
                 ];
             }
 
             // ── 2. Conflicto de CURSO ────────────────────────────────────────
-            $sqlCurso = "SELECT h.id, h.hora_inicio, h.hora_fin, asig.nombre AS asignatura
+            $sqlCurso = "SELECT h.hora_inicio, h.hora_fin, asig.nombre AS asignatura
                          FROM horario h
                          INNER JOIN docente_asignatura_curso dac3 ON h.id_docente_asignatura_curso = dac3.id
                          INNER JOIN asignatura_curso ac3           ON dac3.id_asignatura_curso = ac3.id
                          INNER JOIN asignatura asig                ON ac3.id_asignatura = asig.id
-                         WHERE ac3.id_curso = :id_curso
-                           AND h.id_institucion = :id_institucion2
+                         WHERE ac3.id_curso       = :id_curso
+                           AND h.id_institucion   = :id_institucion2
                            AND $baseWhere
                          LIMIT 1";
             $s2 = $this->pdo->prepare($sqlCurso);
@@ -323,9 +332,38 @@ class HorarioModel
             if ($row = $s2->fetch(PDO::FETCH_ASSOC)) {
                 $conflictos[] = [
                     'tipo'    => 'curso',
-                    'mensaje' => "El curso ya tiene clase de <strong>{$row['asignatura']}</strong> a esa hora ({$row['hora_inicio']} – {$row['hora_fin']}).",
+                    'mensaje' => "El curso ya tiene <strong>{$row['asignatura']}</strong> en ese horario ({$row['hora_inicio']} – {$row['hora_fin']}).",
                 ];
             }
+
+            // ── 3. Conflicto de AULA ─────────────────────────────────────────
+            $aulaLimpia = trim($aula ?? '');
+            if ($aulaLimpia !== '') {
+                $sqlAula = "SELECT h.hora_inicio, h.hora_fin,
+                                   asig.nombre AS asignatura,
+                                   CONCAT(c.grado, '°', c.curso) AS curso
+                            FROM horario h
+                            INNER JOIN docente_asignatura_curso dac4 ON h.id_docente_asignatura_curso = dac4.id
+                            INNER JOIN asignatura_curso ac4           ON dac4.id_asignatura_curso = ac4.id
+                            INNER JOIN asignatura asig                ON ac4.id_asignatura = asig.id
+                            INNER JOIN curso c                        ON ac4.id_curso = c.id
+                            WHERE h.aula            = :aula
+                              AND h.id_institucion  = :id_institucion3
+                              AND $baseWhere
+                            LIMIT 1";
+                $s3 = $this->pdo->prepare($sqlAula);
+                $s3->bindValue(':aula',            $aulaLimpia,     PDO::PARAM_STR);
+                $s3->bindValue(':id_institucion3', $id_institucion, PDO::PARAM_INT);
+                $bindBase($s3);
+                $s3->execute();
+                if ($row = $s3->fetch(PDO::FETCH_ASSOC)) {
+                    $conflictos[] = [
+                        'tipo'    => 'aula',
+                        'mensaje' => "El aula <strong>{$aulaLimpia}</strong> ya está ocupada por <strong>{$row['asignatura']}</strong> ({$row['curso']}) de {$row['hora_inicio']} a {$row['hora_fin']}.",
+                    ];
+                }
+            }
+
         } catch (PDOException $e) {
             error_log('HorarioModel::verificarConflictos → ' . $e->getMessage());
             $conflictos[] = ['tipo' => 'error', 'mensaje' => 'Error interno al verificar conflictos.'];
@@ -346,7 +384,7 @@ class HorarioModel
         ?string $aula
     ): array {
         $conflictos = $this->verificarConflictos(
-            $id_institucion, $id_dac, $dia_semana, $hora_inicio, $hora_fin
+            $id_institucion, $id_dac, $dia_semana, $hora_inicio, $hora_fin, null, $aula
         );
         if (!empty($conflictos)) {
             return ['success' => false, 'conflictos' => $conflictos];
@@ -386,7 +424,7 @@ class HorarioModel
         ?string $aula
     ): array {
         $conflictos = $this->verificarConflictos(
-            $id_institucion, $id_dac, $dia_semana, $hora_inicio, $hora_fin, $id
+            $id_institucion, $id_dac, $dia_semana, $hora_inicio, $hora_fin, $id, $aula
         );
         if (!empty($conflictos)) {
             return ['success' => false, 'conflictos' => $conflictos];

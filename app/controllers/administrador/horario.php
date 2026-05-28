@@ -35,18 +35,19 @@ if ($accion === 'obtener_dac_por_curso') {
 // ── AJAX: verificar conflictos (live) ───────────────────────────────────────
 if ($accion === 'verificar_conflicto') {
     header('Content-Type: application/json');
-    $idDac      = (int)    ($_GET['id_dac']      ?? 0);
-    $dia        = (int)    ($_GET['dia']          ?? 0);
-    $horaInicio = trim(    ($_GET['hora_inicio']  ?? ''));
-    $horaFin    = trim(    ($_GET['hora_fin']      ?? ''));
-    $excluirId  = (int)    ($_GET['excluir_id']   ?? 0) ?: null;
+    $idDac      = (int)  ($_GET['id_dac']      ?? 0);
+    $dia        = (int)  ($_GET['dia']          ?? 0);
+    $horaInicio = trim(  ($_GET['hora_inicio']  ?? ''));
+    $horaFin    = trim(  ($_GET['hora_fin']     ?? ''));
+    $excluirId  = (int)  ($_GET['excluir_id']   ?? 0) ?: null;
+    $aula       = trim(  ($_GET['aula']         ?? '')) ?: null;
 
     if ($idDac === 0 || $dia === 0 || !$horaInicio || !$horaFin) {
         echo json_encode(['success' => true, 'conflictos' => []]);
         exit();
     }
     $conflictos = $model->verificarConflictos(
-        $idInstitucion, $idDac, $dia, $horaInicio, $horaFin, $excluirId
+        $idInstitucion, $idDac, $dia, $horaInicio, $horaFin, $excluirId, $aula
     );
     echo json_encode(['success' => true, 'conflictos' => $conflictos]);
     exit();
