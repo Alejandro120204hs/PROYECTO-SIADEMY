@@ -226,22 +226,26 @@
                     </td>
                     <td style="text-align: center;">
                     <div style="display: inline-flex; gap: 8px;">
-                    <?php 
-                    // Mantener el parámetro de curso en las acciones
+                    <?php
                     $curso_param = isset($_GET['curso']) ? '&curso=' . $_GET['curso'] : '';
                     ?>
-                    <a href="<?= BASE_URL ?>/administrador/asignar-docentes?accion=cambiar_estado&id=<?= $asig['id'] ?>&estado=<?= $asig['estado'] ?><?= $curso_param ?>" 
-                       class="btn-action btn-warning" 
-                    title="Cambiar estado">
-                    <i class="ri-toggle-line"></i>
+                    <button class="btn-action btn-edit"
+                            onclick="abrirModalEditar(<?= (int)$asig['id'] ?>,'<?= htmlspecialchars($asig['docente'],ENT_QUOTES) ?>','<?= htmlspecialchars($asig['asignatura'],ENT_QUOTES) ?>','<?= htmlspecialchars($asig['curso'],ENT_QUOTES) ?>')"
+                            title="Cambiar docente">
+                        <i class="ri-edit-line"></i>
+                    </button>
+                    <a href="<?= BASE_URL ?>/administrador/asignar-docentes?accion=cambiar_estado&id=<?= $asig['id'] ?>&estado=<?= $asig['estado'] ?><?= $curso_param ?>"
+                       class="btn-action btn-warning"
+                       title="Activar / Desactivar">
+                        <i class="ri-toggle-line"></i>
                     </a>
-                    <a href="<?= BASE_URL ?>/administrador/asignar-docentes?accion=eliminar&id=<?= $asig['id'] ?><?= $curso_param ?>" 
-                       class="btn-action btn-danger" 
-                         onclick="return confirm('¿Está seguro de eliminar esta asignación?')" 
-                           title="Eliminar">
-                          <i class="ri-delete-bin-line"></i>
-                        </a>
-                      </div>
+                    <a href="<?= BASE_URL ?>/administrador/asignar-docentes?accion=eliminar&id=<?= $asig['id'] ?><?= $curso_param ?>"
+                       class="btn-action btn-danger"
+                       onclick="return confirm('¿Eliminar esta asignación definitivamente?')"
+                       title="Eliminar">
+                        <i class="ri-delete-bin-line"></i>
+                    </a>
+                    </div>
                     </td>
                   </tr>
                 <?php endforeach; ?>
@@ -254,10 +258,70 @@
     </main>
   </div>
 
+  <!-- MODAL: Cambiar docente -->
+  <div class="modal fade" id="modalCambiarDocente" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background:#11193a;border:1px solid rgba(255,255,255,.1);border-radius:14px;">
+        <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.08);padding:18px 22px;">
+          <h5 class="modal-title" style="font-size:15px;font-weight:600;color:#e2e8f0;">
+            <i class="ri-edit-line" style="color:#4f46e5;margin-right:6px"></i> Cambiar Docente
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" style="padding:22px;">
+          <div id="modal-info" style="background:rgba(79,70,229,.1);border:1px solid rgba(79,70,229,.25);border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#cbd5e1;line-height:1.7;"></div>
+
+          <form action="<?= BASE_URL ?>/administrador/asignar-docentes" method="POST">
+            <input type="hidden" name="accion" value="actualizar_docente">
+            <input type="hidden" name="id_asignacion" id="modal-id">
+            <?php if (isset($_GET['curso']) && $_GET['curso'] !== ''): ?>
+              <input type="hidden" name="curso" value="<?= (int)$_GET['curso'] ?>">
+            <?php endif; ?>
+
+            <div class="form-group" style="margin-bottom:20px;">
+              <label style="display:block;font-size:13px;color:#8b91a3;margin-bottom:8px;font-weight:600;">
+                <i class="ri-user-star-line"></i> Nuevo Docente
+              </label>
+              <select name="nuevo_docente" class="form-select" required
+                      style="background:#0e1632;border:1px solid rgba(255,255,255,.12);color:#e2e8f0;border-radius:8px;padding:10px 14px;width:100%;">
+                <option value="">Seleccione el nuevo docente...</option>
+                <?php foreach ($docentes as $d): ?>
+                  <option value="<?= (int)$d['id'] ?>"><?= htmlspecialchars($d['nombre_completo']) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+
+            <div style="display:flex;justify-content:flex-end;gap:10px;">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                      style="background:rgba(255,255,255,.08);border:none;color:#e2e8f0;padding:9px 18px;border-radius:8px;font-size:13px;cursor:pointer;">
+                Cancelar
+              </button>
+              <button type="submit"
+                      style="background:#4f46e5;border:none;color:#fff;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+                <i class="ri-save-line"></i> Guardar cambio
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/administrador/asignar-docente-asignatura.js"></script>
+  <script>
+    function abrirModalEditar(id, docente, asignatura, curso) {
+      document.getElementById('modal-id').value = id;
+      document.getElementById('modal-info').innerHTML =
+        '<strong>Asignatura:</strong> ' + asignatura +
+        '<br><strong>Curso:</strong> ' + curso +
+        '<br><strong>Docente actual:</strong> ' + docente;
+      new bootstrap.Modal(document.getElementById('modalCambiarDocente')).show();
+    }
+  </script>
 </body>
 </html>

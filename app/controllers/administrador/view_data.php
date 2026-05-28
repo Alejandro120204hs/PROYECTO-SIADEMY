@@ -30,93 +30,66 @@ function obtenerDataVistaAdminDashboard()
     $idInstitucion = (int) ($_SESSION['user']['id_institucion'] ?? 0);
 
     $objEstudiante = new Estudiante();
-    $objAcudiente = new Acudiente();
-    $objDocente = new Docente();
-    $objEvento = new Evento();
-    $objCurso = new Curso();
+    $objAcudiente  = new Acudiente();
+    $objDocente    = new Docente();
+    $objEvento     = new Evento();
+    $objCurso      = new Curso();
     $objAsignatura = new Asignatura();
 
     $totalEstudiantes = (int) $objEstudiante->contar($idInstitucion);
-    $totalAcudientes = (int) $objAcudiente->contar($idInstitucion);
-    $totalProfesores = (int) $objDocente->contar($idInstitucion);
-    $totalEventos = (int) $objEvento->contar($idInstitucion);
-    $totalCursos = (int) $objCurso->contar($idInstitucion);
+    $totalAcudientes  = (int) $objAcudiente->contar($idInstitucion);
+    $totalProfesores  = (int) $objDocente->contar($idInstitucion);
+    $totalEventos     = (int) $objEvento->contar($idInstitucion);
+    $totalCursos      = (int) $objCurso->contar($idInstitucion);
     $totalAsignaturas = (int) $objAsignatura->contar($idInstitucion);
 
-    $eventosInstitucion = $objEvento->listar($idInstitucion);
     $mesesAbreviados = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-    $anioActual = (int) date('Y');
+    $anioActual  = (int) date('Y');
     $anioAnterior = $anioActual - 1;
-    $serieAnioActual = array_fill(0, 12, 0);
-    $serieAnioAnterior = array_fill(0, 12, 0);
 
-    $hoy = new DateTimeImmutable('today');
-    $inicioSemanaActual = $hoy->modify('monday this week');
-    $finSemanaActual = $hoy->modify('sunday this week');
-    $inicioSemanaAnterior = $inicioSemanaActual->modify('-7 days');
-    $finSemanaAnterior = $inicioSemanaActual->modify('-1 day');
-    $totalSemanaActual = 0;
-    $totalSemanaAnterior = 0;
-    $eventosCalendario = [];
+    // ── Calificaciones por mes (rendimiento escolar) ──────────────────────────
+    $serieAnioActual  = $objAsignatura->obtenerPromedioMensual($idInstitucion, $anioActual);
+    $serieAnioAnterior = $objAsignatura->obtenerPromedioMensual($idInstitucion, $anioAnterior);
+    $promedioAnioActual  = $objAsignatura->obtenerPromedioAnual($idInstitucion, $anioActual);
+    $promedioAnioAnterior = $objAsignatura->obtenerPromedioAnual($idInstitucion, $anioAnterior);
+
+    // ── Eventos para el calendario widget ────────────────────────────────────
+    $eventosInstitucion = $objEvento->listar($idInstitucion);
+    $eventosCalendario  = [];
 
     foreach ($eventosInstitucion as $evento) {
         $fechaCruda = (string) ($evento['fecha_evento'] ?? '');
-        if ($fechaCruda === '') {
-            continue;
-        }
+        if ($fechaCruda === '') continue;
 
         $fechaEvento = DateTimeImmutable::createFromFormat('Y-m-d', substr($fechaCruda, 0, 10));
-        if (!$fechaEvento) {
-            continue;
-        }
-
-        $anioEvento = (int) $fechaEvento->format('Y');
-        $mesEvento = (int) $fechaEvento->format('n') - 1;
-
-        if ($anioEvento === $anioActual && isset($serieAnioActual[$mesEvento])) {
-            $serieAnioActual[$mesEvento]++;
-        }
-
-        if ($anioEvento === $anioAnterior && isset($serieAnioAnterior[$mesEvento])) {
-            $serieAnioAnterior[$mesEvento]++;
-        }
-
-        if ($fechaEvento >= $inicioSemanaActual && $fechaEvento <= $finSemanaActual) {
-            $totalSemanaActual++;
-        }
-
-        if ($fechaEvento >= $inicioSemanaAnterior && $fechaEvento <= $finSemanaAnterior) {
-            $totalSemanaAnterior++;
-        }
+        if (!$fechaEvento) continue;
 
         $eventosCalendario[] = [
-            'id' => (int) ($evento['id'] ?? 0),
-            'title' => (string) ($evento['nombre_evento'] ?? 'Evento academico'),
-            'date' => $fechaEvento->format('Y-m-d'),
+            'id'        => (int) ($evento['id'] ?? 0),
+            'title'     => (string) ($evento['nombre_evento'] ?? 'Evento academico'),
+            'date'      => $fechaEvento->format('Y-m-d'),
             'timeStart' => !empty($evento['hora_inicio']) ? substr((string) $evento['hora_inicio'], 0, 5) : '',
-            'timeEnd' => !empty($evento['hora_fin']) ? substr((string) $evento['hora_fin'], 0, 5) : '',
-            'type' => (string) ($evento['tipo_evento'] ?? 'evento'),
-            'location' => (string) ($evento['ubicacion'] ?? ''),
+            'timeEnd'   => !empty($evento['hora_fin'])    ? substr((string) $evento['hora_fin'],    0, 5) : '',
+            'type'      => (string) ($evento['tipo_evento'] ?? 'evento'),
+            'location'  => (string) ($evento['ubicacion'] ?? ''),
         ];
     }
 
     usort($eventosCalendario, function ($a, $b) {
-        $claveA = ($a['date'] ?? '') . ' ' . ($a['timeStart'] ?? '');
-        $claveB = ($b['date'] ?? '') . ' ' . ($b['timeStart'] ?? '');
-        return strcmp($claveA, $claveB);
+        return strcmp(($a['date'] ?? '') . ($a['timeStart'] ?? ''), ($b['date'] ?? '') . ($b['timeStart'] ?? ''));
     });
 
     $dashboardData = [
         'chart' => [
-            'labels' => $mesesAbreviados,
-            'currentYear' => $anioActual,
-            'previousYear' => $anioAnterior,
+            'labels'        => $mesesAbreviados,
+            'currentYear'   => $anioActual,
+            'previousYear'  => $anioAnterior,
             'currentSeries' => $serieAnioActual,
-            'previousSeries' => $serieAnioAnterior,
+            'previousSeries'=> $serieAnioAnterior,
         ],
         'totals' => [
-            'currentWeek' => $totalSemanaActual,
-            'previousWeek' => $totalSemanaAnterior,
+            'currentWeek'  => $promedioAnioActual,
+            'previousWeek' => $promedioAnioAnterior,
         ],
         'calendar' => [
             'events' => $eventosCalendario,
@@ -124,16 +97,18 @@ function obtenerDataVistaAdminDashboard()
     ];
 
     return [
-        'usuario' => obtenerPerfilAdminDesdeSesion(),
-        'totalEstudiantes' => $totalEstudiantes,
-        'totalAcudientes' => $totalAcudientes,
-        'totalProfesores' => $totalProfesores,
-        'totalEventos' => $totalEventos,
-        'totalCursos' => $totalCursos,
-        'totalAsignaturas' => $totalAsignaturas,
-        'totalSemanaActual' => $totalSemanaActual,
-        'totalSemanaAnterior' => $totalSemanaAnterior,
-        'dashboardData' => $dashboardData,
+        'usuario'              => obtenerPerfilAdminDesdeSesion(),
+        'totalEstudiantes'     => $totalEstudiantes,
+        'totalAcudientes'      => $totalAcudientes,
+        'totalProfesores'      => $totalProfesores,
+        'totalEventos'         => $totalEventos,
+        'totalCursos'          => $totalCursos,
+        'totalAsignaturas'     => $totalAsignaturas,
+        'promedioAnioActual'   => $promedioAnioActual,
+        'promedioAnioAnterior' => $promedioAnioAnterior,
+        'anioActual'           => $anioActual,
+        'anioAnterior'         => $anioAnterior,
+        'dashboardData'        => $dashboardData,
     ] + obtenerVersionesAssetsAdmin();
 }
 
@@ -159,13 +134,27 @@ function obtenerDataVistaAdminAsignaturas()
     $idInstitucion = (int) ($_SESSION['user']['id_institucion'] ?? 0);
 
     $objAsignatura = new Asignatura();
-    $objDocente = new Docente();
+    $objDocente    = new Docente();
+
+    $listaRaw  = $objAsignatura->listar($idInstitucion);
+    $statsMap  = $objAsignatura->obtenerStatsTodasAsignaturas($idInstitucion);
+
+    $asignaturas = array_map(function ($row) use ($statsMap) {
+        $id = (int) $row['id'];
+        $s  = $statsMap[$id] ?? [];
+        $row['stat_docentes']    = $s['total_docentes']    ?? 0;
+        $row['stat_estudiantes'] = $s['total_estudiantes'] ?? 0;
+        $row['stat_promedio']    = $s['promedio']          ?? '—';
+        $row['stat_cursos']      = $s['total_cursos']      ?? 0;
+        return $row;
+    }, $listaRaw);
 
     return [
-        'usuario' => obtenerPerfilAdminDesdeSesion(),
-        'asignaturas' => $objAsignatura->listar($idInstitucion),
+        'usuario'          => obtenerPerfilAdminDesdeSesion(),
+        'asignaturas'      => $asignaturas,
         'totalAsignaturas' => (int) $objAsignatura->contar($idInstitucion),
-        'totalProfesores' => (int) $objDocente->contar($idInstitucion),
+        'totalProfesores'  => (int) $objDocente->contar($idInstitucion),
+        'promedioGeneral'  => $objAsignatura->obtenerPromedioGeneral($idInstitucion),
     ] + obtenerVersionesAssetsAdmin();
 }
 
@@ -289,6 +278,36 @@ function obtenerDataVistaAdminPeriodo()
     ] + obtenerVersionesAssetsAdmin() + [
         'periodosCssVersion' => @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-periodos.css') ?: time(),
     ];
+}
+
+function obtenerDataVistaAdminDetalleAsignatura(int $idAsignatura)
+{
+    $idInstitucion = (int) ($_SESSION['user']['id_institucion'] ?? 0);
+    $obj = new Asignatura();
+
+    $asignatura = $obj->listarAsignaturaId($idAsignatura);
+
+    // Seguridad multi-tenant: la asignatura debe pertenecer a la institución
+    if (!$asignatura || (int)($asignatura['id_institucion'] ?? 0) !== $idInstitucion) {
+        return null;
+    }
+
+    $docentes   = $obj->obtenerDocentesDeAsignatura($idAsignatura, $idInstitucion);
+    $cursos     = $obj->obtenerCursosDeAsignatura($idAsignatura, $idInstitucion);
+    $stats      = $obj->obtenerEstadisticasDetalle($idAsignatura);
+
+    $totalEstudiantes = array_sum(array_column($cursos, 'total_estudiantes'));
+
+    return [
+        'usuario'           => obtenerPerfilAdminDesdeSesion(),
+        'asignatura'        => $asignatura,
+        'docentes'          => $docentes,
+        'cursos'            => $cursos,
+        'stats'             => $stats,
+        'totalEstudiantes'  => $totalEstudiantes,
+        'totalDocentes'     => count($docentes),
+        'totalCursos'       => count($cursos),
+    ] + obtenerVersionesAssetsAdmin();
 }
 
 function obtenerDataVistaAdminDetalleCurso($idCurso)

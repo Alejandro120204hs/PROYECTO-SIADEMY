@@ -199,6 +199,16 @@
   color: #fff;
 }
 
+.btn-edit {
+  background: rgba(79, 70, 229, 0.15);
+  color: #818cf8;
+}
+
+.btn-edit:hover {
+  background: #4f46e5;
+  color: #fff;
+}
+
 .empty-state {
   text-align: center;
   padding: 60px 20px;

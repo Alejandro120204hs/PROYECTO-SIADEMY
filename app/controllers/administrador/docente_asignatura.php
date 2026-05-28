@@ -17,6 +17,9 @@ switch($method){
         if($accion === 'asignar'){
             asignarDocenteAsignatura($docenteAsignatura);
         }
+        if($accion === 'actualizar_docente'){
+            actualizarDocenteAsignacion($docenteAsignatura);
+        }
         break;
 
     case 'GET':
@@ -89,6 +92,29 @@ function asignarDocenteAsignatura($docenteAsignatura){
         $_SESSION['alerta'] = ['tipo' => 'warning', 'mensaje' => $resultado['message']];
         exit();
     }
+}
+
+function actualizarDocenteAsignacion($docenteAsignatura){
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    $id_institucion  = (int)($_SESSION['user']['id_institucion'] ?? 0);
+    $id_asignacion   = (int)($_POST['id_asignacion']   ?? 0);
+    $nuevo_id_docente= (int)($_POST['nuevo_docente']   ?? 0);
+    $curso_param     = !empty($_POST['curso']) ? '?curso=' . (int)$_POST['curso'] : '';
+
+    if (!$id_asignacion || !$nuevo_id_docente) {
+        $_SESSION['alerta'] = ['tipo' => 'warning', 'mensaje' => 'Datos incompletos'];
+        header('Location: ' . BASE_URL . '/administrador/asignar-docentes' . $curso_param);
+        exit();
+    }
+
+    $resultado = $docenteAsignatura->actualizarDocenteAsignacion($id_asignacion, $nuevo_id_docente, $id_institucion);
+
+    $_SESSION['alerta'] = [
+        'tipo'    => $resultado['success'] ? 'success' : 'warning',
+        'mensaje' => $resultado['message'],
+    ];
+    header('Location: ' . BASE_URL . '/administrador/asignar-docentes' . $curso_param);
+    exit();
 }
 
 function eliminarAsignacionDocente($docenteAsignatura, $id){

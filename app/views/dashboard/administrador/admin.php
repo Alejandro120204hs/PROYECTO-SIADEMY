@@ -90,13 +90,17 @@
         </div>
       </section>
 
-      <!-- LINE CHART SECTION -->
+      <!-- CHART SECTION -->
       <section class="card">
-        <div style="display:flex; align-items:center; gap:12px">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap">
           <h3>Rendimiento escolar</h3>
           <div class="legend">
-            <span class="pill"><span class="dot week"></span> Esta semana <b id="weekTotal"><?= number_format((int)$totalSemanaActual, 0, ',', '.') ?></b></span>
-            <span class="pill"><span class="dot last"></span> La semana pasada <b id="lastWeekTotal"><?= number_format((int)$totalSemanaAnterior, 0, ',', '.') ?></b></span>
+            <span class="pill"><span class="dot week"></span> Promedio <?= (int)$anioActual ?> <b id="weekTotal"><?= $promedioAnioActual > 0 ? number_format($promedioAnioActual, 1, ',', '.') : '—' ?></b></span>
+            <span class="pill"><span class="dot last"></span> Promedio <?= (int)$anioAnterior ?> <b id="lastWeekTotal"><?= $promedioAnioAnterior > 0 ? number_format($promedioAnioAnterior, 1, ',', '.') : '—' ?></b></span>
+          </div>
+          <div class="view-toggle" style="margin-left:auto">
+            <button class="view-btn" id="chartToggleLine" title="Ver como líneas"><i class="ri-line-chart-line"></i></button>
+            <button class="view-btn" id="chartToggleBar"  title="Ver como barras"><i class="ri-bar-chart-line"></i></button>
           </div>
         </div>
         <canvas id="lineChart"></canvas>
