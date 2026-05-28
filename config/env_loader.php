@@ -20,10 +20,24 @@
  */
 
 (function () {
-    $rutaEnv = dirname(__DIR__) . '/.env';
+    // Buscar .env en dos ubicaciones:
+    //  1. Un nivel ARRIBA de public_html  → producción (fuera del repo git)
+    //  2. Raíz del proyecto (public_html) → desarrollo local
+    $candidatos = [
+        dirname(dirname(__DIR__)) . '/.env',   // /home/usuario/.env  (producción)
+        dirname(__DIR__) . '/.env',             // /public_html/.env   (local)
+    ];
 
-    if (!is_file($rutaEnv)) {
-        // En producción sin .env las variables vienen del entorno del servidor.
+    $rutaEnv = null;
+    foreach ($candidatos as $ruta) {
+        if (is_file($ruta)) {
+            $rutaEnv = $ruta;
+            break;
+        }
+    }
+
+    if ($rutaEnv === null) {
+        // Sin .env en ninguna ubicación: las variables vienen del entorno del servidor.
         return;
     }
 
