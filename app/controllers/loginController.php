@@ -24,8 +24,14 @@
 
         // PROGRAMACION ORIENTADA A OBJETOS
         // INSTANCEAMOS LA CLASE PARA ACCEDER A UNA FUNCION EN ESPECIFICO
-        $login = new Login();
-        $resultado = $login->autenticar($correo,$clave);
+        try {
+            $login = new Login();
+            $resultado = $login->autenticar($correo,$clave);
+        } catch (Throwable $e) {
+            error_log('[Siademy] Error en loginController: ' . $e->getMessage());
+            mostrarSweetAlert('error', 'Error del sistema', 'No se pudo procesar tu solicitud. Por favor intenta más tarde o contacta al soporte.');
+            exit();
+        }
 
         // VERIFICAR SI EL MODELO DEVOLVIO UN ERROR
         if(isset($resultado['error'])){
