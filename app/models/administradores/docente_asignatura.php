@@ -232,6 +232,60 @@ class DocenteAsignatura {
         }
     }
 
+    // Cambiar el docente de una asignación existente
+    public function actualizarDocenteAsignacion(int $id, int $nuevo_id_docente, int $id_institucion): array
+    {
+        try {
+            // Obtener el id_asignatura_curso de este registro (verificando multi-tenant)
+            $stmt = $this->conexion->prepare(
+                "SELECT id_asignatura_curso FROM docente_asignatura_curso
+                 WHERE id = :id AND id_institucion = :id_institucion LIMIT 1"
+            );
+            $stmt->bindValue(':id',             $id,             PDO::PARAM_INT);
+            $stmt->bindValue(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$row) {
+                return ['success' => false, 'message' => 'Asignación no encontrada'];
+            }
+
+            $idAC = (int)$row['id_asignatura_curso'];
+
+            // Verificar que el nuevo docente no esté ya asignado a esta misma asignatura-curso
+            $stmt2 = $this->conexion->prepare(
+                "SELECT id FROM docente_asignatura_curso
+                 WHERE id_docente = :nuevo_docente AND id_asignatura_curso = :id_ac AND id != :id LIMIT 1"
+            );
+            $stmt2->bindValue(':nuevo_docente', $nuevo_id_docente, PDO::PARAM_INT);
+            $stmt2->bindValue(':id_ac',         $idAC,            PDO::PARAM_INT);
+            $stmt2->bindValue(':id',            $id,              PDO::PARAM_INT);
+            $stmt2->execute();
+
+            if ($stmt2->fetch()) {
+                return ['success' => false, 'message' => 'Este docente ya está asignado a esa asignatura en ese curso'];
+            }
+
+            // Actualizar
+            $stmt3 = $this->conexion->prepare(
+                "UPDATE docente_asignatura_curso SET id_docente = :nuevo_docente
+                 WHERE id = :id AND id_institucion = :id_institucion"
+            );
+            $stmt3->bindValue(':nuevo_docente', $nuevo_id_docente, PDO::PARAM_INT);
+            $stmt3->bindValue(':id',            $id,              PDO::PARAM_INT);
+            $stmt3->bindValue(':id_institucion',$id_institucion,  PDO::PARAM_INT);
+            $stmt3->execute();
+
+            return $stmt3->rowCount() > 0
+                ? ['success' => true,  'message' => 'Docente actualizado correctamente']
+                : ['success' => false, 'message' => 'No se realizaron cambios'];
+
+        } catch (PDOException $e) {
+            error_log("Error en actualizarDocenteAsignacion: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error al actualizar la asignación'];
+        }
+    }
+
     // Cambiar estado de asignación (activar/desactivar)
     public function cambiarEstadoAsignacion($id, $nuevo_estado){
         try {

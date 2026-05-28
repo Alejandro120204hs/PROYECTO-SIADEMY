@@ -89,90 +89,118 @@ if (dashboardDataRaw) {
 const ctx = document.getElementById('lineChart');
 if (ctx) {
   const defaultMonths = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  const chartData = adminDashboardData.chart || {};
+  const chartData  = adminDashboardData.chart  || {};
   const totalsData = adminDashboardData.totals || {};
   const labels = Array.isArray(chartData.labels) && chartData.labels.length === 12 ? chartData.labels : defaultMonths;
-  const currentSeries = Array.isArray(chartData.currentSeries) && chartData.currentSeries.length === 12
-    ? chartData.currentSeries
-    : new Array(12).fill(0);
-  const previousSeries = Array.isArray(chartData.previousSeries) && chartData.previousSeries.length === 12
-    ? chartData.previousSeries
-    : new Array(12).fill(0);
+  const currentSeries  = Array.isArray(chartData.currentSeries)  && chartData.currentSeries.length  === 12 ? chartData.currentSeries  : new Array(12).fill(null);
+  const previousSeries = Array.isArray(chartData.previousSeries) && chartData.previousSeries.length === 12 ? chartData.previousSeries : new Array(12).fill(null);
 
-  const weekTotalEl = document.getElementById('weekTotal');
+  const gradeFormatter = new Intl.NumberFormat('es-CO', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  const weekTotalEl     = document.getElementById('weekTotal');
   const lastWeekTotalEl = document.getElementById('lastWeekTotal');
-  const numberFormatter = new Intl.NumberFormat('es-CO');
+  if (weekTotalEl)     { const v = Number(totalsData.currentWeek);  weekTotalEl.textContent     = v > 0 ? gradeFormatter.format(v) : '—'; }
+  if (lastWeekTotalEl) { const v = Number(totalsData.previousWeek); lastWeekTotalEl.textContent = v > 0 ? gradeFormatter.format(v) : '—'; }
 
-  if (weekTotalEl && Number.isFinite(Number(totalsData.currentWeek))) {
-    weekTotalEl.textContent = numberFormatter.format(Number(totalsData.currentWeek));
-  }
+  const gradient1 = ctx.getContext('2d').createLinearGradient(0, 0, 0, 320);
+  gradient1.addColorStop(0, 'rgba(255,107,107,.35)');
+  gradient1.addColorStop(1, 'rgba(255,107,107,0)');
+  const gradient2 = ctx.getContext('2d').createLinearGradient(0, 0, 0, 320);
+  gradient2.addColorStop(0, 'rgba(255,176,32,.35)');
+  gradient2.addColorStop(1, 'rgba(255,176,32,0)');
 
-  if (lastWeekTotalEl && Number.isFinite(Number(totalsData.previousWeek))) {
-    lastWeekTotalEl.textContent = numberFormatter.format(Number(totalsData.previousWeek));
-  }
-
-    const gradient1 = ctx.getContext('2d').createLinearGradient(0, 0, 0, 320);
-    gradient1.addColorStop(0, 'rgba(255,107,107,.35)');
-    gradient1.addColorStop(1, 'rgba(255,107,107,0)');
-
-    const gradient2 = ctx.getContext('2d').createLinearGradient(0, 0, 0, 320);
-    gradient2.addColorStop(0, 'rgba(255,176,32,.35)');
-    gradient2.addColorStop(1, 'rgba(255,176,32,0)');
-
-    const data = {
-      labels,
-        datasets: [{
-        label: `Eventos ${chartData.currentYear || 'Año actual'}`,
-        data: currentSeries,
-            borderColor: '#ff6b6b',
-            backgroundColor: gradient1,
-            borderWidth: 3,
-            pointRadius: 5,
-            pointBackgroundColor: '#ff6b6b',
-            tension: .45,
-            fill: true
-        }, {
-            label: `Eventos ${chartData.previousYear || 'Año anterior'}`,
-            data: previousSeries,
-            borderColor: '#ffb020',
-            backgroundColor: gradient2,
-            borderWidth: 3,
-            pointRadius: 0,
-            tension: .45,
-            fill: true
-        }]
-    };
-
-    new Chart(ctx, {
-        type: 'line',
-        data,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    enabled: true,
-                    backgroundColor: '#0e142e',
-                    borderColor: 'rgba(255,255,255,.1)',
-                    borderWidth: 1,
-                    titleColor: '#fff',
-                    bodyColor: '#e5e7eb'
-                }
-            },
-            scales: {
-                x: {
-                    grid: { color: 'rgba(255,255,255,.06)' },
-                    ticks: { color: '#cbd5e1' }
-                },
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(255,255,255,.06)' },
-                    ticks: { color: '#cbd5e1' }
-                }
-            }
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        enabled: true,
+        backgroundColor: '#0e142e',
+        borderColor: 'rgba(255,255,255,.1)',
+        borderWidth: 1,
+        titleColor: '#fff',
+        bodyColor: '#e5e7eb',
+        callbacks: {
+          label: function(ctx) {
+            const v = ctx.parsed.y;
+            return v != null ? ` ${gradeFormatter.format(v)}` : ' Sin datos';
+          }
         }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,.06)' },
+        ticks: { color: '#cbd5e1' }
+      },
+      y: {
+        beginAtZero: true,
+        min: 0,
+        max: 5,
+        grid: { color: 'rgba(255,255,255,.06)' },
+        ticks: {
+          color: '#cbd5e1',
+          stepSize: 1,
+          callback: function(value) { return value.toFixed(1); }
+        }
+      }
+    }
+  };
+
+  let chartInstance = null;
+
+  function buildChart(type) {
+    if (chartInstance) chartInstance.destroy();
+    const isLine = type === 'line';
+    chartInstance = new Chart(ctx, {
+      type,
+      data: {
+        labels,
+        datasets: [{
+          label: `Promedio ${chartData.currentYear || 'Año actual'}`,
+          data: currentSeries,
+          borderColor: '#ff6b6b',
+          backgroundColor: isLine ? gradient1 : 'rgba(255,107,107,.65)',
+          borderWidth: isLine ? 3 : 1,
+          borderRadius: isLine ? 0 : 5,
+          pointRadius: isLine ? 5 : 0,
+          pointBackgroundColor: '#ff6b6b',
+          tension: isLine ? .45 : 0,
+          fill: isLine,
+          spanGaps: true,
+        }, {
+          label: `Promedio ${chartData.previousYear || 'Año anterior'}`,
+          data: previousSeries,
+          borderColor: '#ffb020',
+          backgroundColor: isLine ? gradient2 : 'rgba(255,176,32,.55)',
+          borderWidth: isLine ? 3 : 1,
+          borderRadius: isLine ? 0 : 5,
+          pointRadius: 0,
+          tension: isLine ? .45 : 0,
+          fill: isLine,
+          spanGaps: true,
+        }]
+      },
+      options: chartOptions
     });
+  }
+
+  // Botones toggle
+  const btnLine = document.getElementById('chartToggleLine');
+  const btnBar  = document.getElementById('chartToggleBar');
+
+  function setActiveBtn(type) {
+    if (btnLine) btnLine.classList.toggle('active', type === 'line');
+    if (btnBar)  btnBar.classList.toggle('active',  type === 'bar');
+  }
+
+  if (btnLine) btnLine.addEventListener('click', () => { buildChart('line'); setActiveBtn('line'); localStorage.setItem('adminChartType', 'line'); });
+  if (btnBar)  btnBar.addEventListener('click',  () => { buildChart('bar');  setActiveBtn('bar');  localStorage.setItem('adminChartType', 'bar');  });
+
+  const savedType = localStorage.getItem('adminChartType') || 'line';
+  buildChart(savedType);
+  setActiveBtn(savedType);
 }
 
     // ========================================

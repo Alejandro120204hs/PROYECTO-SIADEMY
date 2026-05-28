@@ -294,6 +294,10 @@
                 require BASE_PATH . '/app/views/dashboard/administrador/asignaturas.php';
                 break;
 
+            case '/administrador/detalle-asignatura':
+                require BASE_PATH . '/app/views/dashboard/administrador/detalle-asignatura.php';
+                break;
+
             
 
 

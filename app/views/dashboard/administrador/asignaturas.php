@@ -78,7 +78,7 @@
           <div class="icon"><i class="ri-line-chart-line"></i></div>
           <div>
             <small>Promedio General</small>
-            <strong>3.8</strong>
+            <strong><?= $promedioGeneral ?></strong>
           </div>
         </div>
       </div>
@@ -89,7 +89,7 @@
       <section class="subjects-section">
         <div class="subjects-header">
           
-          <h3>Asignaturas Activas (18)</h3>
+          <h3>Asignaturas Activas (<?= $totalAsignaturas ?>)</h3>
           <div class="view-toggle">
             <button class="view-btn active" data-view="grid"><i class="ri-grid-line"></i></button>
             <button class="view-btn" data-view="list"><i class="ri-list-check"></i></button>
@@ -100,32 +100,32 @@
           <!-- Subject Card 1 -->
 
           <?php if(!empty($asignaturas)): ?>
-          <?php foreach($asignaturas as $asignaturas): ?>
+          <?php foreach($asignaturas as $asignatura): ?>
 
           <div class="subject-card">
             <div class="subject-header">
               <div class="subject-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                 <i class="ri-calculator-line"></i>
               </div>
-              <div class="subject-status status-active <?= $asignaturas['estado'] ?>"><?= $asignaturas['estado'] ?></div>
+              <div class="subject-status status-active <?= htmlspecialchars($asignatura['estado']) ?>"><?= htmlspecialchars($asignatura['estado']) ?></div>
             </div>
-            
-            <h4><?= $asignaturas['nombre'] ?></h4>
-            <p class="subject-area"><?= $asignaturas['descripcion'] ?></p>
-            
+
+            <h4><?= htmlspecialchars($asignatura['nombre']) ?></h4>
+            <p class="subject-area"><?= htmlspecialchars($asignatura['descripcion']) ?></p>
+
             <div class="subject-info">
               <div class="info-item">
                 <i class="ri-user-line"></i>
                 <div>
                   <span class="info-label">Profesores</span>
-                  <strong>4</strong>
+                  <strong><?= (int)$asignatura['stat_docentes'] ?></strong>
                 </div>
               </div>
               <div class="info-item">
-                <i class="ri-time-line"></i>
+                <i class="ri-book-open-line"></i>
                 <div>
-                  <span class="info-label">Horas/Semana</span>
-                  <strong>5</strong>
+                  <span class="info-label">Cursos</span>
+                  <strong><?= (int)$asignatura['stat_cursos'] ?></strong>
                 </div>
               </div>
             </div>
@@ -133,26 +133,25 @@
             <div class="subject-stats">
               <div class="stat-box">
                 <span class="stat-label">Promedio</span>
-                <strong class="stat-value grade-good">4.1</strong>
+                <strong class="stat-value grade-good"><?= $asignatura['stat_promedio'] !== '—' ? number_format((float)$asignatura['stat_promedio'], 1) : '—' ?></strong>
               </div>
               <div class="stat-box">
                 <span class="stat-label">Estudiantes</span>
-                <strong class="stat-value">842</strong>
+                <strong class="stat-value"><?= (int)$asignatura['stat_estudiantes'] ?></strong>
               </div>
             </div>
 
             <div class="subject-actions">
-              <button class="btn-secondary"><i class="bi bi-eye"></i></button>
-              <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/editar-asignatura?id=<?= $asignaturas['id'] ?>"><i class="bi bi-pencil-square"></i></a></button>
-              <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/eliminar-asignatura?accion=eliminar&id=<?= $asignaturas['id'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
-
+              <button class="btn-secondary" onclick="window.location.href='<?= BASE_URL ?>/administrador/detalle-asignatura?id=<?= (int)$asignatura['id'] ?>'"><i class="bi bi-eye"></i></button>
+              <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/editar-asignatura?id=<?= (int)$asignatura['id'] ?>"><i class="bi bi-pencil-square"></i></a></button>
+              <button class="btn-secondary"><a href="<?= BASE_URL ?>/administrador/eliminar-asignatura?accion=eliminar&id=<?= (int)$asignatura['id'] ?>"><i class="bi bi-trash3-fill"></i></a></button>
             </div>
           </div>
               <?php endforeach; ?>
               <?php else: ?>
 
-                  <h3>No hay asignaturas registrados</h3>
-                
+                  <h3>No hay asignaturas registradas</h3>
+
               <?php endif; ?>
 
 

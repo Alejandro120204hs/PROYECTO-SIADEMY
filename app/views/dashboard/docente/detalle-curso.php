@@ -170,18 +170,6 @@
                         <i class="ri-add-circle-line"></i>
                         Nueva Actividad
                     </a>
-                    <a href="<?= BASE_URL ?>/docente-calificaciones?curso=<?= $id_curso ?>" class="quick-action-btn">
-                        <i class="ri-file-edit-line"></i>
-                        Registrar Calificaciones
-                    </a>
-                    <a href="<?= BASE_URL ?>/docente-asistencia?curso=<?= $id_curso ?>" class="quick-action-btn">
-                        <i class="ri-user-follow-line"></i>
-                        Tomar Asistencia
-                    </a>
-                    <a href="<?= BASE_URL ?>/docente-reportes?curso=<?= $id_curso ?>" class="quick-action-btn">
-                        <i class="ri-file-chart-line"></i>
-                        Generar Reporte
-                    </a>
                 </div>
             </div>
             <?php endif; ?>
