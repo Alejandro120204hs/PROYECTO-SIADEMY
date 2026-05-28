@@ -1051,3 +1051,61 @@ a {
     justify-content: center;
   }
 }
+/* ============================================================
+   VISTA TABLA
+   ============================================================ */
+.datatable-card.table-scroll-x {
+    background: #11193a;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.datatable-card.table-scroll-x .table-dark {
+    --bs-table-bg: transparent;
+    --bs-table-hover-bg: rgba(79,70,229,.06);
+    --bs-table-border-color: rgba(255,255,255,.06);
+    color: #e2e8f0;
+    font-size: 14px;
+}
+.datatable-card.table-scroll-x thead th {
+    background: #0e1632;
+    color: #8b91a3;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 13px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    white-space: nowrap;
+}
+.datatable-card.table-scroll-x tbody td {
+    padding: 13px 16px;
+    vertical-align: middle;
+}
+.tabla-nota-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 50px; padding: 5px 10px; border-radius: 8px;
+    font-size: 15px; font-weight: 700; font-family: 'Montserrat', sans-serif;
+}
+.tabla-nota-badge.badge-excel   { background: rgba(16,185,129,.15); color: #34d399; border: 1px solid rgba(16,185,129,.2); }
+.tabla-nota-badge.badge-bueno   { background: rgba(59,130,246,.15);  color: #60a5fa; border: 1px solid rgba(59,130,246,.2); }
+.tabla-nota-badge.badge-riesgo  { background: rgba(245,158,11,.15);  color: #fbbf24; border: 1px solid rgba(245,158,11,.2); }
+.tabla-nota-badge.badge-critico { background: rgba(239,68,68,.15);   color: #f87171; border: 1px solid rgba(239,68,68,.2); }
+.tabla-nota-badge.badge-sin     { background: rgba(255,255,255,.06); color: #8b91a3; border: 1px solid rgba(255,255,255,.08); }
+.tabla-estado-badge {
+    display: inline-block; padding: 3px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+}
+.tabla-estado-badge.badge-excel   { background: rgba(16,185,129,.15); color: #34d399; }
+.tabla-estado-badge.badge-bueno   { background: rgba(59,130,246,.15);  color: #60a5fa; }
+.tabla-estado-badge.badge-riesgo  { background: rgba(245,158,11,.15);  color: #fbbf24; }
+.tabla-estado-badge.badge-critico { background: rgba(239,68,68,.15);   color: #f87171; }
+.tabla-estado-badge.badge-sin     { background: rgba(255,255,255,.06); color: #8b91a3; }
+.btn-tabla-accion {
+    width: 34px; height: 34px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: rgba(79,70,229,.1); color: #818cf8;
+    display: inline-grid; place-items: center; font-size: 16px;
+    cursor: pointer; transition: all .2s;
+}
+.btn-tabla-accion:hover { background: #4f46e5; color: #fff; border-color: #4f46e5; }

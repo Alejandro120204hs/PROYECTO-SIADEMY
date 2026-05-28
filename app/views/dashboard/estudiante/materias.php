@@ -2,6 +2,14 @@
   require_once BASE_PATH . '/app/controllers/perfil.php';
   $id = $_SESSION['user']['id'] ?? 0;
   $usuario = mostrarPerfil($id);
+
+  $materias = $materias ?? [];
+  $estadisticas = $estadisticas ?? [
+      'total_materias'         => 0,
+      'promedio_general'       => 0,
+      'en_riesgo'              => 0,
+      'actividades_pendientes' => 0,
+  ];
 ?>
 <!doctype html>
 <html lang="es">
@@ -88,22 +96,9 @@
         </div>
       </div>
 
-      <!-- FILTERS -->
+      <!-- VIEW TOGGLE -->
       <div class="filter-section">
-        <div class="filter-group">
-          <button class="filter-btn active" data-filter="todas">
-            <i class="ri-apps-line"></i> Todas
-          </button>
-          <button class="filter-btn" data-filter="excelente">
-            <i class="ri-star-line"></i> Excelentes
-          </button>
-          <button class="filter-btn" data-filter="riesgo">
-            <i class="ri-error-warning-line"></i> En Riesgo
-          </button>
-          <button class="filter-btn" data-filter="critico">
-            <i class="ri-alert-line"></i> Críticas
-          </button>
-        </div>
+        <div></div>
         <div class="view-toggle">
           <button class="view-btn active" data-view="grid" title="Vista en cuadrícula">
             <i class="ri-grid-line"></i>
@@ -125,7 +120,9 @@
           </div>
         <?php else: ?>
           <?php foreach ($materias as $materia): ?>
-            <div class="materia-card" data-status="<?= $materia['estado_nota'] ?>">
+            <div class="materia-card"
+                 data-status="<?= htmlspecialchars($materia['estado_nota']) ?>"
+                 data-url="<?= BASE_URL ?>/estudiante-materia-detalle?id=<?= (int)$materia['id_asignatura_curso'] ?>">
               <div class="materia-status <?= $materia['estado_nota'] ?>"></div>
               <div class="materia-header">
                 <div class="materia-icon" style="background: <?= $materia['color_icono'] ?>">
@@ -172,8 +169,8 @@
                 <button class="btn-materia primary" onclick="window.location.href='<?= BASE_URL ?>/estudiante-materia-detalle?id=<?= $materia['id_asignatura_curso'] ?>'">
                   <i class="ri-file-list-3-line"></i> Ver Actividades
                 </button>
-                <button class="btn-materia secondary">
-                  <i class="ri-folder-2-line"></i>
+                <button class="btn-materia secondary" title="Ver calificaciones" onclick="window.location.href='<?= BASE_URL ?>/estudiante-panel-calificaciones'">
+                  <i class="ri-bar-chart-line"></i>
                 </button>
               </div>
             </div>

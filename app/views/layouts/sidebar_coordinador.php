@@ -39,7 +39,7 @@
         <a class="<?= navIsActive($currentPath, ['/administrador-panel-eventos', '/administrador-eventos', '/administrador/registrar-evento', '/administrador/editar-evento']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-panel-eventos"><i class="ri-calendar-event-line"></i> Eventos</a>
         
         <div class="spacer"></div>
-        <div class="section">Cursos / Asignaturas</div>
+        <div class="section">Gestión académica</div>
          <a class="<?= navIsActive($currentPath, ['/administrador-panel-cursos', '/administrador/registrar-curso', '/administrador/editar-curso', '/administrador/detalle-curso']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-panel-cursos"><i class="ri-book-2-line"></i> Cursos</a>
         <a class="<?= navIsActive($currentPath, ['/administrador-panel-asignaturas', '/administrador/registrar-asignatura', '/administrador/editar-asignatura']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-panel-asignaturas"><i class="ri-booklet-line"></i> Asignaturas</a>
         <a class="<?= navIsActive($currentPath, ['/administrador-panel-matriculas', '/administrador/registrar-matricula', '/administrador/editar-matricula']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-panel-matriculas"><i class="ri-graduation-cap-line"></i> Matrículas</a>
