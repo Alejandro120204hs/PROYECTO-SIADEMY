@@ -221,8 +221,9 @@ function showEvaluaciones(card, materiaId, numeroPeriodo) {
             const isPendiente = evaluacion.nota === null;
             const notaClass = isPendiente ? '' : getNotaClass(evaluacion.nota);
 
+            const itemClass = isPendiente ? 'pendiente' : (notaClass ? 'nota-' + notaClass : '');
             return `
-                <div class="evaluacion-item ${isPendiente ? 'pendiente' : ''}">
+                <div class="evaluacion-item ${itemClass}">
                     <div class="evaluacion-info">
                         <span class="evaluacion-nombre">${evaluacion.nombre}</span>
                         <span class="evaluacion-fecha">${evaluacion.fecha}</span>

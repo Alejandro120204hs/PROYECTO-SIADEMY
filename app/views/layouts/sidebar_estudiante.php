@@ -33,6 +33,7 @@
     }
 ?>
 
+<link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/sidebar-shared.css">
 <aside class="sidebar" id="leftSidebar">
     <a class="brand" href="#">
                        <img width="170px" src="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
@@ -61,6 +62,10 @@
 
         <a class="<?= navEstudianteIsActive($currentPath, ['/estudiante-panel-profesores']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/estudiante-panel-profesores">
             <i class="ri-user-3-line"></i> Mis Profesores
+        </a>
+
+        <a class="<?= navEstudianteIsActive($currentPath, ['/estudiante-horario']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/estudiante-horario">
+            <i class="ri-calendar-schedule-line"></i> Mi Horario
         </a>
 
         <a href="recursos.php">

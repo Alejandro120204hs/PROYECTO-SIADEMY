@@ -25,6 +25,7 @@
   }
 ?>
 
+<link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/sidebar-shared.css">
 <aside class="sidebar" id="leftSidebar">
       <a class="brand" href="#">
         <img width="170px" src="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
@@ -43,6 +44,7 @@
         <a class="<?= navIsActive($currentPath, ['/administrador-panel-asignaturas', '/administrador/registrar-asignatura', '/administrador/editar-asignatura']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-panel-asignaturas"><i class="ri-booklet-line"></i> Asignaturas</a>
         <a class="<?= navIsActive($currentPath, ['/administrador-panel-matriculas', '/administrador/registrar-matricula', '/administrador/editar-matricula']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-panel-matriculas"><i class="ri-graduation-cap-line"></i> Matrículas</a>
         <a class="<?= navIsActive($currentPath, ['/administrador-periodo', '/administrador/editar-periodo']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-periodo"><i class="ri-repeat-line"></i> Periodos</a>
+        <a class="<?= navIsActive($currentPath, ['/administrador/horarios']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador/horarios"><i class="ri-calendar-schedule-line"></i> Horarios</a>
 
       </nav>
     </aside>

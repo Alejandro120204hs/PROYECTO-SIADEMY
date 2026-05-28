@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/sidebar-shared.css">
 <aside class="sidebar" id="leftSidebar">
     <a class="brand" href="#">
         <span class="logo"><i class="ri-shield-star-line"></i></span>

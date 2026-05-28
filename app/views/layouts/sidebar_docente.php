@@ -25,6 +25,7 @@
   }
 ?>
 
+<link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/sidebar-shared.css">
 <aside class="sidebar" id="leftSidebar">
       <a class="brand" href="<?= BASE_URL ?>/docente/dashboard">
                 <img width="170px" src="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
@@ -35,8 +36,8 @@
         <a class="<?= navDocenteIsActive($currentPath, ['/docente-cursos', '/docente/detalle-curso', '/docente/actividades', '/docente/agregar-actividad', '/docente/ver-entregas']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/docente-cursos"><i class="ri-team-line"></i> Cursos</a>
           
         <a class="<?= navDocenteIsActive($currentPath, ['/docente-eventos']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/docente-eventos"><i class="ri-calendar-event-line"></i> Eventos</a>
-        <a class="<?= navDocenteIsActive($currentPath, ['/docente/asistencia']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/docente/asistencia"><i class="ri-team-line"></i> Gestion de Asistencia</a>
+        <a class="<?= navDocenteIsActive($currentPath, ['/docente/asistencia']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/docente/asistencia"><i class="ri-team-line"></i> Gestión de Asistencia</a>
+        <a class="<?= navDocenteIsActive($currentPath, ['/docente/horario']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/docente/horario"><i class="ri-calendar-schedule-line"></i> Mi Horario</a>
 
-    
       </nav>
     </aside>

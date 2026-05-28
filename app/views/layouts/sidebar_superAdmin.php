@@ -20,6 +20,7 @@
   };
 ?>
 
+<link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/sidebar-shared.css">
 <aside class="sidebar" id="leftSidebar">
       <a class="brand" href="<?= BASE_URL ?>/superAdmin-dashboard">
         <img width="170px" src="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">

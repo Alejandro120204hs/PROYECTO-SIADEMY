@@ -1,0 +1,149 @@
+/* =============================================================
+   SIDEBAR COMPARTIDO — Siademy
+   Incluido por todos los sidebar_*.php del sistema.
+   Sobreescribe los estilos de sidebar en CSS individuales.
+   ============================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap');
+
+/* LEFT SIDEBAR */
+.sidebar {
+    background: linear-gradient(180deg, #161821 0%, #101117 100%);
+    border-right: 1px solid rgba(255, 255, 255, .07);
+    padding: 24px 16px;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.hidden {
+    padding: 0;
+    width: 0;
+    min-width: 0;
+    border: none;
+    opacity: 0;
+}
+
+/* BRAND / LOGO */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    margin-bottom: 18px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    font-size: 20px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.brand .logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #1e2336;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .25), inset 0 0 0 1px rgba(255,255,255,.07);
+}
+
+.brand small {
+    opacity: .7;
+    font-weight: 600;
+}
+
+/* NAV */
+.nav {
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Scrollbar fino en nav */
+.nav::-webkit-scrollbar { width: 3px; }
+.nav::-webkit-scrollbar-track { background: transparent; }
+.nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 3px; }
+
+.nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    color: #9aa3bc;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    text-decoration: none;
+    transition: all 0.18s ease;
+    border-left: 3px solid transparent;
+    position: relative;
+}
+
+.nav a:hover {
+    background: rgba(255, 255, 255, .05);
+    color: #fff;
+}
+
+.nav a.active {
+    background: rgba(79, 70, 229, .14);
+    color: #fff;
+    border-left-color: #4f46e5;
+    padding-left: 11px;
+    font-weight: 600;
+}
+
+.nav i {
+    width: 20px;
+    height: 20px;
+    font-size: 19px;
+    color: inherit;
+    flex-shrink: 0;
+}
+
+/* BADGES */
+.nav a .badge {
+    margin-left: auto;
+    background: #4f46e5;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    min-width: 22px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+}
+
+.nav a .badge.bg-warning { background: #f59e0b; color: #0b1330; }
+.nav a .badge.bg-success  { background: #10b981; }
+.nav a .badge.bg-danger   { background: #ef4444; }
+
+/* SEPARADOR Y SECCIÓN */
+.spacer { height: 12px; }
+
+.nav .section {
+    color: #4e566a;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    padding: 10px 12px 4px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Línea divisora opcional */
+.nav hr {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,.07);
+    margin: 8px 12px;
+}
