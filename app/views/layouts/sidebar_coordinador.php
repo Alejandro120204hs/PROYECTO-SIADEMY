@@ -45,6 +45,7 @@
         <a class="<?= navIsActive($currentPath, ['/administrador-panel-matriculas', '/administrador/registrar-matricula', '/administrador/editar-matricula']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-panel-matriculas"><i class="ri-graduation-cap-line"></i> Matrículas</a>
         <a class="<?= navIsActive($currentPath, ['/administrador-periodo', '/administrador/editar-periodo']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-periodo"><i class="ri-repeat-line"></i> Periodos</a>
         <a class="<?= navIsActive($currentPath, ['/administrador/horarios']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador/horarios"><i class="ri-calendar-schedule-line"></i> Horarios</a>
+        <a class="<?= navIsActive($currentPath, ['/administrador/boletines']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador/boletines"><i class="ri-file-paper-2-line"></i> Boletines</a>
 
       </nav>
     </aside>

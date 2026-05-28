@@ -390,6 +390,18 @@
                 require BASE_PATH . '/app/controllers/administrador/horario.php';
                 break;
 
+            // -------------------------------ADMINISTRADOR(MODULO BOLETINES)-------------------------
+
+            case '/administrador/boletines':
+                require BASE_PATH . '/app/controllers/administrador/boletin.php';
+                break;
+
+            // -------------------------------DOCENTE(MODULO BOLETINES)-------------------------------
+
+            case '/docente/boletines':
+                require BASE_PATH . '/app/controllers/docente/boletin.php';
+                break;
+
             case '/administrador/guardar-periodo':
                 require BASE_PATH . '/app/controllers/administrador/periodo.php';
                 break;

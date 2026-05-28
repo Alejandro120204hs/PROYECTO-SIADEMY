@@ -38,6 +38,7 @@
         <a class="<?= navDocenteIsActive($currentPath, ['/docente-eventos']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/docente-eventos"><i class="ri-calendar-event-line"></i> Eventos</a>
         <a class="<?= navDocenteIsActive($currentPath, ['/docente/asistencia']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/docente/asistencia"><i class="ri-team-line"></i> Gestión de Asistencia</a>
         <a class="<?= navDocenteIsActive($currentPath, ['/docente/horario']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/docente/horario"><i class="ri-calendar-schedule-line"></i> Mi Horario</a>
+        <a class="<?= navDocenteIsActive($currentPath, ['/docente/boletines']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/docente/boletines"><i class="ri-file-paper-2-line"></i> Boletines</a>
 
       </nav>
     </aside>
