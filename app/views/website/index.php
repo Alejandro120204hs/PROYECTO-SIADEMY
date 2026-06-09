@@ -20,7 +20,7 @@
                 </div>
 
                 <ul class="nav-menu">
-                    <li><a href="" class="active">Iniciooooooo</a></li>
+                    <li><a href="" class="active">Inicio</a></li>
                     <li><a href="#modulos">Modulos</a></li>
                     <li><a href="#roles">Roles</a></li>
                     <li><a href="#team">Nuestro equipo</a></li>
