@@ -1,4 +1,4 @@
-// ========================================
+﻿// ========================================
 // SISTEMA DE TOGGLE PARA SIDEBAR IZQUIERDO
 // ========================================
 const leftSidebar = document.getElementById('leftSidebar');
@@ -7,7 +7,7 @@ const toggleLeft = document.getElementById('toggleLeft');
 
 let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
 
-// ── Overlay y drawer móvil ────────────────────────────────
+// â”€â”€ Overlay y drawer mÃ³vil â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const overlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
 if (!overlay.parentElement) {
   overlay.className = 'sidebar-overlay';
@@ -68,7 +68,7 @@ updateGridState();
 
 
 // ========================================
-// GRÁFICO (solo si existe)
+// GRÃFICO (solo si existe)
 // ========================================
 let adminDashboardData = {};
 
@@ -99,8 +99,8 @@ if (ctx) {
 
   const weekTotalEl     = document.getElementById('weekTotal');
   const lastWeekTotalEl = document.getElementById('lastWeekTotal');
-  if (weekTotalEl)     { const v = Number(totalsData.currentWeek);  weekTotalEl.textContent     = v > 0 ? gradeFormatter.format(v) : '—'; }
-  if (lastWeekTotalEl) { const v = Number(totalsData.previousWeek); lastWeekTotalEl.textContent = v > 0 ? gradeFormatter.format(v) : '—'; }
+  if (weekTotalEl)     { const v = Number(totalsData.currentWeek);  weekTotalEl.textContent     = v > 0 ? gradeFormatter.format(v) : 'â€”'; }
+  if (lastWeekTotalEl) { const v = Number(totalsData.previousWeek); lastWeekTotalEl.textContent = v > 0 ? gradeFormatter.format(v) : 'â€”'; }
 
   const gradient1 = ctx.getContext('2d').createLinearGradient(0, 0, 0, 320);
   gradient1.addColorStop(0, 'rgba(255,107,107,.35)');
@@ -158,7 +158,7 @@ if (ctx) {
       data: {
         labels,
         datasets: [{
-          label: `Promedio ${chartData.currentYear || 'Año actual'}`,
+          label: `Promedio ${chartData.currentYear || 'AÃ±o actual'}`,
           data: currentSeries,
           borderColor: '#ff6b6b',
           backgroundColor: isLine ? gradient1 : 'rgba(255,107,107,.65)',
@@ -170,7 +170,7 @@ if (ctx) {
           fill: isLine,
           spanGaps: true,
         }, {
-          label: `Promedio ${chartData.previousYear || 'Año anterior'}`,
+          label: `Promedio ${chartData.previousYear || 'AÃ±o anterior'}`,
           data: previousSeries,
           borderColor: '#ffb020',
           backgroundColor: isLine ? gradient2 : 'rgba(255,176,32,.55)',
@@ -204,7 +204,7 @@ if (ctx) {
 }
 
     // ========================================
-    // CALENDARIO ACADÉMICO - DASHBOARD ADMIN
+    // CALENDARIO ACADÃ‰MICO - DASHBOARD ADMIN
     // ========================================
     const dashboardCalendarGrid = document.getElementById('calendarGrid');
     if (dashboardCalendarGrid) {
@@ -217,7 +217,7 @@ if (ctx) {
       const dayEventsModalBody = document.getElementById('adminCalendarDayModalBody');
       const prevMonthButton = document.getElementById('prevMonth');
       const nextMonthButton = document.getElementById('nextMonth');
-      const dayHeaders = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+      const dayHeaders = ['Dom', 'Lun', 'Mar', 'MiÃ©', 'Jue', 'Vie', 'SÃ¡b'];
       const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
       let currentDate = new Date();
@@ -239,7 +239,7 @@ if (ctx) {
 
         if (!acc[dateKey]) acc[dateKey] = [];
         acc[dateKey].push({
-          title: String(eventItem?.title || 'Evento académico'),
+          title: String(eventItem?.title || 'Evento acadÃ©mico'),
           type: String(eventItem?.type || 'evento'),
           timeStart: String(eventItem?.timeStart || ''),
           timeEnd: String(eventItem?.timeEnd || ''),
@@ -282,7 +282,7 @@ if (ctx) {
         if (events.length === 0) {
           dayEventsModalBody.innerHTML =
             '<div class="calendar-empty-day">'
-            + '<i class="ri-calendar-line" style="font-size:24px;"></i><br>No hay eventos para este día.</div>';
+            + '<i class="ri-calendar-line" style="font-size:24px;"></i><br>No hay eventos para este dÃ­a.</div>';
 
           if (window.bootstrap && window.bootstrap.Modal) {
             window.bootstrap.Modal.getOrCreateInstance(dayEventsModalEl).show();
@@ -306,7 +306,7 @@ if (ctx) {
               <h6>${escapeHtml(eventItem.title)}</h6>
               <div class="calendar-day-event-meta">
                 <span><i class="ri-time-line"></i> ${timeLabel}</span>
-                <span><i class="ri-map-pin-line"></i> ${escapeHtml(eventItem.location || 'Ubicación por confirmar')}</span>
+                <span><i class="ri-map-pin-line"></i> ${escapeHtml(eventItem.location || 'UbicaciÃ³n por confirmar')}</span>
               </div>
             </article>
           `;
@@ -395,18 +395,22 @@ if (ctx) {
 // ========================================
 // DATATABLE (solo si existe)
 // ========================================
-$(document).ready(function() {
+if (window.jQuery) {
+  $(document).ready(function() {
     if ($('#studentsTable').length) {
-        $('#studentsTable').DataTable({
-            language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
-            pageLength: 5,
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
-            ordering: true,
-            order: [[0, 'asc']],
-            pagingType: 'simple_numbers'
-        });
+      $('#studentsTable').DataTable({
+        language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+        pageLength: 5,
+        lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+        ordering: true,
+        order: [[0, 'asc']],
+        pagingType: 'simple_numbers'
+      });
     }
-});
+  });
+} else {
+  console.warn('jQuery not found — skipping DataTable initialisation.');
+}
 
 
 // ========================================
@@ -433,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // QUICK ACTIONS
     document.querySelectorAll('.quick-action-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            console.log('Acción:', btn.textContent.trim());
+            console.log('AcciÃ³n:', btn.textContent.trim());
         });
     });
 
@@ -459,138 +463,102 @@ document.addEventListener('DOMContentLoaded', function() {
    Agregar al final de main-admin.js o en un archivo separado
    ======================================== */
 
-// Funcionalidad del dropdown de usuario
-document.addEventListener('DOMContentLoaded', function() {
-  const userMenuBtn = document.getElementById('userMenuBtn');
-  const userDropdown = document.getElementById('userDropdown');
-  
-  // Crear overlay
-  const overlay = document.createElement('div');
-  overlay.className = 'dropdown-overlay';
-  document.body.appendChild(overlay);
-  
-  // Toggle del dropdown
-  if (userMenuBtn && userDropdown) {
-    userMenuBtn.dataset.dropdownInit = '1'; // marca para evitar doble registro
-    userMenuBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const isOpen = userDropdown.classList.contains('show');
-      
-      if (isOpen) {
-        closeDropdown();
-      } else {
-        openDropdown();
+// --- Manejador robusto para cambio de tema (delegación)
+if (!window.__siademyThemeToggleInit) {
+  window.__siademyThemeToggleInit = true;
+
+  // Delegación: escucha clicks en el documento para el botón de toggle
+  document.addEventListener('click', function (ev) {
+    const btn = ev.target.closest && ev.target.closest('#toggleThemeBtn');
+    if (!btn) return;
+    ev.preventDefault();
+
+    document.body.classList.toggle('light-mode');
+    const icon = btn.querySelector('i:first-child');
+    if (document.body.classList.contains('light-mode')) {
+      if (icon) icon.className = 'ri-sun-line';
+    } else {
+      if (icon) icon.className = 'ri-contrast-2-line';
+    }
+    try { localStorage.setItem('theme-mode', document.body.classList.contains('light-mode') ? 'light' : 'dark'); } catch (e) {}
+
+    // showNotification puede estar definido más abajo; llamarlo si existe
+    if (typeof showNotification === 'function') showNotification('Tema cambiado correctamente');
+  });
+
+  // Aplicar tema guardado inmediatamente (por si el script carga después de DOMContentLoaded)
+  try {
+    const saved = localStorage.getItem('theme-mode');
+    if (saved === 'light') {
+      document.body.classList.add('light-mode');
+      const btn = document.getElementById('toggleThemeBtn');
+      const icon = btn ? btn.querySelector('i:first-child') : null;
+      if (icon) icon.className = 'ri-sun-line';
+    }
+  } catch (e) {}
+}
+
+// --- Manejador delegado para dropdown de usuario (abre/cierra #userDropdown)
+if (!window.__siademyUserDropdownInit) {
+  window.__siademyUserDropdownInit = true;
+
+  function ensureDropdownOverlay() {
+    let ov = document.querySelector('.dropdown-overlay');
+    if (!ov) {
+      ov = document.createElement('div');
+      ov.className = 'dropdown-overlay';
+      document.body.appendChild(ov);
+    }
+    return ov;
+  }
+
+  document.addEventListener('click', function (ev) {
+    const btn = ev.target.closest && ev.target.closest('#userMenuBtn');
+    if (!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    const userDropdown = document.getElementById('userDropdown');
+    if (!userDropdown) return;
+
+    const overlay = ensureDropdownOverlay();
+    const isOpen = userDropdown.classList.contains('show');
+    if (isOpen) {
+      userDropdown.classList.remove('show');
+      overlay.classList.remove('show');
+    } else {
+      userDropdown.classList.add('show');
+      overlay.classList.add('show');
+    }
+  });
+
+  // Cerrar al hacer click en overlay
+  document.addEventListener('click', function (ev) {
+    const ov = ev.target.closest && ev.target.closest('.dropdown-overlay');
+    if (!ov) return;
+    const userDropdown = document.getElementById('userDropdown');
+    if (userDropdown) userDropdown.classList.remove('show');
+    ov.classList.remove('show');
+  });
+
+  // Cerrar con Escape
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape') {
+      const userDropdown = document.getElementById('userDropdown');
+      const ov = document.querySelector('.dropdown-overlay');
+      if (userDropdown && userDropdown.classList.contains('show')) {
+        userDropdown.classList.remove('show');
+        if (ov) ov.classList.remove('show');
       }
-    });
-    
-    // Cerrar al hacer click en el overlay
-    overlay.addEventListener('click', closeDropdown);
-    
-    // Cerrar con tecla Escape
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && userDropdown.classList.contains('show')) {
-        closeDropdown();
-      }
-    });
-    
-    // Prevenir cierre al hacer click dentro del dropdown
-    userDropdown.addEventListener('click', function(e) {
-      e.stopPropagation();
-    });
-  }
-  
-  // Funciones auxiliares
-  function openDropdown() {
-    userDropdown.classList.add('show');
-    overlay.classList.add('show');
-    
-    // Animación suave de los items
-    const items = userDropdown.querySelectorAll('.dropdown-item');
-    items.forEach((item, index) => {
-      item.style.opacity = '0';
-      item.style.transform = 'translateX(-10px)';
-      setTimeout(() => {
-        item.style.transition = 'all 0.2s ease';
-        item.style.opacity = '1';
-        item.style.transform = 'translateX(0)';
-      }, 50 * index);
-    });
-  }
-  
-  function closeDropdown() {
-    userDropdown.classList.remove('show');
-    overlay.classList.remove('show');
-  }
-  
-  // Funcionalidad del botón de cambiar tema
-  const toggleThemeBtn = document.getElementById('toggleThemeBtn');
-  if (toggleThemeBtn) {
-    toggleThemeBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Aquí puedes implementar el cambio de tema
-      document.body.classList.toggle('light-mode');
-      
-      // Cambiar icono según el modo
-      const icon = this.querySelector('i:first-child');
-      if (document.body.classList.contains('light-mode')) {
-        icon.className = 'ri-sun-line';
-      } else {
-        icon.className = 'ri-contrast-2-line';
-      }
-      
-      // Guardar preferencia en localStorage
-      const currentMode = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-      localStorage.setItem('theme-mode', currentMode);
-      
-      // Mostrar notificación (opcional)
-      showNotification('Tema cambiado correctamente');
-    });
-  }
-  
-  // Cargar tema guardado al iniciar
-  const savedTheme = localStorage.getItem('theme-mode');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-mode');
-    const icon = toggleThemeBtn ? toggleThemeBtn.querySelector('i:first-child') : null;
-    if (icon) icon.className = 'ri-sun-line';
-  }
-  
-  // Función para mostrar notificaciones (opcional)
-  function showNotification(message) {
-    // Crear elemento de notificación
-    const notification = document.createElement('div');
-    notification.className = 'toast-notification';
-    notification.innerHTML = `
-      <i class="ri-check-line"></i>
-      <span>${message}</span>
-    `;
-    notification.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #10b981;
-      color: white;
-      padding: 14px 20px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 500;
-      z-index: 10000;
-      animation: slideInRight 0.3s ease;
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Auto-remover después de 3 segundos
-    setTimeout(() => {
-      notification.style.animation = 'slideOutRight 0.3s ease';
-      setTimeout(() => notification.remove(), 300);
-    }, 3000);
-  }
-});
+    }
+  });
+
+  // Prevenir cierre al hacer click dentro del dropdown
+  document.addEventListener('click', function (ev) {
+    const inside = ev.target.closest && ev.target.closest('#userDropdown');
+    if (inside) ev.stopPropagation();
+  });
+}
 
 // Animaciones para las notificaciones
 const style = document.createElement('style');
@@ -647,7 +615,7 @@ document.addEventListener('DOMContentLoaded', function () {
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
-  const daysOfWeekEvents = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  const daysOfWeekEvents = ['Dom', 'Lun', 'Mar', 'MiÃ©', 'Jue', 'Vie', 'SÃ¡b'];
   const categoryLabels = {
     all: () => eventCards.length,
     upcoming: (cardData) => cardData.filter((item) => item.isUpcoming).length,
@@ -725,7 +693,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (safeEvents.length === 0) {
       dayEventsModalBody.innerHTML =
         '<div style="border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:22px; text-align:center; color:#c5d1ee; background:#171f45;">'
-        + '<i class="ri-calendar-line" style="font-size:24px;"></i><br>No hay eventos para este día.</div>';
+        + '<i class="ri-calendar-line" style="font-size:24px;"></i><br>No hay eventos para este dÃ­a.</div>';
       showModalSafe(dayEventsModalEl);
       return;
     }
@@ -735,8 +703,8 @@ document.addEventListener('DOMContentLoaded', function () {
         ? `<span><i class="ri-time-line"></i> ${escapeHtml(String(event.time).slice(0, 5))}</span>`
         : '<span><i class="ri-time-line"></i> Sin hora</span>';
 
-      const eventTitle = escapeHtml(event.title || 'Evento académico');
-      const eventDescription = escapeHtml(event.description || 'Sin descripción');
+      const eventTitle = escapeHtml(event.title || 'Evento acadÃ©mico');
+      const eventDescription = escapeHtml(event.description || 'Sin descripciÃ³n');
       const eventCategory = escapeHtml(event.category || 'event');
       const eventIcon = escapeHtml(event.icon || 'ri-calendar-event-line');
 
@@ -892,7 +860,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (dayEvents.length > 2) {
-          eventsHTML += `<div class="calendar-mini-event more-events">+${dayEvents.length - 2} más</div>`;
+          eventsHTML += `<div class="calendar-mini-event more-events">+${dayEvents.length - 2} mÃ¡s</div>`;
         }
 
         eventsHTML += '</div>';
