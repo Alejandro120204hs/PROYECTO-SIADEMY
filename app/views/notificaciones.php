@@ -250,9 +250,6 @@
           </button>
           <div class="title">Notificaciones</div>
         </div>
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
       </div>
 
       <div style="padding: 24px; min-height: calc(100vh - 120px);">
@@ -348,8 +345,6 @@
       </div>
     </main>
 
-    <!-- PANEL DERECHO -->
-    <?php include_once BASE_PATH . '/app/views/layouts/sidebar_right_coordinador.php' ?>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -358,12 +353,9 @@
     const BASE_URL   = '<?= rtrim(BASE_URL, '/') ?>';
     const API_NOTIF  = BASE_URL + '/api/notificaciones';
 
-    // ── Toggle sidebars ───────────────────────────────────────────────────
+    // ── Toggle sidebar izquierdo ──────────────────────────────────────────
     document.getElementById('toggleLeft').addEventListener('click', function () {
       document.querySelector('.app').classList.toggle('hide-left');
-    });
-    document.getElementById('toggleRight').addEventListener('click', function () {
-      document.querySelector('.app').classList.toggle('hide-right');
     });
 
     // ── Helpers ───────────────────────────────────────────────────────────
@@ -383,15 +375,35 @@
       box.style.transform  = 'scale(0.95)';
       setTimeout(function () {
         box.remove();
-        checkEmpty();
+        const container = document.getElementById('notificationContainer');
+        // Solo reemplaza el DOM cuando NO queda ninguna tarjeta en absoluto
+        if (container.querySelectorAll('.notification-box').length === 0) {
+          container.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="ri-inbox-2-line"></i><h3>Sin notificaciones</h3><p>No tienes notificaciones por el momento</p></div>';
+        }
       }, 300);
     }
 
+    // checkEmpty: muestra/oculta un placeholder SIN destruir tarjetas del DOM.
+    // Se usa solo al cambiar filtros — cuando un filtro no tiene resultados
+    // las tarjetas siguen en el DOM (ocultas con display:none).
     function checkEmpty() {
-      const container = document.getElementById('notificationContainer');
-      const visible   = container.querySelectorAll('.notification-box:not([style*="display: none"])');
-      if (visible.length === 0) {
-        container.innerHTML = '<div class="empty-state"><i class="ri-inbox-2-line"></i><h3>Sin notificaciones</h3><p>No tienes notificaciones por el momento</p></div>';
+      const container   = document.getElementById('notificationContainer');
+      const allBoxes    = container.querySelectorAll('.notification-box');
+      const visible     = Array.from(allBoxes).filter(function (b) {
+        return b.style.display !== 'none';
+      });
+      let placeholder   = container.querySelector('.filter-placeholder');
+
+      if (allBoxes.length > 0 && visible.length === 0) {
+        if (!placeholder) {
+          placeholder = document.createElement('div');
+          placeholder.className = 'empty-state filter-placeholder';
+          placeholder.style.gridColumn = '1 / -1';
+          placeholder.innerHTML = '<i class="ri-filter-line"></i><h3>Sin resultados</h3><p>No hay notificaciones en este filtro</p>';
+          container.appendChild(placeholder);
+        }
+      } else if (placeholder) {
+        placeholder.remove();
       }
     }
 
