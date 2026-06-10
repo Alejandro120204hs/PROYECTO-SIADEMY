@@ -1,4 +1,4 @@
-// Sistema de toggle para sidebars con localStorage
+﻿// Sistema de toggle para sidebars con localStorage
 const leftSidebar = document.getElementById('leftSidebar') || document.querySelector('.sidebar');
 const appGrid = document.getElementById('appGrid');
 const toggleLeft = document.getElementById('toggleLeft');
@@ -216,7 +216,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.body.appendChild(overlay);
   
   // Toggle del dropdown
-  if (userMenuBtn && userDropdown) {
+  if (userMenuBtn && userDropdown && !userMenuBtn.dataset.dropdownInit) {
+    userMenuBtn.dataset.dropdownInit = '1';
     userMenuBtn.addEventListener('click', function(e) {
       e.stopPropagation();
       const isOpen = userDropdown.classList.contains('show');

@@ -206,6 +206,28 @@ if ($entrega_existente) {
 }
 
 if ($exito) {
+    // Notificar al docente sobre la entrega recibida
+    try {
+        require_once BASE_PATH . '/app/helpers/notificacion_helper.php';
+        $notifModel       = new Notificacion();
+        $idUsuarioDocente = $notifModel->obtenerIdUsuarioDocenteDeActividad($id_actividad);
+        if ($idUsuarioDocente) {
+            $nombreEstudiante = trim($info_estudiante['nombres'] . ' ' . $info_estudiante['apellidos']);
+            $urlEntregas      = rtrim(BASE_URL, '/') . '/docente/ver-entregas?id_actividad=' . $id_actividad;
+            notificar(
+                'entrega_recibida',
+                'Entrega recibida',
+                $nombreEstudiante . ' entregó la actividad "' . $info_actividad['titulo'] . '" en ' . $info_actividad['nombre_asignatura'] . '.',
+                $idUsuarioDocente,
+                (int)$_SESSION['user']['id_institucion'],
+                $urlEntregas,
+                'entrega',
+                $id_actividad
+            );
+        }
+    } catch (Throwable $_e) {
+        error_log('[hook-entrega_recibida] ' . $_e->getMessage());
+    }
     mostrarSweetAlert('success', '¡Éxito!', $mensaje, BASE_URL . '/estudiante-materia-detalle?id=' . $id_asignatura_curso);
 } else {
     // Si falla la BD, eliminar el archivo subido

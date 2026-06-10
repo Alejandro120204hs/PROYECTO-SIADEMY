@@ -90,6 +90,30 @@
 
         // SI LA RESPUESTA DEL MODELO ES VERDADERA CONFIRMAMOS EL REGISTRO Y REDIRECCIONAMOS
         if($resultado === true){
+            if ($enviar_notificacion === '1') {
+                try {
+                    require_once BASE_PATH . '/app/helpers/notificacion_helper.php';
+                    $notifModel    = new Notificacion();
+                    // grado del evento es texto libre ("todos los grados", "7°A", etc.)
+                    // no coincide con los valores de curso.grado → siempre notificar a todos
+                    $destinatarios = $notifModel->obtenerEstudiantesInstitucion((int)$id_institucion);
+                    if (!empty($destinatarios)) {
+                        $urlEvento = rtrim(BASE_URL, '/') . '/administrador-eventos';
+                        notificarBatch(
+                            'evento_nuevo',
+                            'Nuevo evento: ' . $nombre_evento,
+                            'Se ha programado el evento "' . $nombre_evento . '" para el ' . $fecha_evento . '.',
+                            $destinatarios,
+                            (int)$id_institucion,
+                            $urlEvento,
+                            'evento',
+                            null
+                        );
+                    }
+                } catch (Throwable $_e) {
+                    error_log('[hook-evento_nuevo] ' . $_e->getMessage());
+                }
+            }
             mostrarSweetAlert('success', 'Evento registrado', 'El evento ha sido creado exitosamente. Redirigiendo...', BASE_URL . '/administrador-eventos');
             exit();
         }else{
