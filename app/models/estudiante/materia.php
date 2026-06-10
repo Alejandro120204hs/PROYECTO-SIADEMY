@@ -517,6 +517,104 @@ class MateriaEstudiante
     }
 
     /**
+     * Agrupa las evaluaciones de un estudiante por materia y periodo,
+     * calculando el promedio ponderado de cada periodo (1-4).
+     *
+     * Reutiliza la misma lógica que app/controllers/estudiante/calificaciones.php
+     * para que cualquier rol (Estudiante, Acudiente) obtenga resultados consistentes.
+     *
+     * @param array $materiasBase  Resultado de obtenerMateriasConEstadisticas()
+     * @param array $evaluaciones  Resultado de obtenerEvaluacionesPorMateriaYPeriodo()
+     * @return array Indexado por id_asignatura_curso
+     */
+    public function agruparEvaluacionesPorMateriaYPeriodo(array $materiasBase, array $evaluaciones)
+    {
+        $calificaciones = [];
+
+        foreach ($materiasBase as $materia) {
+            $idMateriaCurso = (int)$materia['id_asignatura_curso'];
+            $calificaciones[$idMateriaCurso] = [
+                'id' => $idMateriaCurso,
+                'nombre' => $materia['materia'],
+                'profesor' => trim(($materia['docente_nombres'] ?? '') . ' ' . ($materia['docente_apellidos'] ?? '')),
+                'icono' => $materia['icono'] ?? 'ri-book-line',
+                'color_icono' => $materia['color_icono'] ?? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                'promedio_general' => $materia['promedio'] !== null ? (float)$materia['promedio'] : null,
+                'estado_general' => $materia['estado_nota'],
+                'periodos' => [
+                    1 => ['notaFinal' => null, 'estado' => null, 'evaluaciones' => []],
+                    2 => ['notaFinal' => null, 'estado' => null, 'evaluaciones' => []],
+                    3 => ['notaFinal' => null, 'estado' => null, 'evaluaciones' => []],
+                    4 => ['notaFinal' => null, 'estado' => null, 'evaluaciones' => []],
+                ],
+            ];
+        }
+
+        foreach ($evaluaciones as $fila) {
+            $idMateriaCurso = (int)($fila['id_asignatura_curso'] ?? 0);
+            if ($idMateriaCurso <= 0 || !isset($calificaciones[$idMateriaCurso])) {
+                continue;
+            }
+
+            if (empty($fila['evaluacion'])) {
+                continue;
+            }
+
+            $periodo = (int)($fila['numero_periodo'] ?? 1);
+            if ($periodo < 1 || $periodo > 4) {
+                $periodo = 1;
+            }
+
+            $nota = isset($fila['nota']) ? (float)$fila['nota'] : null;
+            $ponderacion = isset($fila['ponderacion']) ? (float)$fila['ponderacion'] : 0;
+
+            $calificaciones[$idMateriaCurso]['periodos'][$periodo]['evaluaciones'][] = [
+                'nombre'      => $fila['evaluacion'],
+                'fecha'       => !empty($fila['fecha_entrega']) ? date('d M Y', strtotime($fila['fecha_entrega'])) : '-',
+                'nota'        => $nota,
+                'ponderacion' => $ponderacion,
+                'peso'        => rtrim(rtrim(number_format($ponderacion, 1), '0'), '.') . '%',
+            ];
+        }
+
+        foreach ($calificaciones as &$materia) {
+            for ($p = 1; $p <= 4; $p++) {
+                $sumaPonderada = 0.0;
+                $sumaPesos     = 0.0;
+                $notasSimples  = [];
+
+                foreach ($materia['periodos'][$p]['evaluaciones'] as $evaluacion) {
+                    if ($evaluacion['nota'] === null) {
+                        continue;
+                    }
+                    $nota = (float)$evaluacion['nota'];
+                    $peso = (float)$evaluacion['ponderacion'];
+
+                    $sumaPonderada += $nota * $peso;
+                    $sumaPesos     += $peso;
+                    $notasSimples[] = $nota;
+                }
+
+                if (empty($notasSimples)) {
+                    continue;
+                }
+
+                if ($sumaPesos > 0) {
+                    $promedio = round($sumaPonderada / $sumaPesos, 1);
+                } else {
+                    $promedio = round(array_sum($notasSimples) / count($notasSimples), 1);
+                }
+
+                $materia['periodos'][$p]['notaFinal'] = $promedio;
+                $materia['periodos'][$p]['estado'] = $this->calcularEstadoNota($promedio);
+            }
+        }
+        unset($materia);
+
+        return $calificaciones;
+    }
+
+    /**
      * Calcular el estado de la nota según el promedio
      *
      * @param float|null $promedio Promedio de la materia

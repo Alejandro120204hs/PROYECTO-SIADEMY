@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,498 +10,333 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/dashboard/css/styles-acudiente.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-acudiente.css">
+  <style>
+    .student-avatar-small img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .detail-row.detail-row-activo {
+      background: rgba(79, 70, 229, .12);
+      border-radius: 8px;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin: 0 -10px;
+    }
+
+    .subject-activities {
+      flex: 1;
+    }
+
+    .subject-activities summary {
+      list-style: none;
+    }
+
+    .subject-activities summary::-webkit-details-marker,
+    .subject-activities summary::marker {
+      display: none;
+      content: '';
+    }
+
+    .activities-list {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .activity-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: #0e142e;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+
+    .activity-info strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .activity-info small {
+      color: #97a1b6;
+      font-size: 12px;
+    }
+
+    .grade-value.nota-pendiente {
+      color: #97a1b6;
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #c7cbe1;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      color: #4f46e5;
+      margin-bottom: 12px;
+      display: block;
+    }
+  </style>
 </head>
+
 <body>
-  <div class="app" id="appGrid">
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar" id="leftSidebar">
-      <a class="brand" href="#">
-        <span class="logo"><i class="ri-shield-star-line"></i></span>
-        <span>Siademy</span>
-      </a>
-      <nav class="nav">
-        <a href="acudiente.html"><i class="ri-home-5-line"></i> Panel</a>
-        <a class="active" href="#"><i class="ri-file-text-line"></i> Calificaciones</a>
-        <a href="asistencias.html"><i class="ri-calendar-check-line"></i> Asistencia</a>
-     
-       
-        <div class="spacer"></div>
-       
-      </nav>
-    </aside>
+  <div class="app hide-right" id="appGrid">
+    <?php include_once __DIR__ . '/../../layouts/sidebar_acudiente.php' ?>
 
     <!-- MAIN -->
     <main class="main">
       <div class="topbar">
         <div class="topbar-left">
-          <button class="toggle-btn" id="toggleLeft">
+          <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
             <i class="ri-menu-2-line"></i>
           </button>
           <div class="title">Calificaciones</div>
         </div>
-        <button class="toggle-btn" id="toggleRight">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+        <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
       </div>
 
-      <!-- STUDENT INFO BAR -->
-      <div class="student-bar">
-        <div class="student-quick-info">
-          <div class="student-avatar-small">JS</div>
-          <div>
-            <strong>Juan Sebastián Rodríguez</strong>
-            <small>Grado 7° A • Periodo 2 - 2025</small>
+      <?php if (!$estudianteSeleccionado): ?>
+        <section class="card">
+          <div class="empty-state">
+            <i class="ri-user-search-line"></i>
+            <h3>No tienes estudiantes asociados</h3>
+            <p>Si crees que esto es un error, comunícate con la institución para verificar la vinculación.</p>
           </div>
-        </div>
-        <div class="period-selector">
-          <label>Periodo:</label>
-          <select id="periodSelect">
-            <option value="1">Periodo 1</option>
-            <option value="2" selected>Periodo 2</option>
-            <option value="3">Periodo 3</option>
-            <option value="4">Periodo 4</option>
-          </select>
-        </div>
-      </div>
+        </section>
+      <?php else: ?>
 
-      <!-- SUMMARY CARDS -->
-      <section class="summary-cards">
-        <div class="summary-card">
-          <div class="summary-icon" style="background: rgba(79, 70, 229, 0.2);">
-            <i class="ri-bar-chart-box-line" style="color: #6366f1;"></i>
-          </div>
-          <div class="summary-content">
-            <small>Promedio General</small>
-            <strong>4.2</strong>
-            <span class="trend up"><i class="ri-arrow-up-line"></i> +0.3</span>
-          </div>
-        </div>
+        <?php
+          $nombreEstudiante = trim($estudianteSeleccionado['nombres'] . ' ' . $estudianteSeleccionado['apellidos']);
+          $iniciales = mb_strtoupper(
+              mb_substr($estudianteSeleccionado['nombres'], 0, 1) . mb_substr($estudianteSeleccionado['apellidos'], 0, 1)
+          );
+          $cursoActual = $estudianteSeleccionado['id_curso']
+              ? $estudianteSeleccionado['grado'] . '° - ' . $estudianteSeleccionado['nombre_curso']
+              : 'Sin matrícula activa';
+        ?>
 
-        <div class="summary-card">
-          <div class="summary-icon" style="background: rgba(34, 197, 94, 0.2);">
-            <i class="ri-checkbox-circle-line" style="color: #4ade80;"></i>
+        <!-- STUDENT INFO BAR -->
+        <div class="student-bar">
+          <div class="student-quick-info">
+            <div class="student-avatar-small">
+              <img src="<?= BASE_URL ?>/public/uploads/estudiantes/<?= htmlspecialchars($estudianteSeleccionado['foto'] ?: 'default.png') ?>" alt="" onerror="this.onerror=null; this.src='<?= BASE_URL ?>/public/uploads/estudiantes/default.png'">
+            </div>
+            <div>
+              <strong><?= htmlspecialchars($nombreEstudiante) ?></strong>
+              <small><?= htmlspecialchars($cursoActual) ?> • Periodo activo: <?= (int)$periodoActual ?></small>
+            </div>
           </div>
-          <div class="summary-content">
-            <small>Aprobadas</small>
-            <strong>8/9</strong>
-            <span class="trend neutral">89% del total</span>
-          </div>
+          <form class="period-selector" method="get" action="<?= BASE_URL ?>/acudiente/calificaciones">
+            <label for="periodSelect">Periodo:</label>
+            <select id="periodSelect" name="periodo" onchange="this.form.submit()">
+              <?php for ($p = 1; $p <= 4; $p++): ?>
+                <option value="<?= $p ?>" <?= $p === $periodoSeleccionado ? 'selected' : '' ?>>Periodo <?= $p ?></option>
+              <?php endfor; ?>
+            </select>
+          </form>
         </div>
 
-        <div class="summary-card">
-          <div class="summary-icon" style="background: rgba(251, 191, 36, 0.2);">
-            <i class="ri-alert-line" style="color: #fbbf24;"></i>
+        <!-- SUMMARY CARDS -->
+        <section class="summary-cards">
+          <div class="summary-card">
+            <div class="summary-icon" style="background: rgba(79, 70, 229, 0.2);">
+              <i class="ri-bar-chart-box-line" style="color: #6366f1;"></i>
+            </div>
+            <div class="summary-content">
+              <small>Promedio General</small>
+              <strong><?= $resumenCalificaciones['promedio_general'] > 0 ? number_format((float)$resumenCalificaciones['promedio_general'], 1) : '—' ?></strong>
+              <span class="trend neutral">Periodo <?= (int)$periodoActual ?> activo</span>
+            </div>
           </div>
-          <div class="summary-content">
-            <small>En Observación</small>
-            <strong>1</strong>
-            <span class="trend neutral">Tecnología</span>
-          </div>
-        </div>
 
-        <div class="summary-card">
-          <div class="summary-icon" style="background: rgba(59, 130, 246, 0.2);">
-            <i class="ri-trophy-line" style="color: #60a5fa;"></i>
+          <div class="summary-card">
+            <div class="summary-icon" style="background: rgba(34, 197, 94, 0.2);">
+              <i class="ri-checkbox-circle-line" style="color: #4ade80;"></i>
+            </div>
+            <div class="summary-content">
+              <small>Materias Aprobadas</small>
+              <strong><?= $totalAprobadas ?>/<?= (int)$resumenCalificaciones['total_materias'] ?></strong>
+              <span class="trend neutral"><?= $resumenCalificaciones['total_materias'] > 0 ? round($totalAprobadas / $resumenCalificaciones['total_materias'] * 100) : 0 ?>% del total</span>
+            </div>
           </div>
-          <div class="summary-content">
-            <small>Mejor Materia</small>
-            <strong>4.75</strong>
-            <span class="trend neutral">Ed. Física</span>
-          </div>
-        </div>
-      </section>
 
-      <!-- GRADES BY SUBJECT -->
-      <section class="grades-section">
-        <h3>Calificaciones por Asignatura</h3>
-        
-        <div class="subject-card excellent">
-          <div class="subject-header">
-            <div class="subject-icon">
-              <i class="ri-calculator-line"></i>
+          <div class="summary-card">
+            <div class="summary-icon" style="background: rgba(251, 191, 36, 0.2);">
+              <i class="ri-alert-line" style="color: #fbbf24;"></i>
             </div>
-            <div class="subject-info">
-              <h4>Matemáticas</h4>
-              <small>Prof. Laura Castro</small>
-            </div>
-            <div class="subject-grade">
-              <div class="grade-big">4.4</div>
-              <small>Promedio</small>
+            <div class="summary-content">
+              <small>En Observación</small>
+              <strong><?= $totalEnObservacion ?></strong>
+              <span class="trend neutral"><?= $peorMateria ? htmlspecialchars($peorMateria['nombre']) : 'Ninguna' ?></span>
             </div>
           </div>
-          <div class="subject-details">
-            <div class="detail-row">
-              <span>Periodo 1</span>
-              <span class="grade-value">4.5</span>
-            </div>
-            <div class="detail-row">
-              <span>Periodo 2</span>
-              <span class="grade-value">4.3</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 88%;"></div>
-            </div>
-            <div class="subject-actions">
-              <button class="btn-action"><i class="ri-file-list-3-line"></i> Ver detalles</button>
-              <button class="btn-action"><i class="ri-download-line"></i> Descargar</button>
-            </div>
-          </div>
-        </div>
 
-        <div class="subject-card excellent">
-          <div class="subject-header">
-            <div class="subject-icon">
-              <i class="ri-book-open-line"></i>
+          <div class="summary-card">
+            <div class="summary-icon" style="background: rgba(59, 130, 246, 0.2);">
+              <i class="ri-trophy-line" style="color: #60a5fa;"></i>
             </div>
-            <div class="subject-info">
-              <h4>Español</h4>
-              <small>Prof. Carlos Méndez</small>
-            </div>
-            <div class="subject-grade">
-              <div class="grade-big">4.1</div>
-              <small>Promedio</small>
+            <div class="summary-content">
+              <small>Mejor Materia</small>
+              <strong><?= $mejorMateria ? number_format($mejorMateria['promedio'], 1) : '—' ?></strong>
+              <span class="trend neutral"><?= $mejorMateria ? htmlspecialchars($mejorMateria['nombre']) : 'Sin datos' ?></span>
             </div>
           </div>
-          <div class="subject-details">
-            <div class="detail-row">
-              <span>Periodo 1</span>
-              <span class="grade-value">4.0</span>
-            </div>
-            <div class="detail-row">
-              <span>Periodo 2</span>
-              <span class="grade-value">4.2</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 82%;"></div>
-            </div>
-            <div class="subject-actions">
-              <button class="btn-action"><i class="ri-file-list-3-line"></i> Ver detalles</button>
-              <button class="btn-action"><i class="ri-download-line"></i> Descargar</button>
-            </div>
-          </div>
-        </div>
+        </section>
 
-        <div class="subject-card good">
-          <div class="subject-header">
-            <div class="subject-icon">
-              <i class="ri-global-line"></i>
-            </div>
-            <div class="subject-info">
-              <h4>Inglés</h4>
-              <small>Prof. Ana Suárez</small>
-            </div>
-            <div class="subject-grade">
-              <div class="grade-big">3.9</div>
-              <small>Promedio</small>
-            </div>
-          </div>
-          <div class="subject-details">
-            <div class="detail-row">
-              <span>Periodo 1</span>
-              <span class="grade-value">3.8</span>
-            </div>
-            <div class="detail-row">
-              <span>Periodo 2</span>
-              <span class="grade-value">4.0</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 78%;"></div>
-            </div>
-            <div class="subject-actions">
-              <button class="btn-action"><i class="ri-file-list-3-line"></i> Ver detalles</button>
-              <button class="btn-action"><i class="ri-download-line"></i> Descargar</button>
-            </div>
-          </div>
-        </div>
+        <!-- GRADES BY SUBJECT -->
+        <section class="grades-section">
+          <h3>Calificaciones por Asignatura</h3>
 
-        <div class="subject-card excellent">
-          <div class="subject-header">
-            <div class="subject-icon">
-              <i class="ri-flask-line"></i>
+          <?php if (empty($calificacionesMaterias)): ?>
+            <div class="card">
+              <p class="muted" style="margin: 0;">Este estudiante no tiene materias registradas.</p>
             </div>
-            <div class="subject-info">
-              <h4>Ciencias Naturales</h4>
-              <small>Prof. Roberto García</small>
-            </div>
-            <div class="subject-grade">
-              <div class="grade-big">4.35</div>
-              <small>Promedio</small>
-            </div>
-          </div>
-          <div class="subject-details">
-            <div class="detail-row">
-              <span>Periodo 1</span>
-              <span class="grade-value">4.2</span>
-            </div>
-            <div class="detail-row">
-              <span>Periodo 2</span>
-              <span class="grade-value">4.5</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 87%;"></div>
-            </div>
-            <div class="subject-actions">
-              <button class="btn-action"><i class="ri-file-list-3-line"></i> Ver detalles</button>
-              <button class="btn-action"><i class="ri-download-line"></i> Descargar</button>
-            </div>
-          </div>
-        </div>
+          <?php else: ?>
+            <?php foreach ($calificacionesMaterias as $materia): ?>
+              <?php
+                $clase = match ($materia['estado_general']) {
+                    'superior' => 'excellent',
+                    'alto' => 'good',
+                    'basico' => 'average',
+                    'bajo' => 'low',
+                    default => '',
+                };
+                $progreso = $materia['promedio_general'] !== null
+                    ? max(0, min(100, ($materia['promedio_general'] / 5) * 100))
+                    : 0;
+                $actividadesPeriodo = $materia['periodos'][$periodoSeleccionado]['evaluaciones'];
+              ?>
+              <div class="subject-card <?= $clase ?>">
+                <div class="subject-header">
+                  <div class="subject-icon" style="background: <?= htmlspecialchars($materia['color_icono']) ?>;">
+                    <i class="<?= htmlspecialchars($materia['icono']) ?>"></i>
+                  </div>
+                  <div class="subject-info">
+                    <h4><?= htmlspecialchars($materia['nombre']) ?></h4>
+                    <small><?= $materia['profesor'] !== '' ? 'Prof. ' . htmlspecialchars($materia['profesor']) : 'Sin docente asignado' ?></small>
+                  </div>
+                  <div class="subject-grade">
+                    <div class="grade-big"><?= $materia['promedio_general'] !== null ? number_format($materia['promedio_general'], 1) : '—' ?></div>
+                    <small>Promedio</small>
+                  </div>
+                </div>
+                <div class="subject-details">
+                  <?php foreach ($materia['periodos'] as $numPeriodo => $datosPeriodo): ?>
+                    <div class="detail-row<?= $numPeriodo === $periodoSeleccionado ? ' detail-row-activo' : '' ?>">
+                      <span>Periodo <?= $numPeriodo ?><?= $numPeriodo === $periodoActual ? ' (actual)' : '' ?></span>
+                      <span class="grade-value"><?= $datosPeriodo['notaFinal'] !== null ? number_format($datosPeriodo['notaFinal'], 1) : '—' ?></span>
+                    </div>
+                  <?php endforeach; ?>
 
-        <div class="subject-card good">
-          <div class="subject-header">
-            <div class="subject-icon">
-              <i class="ri-earth-line"></i>
-            </div>
-            <div class="subject-info">
-              <h4>Ciencias Sociales</h4>
-              <small>Prof. Patricia López</small>
-            </div>
-            <div class="subject-grade">
-              <div class="grade-big">3.65</div>
-              <small>Promedio</small>
-            </div>
-          </div>
-          <div class="subject-details">
-            <div class="detail-row">
-              <span>Periodo 1</span>
-              <span class="grade-value">3.5</span>
-            </div>
-            <div class="detail-row">
-              <span>Periodo 2</span>
-              <span class="grade-value">3.8</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 73%;"></div>
-            </div>
-            <div class="subject-actions">
-              <button class="btn-action"><i class="ri-file-list-3-line"></i> Ver detalles</button>
-              <button class="btn-action"><i class="ri-download-line"></i> Descargar</button>
-            </div>
-          </div>
-        </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill <?= $clase === 'low' ? 'warning' : '' ?>" style="width: <?= $progreso ?>%;"></div>
+                  </div>
 
-        <div class="subject-card excellent">
-          <div class="subject-header">
-            <div class="subject-icon">
-              <i class="ri-run-line"></i>
-            </div>
-            <div class="subject-info">
-              <h4>Educación Física</h4>
-              <small>Prof. Miguel Torres</small>
-            </div>
-            <div class="subject-grade">
-              <div class="grade-big">4.75</div>
-              <small>Promedio</small>
-            </div>
-          </div>
-          <div class="subject-details">
-            <div class="detail-row">
-              <span>Periodo 1</span>
-              <span class="grade-value">4.8</span>
-            </div>
-            <div class="detail-row">
-              <span>Periodo 2</span>
-              <span class="grade-value">4.7</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 95%;"></div>
-            </div>
-            <div class="subject-actions">
-              <button class="btn-action"><i class="ri-file-list-3-line"></i> Ver detalles</button>
-              <button class="btn-action"><i class="ri-download-line"></i> Descargar</button>
-            </div>
-          </div>
-        </div>
+                  <?php if ($clase === 'low'): ?>
+                    <div class="alert-box">
+                      <i class="ri-alert-line"></i>
+                      <span>Esta materia requiere atención especial</span>
+                    </div>
+                  <?php endif; ?>
 
-        <div class="subject-card excellent">
-          <div class="subject-header">
-            <div class="subject-icon">
-              <i class="ri-palette-line"></i>
-            </div>
-            <div class="subject-info">
-              <h4>Artes</h4>
-              <small>Prof. Sandra Martínez</small>
-            </div>
-            <div class="subject-grade">
-              <div class="grade-big">4.35</div>
-              <small>Promedio</small>
-            </div>
-          </div>
-          <div class="subject-details">
-            <div class="detail-row">
-              <span>Periodo 1</span>
-              <span class="grade-value">4.3</span>
-            </div>
-            <div class="detail-row">
-              <span>Periodo 2</span>
-              <span class="grade-value">4.4</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 87%;"></div>
-            </div>
-            <div class="subject-actions">
-              <button class="btn-action"><i class="ri-file-list-3-line"></i> Ver detalles</button>
-              <button class="btn-action"><i class="ri-download-line"></i> Descargar</button>
-            </div>
-          </div>
-        </div>
+                  <div class="subject-actions">
+                    <details class="subject-activities">
+                      <summary class="btn-action"><i class="ri-file-list-3-line"></i> Ver actividades del Periodo <?= $periodoSeleccionado ?></summary>
+                      <div class="activities-list">
+                        <?php if (empty($actividadesPeriodo)): ?>
+                          <p class="muted" style="margin: 0;">No hay actividades registradas en este periodo.</p>
+                        <?php else: ?>
+                          <?php foreach ($actividadesPeriodo as $actividad): ?>
+                            <div class="activity-row">
+                              <div class="activity-info">
+                                <strong><?= htmlspecialchars($actividad['nombre']) ?></strong>
+                                <small><?= htmlspecialchars($actividad['fecha']) ?> • Ponderación <?= htmlspecialchars($actividad['peso']) ?></small>
+                              </div>
+                              <?php if ($actividad['nota'] !== null): ?>
+                                <span class="grade-value"><?= number_format($actividad['nota'], 1) ?></span>
+                              <?php else: ?>
+                                <span class="grade-value nota-pendiente">Sin calificar</span>
+                              <?php endif; ?>
+                            </div>
+                          <?php endforeach; ?>
+                        <?php endif; ?>
+                      </div>
+                    </details>
+                  </div>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </section>
 
-        <div class="subject-card average">
-          <div class="subject-header">
-            <div class="subject-icon">
-              <i class="ri-computer-line"></i>
+        <!-- ESCALA DE CALIFICACIÓN -->
+        <section class="card">
+          <h3>Escala de Calificación</h3>
+          <div class="scale-info">
+            <div class="scale-item">
+              <div class="scale-color excellent"></div>
+              <div>
+                <strong>Superior</strong>
+                <small>4.5 - 5.0</small>
+              </div>
             </div>
-            <div class="subject-info">
-              <h4>Tecnología</h4>
-              <small>Prof. Andrés Vargas</small>
+            <div class="scale-item">
+              <div class="scale-color good"></div>
+              <div>
+                <strong>Alto</strong>
+                <small>4.0 - 4.4</small>
+              </div>
             </div>
-            <div class="subject-grade">
-              <div class="grade-big">3.35</div>
-              <small>Promedio</small>
+            <div class="scale-item">
+              <div class="scale-color average"></div>
+              <div>
+                <strong>Básico</strong>
+                <small>3.1 - 3.9</small>
+              </div>
             </div>
-          </div>
-          <div class="subject-details">
-            <div class="detail-row">
-              <span>Periodo 1</span>
-              <span class="grade-value">3.2</span>
-            </div>
-            <div class="detail-row">
-              <span>Periodo 2</span>
-              <span class="grade-value">3.5</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill warning" style="width: 67%;"></div>
-            </div>
-            <div class="alert-box">
-              <i class="ri-alert-line"></i>
-              <span>Esta materia requiere atención especial</span>
-            </div>
-            <div class="subject-actions">
-              <button class="btn-action"><i class="ri-file-list-3-line"></i> Ver detalles</button>
-              <button class="btn-action"><i class="ri-download-line"></i> Descargar</button>
+            <div class="scale-item">
+              <div class="scale-color low"></div>
+              <div>
+                <strong>Bajo</strong>
+                <small>0.0 - 3.0</small>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div class="subject-card excellent">
-          <div class="subject-header">
-            <div class="subject-icon">
-              <i class="ri-heart-line"></i>
-            </div>
-            <div class="subject-info">
-              <h4>Ética y Valores</h4>
-              <small>Prof. María Fernández</small>
-            </div>
-            <div class="subject-grade">
-              <div class="grade-big">4.55</div>
-              <small>Promedio</small>
-            </div>
+        <!-- ESTADÍSTICAS -->
+        <section class="card">
+          <h3>Estadísticas del Año</h3>
+          <div class="stat-item">
+            <span>Total de materias</span>
+            <strong><?= (int)$resumenCalificaciones['total_materias'] ?></strong>
           </div>
-          <div class="subject-details">
-            <div class="detail-row">
-              <span>Periodo 1</span>
-              <span class="grade-value">4.6</span>
-            </div>
-            <div class="detail-row">
-              <span>Periodo 2</span>
-              <span class="grade-value">4.5</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 91%;"></div>
-            </div>
-            <div class="subject-actions">
-              <button class="btn-action"><i class="ri-file-list-3-line"></i> Ver detalles</button>
-              <button class="btn-action"><i class="ri-download-line"></i> Descargar</button>
-            </div>
+          <div class="stat-item">
+            <span>Total de actividades evaluables</span>
+            <strong><?= (int)$resumenCalificaciones['total_evaluaciones'] ?></strong>
           </div>
-        </div>
-      </section>
+          <div class="stat-item">
+            <span>Actividades pendientes por entregar</span>
+            <strong><?= (int)$resumenCalificaciones['pendientes'] ?></strong>
+          </div>
+        </section>
+
+      <?php endif; ?>
     </main>
-
-    <!-- RIGHT SIDEBAR -->
-    <aside class="rightbar" id="rightSidebar">
-      <div class="user">
-        <button class="btn"><i class="ri-notification-3-line"></i></button>
-        <button class="btn"><i class="ri-settings-3-line"></i></button>
-        <div class="avatar">MR</div>
-      </div>
-
-      <div class="panel-title">Escala de Calificación</div>
-      <p class="muted">Sistema de evaluación</p>
-
-      <div class="scale-info">
-        <div class="scale-item">
-          <div class="scale-color excellent"></div>
-          <div>
-            <strong>Excelente</strong>
-            <small>4.6 - 5.0</small>
-          </div>
-        </div>
-        <div class="scale-item">
-          <div class="scale-color good"></div>
-          <div>
-            <strong>Bueno</strong>
-            <small>4.0 - 4.5</small>
-          </div>
-        </div>
-        <div class="scale-item">
-          <div class="scale-color average"></div>
-          <div>
-            <strong>Aceptable</strong>
-            <small>3.0 - 3.9</small>
-          </div>
-        </div>
-        <div class="scale-item">
-          <div class="scale-color low"></div>
-          <div>
-            <strong>Insuficiente</strong>
-            <small>1.0 - 2.9</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel-title" style="margin-top: 24px;">Estadísticas</div>
-      <p class="muted">Resumen del periodo</p>
-
-      <div class="stat-item">
-        <span>Total de evaluaciones</span>
-        <strong>36</strong>
-      </div>
-      <div class="stat-item">
-        <span>Evaluaciones pendientes</span>
-        <strong>2</strong>
-      </div>
-      <div class="stat-item">
-        <span>Trabajos entregados</span>
-        <strong>28/30</strong>
-      </div>
-      <div class="stat-item">
-        <span>Porcentaje de aprobación</span>
-        <strong>89%</strong>
-      </div>
-
-      <div class="panel-title" style="margin-top: 24px;">Acciones Rápidas</div>
-      
-      <button class="quick-action">
-        <i class="ri-printer-line"></i>
-        <span>Imprimir Boletín</span>
-      </button>
-      <button class="quick-action">
-        <i class="ri-download-cloud-line"></i>
-        <span>Descargar PDF</span>
-      </button>
-      <button class="quick-action">
-        <i class="ri-mail-send-line"></i>
-        <span>Enviar por Correo</span>
-      </button>
-      <button class="quick-action">
-        <i class="ri-message-3-line"></i>
-        <span>Contactar Profesor</span>
-      </button>
-    </aside>
   </div>
 
-  <script src="calificaciones.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-acudiente.js"></script>
 </body>
+
 </html>

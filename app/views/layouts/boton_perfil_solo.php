@@ -27,6 +27,7 @@
   }
 ?>
 
+<?php if ($perfilRol === 'Estudiante' || $perfilRol === 'Acudiente'): ?>
 <?php
 // Conteo real de notificaciones no leídas para el badge
 $_badgeCount = 0;
@@ -355,6 +356,7 @@ if (!empty($_SESSION['user']['id']) && !empty($_SESSION['user']['id_institucion'
   </div>
 </div>
 
+<?php if ($perfilRol === 'Docente' || $perfilRol === 'Estudiante' || $perfilRol === 'Acudiente'): ?>
 <script>
   (function () {
     if (window.__siademyProfileDropdownInit) {

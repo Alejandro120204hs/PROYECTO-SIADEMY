@@ -111,6 +111,28 @@ class Perfil
         return $this->ejecutarConsultaPerfil($consulta, $id);
     }
 
+    public function mostrarPerfilAcudiente($id)
+    {
+        $consulta = "SELECT
+                acudiente.nombres AS nombres,
+                acudiente.apellidos AS apellidos,
+                acudiente.documento AS documento,
+                acudiente.telefono AS telefono,
+                NULL AS edad,
+                COALESCE(acudiente.foto, 'default.png') AS foto,
+                usuario.correo AS correo,
+                usuario.rol AS rol,
+                institucion.nombre AS nombre_institucion,
+                institucion.direccion AS direccion_institucion
+            FROM acudiente
+            INNER JOIN usuario ON acudiente.id_usuario = usuario.id
+            LEFT JOIN institucion ON institucion.id = acudiente.id_institucion
+            WHERE usuario.id = :id
+            LIMIT 1";
+
+        return $this->ejecutarConsultaPerfil($consulta, $id);
+    }
+
     public function mostrarPerfilGenerico($id)
     {
         $consulta = "SELECT 
