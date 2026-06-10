@@ -18,7 +18,14 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/perfil.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
     <style>
-        body { background: linear-gradient(180deg, #0f1e4a 0%, #0b1736 100%); }
+        body { background: linear-gradient(180deg, #0f1e4a 0%, #0b1736 100%); overflow-x: hidden; }
+
+        /* Sin sidebar derecho: el main ocupa todo el espacio disponible */
+        #appGrid {
+            grid-template-columns: auto 1fr !important;
+            grid-template-areas: "sidebar main" !important;
+        }
+        #appGrid .rightbar { display: none !important; }
 
         .page-header {
             display: flex;
@@ -322,7 +329,7 @@
                   </button>
                   <?php endif; ?>
                   <?php if (!empty($notif['url_accion'])): ?>
-                  <a href="<?= htmlspecialchars(rtrim(BASE_URL, '/') . $notif['url_accion']) ?>"
+                  <a href="<?= htmlspecialchars($notif['url_accion']) ?>"
                      style="font-size:11px;color:#6366f1;text-decoration:none">
                     Ver detalle →
                   </a>
