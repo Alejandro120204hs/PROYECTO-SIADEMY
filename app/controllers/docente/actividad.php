@@ -152,6 +152,32 @@ function guardarActividad() {
     $redirect_url = $base_url . '/docente/actividades?id_curso=' . $id_curso;
 
     if ($resultado['success']) {
+        // Notificar a los estudiantes matriculados en este asignatura-curso
+        try {
+            require_once BASE_PATH . '/app/helpers/notificacion_helper.php';
+            $notifModel    = new Notificacion();
+            $anioActual    = (int)date('Y');
+            $destinatarios = $notifModel->obtenerEstudiantesPorAsignaturaCurso(
+                (int)$datos['id_asignatura_curso'],
+                $idInstitucion,
+                $anioActual
+            );
+            if (!empty($destinatarios)) {
+                $urlActividades = rtrim(BASE_URL, '/') . '/estudiante-materia-detalle?id=' . (int)$datos['id_asignatura_curso'];
+                notificarBatch(
+                    'actividad_nueva',
+                    'Nueva actividad publicada',
+                    'Se ha publicado la actividad "' . $datos['titulo'] . '". Revisa los detalles y la fecha de entrega.',
+                    $destinatarios,
+                    $idInstitucion,
+                    $urlActividades,
+                    'actividad',
+                    (int)$resultado['id']
+                );
+            }
+        } catch (Throwable $_e) {
+            error_log('[hook-actividad_nueva] ' . $_e->getMessage());
+        }
         mostrarSweetAlert('success', '¡Éxito!', $resultado['message'], $redirect_url);
     } else {
         mostrarSweetAlert('error', 'Error', $resultado['message']);

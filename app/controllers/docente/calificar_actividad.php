@@ -107,6 +107,42 @@ try {
     );
     
     if ($resultado) {
+        // Notificar al estudiante y su acudiente sobre la calificación
+        try {
+            require_once BASE_PATH . '/app/helpers/notificacion_helper.php';
+            $notifModel = new Notificacion();
+            $contexto   = $notifModel->obtenerContextoDeEntrega($id_entrega);
+            if ($contexto) {
+                $notaFormato  = number_format($nota, 1);
+                $urlEstudiante = rtrim(BASE_URL, '/') . '/estudiante-panel-calificaciones';
+                // Notificar al estudiante
+                notificar(
+                    'calificacion_publicada',
+                    'Calificación publicada',
+                    'Tu actividad "' . $contexto['titulo_actividad'] . '" fue calificada con ' . $notaFormato . ' / 5.0.',
+                    (int)$contexto['id_usuario_estudiante'],
+                    (int)$contexto['id_institucion'],
+                    $urlEstudiante,
+                    'calificacion',
+                    (int)$contexto['id_actividad']
+                );
+                // Notificar al acudiente si existe
+                if (!empty($contexto['id_usuario_acudiente'])) {
+                    notificar(
+                        'calificacion_publicada',
+                        'Calificación publicada',
+                        'Se registró una calificación de ' . $notaFormato . ' / 5.0 en "' . $contexto['titulo_actividad'] . '".',
+                        (int)$contexto['id_usuario_acudiente'],
+                        (int)$contexto['id_institucion'],
+                        null,
+                        'calificacion',
+                        (int)$contexto['id_actividad']
+                    );
+                }
+            }
+        } catch (Throwable $_e) {
+            error_log('[hook-calificacion_publicada] ' . $_e->getMessage());
+        }
         echo json_encode([
             'success' => true,
             'message' => 'Calificación guardada exitosamente'
