@@ -22,7 +22,23 @@
   }
 ?>
 
-<?php if ($perfilRol === 'Estudiante'): ?>
+<?php
+// Conteo real de notificaciones no leídas para el badge
+$_badgeCount = 0;
+if (!empty($_SESSION['user']['id']) && !empty($_SESSION['user']['id_institucion'])) {
+    try {
+        require_once BASE_PATH . '/app/models/notificaciones.php';
+        $_notifModel = new Notificacion();
+        $_badgeCount = $_notifModel->contarNoLeidas(
+            (int)$_SESSION['user']['id'],
+            (int)$_SESSION['user']['id_institucion']
+        );
+    } catch (Throwable $_notifEx) {
+        error_log('[badge] ' . $_notifEx->getMessage());
+    }
+}
+?>
+<?php if (true): // Estilos del dropdown — aplican a todos los roles ?>
 <style>
   .topbar .user {
     position: relative;
@@ -307,10 +323,14 @@
       <i class="ri-settings-3-line"></i>
       <span>Configuración</span>
     </a>
-    <a href="<?= BASE_URL ?>/notificaciones" class="dropdown-item">
+    <a href="<?= BASE_URL ?>/notificaciones" class="dropdown-item" id="notifDropdownLink">
       <i class="ri-notification-3-line"></i>
       <span>Notificaciones</span>
-      <span class="dropdown-badge">3</span>
+      <?php if ($_badgeCount > 0): ?>
+      <span class="dropdown-badge" id="notifBadge"><?= min($_badgeCount, 99) ?></span>
+      <?php else: ?>
+      <span class="dropdown-badge" id="notifBadge" style="display:none">0</span>
+      <?php endif; ?>
     </a>
     <a href="<?= BASE_URL ?>/ayuda" class="dropdown-item">
       <i class="ri-question-line"></i>
@@ -334,7 +354,6 @@
   </div>
 </div>
 
-<?php if ($perfilRol === 'Docente' || $perfilRol === 'Estudiante'): ?>
 <script>
   (function () {
     if (window.__siademyProfileDropdownInit) {
@@ -343,7 +362,7 @@
     window.__siademyProfileDropdownInit = true;
 
     function initProfileDropdown() {
-      const userMenuBtn = document.getElementById('userMenuBtn');
+      const userMenuBtn  = document.getElementById('userMenuBtn');
       const userDropdown = document.getElementById('userDropdown');
 
       if (!userMenuBtn || !userDropdown || userMenuBtn.dataset.dropdownInit === '1') {
@@ -371,12 +390,7 @@
       userMenuBtn.addEventListener('click', function (event) {
         event.preventDefault();
         event.stopPropagation();
-        const isOpen = userDropdown.classList.contains('show');
-        if (isOpen) {
-          closeUserDropdown();
-        } else {
-          openUserDropdown();
-        }
+        userDropdown.classList.contains('show') ? closeUserDropdown() : openUserDropdown();
       });
 
       dropdownOverlay.addEventListener('click', closeUserDropdown);
@@ -392,11 +406,32 @@
       });
     }
 
+    // ── Polling del badge cada 60 s ────────────────────────────────────────
+    function pollBadge() {
+      fetch('<?= rtrim(BASE_URL, '/') ?>/api/notificaciones?action=badge', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (!data || !data.success) return;
+        const badge = document.getElementById('notifBadge');
+        if (!badge) return;
+        if (data.count > 0) {
+          badge.textContent = Math.min(data.count, 99);
+          badge.style.display = '';
+        } else {
+          badge.style.display = 'none';
+        }
+      })
+      .catch(function () {});
+    }
+
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initProfileDropdown);
     } else {
       initProfileDropdown();
     }
+
+    setInterval(pollBadge, 60000);
   })();
 </script>
-<?php endif; ?>
