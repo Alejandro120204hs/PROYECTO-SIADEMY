@@ -46,8 +46,15 @@
 
         <a class="<?= navEstudianteIsActive($currentPath, ['/estudiante-panel-materias', '/estudiante-materia-detalle']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/estudiante-panel-materias">
             <i class="ri-book-2-line"></i> Mis Materias
-            <span class="badge">6</span> <!-- COUNT de estudiante_materia -->
+            
         </a>
+
+         <a class="<?= navEstudianteIsActive($currentPath, ['/estudiante-panel-profesores']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/estudiante-panel-profesores">
+            <i class="ri-user-3-line"></i> Mis Profesores
+        </a>
+
+         <div class="spacer"></div>
+        <div class="section">Académico y seguimiento</div>
 
         <a class="<?= navEstudianteIsActive($currentPath, ['/estudiante-panel-calificaciones']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/estudiante-panel-calificaciones">
             <i class="ri-bar-chart-line"></i> Calificaciones
@@ -57,28 +64,14 @@
             <i class="ri-file-paper-2-line"></i> Mi Boletín
         </a>
 
-        <div class="spacer"></div>
-        <div class="section">Académico y seguimiento</div>
+       
 
-        <a class="<?= navEstudianteIsActive($currentPath, ['/estudiante-panel-profesores']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/estudiante-panel-profesores">
-            <i class="ri-user-3-line"></i> Mis Profesores
-        </a>
+       
 
         <a class="<?= navEstudianteIsActive($currentPath, ['/estudiante-horario']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/estudiante-horario">
             <i class="ri-calendar-schedule-line"></i> Mi Horario
         </a>
 
-        <a href="recursos.php">
-            <i class="ri-folder-2-line"></i> Recursos
-        </a>
-
-        <a href="mensajes.php">
-            <i class="ri-message-3-line"></i> Mensajes
-            <span class="badge bg-danger">2</span> <!-- No leídos -->
-        </a>
-
-        <a href="anuncios.php">
-            <i class="ri-megaphone-line"></i> Anuncios
-        </a>
+     
     </nav>
 </aside>
