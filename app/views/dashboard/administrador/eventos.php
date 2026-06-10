@@ -169,7 +169,7 @@
             <div class="no-events-message" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
               <i class="ri-calendar-blank-line" style="font-size: 48px; margin-bottom: 20px;"></i>
               <p>No hay eventos registrados aún</p>
-              <a href="<?= BASE_URL ?>/administrador/registrar-evento" class="btn btn-primary mt-3">
+              <a href="<?= BASE_URL ?>/administrador/registrar-evento" class="btn btn-primary btn-crearEvento mt-3">
                 <i class="ri-add-line"></i> Crear Primer Evento
               </a>
             </div>
