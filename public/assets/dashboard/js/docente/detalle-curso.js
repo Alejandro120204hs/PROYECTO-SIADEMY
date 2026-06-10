@@ -11,10 +11,26 @@ function parseJsonAttr(key) {
   }
 }
 
-const detalleActividadesPorAsignatura = parseJsonAttr('detalleActividades');
+function parseArrayAttr(key) {
+  if (!detalleApp) return [];
+  try {
+    const val = JSON.parse(detalleApp.dataset[key] || '[]');
+    return Array.isArray(val) ? val : [];
+  } catch {
+    return [];
+  }
+}
+
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+const detalleActividadesPorAsignatura    = parseJsonAttr('detalleActividades');
 const resumenCalificacionesPorAsignatura = parseJsonAttr('resumenCalificaciones');
-const perfilAcademicoPorEstudiante = parseJsonAttr('perfilEstudiantes');
-const calificacionesPorEstudiante = parseJsonAttr('calificacionesEstudiantes');
+const perfilAcademicoPorEstudiante       = parseJsonAttr('perfilEstudiantes');
+const calificacionesPorEstudiante        = parseJsonAttr('calificacionesEstudiantes');
 
 function formatoFecha(fechaIso) {
   if (!fechaIso) return 'Sin fecha';
@@ -272,3 +288,213 @@ document.addEventListener('DOMContentLoaded', function() {
     }, index * 100);
   });
 });
+
+// ── Helpers para modales de stat-cards ────────────────────────────────────────
+
+function diasRestantes(fechaIso) {
+  if (!fechaIso) return null;
+  const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+  const fecha = new Date(`${fechaIso}T00:00:00`);
+  if (isNaN(fecha.getTime())) return null;
+  return Math.ceil((fecha - hoy) / 86400000);
+}
+
+function fechaBadge(fechaIso, dias) {
+  const str = formatoFecha(fechaIso);
+  if (dias === null) return `<span style="color:#94a3b8;">${str}</span>`;
+  const color = dias < 0 ? '#ef4444' : (dias <= 3 ? '#f59e0b' : '#10b981');
+  const label = dias < 0
+    ? `Venció hace ${Math.abs(dias)}d`
+    : (dias === 0 ? 'Vence hoy' : `${dias}d restantes`);
+  return `<div style="color:#e2e8f0;">${str}</div><div style="font-size:11px;color:${color};">${label}</div>`;
+}
+
+function notaColor(nota) {
+  if (nota === null || nota === undefined) return '#94a3b8';
+  return nota >= 4.0 ? '#10b981' : (nota >= 3.0 ? '#f59e0b' : '#ef4444');
+}
+
+// ── MODAL: Pendientes por Calificar ───────────────────────────────────────────
+
+function abrirModalPendientesCalificar() {
+  const datos   = parseArrayAttr('pendientesCalificar');
+  const resumen = document.getElementById('pendientesResumen');
+  const body    = document.getElementById('pendientesBody');
+  if (!resumen || !body) return;
+
+  const totalPend = datos.reduce((s, a) => s + (parseInt(a.pendientes, 10) || 0), 0);
+  resumen.innerHTML = [
+    `<span style="padding:8px 14px;border-radius:10px;background:rgba(245,87,108,.15);color:#f5576c;font-weight:600;">${datos.length} actividades</span>`,
+    `<span style="padding:8px 14px;border-radius:10px;background:rgba(245,158,11,.15);color:#fcd34d;font-weight:600;">${totalPend} entregas sin calificar</span>`,
+  ].join('');
+
+  if (!datos.length) {
+    body.innerHTML = '<tr><td colspan="7" class="text-center" style="padding:24px;color:#94a3b8;">No hay actividades con entregas pendientes de calificación.</td></tr>';
+  } else {
+    body.innerHTML = datos.map(a => {
+      const dias = diasRestantes(a.fecha_entrega);
+      return `<tr>
+        <td><div style="font-weight:600;color:#e2e8f0;">${esc(a.titulo)}</div></td>
+        <td><span style="color:#94a3b8;font-size:13px;">${esc(a.asignatura)}</span></td>
+        <td>${fechaBadge(a.fecha_entrega, dias)}</td>
+        <td style="text-align:center;"><span style="color:#7dd3fc;">${a.total_entregas}</span></td>
+        <td style="text-align:center;"><span style="color:#6ee7b7;">${a.total_calificadas}</span></td>
+        <td style="text-align:center;">
+          <span style="background:rgba(245,158,11,.2);color:#fcd34d;padding:4px 10px;border-radius:8px;font-weight:700;">${a.pendientes}</span>
+        </td>
+        <td style="text-align:center;">
+          <a href="${esc(a.url_entregas)}" class="btn btn-sm btn-outline-warning" title="Ir a calificar">
+            <i class="ri-edit-line"></i>
+          </a>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  mostrarModalSeguro('modalPendientesCalificar');
+}
+
+// ── MODAL: Estudiantes en Riesgo ──────────────────────────────────────────────
+
+function abrirModalEstudiantesRiesgo() {
+  const datos   = parseArrayAttr('estudiantesRiesgo');
+  const resumen = document.getElementById('riesgoResumen');
+  const body    = document.getElementById('riesgoBody');
+  if (!resumen || !body) return;
+
+  const conProm = datos.filter(e => e.promedio_general !== null && e.promedio_general < 3.0).length;
+  const sinEntr = datos.filter(e => e.total_actividades > 0 && e.total_entregadas === 0).length;
+  resumen.innerHTML = [
+    `<span style="padding:8px 14px;border-radius:10px;background:rgba(239,68,68,.15);color:#f87171;font-weight:600;">${datos.length} en riesgo</span>`,
+    `<span style="padding:8px 14px;border-radius:10px;background:rgba(245,158,11,.15);color:#fcd34d;font-weight:600;">${conProm} promedio bajo</span>`,
+    `<span style="padding:8px 14px;border-radius:10px;background:rgba(99,102,241,.15);color:#a5b4fc;font-weight:600;">${sinEntr} sin entregas</span>`,
+  ].join('');
+
+  if (!datos.length) {
+    body.innerHTML = '<tr><td colspan="6" class="text-center" style="padding:24px;color:#94a3b8;">No hay estudiantes en situación de riesgo académico.</td></tr>';
+  } else {
+    body.innerHTML = datos.map(e => {
+      const prom  = e.promedio_general !== null ? parseFloat(e.promedio_general).toFixed(2) : 'Sin nota';
+      const pc    = notaColor(e.promedio_general);
+      const asist = e.porcentaje_asistencia !== null
+        ? parseFloat(e.porcentaje_asistencia).toFixed(1) + '%' : 'N/A';
+      const ac = e.porcentaje_asistencia === null ? '#94a3b8'
+        : (e.porcentaje_asistencia < 70 ? '#ef4444'
+          : (e.porcentaje_asistencia < 85 ? '#f59e0b' : '#10b981'));
+      const nombreEsc = esc(e.nombre).replace(/'/g, "\\'");
+      return `<tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <img src="${baseUrlDetalle}/public/uploads/estudiantes/${esc(e.foto)}"
+                 onerror="this.onerror=null;this.src='${baseUrlDetalle}/public/uploads/estudiantes/default.png'"
+                 style="width:40px;height:40px;border-radius:10px;object-fit:cover;">
+            <div>
+              <div style="font-weight:600;color:#e2e8f0;">${esc(e.nombre)}</div>
+              <div style="font-size:12px;color:#94a3b8;">${esc(e.documento)}</div>
+            </div>
+          </div>
+        </td>
+        <td style="text-align:center;"><span style="font-size:18px;font-weight:700;color:${pc};">${prom}</span></td>
+        <td style="text-align:center;"><span style="font-weight:600;color:${ac};">${asist}</span></td>
+        <td style="text-align:center;"><span style="color:#94a3b8;">${e.total_entregadas}/${e.total_actividades}</span></td>
+        <td><span style="background:rgba(239,68,68,.15);color:#f87171;padding:4px 10px;border-radius:8px;font-size:12px;">${esc(e.motivo)}</span></td>
+        <td style="text-align:center;">
+          <button class="btn btn-sm btn-outline-info"
+                  onclick="bootstrap.Modal.getInstance(document.getElementById('modalEstudiantesRiesgo'))?.hide();abrirModalPerfilAcademicoEstudiante(${e.id_estudiante},'${nombreEsc}');"
+                  title="Ver perfil académico">
+            <i class="ri-user-star-line"></i>
+          </button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  mostrarModalSeguro('modalEstudiantesRiesgo');
+}
+
+// ── MODAL: Próximas Actividades ───────────────────────────────────────────────
+
+function abrirModalProximasActividades() {
+  const datos   = parseArrayAttr('proximasActividadesDet');
+  const resumen = document.getElementById('proximasResumen');
+  const body    = document.getElementById('proximasBody');
+  if (!resumen || !body) return;
+
+  const hoy3     = new Date(Date.now() + 3 * 86400000).toISOString().slice(0, 10);
+  const urgentes = datos.filter(a => a.fecha_entrega <= hoy3).length;
+  resumen.innerHTML = [
+    `<span style="padding:8px 14px;border-radius:10px;background:rgba(0,242,254,.1);color:#38bdf8;font-weight:600;">${datos.length} en los próximos 7 días</span>`,
+    `<span style="padding:8px 14px;border-radius:10px;background:rgba(239,68,68,.1);color:#f87171;font-weight:600;">${urgentes} vencen en ≤ 3 días</span>`,
+  ].join('');
+
+  if (!datos.length) {
+    body.innerHTML = '<tr><td colspan="6" class="text-center" style="padding:24px;color:#94a3b8;">No hay actividades próximas a vencer en los siguientes 7 días.</td></tr>';
+  } else {
+    body.innerHTML = datos.map(a => {
+      const badge = badgeEstado(a.estado);
+      const dias  = diasRestantes(a.fecha_entrega);
+      return `<tr>
+        <td style="font-weight:600;color:#e2e8f0;">${esc(a.titulo)}</td>
+        <td><span style="color:#94a3b8;font-size:13px;">${esc(a.asignatura)}</span></td>
+        <td>${esc(a.tipo)}</td>
+        <td>${fechaBadge(a.fecha_entrega, dias)}</td>
+        <td style="text-align:center;"><span class="badge ${badge.clase}">${badge.texto}</span></td>
+        <td style="text-align:center;"><span style="color:#7dd3fc;">${a.total_entregas}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  mostrarModalSeguro('modalProximasActividades');
+}
+
+// ── MODAL: Promedio General ───────────────────────────────────────────────────
+
+function abrirModalPromedioGeneral() {
+  const datos   = parseArrayAttr('promedioDetalle');
+  const resumen = document.getElementById('promedioResumen');
+  const detCont = document.getElementById('promedioDetallePorAsignatura');
+  if (!resumen || !detCont) return;
+
+  const totalEst  = Number(detalleApp?.dataset?.totalEstudiantesCurso || 0);
+  const evaluados = Number(detalleApp?.dataset?.totalEvaluados || 0);
+  const promGen   = Number(detalleApp?.dataset?.promedioGeneralFloat || 0);
+  const pc        = notaColor(promGen > 0 ? promGen : null);
+
+  resumen.innerHTML = [
+    `<div style="background:rgba(67,233,123,.1);border:1px solid rgba(67,233,123,.25);padding:16px;border-radius:12px;text-align:center;">
+       <div style="font-size:12px;color:#6ee7b7;margin-bottom:4px;">Promedio del Curso</div>
+       <div style="font-size:30px;font-weight:800;color:${pc};">${promGen > 0 ? promGen.toFixed(2) : 'N/A'}</div>
+     </div>`,
+    `<div style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);padding:16px;border-radius:12px;text-align:center;">
+       <div style="font-size:12px;color:#a5b4fc;margin-bottom:4px;">Total Estudiantes</div>
+       <div style="font-size:30px;font-weight:800;">${totalEst}</div>
+     </div>`,
+    `<div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);padding:16px;border-radius:12px;text-align:center;">
+       <div style="font-size:12px;color:#34d399;margin-bottom:4px;">Evaluados</div>
+       <div style="font-size:30px;font-weight:800;">${evaluados}</div>
+     </div>`,
+  ].join('');
+
+  if (!datos.length) {
+    detCont.innerHTML = '<div class="text-center" style="padding:20px;color:#94a3b8;background:rgba(148,163,184,.08);border-radius:12px;">No hay calificaciones registradas aún.</div>';
+  } else {
+    detCont.innerHTML = '<div style="font-weight:600;margin-bottom:12px;color:#e2e8f0;">Promedio por asignatura</div>' +
+      '<div class="table-responsive"><table class="table table-dark table-hover align-middle" style="margin:0;"><thead><tr>' +
+      '<th>Asignatura</th><th style="text-align:center;">Promedio</th><th style="text-align:center;">Actividades</th><th style="text-align:center;">Entregas</th><th style="text-align:center;">Calificadas</th>' +
+      '</tr></thead><tbody>' +
+      datos.map(d => {
+        const prom = d.promedio_general !== null ? parseFloat(d.promedio_general).toFixed(2) : 'N/A';
+        const dc   = notaColor(d.promedio_general);
+        return `<tr>
+          <td style="font-weight:600;">${esc(d.asignatura)}</td>
+          <td style="text-align:center;"><span style="font-size:18px;font-weight:700;color:${dc};">${prom}</span></td>
+          <td style="text-align:center;">${d.total_actividades}</td>
+          <td style="text-align:center;">${d.total_entregas}</td>
+          <td style="text-align:center;">${d.total_calificadas}</td>
+        </tr>`;
+      }).join('') +
+      '</tbody></table></div>';
+  }
+
+  mostrarModalSeguro('modalPromedioGeneral');
+}
