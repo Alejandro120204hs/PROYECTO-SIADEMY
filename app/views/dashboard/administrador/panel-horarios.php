@@ -34,6 +34,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SIADEMY • Horarios</title>
+    <?php 
+        include_once __DIR__ . '/../../layouts/header_coordinador.php'; 
+    ?>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
@@ -512,5 +515,6 @@ document.querySelectorAll('.block-card').forEach((card, i) => {
     }, i * 40);
 });
 </script>
+<script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
 </body>
 </html>

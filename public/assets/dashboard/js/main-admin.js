@@ -395,18 +395,22 @@ if (ctx) {
 // ========================================
 // DATATABLE (solo si existe)
 // ========================================
-$(document).ready(function() {
+if (window.jQuery) {
+  $(document).ready(function() {
     if ($('#studentsTable').length) {
-        $('#studentsTable').DataTable({
-            language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
-            pageLength: 5,
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
-            ordering: true,
-            order: [[0, 'asc']],
-            pagingType: 'simple_numbers'
-        });
+      $('#studentsTable').DataTable({
+        language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+        pageLength: 5,
+        lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+        ordering: true,
+        order: [[0, 'asc']],
+        pagingType: 'simple_numbers'
+      });
     }
-});
+  });
+} else {
+  console.warn('jQuery not found — skipping DataTable initialisation.');
+}
 
 
 // ========================================
@@ -459,138 +463,102 @@ document.addEventListener('DOMContentLoaded', function() {
    Agregar al final de main-admin.js o en un archivo separado
    ======================================== */
 
-// Funcionalidad del dropdown de usuario
-document.addEventListener('DOMContentLoaded', function() {
-  const userMenuBtn = document.getElementById('userMenuBtn');
-  const userDropdown = document.getElementById('userDropdown');
-  
-  // Crear overlay
-  const overlay = document.createElement('div');
-  overlay.className = 'dropdown-overlay';
-  document.body.appendChild(overlay);
-  
-  // Toggle del dropdown
-  if (userMenuBtn && userDropdown && !userMenuBtn.dataset.dropdownInit) {
-    userMenuBtn.dataset.dropdownInit = '1'; // marca para evitar doble registro
-    userMenuBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const isOpen = userDropdown.classList.contains('show');
-      
-      if (isOpen) {
-        closeDropdown();
-      } else {
-        openDropdown();
+// --- Manejador robusto para cambio de tema (delegación)
+if (!window.__siademyThemeToggleInit) {
+  window.__siademyThemeToggleInit = true;
+
+  // Delegación: escucha clicks en el documento para el botón de toggle
+  document.addEventListener('click', function (ev) {
+    const btn = ev.target.closest && ev.target.closest('#toggleThemeBtn');
+    if (!btn) return;
+    ev.preventDefault();
+
+    document.body.classList.toggle('light-mode');
+    const icon = btn.querySelector('i:first-child');
+    if (document.body.classList.contains('light-mode')) {
+      if (icon) icon.className = 'ri-sun-line';
+    } else {
+      if (icon) icon.className = 'ri-contrast-2-line';
+    }
+    try { localStorage.setItem('theme-mode', document.body.classList.contains('light-mode') ? 'light' : 'dark'); } catch (e) {}
+
+    // showNotification puede estar definido más abajo; llamarlo si existe
+    if (typeof showNotification === 'function') showNotification('Tema cambiado correctamente');
+  });
+
+  // Aplicar tema guardado inmediatamente (por si el script carga después de DOMContentLoaded)
+  try {
+    const saved = localStorage.getItem('theme-mode');
+    if (saved === 'light') {
+      document.body.classList.add('light-mode');
+      const btn = document.getElementById('toggleThemeBtn');
+      const icon = btn ? btn.querySelector('i:first-child') : null;
+      if (icon) icon.className = 'ri-sun-line';
+    }
+  } catch (e) {}
+}
+
+// --- Manejador delegado para dropdown de usuario (abre/cierra #userDropdown)
+if (!window.__siademyUserDropdownInit) {
+  window.__siademyUserDropdownInit = true;
+
+  function ensureDropdownOverlay() {
+    let ov = document.querySelector('.dropdown-overlay');
+    if (!ov) {
+      ov = document.createElement('div');
+      ov.className = 'dropdown-overlay';
+      document.body.appendChild(ov);
+    }
+    return ov;
+  }
+
+  document.addEventListener('click', function (ev) {
+    const btn = ev.target.closest && ev.target.closest('#userMenuBtn');
+    if (!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    const userDropdown = document.getElementById('userDropdown');
+    if (!userDropdown) return;
+
+    const overlay = ensureDropdownOverlay();
+    const isOpen = userDropdown.classList.contains('show');
+    if (isOpen) {
+      userDropdown.classList.remove('show');
+      overlay.classList.remove('show');
+    } else {
+      userDropdown.classList.add('show');
+      overlay.classList.add('show');
+    }
+  });
+
+  // Cerrar al hacer click en overlay
+  document.addEventListener('click', function (ev) {
+    const ov = ev.target.closest && ev.target.closest('.dropdown-overlay');
+    if (!ov) return;
+    const userDropdown = document.getElementById('userDropdown');
+    if (userDropdown) userDropdown.classList.remove('show');
+    ov.classList.remove('show');
+  });
+
+  // Cerrar con Escape
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape') {
+      const userDropdown = document.getElementById('userDropdown');
+      const ov = document.querySelector('.dropdown-overlay');
+      if (userDropdown && userDropdown.classList.contains('show')) {
+        userDropdown.classList.remove('show');
+        if (ov) ov.classList.remove('show');
       }
-    });
-    
-    // Cerrar al hacer click en el overlay
-    overlay.addEventListener('click', closeDropdown);
-    
-    // Cerrar con tecla Escape
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && userDropdown.classList.contains('show')) {
-        closeDropdown();
-      }
-    });
-    
-    // Prevenir cierre al hacer click dentro del dropdown
-    userDropdown.addEventListener('click', function(e) {
-      e.stopPropagation();
-    });
-  }
-  
-  // Funciones auxiliares
-  function openDropdown() {
-    userDropdown.classList.add('show');
-    overlay.classList.add('show');
-    
-    // AnimaciÃ³n suave de los items
-    const items = userDropdown.querySelectorAll('.dropdown-item');
-    items.forEach((item, index) => {
-      item.style.opacity = '0';
-      item.style.transform = 'translateX(-10px)';
-      setTimeout(() => {
-        item.style.transition = 'all 0.2s ease';
-        item.style.opacity = '1';
-        item.style.transform = 'translateX(0)';
-      }, 50 * index);
-    });
-  }
-  
-  function closeDropdown() {
-    userDropdown.classList.remove('show');
-    overlay.classList.remove('show');
-  }
-  
-  // Funcionalidad del botÃ³n de cambiar tema
-  const toggleThemeBtn = document.getElementById('toggleThemeBtn');
-  if (toggleThemeBtn) {
-    toggleThemeBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // AquÃ­ puedes implementar el cambio de tema
-      document.body.classList.toggle('light-mode');
-      
-      // Cambiar icono segÃºn el modo
-      const icon = this.querySelector('i:first-child');
-      if (document.body.classList.contains('light-mode')) {
-        icon.className = 'ri-sun-line';
-      } else {
-        icon.className = 'ri-contrast-2-line';
-      }
-      
-      // Guardar preferencia en localStorage
-      const currentMode = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-      localStorage.setItem('theme-mode', currentMode);
-      
-      // Mostrar notificaciÃ³n (opcional)
-      showNotification('Tema cambiado correctamente');
-    });
-  }
-  
-  // Cargar tema guardado al iniciar
-  const savedTheme = localStorage.getItem('theme-mode');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-mode');
-    const icon = toggleThemeBtn ? toggleThemeBtn.querySelector('i:first-child') : null;
-    if (icon) icon.className = 'ri-sun-line';
-  }
-  
-  // FunciÃ³n para mostrar notificaciones (opcional)
-  function showNotification(message) {
-    // Crear elemento de notificaciÃ³n
-    const notification = document.createElement('div');
-    notification.className = 'toast-notification';
-    notification.innerHTML = `
-      <i class="ri-check-line"></i>
-      <span>${message}</span>
-    `;
-    notification.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #10b981;
-      color: white;
-      padding: 14px 20px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 500;
-      z-index: 10000;
-      animation: slideInRight 0.3s ease;
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Auto-remover despuÃ©s de 3 segundos
-    setTimeout(() => {
-      notification.style.animation = 'slideOutRight 0.3s ease';
-      setTimeout(() => notification.remove(), 300);
-    }, 3000);
-  }
-});
+    }
+  });
+
+  // Prevenir cierre al hacer click dentro del dropdown
+  document.addEventListener('click', function (ev) {
+    const inside = ev.target.closest && ev.target.closest('#userDropdown');
+    if (inside) ev.stopPropagation();
+  });
+}
 
 // Animaciones para las notificaciones
 const style = document.createElement('style');

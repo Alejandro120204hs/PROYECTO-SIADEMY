@@ -347,10 +347,6 @@ if (!empty($_SESSION['user']['id']) && !empty($_SESSION['user']['id_institucion'
       <span>Cambiar Modo</span>
       <i class="ri-arrow-right-s-line dropdown-arrow"></i>
     </a>
-    <a href="#" class="dropdown-item">
-      <i class="ri-moon-line"></i>
-      <span>Modo Descanso</span>
-    </a>
     <div class="dropdown-divider"></div>
     <a href="<?= BASE_URL ?>/logout" class="dropdown-item dropdown-item-danger">
       <i class="ri-logout-box-line"></i>
