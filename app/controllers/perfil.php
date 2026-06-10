@@ -22,6 +22,10 @@
                 $usuario = $objetoPerfil->mostrarPerfilEstudiante($id);
                 break;
 
+            case 'Acudiente':
+                $usuario = $objetoPerfil->mostrarPerfilAcudiente($id);
+                break;
+
             case 'superAdmin':
                 $usuario = $objetoPerfil->mostrarPerfilSuperAdmin($id);
                 break;

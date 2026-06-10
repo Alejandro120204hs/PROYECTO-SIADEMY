@@ -1,5 +1,22 @@
+<?php
+require_once BASE_PATH . '/app/helpers/session_acudiente.php';
+require_once BASE_PATH . '/app/controllers/acudiente/view_data.php';
+
+$dataVistaAcudienteDashboard = obtenerDataVistaAcudienteDashboard();
+extract($dataVistaAcudienteDashboard, EXTR_SKIP);
+
+$estudiante = $estudianteSeleccionado;
+
+if ($estudiante) {
+    $nombreCompleto = trim($estudiante['nombres'] . ' ' . $estudiante['apellidos']);
+    $cursoActual = $estudiante['id_curso']
+        ? $estudiante['grado'] . '° - ' . $estudiante['nombre_curso']
+        : 'Sin matrícula activa';
+}
+?>
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,263 +27,212 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-acudiente.css">
+  <style>
+    .student-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .students-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .student-card-form {
+      display: contents;
+    }
+
+    .student-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      background: #171a28;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: left;
+      color: #e6e9f4;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color .2s ease;
+    }
+
+    .student-card:hover {
+      border-color: #4f46e5;
+    }
+
+    .student-card.active {
+      border-color: #4f46e5;
+      background: linear-gradient(135deg, rgba(79, 70, 229, .18), rgba(99, 102, 241, .08));
+      cursor: default;
+    }
+
+    .student-card-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #2d3353;
+    }
+
+    .student-card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .student-card-info strong {
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .student-card-info small {
+      font-size: 12px;
+      color: #a4b1ff;
+    }
+
+    .student-card-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #22c55e;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #c7cbe1;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      color: #4f46e5;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .upcoming-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .upcoming-list .upcoming-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #171a28;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #c7cbe1;
+      font-size: 14px;
+    }
+
+    .upcoming-list .upcoming-item i {
+      font-size: 20px;
+      color: #a4b1ff;
+    }
+  </style>
 </head>
 <body>
-  <div class="app" id="appGrid">
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar" id="leftSidebar">
-      <a class="brand" href="#">
-        <span class="logo"><i class="ri-shield-star-line"></i></span>
-        <span>Siademy</span>
-      </a>
-      <nav class="nav">
-        <a class="active" href="#"><i class="ri-home-5-line"></i> Panel</a>
-        <a href="calificaciones.html"><i class="ri-file-text-line"></i> Calificaciones</a>
-        <a href="asistencias.html"><i class="ri-calendar-check-line"></i> Asistencia</a>
-      
-     
-        <div class="spacer"></div>
-        
-      </nav>
-    </aside>
+  <div class="app hide-right" id="appGrid">
+    <?php include_once __DIR__ . '/../../layouts/sidebar_acudiente.php' ?>
 
     <!-- MAIN -->
     <main class="main">
       <div class="topbar">
         <div class="topbar-left">
-          <button class="toggle-btn" id="toggleLeft">
+          <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú lateral">
             <i class="ri-menu-2-line"></i>
           </button>
           <div class="title">Panel de Acudiente</div>
         </div>
-        <button class="toggle-btn" id="toggleRight">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+        <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
       </div>
 
-      <!-- STUDENT PROFILE -->
-      <div class="student-profile">
-        <div class="student-avatar">JS</div>
-        <div class="student-info">
-          <h2>Juan Sebastián Rodríguez</h2>
-          <div class="student-meta">
-            <span><i class="ri-book-line"></i> Grado 7° A</span>
-            <span><i class="ri-account-circle-line"></i> ID: 1045823456</span>
-            <span><i class="ri-calendar-line"></i> Periodo: 2° - 2025</span>
+      <?php if (empty($estudiantesAsociados)): ?>
+        <section class="card">
+          <div class="empty-state">
+            <i class="ri-user-search-line"></i>
+            <h3>No tienes estudiantes asociados</h3>
+            <p>Si crees que esto es un error, comunícate con la institución para verificar la vinculación.</p>
           </div>
-        </div>
-      </div>
+        </section>
+      <?php else: ?>
 
-      <!-- KPI CARDS -->
-      <section class="kpis">
-        <div class="kpi">
-          <div class="icon"><i class="ri-medal-line"></i></div>
-          <div>
-            <small>Promedio General</small>
-            <strong>4.2</strong>
-          </div>
-        </div>
-        <div class="kpi">
-          <div class="icon"><i class="ri-calendar-check-line"></i></div>
-          <div>
-            <small>Asistencia</small>
-            <strong>96%</strong>
-          </div>
-        </div>
-        <div class="kpi">
-          <div class="icon"><i class="ri-task-line"></i></div>
-          <div>
-            <small>Tareas Entregadas</small>
-            <strong>28/30</strong>
-          </div>
-        </div>
-        <div class="kpi">
-          <div class="icon"><i class="ri-flag-line"></i></div>
-          <div>
-            <small>Materias Aprobadas</small>
-            <strong>8/9</strong>
-          </div>
-        </div>
-      </section>
+        <?php if (count($estudiantesAsociados) > 1): ?>
+          <section class="card">
+            <h3>Mis estudiantes</h3>
+            <div class="students-grid">
+              <?php foreach ($estudiantesAsociados as $est): ?>
+                <form class="student-card-form" method="post" action="<?= BASE_URL ?>/acudiente/seleccionar-estudiante">
+                  <input type="hidden" name="id_estudiante" value="<?= (int)$est['id'] ?>">
+                  <button type="submit" class="student-card <?= ((int)$est['id'] === (int)$estudiante['id']) ? 'active' : '' ?>">
+                    <img class="student-card-avatar" src="<?= BASE_URL ?>/public/uploads/estudiantes/<?= htmlspecialchars($est['foto'] ?: 'default.png') ?>" alt="" onerror="this.onerror=null; this.src='<?= BASE_URL ?>/public/uploads/estudiantes/default.png'">
+                    <div class="student-card-info">
+                      <strong><?= htmlspecialchars(trim($est['nombres'] . ' ' . $est['apellidos'])) ?></strong>
+                      <small><?= $est['id_curso'] ? htmlspecialchars($est['grado'] . '° - ' . $est['nombre_curso']) : 'Sin matrícula activa' ?></small>
+                      <small><?= htmlspecialchars($est['tipo_documento'] . ': ' . $est['documento']) ?></small>
+                    </div>
+                    <?php if ((int)$est['id'] === (int)$estudiante['id']): ?>
+                      <span class="student-card-badge"><i class="ri-checkbox-circle-fill"></i> Activo</span>
+                    <?php endif; ?>
+                  </button>
+                </form>
+              <?php endforeach; ?>
+            </div>
+          </section>
+        <?php endif; ?>
 
-      <!-- PERFORMANCE CHART -->
-      <section class="card">
-        <h3>Evolución de Calificaciones</h3>
-        <canvas id="performanceChart"></canvas>
-      </section>
+        <!-- STUDENT PROFILE -->
+        <div class="student-profile">
+          <div class="student-avatar">
+            <img src="<?= BASE_URL ?>/public/uploads/estudiantes/<?= htmlspecialchars($estudiante['foto'] ?: 'default.png') ?>" alt="" onerror="this.onerror=null; this.src='<?= BASE_URL ?>/public/uploads/estudiantes/default.png'">
+          </div>
+          <div class="student-info">
+            <h2><?= htmlspecialchars($nombreCompleto) ?></h2>
+            <div class="student-meta">
+              <span><i class="ri-book-line"></i> <?= htmlspecialchars($cursoActual) ?></span>
+              <span><i class="ri-account-circle-line"></i> <?= htmlspecialchars($estudiante['tipo_documento'] . ': ' . $estudiante['documento']) ?></span>
+              <?php if ($estudiante['jornada']): ?>
+                <span><i class="ri-time-line"></i> Jornada <?= htmlspecialchars($estudiante['jornada']) ?></span>
+              <?php endif; ?>
+            </div>
+          </div>
+        </div>
 
-      <!-- GRADES TABLE -->
-      <section class="card">
-        <h3>Calificaciones por Asignatura</h3>
-        <table class="grades-table">
-          <thead>
-            <tr>
-              <th>Asignatura</th>
-              <th>Periodo 1</th>
-              <th>Periodo 2</th>
-              <th>Promedio</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Matemáticas</strong></td>
-              <td>4.5</td>
-              <td>4.3</td>
-              <td><span class="grade-badge grade-excellent">4.4</span></td>
-              <td><span style="color: #4ade80;">✓ Aprobado</span></td>
-            </tr>
-            <tr>
-              <td><strong>Español</strong></td>
-              <td>4.0</td>
-              <td>4.2</td>
-              <td><span class="grade-badge grade-excellent">4.1</span></td>
-              <td><span style="color: #4ade80;">✓ Aprobado</span></td>
-            </tr>
-            <tr>
-              <td><strong>Inglés</strong></td>
-              <td>3.8</td>
-              <td>4.0</td>
-              <td><span class="grade-badge grade-good">3.9</span></td>
-              <td><span style="color: #4ade80;">✓ Aprobado</span></td>
-            </tr>
-            <tr>
-              <td><strong>Ciencias Naturales</strong></td>
-              <td>4.2</td>
-              <td>4.5</td>
-              <td><span class="grade-badge grade-excellent">4.35</span></td>
-              <td><span style="color: #4ade80;">✓ Aprobado</span></td>
-            </tr>
-            <tr>
-              <td><strong>Ciencias Sociales</strong></td>
-              <td>3.5</td>
-              <td>3.8</td>
-              <td><span class="grade-badge grade-good">3.65</span></td>
-              <td><span style="color: #4ade80;">✓ Aprobado</span></td>
-            </tr>
-            <tr>
-              <td><strong>Educación Física</strong></td>
-              <td>4.8</td>
-              <td>4.7</td>
-              <td><span class="grade-badge grade-excellent">4.75</span></td>
-              <td><span style="color: #4ade80;">✓ Aprobado</span></td>
-            </tr>
-            <tr>
-              <td><strong>Artes</strong></td>
-              <td>4.3</td>
-              <td>4.4</td>
-              <td><span class="grade-badge grade-excellent">4.35</span></td>
-              <td><span style="color: #4ade80;">✓ Aprobado</span></td>
-            </tr>
-            <tr>
-              <td><strong>Tecnología</strong></td>
-              <td>3.2</td>
-              <td>3.5</td>
-              <td><span class="grade-badge grade-average">3.35</span></td>
-              <td><span style="color: #fbbf24;">⚠ En observación</span></td>
-            </tr>
-            <tr>
-              <td><strong>Ética y Valores</strong></td>
-              <td>4.6</td>
-              <td>4.5</td>
-              <td><span class="grade-badge grade-excellent">4.55</span></td>
-              <td><span style="color: #4ade80;">✓ Aprobado</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+        <!-- UPCOMING SECTIONS -->
+        <section class="card">
+          <h3>Próximamente</h3>
+          <div class="upcoming-list">
+            <div class="upcoming-item"><i class="ri-bar-chart-2-line"></i> Calificaciones</div>
+            <div class="upcoming-item"><i class="ri-file-paper-2-line"></i> Boletines</div>
+            <div class="upcoming-item"><i class="ri-calendar-check-line"></i> Asistencia</div>
+            <div class="upcoming-item"><i class="ri-book-2-line"></i> Materias y horario</div>
+            <div class="upcoming-item"><i class="ri-task-line"></i> Actividades</div>
+            <div class="upcoming-item"><i class="ri-user-3-line"></i> Profesores</div>
+            <div class="upcoming-item"><i class="ri-calendar-event-line"></i> Eventos académicos</div>
+            <div class="upcoming-item"><i class="ri-notification-3-line"></i> Notificaciones</div>
+          </div>
+        </section>
+
+      <?php endif; ?>
     </main>
-
-    <!-- RIGHT SIDEBAR -->
-    <aside class="rightbar" id="rightSidebar">
-      <div class="user">
-        <button class="btn"><i class="ri-notification-3-line"></i></button>
-        <button class="btn"><i class="ri-settings-3-line"></i></button>
-        <a href="<?= BASE_URL ?>/dashboard-perfil" class="avatar" title="Ir al perfil" style="text-decoration:none;color:inherit;">MR</a>
-      </div>
-
-      <div class="panel-title">Profesores</div>
-      <p class="muted">Contactos directos</p>
-
-      <div class="teacher-item">
-        <div class="teacher-avatar">LC</div>
-        <div class="teacher-info">
-          <strong>Laura Castro</strong>
-          <small>Matemáticas</small>
-        </div>
-        <i class="ri-message-3-line" style="margin-left:auto;color:#a4b1ff;cursor:pointer;"></i>
-      </div>
-
-      <div class="teacher-item">
-        <div class="teacher-avatar">CM</div>
-        <div class="teacher-info">
-          <strong>Carlos Méndez</strong>
-          <small>Español</small>
-        </div>
-        <i class="ri-message-3-line" style="margin-left:auto;color:#a4b1ff;cursor:pointer;"></i>
-      </div>
-
-      <div class="teacher-item">
-        <div class="teacher-avatar">AS</div>
-        <div class="teacher-info">
-          <strong>Ana Suárez</strong>
-          <small>Inglés</small>
-        </div>
-        <i class="ri-message-3-line" style="margin-left:auto;color:#a4b1ff;cursor:pointer;"></i>
-      </div>
-
-      <div class="teacher-item">
-        <div class="teacher-avatar">RG</div>
-        <div class="teacher-info">
-          <strong>Roberto García</strong>
-          <small>Ciencias</small>
-        </div>
-        <i class="ri-message-3-line" style="margin-left:auto;color:#a4b1ff;cursor:pointer;"></i>
-      </div>
-
-      <!-- EVENTS SECTION -->
-      <div class="panel-title" style="margin-top:20px">Próximos Eventos</div>
-      <p class="muted">Agenda del estudiante</p>
-
-      <div class="event-item">
-        <div class="event-date">
-          <span class="day">30</span>
-          <span class="month">Oct</span>
-        </div>
-        <div class="event-content">
-          <h4>Examen de Matemáticas</h4>
-          <p>Evaluación de álgebra y geometría</p>
-        </div>
-      </div>
-
-      <div class="event-item">
-        <div class="event-date">
-          <span class="day">02</span>
-          <span class="month">Nov</span>
-        </div>
-        <div class="event-content">
-          <h4>Festival Cultural</h4>
-          <p>Presentación grupal de danza</p>
-        </div>
-      </div>
-
-      <div class="event-item">
-        <div class="event-date">
-          <span class="day">05</span>
-          <span class="month">Nov</span>
-        </div>
-        <div class="event-content">
-          <h4>Entrega de Proyecto</h4>
-          <p>Proyecto final de Ciencias</p>
-        </div>
-      </div>
-
-      <a href="#" class="btn-primary">Ver calendario completo</a>
-    </aside>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
- 
 
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-acudiente.js"></script>
 </body>

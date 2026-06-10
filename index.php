@@ -541,6 +541,14 @@
                 require BASE_PATH . '/app/views/dashboard/acudiente/acudiente.php';
                 break;
 
+            case '/acudiente/seleccionar-estudiante':
+                require BASE_PATH . '/app/controllers/acudiente/seleccionar_estudiante.php';
+                break;
+
+            case '/acudiente/calificaciones':
+                require BASE_PATH . '/app/controllers/acudiente/calificaciones.php';
+                break;
+
             case '/super-admin/dashboard':
                 require BASE_PATH . '/app/views/dashboard/superAdmin/superAdmin.php';
                 break;

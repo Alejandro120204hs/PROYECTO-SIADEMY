@@ -27,7 +27,7 @@
   }
 ?>
 
-<?php if ($perfilRol === 'Estudiante'): ?>
+<?php if ($perfilRol === 'Estudiante' || $perfilRol === 'Acudiente'): ?>
 <style>
   .topbar .user {
     position: relative;
@@ -339,7 +339,7 @@
   </div>
 </div>
 
-<?php if ($perfilRol === 'Docente' || $perfilRol === 'Estudiante'): ?>
+<?php if ($perfilRol === 'Docente' || $perfilRol === 'Estudiante' || $perfilRol === 'Acudiente'): ?>
 <script>
   (function () {
     if (window.__siademyProfileDropdownInit) {
