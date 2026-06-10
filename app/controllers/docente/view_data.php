@@ -734,6 +734,7 @@ function obtenerDataVistaDocenteDetalleCurso($idCurso)
 
     $detalleActividadesPorAsignatura = [];
     $resumenCalificacionesPorAsignatura = [];
+    $actividadesCurso = [];
 
     foreach ($misAsignaturas as $asignatura) {
         $idAsignatura = (int) ($asignatura['id_asignatura'] ?? 0);
@@ -829,6 +830,156 @@ function obtenerDataVistaDocenteDetalleCurso($idCurso)
         error_log('Error preparando modales de detalle curso docente: ' . $e->getMessage());
     }
 
+    // ─── Lookup nombre de asignatura ──────────────────────────────────────────────
+    $nombreAsignaturaLookup = [];
+    foreach ($misAsignaturas as $asig) {
+        $nombreAsignaturaLookup[(int)($asig['id_asignatura'] ?? 0)] = (string)($asig['asignatura'] ?? '');
+    }
+
+    // ─── Pendientes por calificar & Próximas actividades ─────────────────────────
+    $pendientesCalificarDetalle = [];
+    $proximasActividadesDetalle = [];
+    $hoy         = date('Y-m-d');
+    $limite7dias = date('Y-m-d', strtotime('+7 days'));
+
+    foreach ($actividadesCurso as $act) {
+        $idAsigAct        = (int)($act['id_asignatura'] ?? 0);
+        $totalEntregasAct = (int)($act['total_entregas'] ?? 0);
+        $totalCalifAct    = (int)($act['total_calificadas'] ?? 0);
+        $pendientesAct    = $totalEntregasAct - $totalCalifAct;
+
+        if ($pendientesAct > 0) {
+            $pendientesCalificarDetalle[] = [
+                'titulo'            => (string)($act['titulo'] ?? 'Actividad'),
+                'asignatura'        => $nombreAsignaturaLookup[$idAsigAct] ?? 'Sin asignatura',
+                'fecha_entrega'     => (string)($act['fecha_entrega'] ?? ''),
+                'total_entregas'    => $totalEntregasAct,
+                'total_calificadas' => $totalCalifAct,
+                'pendientes'        => $pendientesAct,
+                'url_entregas'      => BASE_URL . '/docente/ver-entregas?id_actividad=' . (int)$act['id'],
+            ];
+        }
+
+        $fechaAct = (string)($act['fecha_entrega'] ?? '');
+        if ($fechaAct && $fechaAct >= $hoy && $fechaAct <= $limite7dias) {
+            $proximasActividadesDetalle[] = [
+                'titulo'         => (string)($act['titulo'] ?? 'Actividad'),
+                'tipo'           => (string)($act['tipo'] ?? 'Sin tipo'),
+                'estado'         => (string)($act['estado'] ?? 'activa'),
+                'fecha_entrega'  => $fechaAct,
+                'asignatura'     => $nombreAsignaturaLookup[$idAsigAct] ?? 'Sin asignatura',
+                'total_entregas' => $totalEntregasAct,
+            ];
+        }
+    }
+
+    $actividadesPendientesCalificar = count($pendientesCalificarDetalle);
+    $proximasActividades            = count($proximasActividadesDetalle);
+
+    // ─── Promedio general del curso ───────────────────────────────────────────────
+    // Regla: estudiante con actividades asignadas pero sin entregas = 0, no se excluye
+    $promGeneralArr = [];
+    foreach ($perfilAcademicoPorEstudiante as $perfil) {
+        if (($perfil['total_actividades'] ?? 0) > 0) {
+            $promGeneralArr[] = $perfil['promedio_general'] !== null
+                ? (float)$perfil['promedio_general']
+                : 0.0;
+        }
+    }
+    $promedioGeneral = !empty($promGeneralArr)
+        ? round(array_sum($promGeneralArr) / count($promGeneralArr), 2)
+        : 0.0;
+
+    $totalEstudiantesEvaluados = count(array_filter(
+        $perfilAcademicoPorEstudiante,
+        fn($p) => (($p['total_calificadas'] ?? 0) > 0)
+    ));
+
+    $promedioGeneralDetalle = [];
+    foreach ($resumenCalificacionesPorAsignatura as $idAsigResumen => $resumenAsig) {
+        $promedioGeneralDetalle[] = [
+            'id_asignatura'     => (int)$idAsigResumen,
+            'asignatura'        => $nombreAsignaturaLookup[$idAsigResumen] ?? 'Sin asignatura',
+            'promedio_general'  => $resumenAsig['promedio_general'],
+            'total_actividades' => (int)($resumenAsig['total_actividades'] ?? 0),
+            'total_calificadas' => (int)($resumenAsig['total_calificadas'] ?? 0),
+            'total_entregas'    => (int)($resumenAsig['total_entregas'] ?? 0),
+        ];
+    }
+
+    // ─── Estudiantes en riesgo ────────────────────────────────────────────────────
+    $estudiantesRiesgoDetalle = [];
+    $estudiantesEnRiesgo      = 0;
+    foreach ($perfilAcademicoPorEstudiante as $idEstRiesgo => $perfilRiesgo) {
+        $promRiesgo = $perfilRiesgo['promedio_general'];
+        $motivo     = null;
+
+        if ($promRiesgo !== null && $promRiesgo < 3.0) {
+            $motivo = 'Promedio bajo (' . number_format($promRiesgo, 2) . ')';
+        } elseif (($perfilRiesgo['total_actividades'] ?? 0) > 0 && ($perfilRiesgo['total_entregadas'] ?? 0) === 0) {
+            $motivo = 'No ha entregado actividades';
+        }
+
+        if ($motivo !== null) {
+            $estudiantesRiesgoDetalle[] = [
+                'id_estudiante'         => (int)$idEstRiesgo,
+                'nombre'                => (string)($perfilRiesgo['nombre'] ?? ''),
+                'documento'             => (string)($perfilRiesgo['documento'] ?? ''),
+                'foto'                  => (string)($perfilRiesgo['foto'] ?? 'default.png'),
+                'promedio_general'      => $promRiesgo,
+                'total_actividades'     => (int)($perfilRiesgo['total_actividades'] ?? 0),
+                'total_entregadas'      => (int)($perfilRiesgo['total_entregadas'] ?? 0),
+                'porcentaje_asistencia' => null,
+                'motivo'                => $motivo,
+            ];
+            $estudiantesEnRiesgo++;
+        }
+    }
+
+    try {
+        if (!empty($estudiantesRiesgoDetalle)) {
+            $sqlAsist = "SELECT
+                    ast.id_estudiante,
+                    ROUND(
+                        SUM(CASE WHEN ast.estado IN ('Presente','Tarde','Justificado') THEN 1 ELSE 0 END)
+                        * 100.0 / COUNT(*), 1
+                    ) AS porcentaje_asistencia
+                FROM asistencia ast
+                INNER JOIN asignatura_curso ac
+                    ON ast.id_asignatura = ac.id_asignatura
+                   AND ac.id_curso  = :id_curso_asist
+                   AND ac.estado    = 'activo'
+                INNER JOIN docente_asignatura_curso dac
+                    ON dac.id_asignatura_curso = ac.id
+                   AND dac.id_docente = :id_docente_asist
+                   AND dac.estado     = 'activo'
+                WHERE ast.id_institucion = :id_inst_asist
+                GROUP BY ast.id_estudiante";
+
+            $stmtAsist = $pdo->prepare($sqlAsist);
+            $stmtAsist->bindValue(':id_curso_asist',   $idCurso,       PDO::PARAM_INT);
+            $stmtAsist->bindValue(':id_docente_asist', $idDocente,     PDO::PARAM_INT);
+            $stmtAsist->bindValue(':id_inst_asist',    $idInstitucion, PDO::PARAM_INT);
+            $stmtAsist->execute();
+
+            $asistenciaArr    = $stmtAsist->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            $asistenciaPorEst = [];
+            foreach ($asistenciaArr as $asistRow) {
+                $asistenciaPorEst[(int)$asistRow['id_estudiante']] = (float)$asistRow['porcentaje_asistencia'];
+            }
+
+            foreach ($estudiantesRiesgoDetalle as &$estRef) {
+                $idRef = (int)$estRef['id_estudiante'];
+                if (isset($asistenciaPorEst[$idRef])) {
+                    $estRef['porcentaje_asistencia'] = $asistenciaPorEst[$idRef];
+                }
+            }
+            unset($estRef);
+        }
+    } catch (Throwable $e) {
+        error_log('Error asistencia estudiantes riesgo: ' . $e->getMessage());
+    }
+
     return [
         'usuario' => obtenerPerfilDocenteDesdeSesion(),
         'curso' => $curso,
@@ -847,7 +998,12 @@ function obtenerDataVistaDocenteDetalleCurso($idCurso)
         'promedioGeneral' => $promedioGeneral,
         'perfilAcademicoPorEstudiante' => $perfilAcademicoPorEstudiante,
         'calificacionesPorEstudiante' => $calificacionesPorEstudiante,
-        'detalleActividadesPorAsignatura' => $detalleActividadesPorAsignatura,
+        'detalleActividadesPorAsignatura'    => $detalleActividadesPorAsignatura,
         'resumenCalificacionesPorAsignatura' => $resumenCalificacionesPorAsignatura,
+        'pendientesCalificarDetalle'         => $pendientesCalificarDetalle,
+        'proximasActividadesDetalle'         => $proximasActividadesDetalle,
+        'estudiantesRiesgoDetalle'           => $estudiantesRiesgoDetalle,
+        'promedioGeneralDetalle'             => $promedioGeneralDetalle,
+        'totalEstudiantesEvaluados'          => $totalEstudiantesEvaluados,
     ] + obtenerVersionesAssetsDocente();
 }
