@@ -1,16 +1,15 @@
 <?php
 
-/**
- * Controlador de Notificaciones
- * Muestra las notificaciones del usuario
- */
-
 require_once BASE_PATH . '/app/helpers/session_helper.php';
+require_once BASE_PATH . '/app/models/notificaciones.php';
 
-// Verificar que haya sesión activa
-redirectIfNoSession('/siademy/login');
+redirectIfNoSession('/login');
 
-// Incluir la vista de notificaciones
+$idUsuario     = (int)$_SESSION['user']['id'];
+$idInstitucion = (int)($_SESSION['user']['id_institucion'] ?? 0);
+
+$notifModel      = new Notificacion();
+$notificaciones  = $notifModel->listarParaUsuario($idUsuario, $idInstitucion, 100);
+$totalNoLeidas   = $notifModel->contarNoLeidas($idUsuario, $idInstitucion);
+
 require BASE_PATH . '/app/views/notificaciones.php';
-
-?>
