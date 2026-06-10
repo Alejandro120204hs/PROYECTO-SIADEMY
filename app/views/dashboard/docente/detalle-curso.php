@@ -27,7 +27,14 @@
          data-detalle-actividades='<?= docenteJsonParaHtml($detalleActividadesPorAsignatura) ?>'
          data-resumen-calificaciones='<?= docenteJsonParaHtml($resumenCalificacionesPorAsignatura) ?>'
          data-perfil-estudiantes='<?= docenteJsonParaHtml($perfilAcademicoPorEstudiante) ?>'
-         data-calificaciones-estudiantes='<?= docenteJsonParaHtml($calificacionesPorEstudiante) ?>'>
+         data-calificaciones-estudiantes='<?= docenteJsonParaHtml($calificacionesPorEstudiante) ?>'
+         data-pendientes-calificar='<?= docenteJsonParaHtml($pendientesCalificarDetalle) ?>'
+         data-proximas-actividades-det='<?= docenteJsonParaHtml($proximasActividadesDetalle) ?>'
+         data-estudiantes-riesgo='<?= docenteJsonParaHtml($estudiantesRiesgoDetalle) ?>'
+         data-promedio-detalle='<?= docenteJsonParaHtml($promedioGeneralDetalle) ?>'
+         data-total-estudiantes-curso='<?= (int)$totalEstudiantes ?>'
+         data-total-evaluados='<?= (int)$totalEstudiantesEvaluados ?>'
+         data-promedio-general-float='<?= number_format((float)$promedioGeneral, 2, '.', '') ?>'>
         <!-- LEFT SIDEBAR -->
         <?php include_once __DIR__ . '/../../layouts/sidebar_docente.php' ?>
 
@@ -74,17 +81,16 @@
                     <a href="<?= BASE_URL ?>/docente-cursos" class="btn-profile-action btn-secondary-action">
                         <i class="ri-arrow-left-line"></i> Volver a Cursos
                     </a>
-                    <button class="btn-profile-action btn-icon-action" onclick="window.print()">
-                        <i class="ri-printer-line"></i>
-                    </button>
+                   
                 </div>
             </div>
 
             <!-- QUICK STATS - MEJORADAS Y CLICKEABLES -->
             <div class="quick-stats">
                 <!-- Card 1: Actividades Pendientes por Calificar -->
-                <div class="stat-card <?= $actividadesPendientesCalificar > 10 ? 'alert-high' : ($actividadesPendientesCalificar > 5 ? 'alert-medium' : '') ?>" 
-                     onclick="window.location.href='<?= BASE_URL ?>/docente-actividades-pendientes?curso=<?= $id_curso ?>'"
+                <div class="stat-card <?= $actividadesPendientesCalificar > 10 ? 'alert-high' : ($actividadesPendientesCalificar > 5 ? 'alert-medium' : '') ?>"
+                     onclick="abrirModalPendientesCalificar()"
+                     style="cursor:pointer;"
                      title="Ver actividades pendientes de calificación">
                     <?php if ($actividadesPendientesCalificar > 0): ?>
                         <div class="quick-actions-badge"><?= $actividadesPendientesCalificar ?></div>
@@ -102,8 +108,9 @@
                 </div>
 
                 <!-- Card 2: Estudiantes en Riesgo Académico -->
-                <div class="stat-card <?= $estudiantesEnRiesgo > 5 ? 'alert-high' : ($estudiantesEnRiesgo > 0 ? 'alert-medium' : '') ?>" 
-                     onclick="window.location.href='<?= BASE_URL ?>/docente-estudiantes-riesgo?curso=<?= $id_curso ?>'"
+                <div class="stat-card <?= $estudiantesEnRiesgo > 5 ? 'alert-high' : ($estudiantesEnRiesgo > 0 ? 'alert-medium' : '') ?>"
+                     onclick="abrirModalEstudiantesRiesgo()"
+                     style="cursor:pointer;"
                      title="Ver estudiantes con promedio inferior a 3.0">
                     <?php if ($estudiantesEnRiesgo > 0): ?>
                         <div class="quick-actions-badge"><?= $estudiantesEnRiesgo ?></div>
@@ -121,8 +128,9 @@
                 </div>
 
                 <!-- Card 3: Próximas Actividades -->
-                <div class="stat-card" 
-                     onclick="window.location.href='<?= BASE_URL ?>/docente-proximas-actividades?curso=<?= $id_curso ?>'"
+                <div class="stat-card"
+                     onclick="abrirModalProximasActividades()"
+                     style="cursor:pointer;"
                      title="Ver actividades con fecha límite próxima">
                     <?php if ($proximasActividades > 0): ?>
                         <div class="quick-actions-badge" style="background: #f59e0b;"><?= $proximasActividades ?></div>
@@ -140,8 +148,9 @@
                 </div>
 
                 <!-- Card 4: Promedio General del Curso -->
-                <div class="stat-card" 
-                     onclick="window.location.href='<?= BASE_URL ?>/docente-rendimiento-curso?curso=<?= $id_curso ?>'"
+                <div class="stat-card"
+                     onclick="abrirModalPromedioGeneral()"
+                     style="cursor:pointer;"
                      title="Ver rendimiento académico del curso">
                     <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
                         <i class="ri-bar-chart-box-line"></i>
@@ -465,6 +474,137 @@
                     <div id="calificacionesEstudianteDetalle"></div>
                 </div>
                 <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.08);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PENDIENTES POR CALIFICAR -->
+    <div class="modal fade" id="modalPendientesCalificar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content" style="background:#0f172a;color:#e6e9f4;border:1px solid rgba(255,255,255,.08);border-radius:16px;">
+                <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.08);">
+                    <h5 class="modal-title">
+                        <i class="ri-file-list-3-line" style="color:#f5576c;margin-right:8px;"></i>
+                        Actividades Pendientes de Calificación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="pendientesResumen" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;"></div>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle" style="margin:0;">
+                            <thead>
+                                <tr>
+                                    <th>Actividad</th>
+                                    <th>Materia</th>
+                                    <th>Fecha Entrega</th>
+                                    <th style="text-align:center;">Entregas</th>
+                                    <th style="text-align:center;">Calificadas</th>
+                                    <th style="text-align:center;">Pendientes</th>
+                                    <th style="text-align:center;">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendientesBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,.08);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ESTUDIANTES EN RIESGO -->
+    <div class="modal fade" id="modalEstudiantesRiesgo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content" style="background:#0f172a;color:#e6e9f4;border:1px solid rgba(255,255,255,.08);border-radius:16px;">
+                <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.08);">
+                    <h5 class="modal-title">
+                        <i class="ri-alert-line" style="color:#fee140;margin-right:8px;"></i>
+                        Estudiantes en Riesgo Académico
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="riesgoResumen" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;"></div>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle" style="margin:0;">
+                            <thead>
+                                <tr>
+                                    <th>Estudiante</th>
+                                    <th style="text-align:center;">Promedio</th>
+                                    <th style="text-align:center;">Asistencia</th>
+                                    <th style="text-align:center;">Actividades</th>
+                                    <th>Motivo</th>
+                                    <th style="text-align:center;">Perfil</th>
+                                </tr>
+                            </thead>
+                            <tbody id="riesgoBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,.08);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PRÓXIMAS ACTIVIDADES -->
+    <div class="modal fade" id="modalProximasActividades" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content" style="background:#0f172a;color:#e6e9f4;border:1px solid rgba(255,255,255,.08);border-radius:16px;">
+                <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.08);">
+                    <h5 class="modal-title">
+                        <i class="ri-calendar-event-line" style="color:#00f2fe;margin-right:8px;"></i>
+                        Próximas Actividades (siguientes 7 días)
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="proximasResumen" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;"></div>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle" style="margin:0;">
+                            <thead>
+                                <tr>
+                                    <th>Actividad</th>
+                                    <th>Materia</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha Límite</th>
+                                    <th style="text-align:center;">Estado</th>
+                                    <th style="text-align:center;">Entregas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="proximasBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,.08);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PROMEDIO GENERAL -->
+    <div class="modal fade" id="modalPromedioGeneral" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content" style="background:#0f172a;color:#e6e9f4;border:1px solid rgba(255,255,255,.08);border-radius:16px;">
+                <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.08);">
+                    <h5 class="modal-title">
+                        <i class="ri-bar-chart-box-line" style="color:#38f9d7;margin-right:8px;"></i>
+                        Rendimiento Académico del Curso
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="promedioResumen" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;"></div>
+                    <div id="promedioDetallePorAsignatura"></div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,.08);">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
