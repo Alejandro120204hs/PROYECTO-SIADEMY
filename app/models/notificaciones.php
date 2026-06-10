@@ -363,4 +363,41 @@ class Notificacion {
             return null;
         }
     }
+
+    /**
+     * Obtener IDs de usuarios (estudiantes) activos de una institución.
+     * Si $grado no es null/vacío, filtra por ese grado en la tabla curso.
+     * Retorna array de id_usuario.
+     */
+    public function obtenerEstudiantesInstitucion($id_institucion, $grado = null) {
+        try {
+            $sql = "SELECT DISTINCT u.id AS id_usuario
+                    FROM matricula m
+                    INNER JOIN estudiante e  ON m.id_estudiante = e.id
+                    INNER JOIN usuario u     ON e.id_usuario    = u.id
+                    INNER JOIN curso c       ON m.id_curso      = c.id
+                    WHERE m.anio            = :anio
+                      AND m.estado         != 'Retirada'
+                      AND u.id_institucion  = :id_institucion";
+
+            if (!empty($grado)) {
+                $sql .= " AND c.grado = :grado";
+            }
+
+            $stmt = $this->conexion->prepare($sql);
+            $anio = (int)date('Y');
+            $stmt->bindParam(':anio',           $anio,           PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            if (!empty($grado)) {
+                $stmt->bindParam(':grado', $grado, PDO::PARAM_STR);
+            }
+            $stmt->execute();
+
+            return array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'id_usuario');
+
+        } catch (PDOException $e) {
+            error_log('[Notificacion::obtenerEstudiantesInstitucion] ' . $e->getMessage());
+            return [];
+        }
+    }
 }
