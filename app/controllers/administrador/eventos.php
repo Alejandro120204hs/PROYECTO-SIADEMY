@@ -94,9 +94,9 @@
                 try {
                     require_once BASE_PATH . '/app/helpers/notificacion_helper.php';
                     $notifModel    = new Notificacion();
-                    $destinatarios = $notifModel->obtenerEstudiantesInstitucion(
-                        (int)$id_institucion, !empty($grado) ? $grado : null
-                    );
+                    // grado del evento es texto libre ("todos los grados", "7°A", etc.)
+                    // no coincide con los valores de curso.grado → siempre notificar a todos
+                    $destinatarios = $notifModel->obtenerEstudiantesInstitucion((int)$id_institucion);
                     if (!empty($destinatarios)) {
                         $urlEvento = rtrim(BASE_URL, '/') . '/administrador-eventos';
                         notificarBatch(
