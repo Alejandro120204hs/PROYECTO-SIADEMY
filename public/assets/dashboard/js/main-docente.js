@@ -487,6 +487,56 @@ if (document.getElementById('calendarLargeGrid')) {
   $(document).ready(function() {
     'use strict';
 
+    // Helpers duplicados localmente porque este bloque está fuera del ready principal
+    function showModalSafe(modalEl) {
+      if (!modalEl) return;
+      if (window.bootstrap && window.bootstrap.Modal) {
+        window.bootstrap.Modal.getOrCreateInstance(modalEl).show();
+        return;
+      }
+      modalEl.style.display = 'block';
+      modalEl.classList.add('show');
+      modalEl.removeAttribute('aria-hidden');
+      modalEl.setAttribute('aria-modal', 'true');
+      document.body.classList.add('modal-open');
+      if (!document.querySelector('.modal-backdrop')) {
+        var bd = document.createElement('div');
+        bd.className = 'modal-backdrop fade show';
+        bd.addEventListener('click', function() { hideModalSafe(modalEl); });
+        document.body.appendChild(bd);
+      }
+    }
+    function hideModalSafe(modalEl) {
+      if (!modalEl) return;
+      if (window.bootstrap && window.bootstrap.Modal) {
+        var inst = window.bootstrap.Modal.getInstance(modalEl);
+        if (inst) { inst.hide(); return; }
+      }
+      modalEl.classList.remove('show');
+      modalEl.style.display = 'none';
+      modalEl.setAttribute('aria-hidden', 'true');
+      modalEl.removeAttribute('aria-modal');
+      document.body.classList.remove('modal-open');
+      var bd = document.querySelector('.modal-backdrop');
+      if (bd) bd.remove();
+    }
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    function applyDayModalFallbackTheme(modalEl) {
+      if (!modalEl) return;
+      var c = modalEl.querySelector('.modal-content');
+      var h = modalEl.querySelector('.modal-header');
+      var b = modalEl.querySelector('.modal-body');
+      var t = modalEl.querySelector('.modal-title');
+      if (c) { c.style.background = '#11193a'; c.style.color = '#e6e9f4'; c.style.border = '1px solid rgba(255,255,255,.08)'; c.style.borderRadius = '18px'; }
+      if (h) { h.style.background = '#0e142e'; h.style.borderBottom = '1px solid rgba(255,255,255,.08)'; }
+      if (b) { b.style.background = '#11193a'; b.style.color = '#e6e9f4'; }
+      if (t) { t.style.color = '#ffffff'; }
+    }
+
     let currentDateEvents = new Date();
     let currentMonthEvents = currentDateEvents.getMonth();
     let currentYearEvents = currentDateEvents.getFullYear();
@@ -544,6 +594,10 @@ if (document.getElementById('calendarLargeGrid')) {
         category,
         icon: item.icon || iconByCategory[category] || 'ri-calendar-event-line',
         time: item.hora_inicio || '',
+        hora_fin: item.hora_fin || '',
+        ubicacion: item.ubicacion || '',
+        responsable: item.responsable || '',
+        correo: item.correo_contacto || '',
         source: item.fuente || 'evento'
       });
 
@@ -576,6 +630,22 @@ if (document.getElementById('calendarLargeGrid')) {
         const eventTitle = escapeHtml(event.title || 'Evento académico');
         const eventDescription = escapeHtml(event.description || 'Sin descripción');
         const eventIcon = escapeHtml(event.icon || 'ri-calendar-event-line');
+        const detalleBtn = document.getElementById('modalDetalleEvento')
+          ? `<button class="btn-detalle-calendario"
+               data-nombre="${escapeHtml(event.title)}"
+               data-descripcion="${escapeHtml(event.description)}"
+               data-tipo="${eventCategory}"
+               data-fecha="${escapeHtml(dateString)}"
+               data-hora-inicio="${escapeHtml(String(event.time || '').slice(0, 5))}"
+               data-hora-fin="${escapeHtml(String(event.hora_fin || '').slice(0, 5))}"
+               data-ubicacion="${escapeHtml(event.ubicacion || '')}"
+               data-responsable="${escapeHtml(event.responsable || '')}"
+               data-correo="${escapeHtml(event.correo || '')}"
+               data-fuente="${escapeHtml(event.source || 'evento')}"
+               style="margin-top:10px;background:#6366f1;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+               <i class="ri-information-line"></i> Ver detalles
+             </button>`
+          : '';
 
         return `
           <article class="calendar-day-event-item" style="background:#171f45; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; color:#e6e9f4;">
@@ -589,11 +659,46 @@ if (document.getElementById('calendarLargeGrid')) {
               ${hour}
               <span><i class="ri-information-line"></i> ${sourceLabel}</span>
             </div>
+            ${detalleBtn}
           </article>
         `;
       }).join('');
 
       dayEventsModalBody.innerHTML = `<div style="margin-bottom:10px; color:#c5d1ee; font-size:13px;">Total de eventos: ${safeEvents.length}</div><div class="calendar-day-events-list" style="display:grid; gap:12px;">${html}</div>`;
+
+      // Delegación: botón "Ver detalles" dentro del modal de día
+      dayEventsModalBody.querySelectorAll('.btn-detalle-calendario').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const detailModal = document.getElementById('modalDetalleEvento');
+          if (!detailModal) return;
+          const d = btn.dataset;
+          const fecha = d.fecha || '';
+          let fechaFmt = fecha;
+          if (fecha) { const parts = fecha.split('-'); if (parts.length === 3) fechaFmt = parts[2] + '/' + parts[1] + '/' + parts[0]; }
+          const horario = d.horaInicio && d.horaFin ? d.horaInicio + ' — ' + d.horaFin
+                        : d.horaInicio ? 'Desde ' + d.horaInicio : 'Sin hora definida';
+          detailModal.querySelector('#mde-tipo').textContent        = d.tipo || 'Evento';
+          detailModal.querySelector('#mde-titulo').textContent      = d.nombre || '';
+          detailModal.querySelector('#mde-descripcion').textContent = d.descripcion || 'Sin descripción.';
+          detailModal.querySelector('#mde-fecha').textContent       = fechaFmt;
+          detailModal.querySelector('#mde-horario').textContent     = horario;
+          const ubicWrap = detailModal.querySelector('#mde-ubicacion-wrap');
+          const respWrap = detailModal.querySelector('#mde-responsable-wrap');
+          if (d.fuente === 'evento' && (d.ubicacion || d.responsable)) {
+            detailModal.querySelector('#mde-ubicacion').textContent   = d.ubicacion  || '—';
+            detailModal.querySelector('#mde-responsable').textContent = d.responsable || '—';
+            detailModal.querySelector('#mde-correo').textContent      = d.correo || '';
+            if (ubicWrap) ubicWrap.style.display = '';
+            if (respWrap) respWrap.style.display = '';
+          } else {
+            if (ubicWrap) ubicWrap.style.display = 'none';
+            if (respWrap) respWrap.style.display = 'none';
+          }
+          hideModalSafe(dayEventsModalEl);
+          showModalSafe(detailModal);
+        });
+      });
+
       showModalSafe(dayEventsModalEl);
     }
 

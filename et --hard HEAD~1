@@ -1,0 +1,94 @@
+[33m1c65181[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32msp12/develop/feature/error-boletines[m[33m, [m[1;31morigin/develop[m[33m)[m Merge pull request #162 from Alejandro120204hs/sp12/develop/feature/attendant-dashboard
+[33mf3eeb9b[m Merge branch 'develop' into sp12/develop/feature/attendant-dashboard
+[33m73a759c[m feature(attendant): agregue dinamicamente que se vean los estudintes asociados y las materias de estos mismo
+[33m6ea9533[m Merge pull request #160 from Alejandro120204hs/sp12/develop/feature/profile-notifications
+[33m57101bf[m Merge branch 'develop' into sp12/develop/feature/profile-notifications
+[33m672143a[m Merge pull request #158 from Alejandro120204hs/sp12/develop/feature/light-mode
+[33m71aca22[m feature(ui):Estoy Implementando el modo claro
+[33mbe82278[m fix(profile-notifications): always notify all students on evento_nuevo
+[33m9c633df[m fix(profile-notifications): guard dropdown init in all panel JS files
+[33mbc13f65[m fix(profile-notifications): prevent double dropdown init in admin view
+[33mdf341bd[m feat(profile-notifications): add evento_nuevo notification hook
+[33mf10d2b5[m fix(profile-notifications): quitar scrollbar y corregir link Ver detalle
+[33m8c48bb9[m fix(profile-notifications): corregir filtros y quitar sidebar derecho
+[33mb1cf8aa[m feat(profile-notifications): página de notificaciones con datos reales
+[33m295547e[m feat(profile-notifications): badge dinámico y dropdown para todos los roles
+[33m61ed2b4[m feat(profile-notifications): conectar generadores de notificaciones
+[33m5ce85a3[m feat(profile-notifications): agregar modelo, helper y API de notificaciones
+[33mcc28b65[m Merge pull request #156 from Alejandro120204hs/sp12/develop/feature/teacher-course-quick-actions
+[33mccc08e5[m[33m ([m[1;31morigin/sp12/develop/feature/teacher-course-quick-actions[m[33m, [m[1;32msp12/develop/feature/teacher-course-quick-actions[m[33m)[m feature(teacher): Implement functional quick actions in course detail
+[33m763cdb2[m[33m ([m[1;31morigin/sp12/develop/feature/error-boletines[m[33m, [m[1;32msp12/develop/feature/arreglar_sidebar_estudiante[m[33m)[m Merge pull request #146 from Alejandro120204hs/sp12/develop/feature/arreglar_sidebar_estudiante
+[33m53a0f85[m[33m ([m[1;31morigin/sp12/develop/feature/arreglar_sidebar_estudiante[m[33m)[m Arregle estructura de sidebar de estudiante
+[33m5f37439[m[33m ([m[1;32msp10/develop/feature/arreglando_error[m[33m)[m Merge pull request #139 from Alejandro120204hs/sp10/develop/feature/arreglando_error
+[33m8feb1a6[m[33m ([m[1;31morigin/sp10/develop/feature/arreglando_error[m[33m)[m Arreglando error del negro
+[33m57aafd1[m[33m ([m[1;32msp10/develop/feature/prueba_git_flow[m[33m)[m Merge pull request #137 from Alejandro120204hs/sp10/develop/feature/julian_no_supo
+[33m0d21e16[m[33m ([m[1;31morigin/sp10/develop/feature/julian_no_supo[m[33m)[m practice
+[33m7bb42d9[m Merge pull request #135 from Alejandro120204hs/sp10/develop/feature/prueba_git_flow
+[33mc545454[m[33m ([m[1;31morigin/sp10/develop/feature/prueba_git_flow[m[33m)[m Prueba de git flow
+[33m8d56377[m[33m ([m[1;31morigin/sp10/decvlop/feature/prueba_git_flow[m[33m, [m[1;32mfeature/otro_cambio_prueba[m[33m)[m Merge pull request #132 from Alejandro120204hs/feature/cambio_titulo_prueba
+[33m85f3b26[m[33m ([m[1;31morigin/feature/cambio_titulo_prueba[m[33m)[m Merge branch 'develop' into feature/cambio_titulo_prueba
+[33m5411612[m Merge pull request #133 from Alejandro120204hs/feature/otro_cambio_prueba
+[33m06388bb[m[33m ([m[1;31morigin/feature/otro_cambio_prueba[m[33m)[m prueba-1
+[33mcd34b33[m[33m ([m[1;32mfeature/cambio_titulo_prueba[m[33m)[m prueba
+[33m3b97191[m[33m ([m[1;32mdevelop[m[33m)[m Merge pull request #131 from Alejandro120204hs/feature/Alejandro
+[33m7d8097a[m[33m ([m[1;31morigin/feature/Alejandro[m[33m, [m[1;32mfeature/Alejandro[m[33m)[m Agregue estilos mejorados al panel de mis materias del rol estudiante
+[33m5f82b71[m Arregle estilos en el panel de calificaciones del rol estudiante
+[33m315d01b[m Arregle logica en horarios
+[33m4bbe6a8[m Merge pull request #130 from Alejandro120204hs/feature/Alejandro
+[33m3bb9e54[m Agregue logica en asignaturas-docente para editar la asignacion
+[33m96191be[m Merge pull request #129 from Alejandro120204hs/feature/Alejandro
+[33mf0490c7[m Implemnete boletines en rol admin y docente
+[33mf1652dd[m Merge pull request #128 from Alejandro120204hs/feature/Alejandro
+[33mcc1f9e6[m Solucione error de archivo.env
+[33m535e19c[m Merge pull request #127 from Alejandro120204hs/feature/Alejandro
+[33mdbc835f[m Solucionando error de sesion
+[33m80aef5b[m Merge pull request #126 from Alejandro120204hs/feature/Alejandro
+[33m3e2b062[m Agregue funcionalidad de horarios
+[33m32dfffa[m Merge branch 'main' of https://github.com/Alejandro120204hs/PROYECTO-SIADEMY
+[33m77f6789[m Incluir config/config.php, database.php y .htaccess en el repo
+[33meac711e[m Merge pull request #125 from Alejandro120204hs/feature/Alejandro
+[33m128adf2[m Implemente el sistema de boletines academicos
+[33m2a4f09b[m Merge pull request #124 from Alejandro120204hs/feature/Alejandro
+[33m1ee7b83[m Arregle erores en las actividades
+[33mac3b7d2[m Merge pull request #123 from Alejandro120204hs/feature/Alejandro
+[33me98ab13[m Arregle errorees de filtros
+[33m7835243[m Merge pull request #122 from Alejandro120204hs/feature/Alejandro
+[33m898487a[m Arregle errores de asistencia
+[33m6393812[m Merge pull request #121 from Alejandro120204hs/feature/Alejandro
+[33m0f06f61[m Modifique panel de asistencia rol docente, error utf
+[33m8cfb7b7[m Merge pull request #120 from Alejandro120204hs/feature/Alejandro
+[33m3e33689[m Arregle estilos en ver entregas(rol docente)
+[33m92375c5[m Merge pull request #119 from Alejandro120204hs/feature/Alejandro
+[33mf3e78d0[m Arregle erroes en panel de asistencia rol admin
+[33m610bc72[m Merge pull request #118 from Alejandro120204hs/feature/Alejandro
+[33m9ffecd8[m Agregue buenas practicas en rol docente y soluciojne erorres
+[33mc14644c[m Merge pull request #117 from Alejandro120204hs/feature/Alejandro
+[33md4c3cb2[m Agregue buenas practicas en backend en el rol admin
+[33me80cdc0[m Realize buenas practicas en rol admin
+[33m0f47f84[m Merge pull request #116 from Alejandro120204hs/feature/Alejandro
+[33mdcec612[m Realize backend de asistencia en rol docente
+[33m80c484d[m Merge pull request #115 from Alejandro120204hs/feature/Alejandro
+[33m373a280[m Arregle problemas de caches en rol superAdmin
+[33m34edee0[m Merge pull request #114 from Alejandro120204hs/feature/Alejandro
+[33m4f8d4cd[m Arrfegle estilos en rol admin panel de cursos
+[33mffbf833[m Merge pull request #113 from Alejandro120204hs/feature/Alejandro
+[33mf275fc3[m Arregle error de modal en rol docente
+[33m2078e93[m[33m ([m[1;31morigin/feature/DiegoBernal[m[33m)[m Merge pull request #112 from Alejandro120204hs/feature/Alejandro
+[33m171be53[m Arregle error de modal en produccion
+[33med090ff[m Merge pull request #111 from Alejandro120204hs/feature/Alejandro
+[33mcbd7372[m Backend de rol docente y calendario dinamico
+[33mc46f0dd[m Merge pull request #110 from Alejandro120204hs/feature/Alejandro
+[33ma213aff[m Realize muestra y registro de actividades
+[33m888852b[m Merge pull request #109 from Alejandro120204hs/feature/Alejandro
+[33me70af40[m Realize backend del panel principal de docente
+[33me98e630[m Merge pull request #108 from Alejandro120204hs/feature/Alejandro
+[33m1d76039[m Arregle errores de  sesion y actualizar clave
+[33m55ae294[m Merge pull request #107 from Alejandro120204hs/feature/Alejandro
+[33mbb4a1f9[m Arregle problemas de rutas
+[33m59fa03f[m Merge pull request #106 from Alejandro120204hs/feature/Alejandro
+[33me2adff8[m Aregle logica en perful superAdmin y estilos
+[33mebb5115[m Merge pull request #105 from Alejandro120204hs/feature/Alejandro
+[33mbaa1ef2[m Arregle estilos
+[33m0f74bcd[m Merge pull request #104 from Alejandro120204hs/feature/Alejandro
+[33m2d824e2[m Modifique responsive
+[33mbbaf5b

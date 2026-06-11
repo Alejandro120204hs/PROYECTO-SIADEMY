@@ -121,7 +121,16 @@ extract($dataVistaDocenteEventos, EXTR_SKIP);
               <div class="event-card"
                    data-category="<?= htmlspecialchars($evento['category'], ENT_QUOTES, 'UTF-8') ?>"
                    data-upcoming="<?= !empty($evento['is_upcoming']) ? '1' : '0' ?>"
-                   data-date="<?= htmlspecialchars($evento['fecha_evento'], ENT_QUOTES, 'UTF-8') ?>">
+                   data-date="<?= htmlspecialchars($evento['fecha_evento'], ENT_QUOTES, 'UTF-8') ?>"
+                   data-nombre="<?= htmlspecialchars($evento['nombre_evento'], ENT_QUOTES, 'UTF-8') ?>"
+                   data-descripcion="<?= htmlspecialchars($evento['descripcion'], ENT_QUOTES, 'UTF-8') ?>"
+                   data-tipo="<?= htmlspecialchars($evento['category_name'], ENT_QUOTES, 'UTF-8') ?>"
+                   data-hora-inicio="<?= htmlspecialchars(substr($evento['hora_inicio'] ?? '', 0, 5), ENT_QUOTES, 'UTF-8') ?>"
+                   data-hora-fin="<?= htmlspecialchars(substr($evento['hora_fin'] ?? '', 0, 5), ENT_QUOTES, 'UTF-8') ?>"
+                   data-ubicacion="<?= htmlspecialchars($evento['ubicacion'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                   data-responsable="<?= htmlspecialchars($evento['responsable'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                   data-correo="<?= htmlspecialchars($evento['correo_contacto'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                   data-fuente="<?= htmlspecialchars($evento['fuente'], ENT_QUOTES, 'UTF-8') ?>">
                 <div class="event-card-header">
                   <div class="event-type-badge <?= htmlspecialchars($evento['category'], ENT_QUOTES, 'UTF-8') ?>">
                     <i class="<?= htmlspecialchars($evento['icon'], ENT_QUOTES, 'UTF-8') ?>"></i>
@@ -147,6 +156,11 @@ extract($dataVistaDocenteEventos, EXTR_SKIP);
                     </div>
                   </div>
                 </div>
+                <div class="event-card-footer" style="padding:12px 16px; border-top:1px solid rgba(255,255,255,.07);">
+                  <button class="btn-event-secondary btn-ver-detalle-evento" style="cursor:pointer;">
+                    <i class="ri-information-line"></i> Ver detalles
+                  </button>
+                </div>
               </div>
             <?php endforeach; ?>
           <?php endif; ?>
@@ -167,9 +181,103 @@ extract($dataVistaDocenteEventos, EXTR_SKIP);
     </div>
   </div>
 
+  <!-- Modal: detalle de evento institucional -->
+  <div class="modal fade" id="modalDetalleEvento" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="background:#11193a; color:#e6e9f4; border:1px solid rgba(255,255,255,.08); border-radius:16px;">
+        <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.08); padding:20px 24px;">
+          <div>
+            <span id="mde-tipo" style="display:inline-block; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:600; background:rgba(79,70,229,.25); color:#a4b1ff; border:1px solid rgba(164,177,255,.25); margin-bottom:8px;"></span>
+            <h5 class="modal-title" id="mde-titulo" style="margin:0; font-size:20px; font-weight:700;"></h5>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" style="padding:24px;">
+          <p id="mde-descripcion" style="color:#b8c2df; line-height:1.6; margin-bottom:20px;"></p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+            <div id="mde-fecha-wrap" style="background:#0e1632; border-radius:10px; padding:14px 16px;">
+              <div style="font-size:11px; color:#6b7898; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px;">Fecha</div>
+              <div style="font-weight:600;" id="mde-fecha"></div>
+            </div>
+            <div id="mde-horario-wrap" style="background:#0e1632; border-radius:10px; padding:14px 16px;">
+              <div style="font-size:11px; color:#6b7898; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px;">Horario</div>
+              <div style="font-weight:600;" id="mde-horario"></div>
+            </div>
+            <div id="mde-ubicacion-wrap" style="background:#0e1632; border-radius:10px; padding:14px 16px;">
+              <div style="font-size:11px; color:#6b7898; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px;"><i class="ri-map-pin-line"></i> Ubicación</div>
+              <div id="mde-ubicacion"></div>
+            </div>
+            <div id="mde-responsable-wrap" style="background:#0e1632; border-radius:10px; padding:14px 16px;">
+              <div style="font-size:11px; color:#6b7898; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px;"><i class="ri-user-line"></i> Responsable</div>
+              <div id="mde-responsable"></div>
+              <div id="mde-correo" style="font-size:12px; color:#6b7898; margin-top:4px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-docente.js?v=<?= $mainDocenteJsVersion ?>"></script>
+  <script>
+  (function () {
+    const modal = document.getElementById('modalDetalleEvento');
+    if (!modal) return;
+    const bsModal = new bootstrap.Modal(modal);
+
+    document.querySelectorAll('.btn-ver-detalle-evento').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const card = this.closest('.event-card');
+        if (!card) return;
+
+        const nombre      = card.dataset.nombre      || '';
+        const descripcion = card.dataset.descripcion || '';
+        const tipo        = card.dataset.tipo        || '';
+        const fecha       = card.dataset.date        || '';
+        const horaInicio  = card.dataset.horaInicio  || '';
+        const horaFin     = card.dataset.horaFin     || '';
+        const ubicacion   = card.dataset.ubicacion   || '';
+        const responsable = card.dataset.responsable || '';
+        const correo      = card.dataset.correo      || '';
+        const fuente      = card.dataset.fuente      || 'evento';
+
+        modal.querySelector('#mde-tipo').textContent        = tipo || (fuente === 'actividad' ? 'Actividad' : 'Evento');
+        modal.querySelector('#mde-titulo').textContent      = nombre;
+        modal.querySelector('#mde-descripcion').textContent = descripcion || 'Sin descripción.';
+
+        // Fecha
+        if (fecha) {
+          const [y, m, d] = fecha.split('-');
+          modal.querySelector('#mde-fecha').textContent = `${d}/${m}/${y}`;
+        }
+
+        // Horario
+        const horario = horaInicio && horaFin ? `${horaInicio} — ${horaFin}`
+                      : horaInicio ? `Desde ${horaInicio}` : 'Sin hora definida';
+        modal.querySelector('#mde-horario').textContent = horario;
+
+        // Ubicación y responsable solo aparecen para eventos institucionales
+        const ubicWrap = modal.querySelector('#mde-ubicacion-wrap');
+        const respWrap = modal.querySelector('#mde-responsable-wrap');
+        if (fuente === 'evento' && (ubicacion || responsable)) {
+          modal.querySelector('#mde-ubicacion').textContent   = ubicacion  || '—';
+          modal.querySelector('#mde-responsable').textContent = responsable || '—';
+          modal.querySelector('#mde-correo').textContent      = correo || '';
+          if (ubicWrap) ubicWrap.style.display = '';
+          if (respWrap) respWrap.style.display = '';
+        } else {
+          if (ubicWrap) ubicWrap.style.display = 'none';
+          if (respWrap) respWrap.style.display = 'none';
+        }
+
+        bsModal.show();
+      });
+    });
+  })();
+  </script>
 </body>
 
 </html>

@@ -516,6 +516,38 @@ class MateriaEstudiante
         }
     }
 
+    public function obtenerEventosInstitucionalesParaCalendario(int $id_institucion, int $anio): array
+    {
+        try {
+            $sql = "SELECT
+                        DATE(ev.fecha_evento) AS fecha_evento,
+                        COALESCE(NULLIF(ev.tipo_evento, ''), 'Evento') AS tipo_evento,
+                        ev.nombre_evento,
+                        COALESCE(ev.descripcion, '') AS descripcion,
+                        ev.hora_inicio,
+                        ev.hora_fin,
+                        ev.ubicacion,
+                        ev.responsable,
+                        ev.correo_contacto
+                    FROM eventos ev
+                    WHERE ev.id_institucion = :id_institucion
+                      AND ev.fecha_evento IS NOT NULL
+                      AND YEAR(ev.fecha_evento) = :anio
+                      AND (ev.grado IS NULL OR ev.grado = '' OR ev.grado = 'Todos' OR ev.grado = 'Estudiantes')
+                    ORDER BY ev.fecha_evento ASC";
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->bindParam(':anio',           $anio,           PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en obtenerEventosInstitucionalesParaCalendario: " . $e->getMessage());
+            return [];
+        }
+    }
+
     /**
      * Agrupa las evaluaciones de un estudiante por materia y periodo,
      * calculando el promedio ponderado de cada periodo (1-4).

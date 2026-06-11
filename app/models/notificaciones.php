@@ -400,4 +400,36 @@ class Notificacion {
             return [];
         }
     }
+
+    public function obtenerDocentesInstitucion(int $id_institucion): array
+    {
+        try {
+            $sql  = "SELECT DISTINCT d.id_usuario
+                     FROM docente d
+                     WHERE d.id_institucion = :id_institucion";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->execute();
+            return array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'id_usuario');
+        } catch (PDOException $e) {
+            error_log('[Notificacion::obtenerDocentesInstitucion] ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function obtenerAcudientesInstitucion(int $id_institucion): array
+    {
+        try {
+            $sql  = "SELECT DISTINCT a.id_usuario
+                     FROM acudiente a
+                     WHERE a.id_institucion = :id_institucion";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->execute();
+            return array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'id_usuario');
+        } catch (PDOException $e) {
+            error_log('[Notificacion::obtenerAcudientesInstitucion] ' . $e->getMessage());
+            return [];
+        }
+    }
 }

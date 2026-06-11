@@ -201,11 +201,24 @@ function generateCalendar(month, year) {
     if (isToday)   classes += ' today';
     if (hasEvent)  classes += ' has-event';
 
-    const title = hasEvent
-      ? `${dayEvents.length} actividad(es)`
-      : 'Sin actividades';
+    let chipsHtml = '';
+    if (hasEvent) {
+      const visible = dayEvents.slice(0, 2);
+      chipsHtml = visible.map(ev => {
+        const isEvento = ev.source === 'evento';
+        const color = isEvento ? '#4f46e5' : '#059669';
+        const label = escapeHtml(String(ev.title || '').slice(0, 14));
+        return `<div class="cal-chip" style="background:${color};">${label}</div>`;
+      }).join('');
+      if (dayEvents.length > 2) {
+        chipsHtml += `<div class="cal-chip" style="background:#64748b;">+${dayEvents.length - 2} más</div>`;
+      }
+    }
 
-    html += `<div class="${classes}" data-date="${dateString}" title="${title}" style="${hasEvent ? 'cursor:pointer;' : ''}">${day}</div>`;
+    html += `<div class="${classes}" data-date="${dateString}" ${hasEvent ? 'style="cursor:pointer;"' : ''}>
+      <div class="cal-day-num">${day}</div>
+      ${chipsHtml}
+    </div>`;
   }
 
   // Relleno días del mes siguiente

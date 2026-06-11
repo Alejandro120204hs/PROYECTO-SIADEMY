@@ -110,16 +110,20 @@ function docenteConstruirEventosVistaEventos($idInstitucion, $idDocente)
         $category = docenteCategoriaEvento($evento['tipo_evento'] ?? '', $evento['fuente'] ?? 'evento');
 
         $eventosDocente[] = [
-            'fecha_evento' => $fecha,
-            'tipo_evento' => (string) ($evento['tipo_evento'] ?? 'Evento'),
+            'fecha_evento'  => $fecha,
+            'tipo_evento'   => (string) ($evento['tipo_evento']   ?? 'Evento'),
             'nombre_evento' => (string) ($evento['nombre_evento'] ?? 'Evento academico'),
-            'descripcion' => (string) ($evento['descripcion'] ?? 'Sin descripcion'),
-            'hora_inicio' => (string) ($evento['hora_inicio'] ?? ''),
-            'fuente' => (string) ($evento['fuente'] ?? 'evento'),
-            'category' => $category,
+            'descripcion'   => (string) ($evento['descripcion']   ?? 'Sin descripcion'),
+            'hora_inicio'   => (string) ($evento['hora_inicio']   ?? ''),
+            'hora_fin'      => (string) ($evento['hora_fin']      ?? ''),
+            'ubicacion'     => (string) ($evento['ubicacion']     ?? ''),
+            'responsable'   => (string) ($evento['responsable']   ?? ''),
+            'correo_contacto' => (string) ($evento['correo_contacto'] ?? ''),
+            'fuente'        => (string) ($evento['fuente']        ?? 'evento'),
+            'category'      => $category,
             'category_name' => docenteNombreCategoriaEvento($category),
-            'icon' => docenteIconoCategoriaEvento($category),
-            'is_upcoming' => ($fecha >= $hoy),
+            'icon'          => docenteIconoCategoriaEvento($category),
+            'is_upcoming'   => ($fecha >= $hoy),
         ];
     }
 
