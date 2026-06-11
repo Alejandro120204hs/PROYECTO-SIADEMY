@@ -118,10 +118,17 @@
                     </div>
 
                     <div class="row g-3">
-                        <!-- Grado -->
+                        <!-- Dirigido a -->
                         <div class="col-md-6">
-                            <label for="grado">Curso/Grado</label>
-                            <input type="text" id="grado" class="form-control" placeholder="Ej: 7°A, Todos los grados, etc." name="grado">
+                            <label for="grado">Dirigido a*</label>
+                            <select id="grado" class="form-select" name="grado" required>
+                                <option value="">Selecciona el destinatario</option>
+                                <option value="Todos">Todos</option>
+                                <option value="Estudiantes">Estudiantes</option>
+                                <option value="Docentes">Docentes</option>
+                                <option value="Acudientes">Acudientes</option>
+                                <option value="Administradores">Administradores</option>
+                            </select>
                         </div>
 
                         <!-- Número de Participantes -->

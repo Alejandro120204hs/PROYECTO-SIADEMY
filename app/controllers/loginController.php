@@ -54,18 +54,38 @@
             require_once __DIR__ . '/../../config/database.php';
             $db = new Conexion();
             $conn = $db->getConexion();
-            
+
             try {
                 $stmt = $conn->prepare("SELECT id FROM docente WHERE id_usuario = :id_usuario");
                 $stmt->bindParam(':id_usuario', $resultado['id'], PDO::PARAM_INT);
                 $stmt->execute();
                 $docente = $stmt->fetch(PDO::FETCH_ASSOC);
-                
+
                 if ($docente) {
                     $_SESSION['user']['id_docente'] = $docente['id'];
                 }
             } catch(PDOException $e) {
                 error_log("Error al obtener id_docente: " . $e->getMessage());
+            }
+        }
+
+        // Si es acudiente, obtener id_acudiente de la tabla acudiente
+        if ($resultado['rol'] === 'Acudiente') {
+            require_once __DIR__ . '/../../config/database.php';
+            $db = new Conexion();
+            $conn = $db->getConexion();
+
+            try {
+                $stmt = $conn->prepare("SELECT id FROM acudiente WHERE id_usuario = :id_usuario");
+                $stmt->bindParam(':id_usuario', $resultado['id'], PDO::PARAM_INT);
+                $stmt->execute();
+                $acudiente = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($acudiente) {
+                    $_SESSION['user']['id_acudiente'] = $acudiente['id'];
+                }
+            } catch(PDOException $e) {
+                error_log("Error al obtener id_acudiente: " . $e->getMessage());
             }
         }
 

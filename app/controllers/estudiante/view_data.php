@@ -79,36 +79,58 @@ function estudianteObtenerIdDesdeSesion()
  * @param  array $actividadesRaw  Resultado de obtenerActividadesParaCalendario()
  * @return array
  */
-function estudianteConstruirEventosCalendario(array $actividadesRaw)
+function estudianteConstruirEventosCalendario(array $actividadesRaw, array $eventosInstRaw = [])
 {
     $hoy    = date('Y-m-d');
     $eventos = [];
 
     foreach ($actividadesRaw as $act) {
         $fecha = (string)($act['fecha_entrega'] ?? '');
-        if ($fecha === '') {
-            continue;
-        }
+        if ($fecha === '') continue;
 
         $tipo    = trim((string)($act['tipo']    ?? '')) ?: 'Actividad';
         $materia = trim((string)($act['materia'] ?? ''));
         $titulo  = trim((string)($act['titulo']  ?? '')) ?: 'Actividad académica';
         $desc    = trim((string)($act['descripcion'] ?? ''));
 
-        // Incluir la materia en la descripción para que el modal lo muestre
         $descripcionCompleta = ($materia !== '' ? "Materia: {$materia}." : '')
                              . ($desc    !== '' ? " {$desc}" : '');
 
         $eventos[] = [
-            'fecha_evento'  => $fecha,
-            'tipo_evento'   => $tipo,
-            'nombre_evento' => $titulo,
-            'descripcion'   => trim($descripcionCompleta),
-            'hora_inicio'   => '',
-            'fuente'        => 'actividad',
-            'is_upcoming'   => ($fecha >= $hoy),
+            'fecha_evento'    => $fecha,
+            'tipo_evento'     => $tipo,
+            'nombre_evento'   => $titulo,
+            'descripcion'     => trim($descripcionCompleta),
+            'hora_inicio'     => '',
+            'hora_fin'        => '',
+            'ubicacion'       => '',
+            'responsable'     => '',
+            'correo_contacto' => '',
+            'fuente'          => 'actividad',
+            'is_upcoming'     => ($fecha >= $hoy),
         ];
     }
+
+    foreach ($eventosInstRaw as $ev) {
+        $fecha = (string)($ev['fecha_evento'] ?? '');
+        if ($fecha === '') continue;
+
+        $eventos[] = [
+            'fecha_evento'    => $fecha,
+            'tipo_evento'     => trim((string)($ev['tipo_evento']  ?? '')) ?: 'Evento',
+            'nombre_evento'   => trim((string)($ev['nombre_evento'] ?? '')) ?: 'Evento institucional',
+            'descripcion'     => trim((string)($ev['descripcion']  ?? '')),
+            'hora_inicio'     => (string)($ev['hora_inicio']    ?? ''),
+            'hora_fin'        => (string)($ev['hora_fin']       ?? ''),
+            'ubicacion'       => (string)($ev['ubicacion']      ?? ''),
+            'responsable'     => (string)($ev['responsable']    ?? ''),
+            'correo_contacto' => (string)($ev['correo_contacto'] ?? ''),
+            'fuente'          => 'evento',
+            'is_upcoming'     => ($fecha >= $hoy),
+        ];
+    }
+
+    usort($eventos, fn($a, $b) => strcmp($a['fecha_evento'], $b['fecha_evento']));
 
     return $eventos;
 }
@@ -154,11 +176,14 @@ function obtenerDataVistaEstudianteDashboard()
         })
     );
 
-    // ── 4. Actividades para el calendario ───────────────────────────────────
-    $actividadesRaw       = $materiaModel->obtenerActividadesParaCalendario(
+    // ── 4. Actividades + eventos institucionales para el calendario ─────────
+    $actividadesRaw = $materiaModel->obtenerActividadesParaCalendario(
         $idEstudiante, $idInstitucion, $anio
     );
-    $eventosCalendarioEstudiante = estudianteConstruirEventosCalendario($actividadesRaw);
+    $eventosInstRaw = $materiaModel->obtenerEventosInstitucionalesParaCalendario(
+        $idInstitucion, $anio
+    );
+    $eventosCalendarioEstudiante = estudianteConstruirEventosCalendario($actividadesRaw, $eventosInstRaw);
 
     return [
         'usuario'                     => obtenerPerfilEstudianteDesdeSesion(),

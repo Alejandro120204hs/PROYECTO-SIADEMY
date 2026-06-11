@@ -145,6 +145,10 @@
                         a.titulo AS nombre_evento,
                         a.descripcion,
                         NULL AS hora_inicio,
+                        NULL AS hora_fin,
+                        NULL AS ubicacion,
+                        NULL AS responsable,
+                        NULL AS correo_contacto,
                         'actividad' AS fuente
                     FROM actividad a
                     LEFT JOIN docente d
@@ -164,10 +168,15 @@
                         ev.nombre_evento,
                         ev.descripcion,
                         ev.hora_inicio,
+                        ev.hora_fin,
+                        ev.ubicacion,
+                        ev.responsable,
+                        ev.correo_contacto,
                         'evento' AS fuente
                     FROM eventos ev
                     WHERE ev.id_institucion = :id_institucion_evento
                       AND ev.fecha_evento IS NOT NULL
+                      AND (ev.grado IS NULL OR ev.grado = '' OR ev.grado = 'Todos' OR ev.grado = 'Docentes')
 
                     ORDER BY fecha_evento ASC, hora_inicio ASC, nombre_evento ASC
                 ";

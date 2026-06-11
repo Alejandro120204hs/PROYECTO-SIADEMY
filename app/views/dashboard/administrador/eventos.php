@@ -214,6 +214,12 @@
                     <i class="ri-map-pin-line"></i>
                     <span><?= htmlspecialchars($evento['ubicacion']) ?></span>
                   </div>
+                  <?php if (!empty($evento['grado'])): ?>
+                  <div class="meta-item">
+                    <i class="ri-group-line"></i>
+                    <span>Dirigido a: <strong><?= htmlspecialchars($evento['grado']) ?></strong></span>
+                  </div>
+                  <?php endif; ?>
                 </div>
 
                 <div class="event-participants">

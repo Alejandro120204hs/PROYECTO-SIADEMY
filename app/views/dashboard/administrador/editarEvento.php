@@ -111,8 +111,16 @@
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="grado">Curso/Grado</label>
-                            <input type="text" id="grado" class="form-control" name="grado" value="<?= htmlspecialchars($evento['grado']) ?>">
+                            <label for="grado">Dirigido a*</label>
+                            <?php
+                            $opcionesDirigido = ['Todos', 'Estudiantes', 'Docentes', 'Acudientes', 'Administradores'];
+                            $gradoActual = in_array($evento['grado'], $opcionesDirigido) ? $evento['grado'] : 'Todos';
+                            ?>
+                            <select id="grado" class="form-select" name="grado" required>
+                                <?php foreach ($opcionesDirigido as $opcion): ?>
+                                    <option value="<?= $opcion ?>" <?= $gradoActual === $opcion ? 'selected' : '' ?>><?= $opcion ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
                         <div class="col-md-6">
