@@ -32,6 +32,9 @@
         }
     }
 
+    // Valores permitidos para el campo "Dirigido a"
+    const DIRIGIDO_PERMITIDOS = ['Todos', 'Estudiantes', 'Docentes', 'Acudientes', 'Administradores'];
+
     // FUNCIONES DEL CRUD
     function registrarEvento(){
         // CAPTURAMOS EN VARIABLES LOS DATOS ENVIADOS A TRAVÉS DEL MÉTODO POST
@@ -42,7 +45,9 @@
         $hora_inicio = $_POST['hora_inicio'] ?? '';
         $hora_fin = $_POST['hora_fin'] ?? '';
         $ubicacion = $_POST['ubicacion'] ?? '';
-        $grado = $_POST['grado'] ?? '';
+        $gradoRaw = $_POST['grado'] ?? '';
+        $grado = in_array($gradoRaw, ['Todos', 'Estudiantes', 'Docentes', 'Acudientes', 'Administradores'], true)
+                 ? $gradoRaw : 'Todos';
         $participantes_esperados = $_POST['participantes_esperados'] ?? '0';
         $responsable = $_POST['responsable'] ?? '';
         $correo_contacto = $_POST['correo_contacto'] ?? '';
@@ -93,22 +98,30 @@
             if ($enviar_notificacion === '1') {
                 try {
                     require_once BASE_PATH . '/app/helpers/notificacion_helper.php';
-                    $notifModel    = new Notificacion();
-                    // grado del evento es texto libre ("todos los grados", "7°A", etc.)
-                    // no coincide con los valores de curso.grado → siempre notificar a todos
-                    $destinatarios = $notifModel->obtenerEstudiantesInstitucion((int)$id_institucion);
-                    if (!empty($destinatarios)) {
-                        $urlEvento = rtrim(BASE_URL, '/') . '/administrador-eventos';
-                        notificarBatch(
-                            'evento_nuevo',
-                            'Nuevo evento: ' . $nombre_evento,
-                            'Se ha programado el evento "' . $nombre_evento . '" para el ' . $fecha_evento . '.',
-                            $destinatarios,
-                            (int)$id_institucion,
-                            $urlEvento,
-                            'evento',
-                            null
-                        );
+                    $notifModel = new Notificacion();
+                    $idinst  = (int)$id_institucion;
+                    $base    = rtrim(BASE_URL, '/');
+                    $titulo  = 'Nuevo evento: ' . $nombre_evento;
+                    $mensaje = 'Se ha programado el evento "' . $nombre_evento . '" para el ' . $fecha_evento . '.';
+
+                    // Cada rol recibe la URL de su propia vista de eventos
+                    if ($grado === 'Todos' || $grado === 'Estudiantes') {
+                        $dest = $notifModel->obtenerEstudiantesInstitucion($idinst);
+                        if (!empty($dest)) {
+                            notificarBatch('evento_nuevo', $titulo, $mensaje, $dest, $idinst, $base . '/estudiante/dashboard', 'evento', null);
+                        }
+                    }
+                    if ($grado === 'Todos' || $grado === 'Docentes') {
+                        $dest = $notifModel->obtenerDocentesInstitucion($idinst);
+                        if (!empty($dest)) {
+                            notificarBatch('evento_nuevo', $titulo, $mensaje, $dest, $idinst, $base . '/docente-eventos', 'evento', null);
+                        }
+                    }
+                    if ($grado === 'Todos' || $grado === 'Acudientes') {
+                        $dest = $notifModel->obtenerAcudientesInstitucion($idinst);
+                        if (!empty($dest)) {
+                            notificarBatch('evento_nuevo', $titulo, $mensaje, $dest, $idinst, $base . '/acudiente/dashboard', 'evento', null);
+                        }
                     }
                 } catch (Throwable $_e) {
                     error_log('[hook-evento_nuevo] ' . $_e->getMessage());
@@ -158,7 +171,9 @@
         $hora_inicio = $_POST['hora_inicio'] ?? '';
         $hora_fin = $_POST['hora_fin'] ?? '';
         $ubicacion = $_POST['ubicacion'] ?? '';
-        $grado = $_POST['grado'] ?? '';
+        $gradoRaw = $_POST['grado'] ?? '';
+        $grado = in_array($gradoRaw, ['Todos', 'Estudiantes', 'Docentes', 'Acudientes', 'Administradores'], true)
+                 ? $gradoRaw : 'Todos';
         $participantes_esperados = $_POST['participantes_esperados'] ?? '0';
         $responsable = $_POST['responsable'] ?? '';
         $correo_contacto = $_POST['correo_contacto'] ?? '';

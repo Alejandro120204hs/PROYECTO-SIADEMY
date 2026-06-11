@@ -27,9 +27,7 @@
   }
 ?>
 
-<?php if ($perfilRol === 'Estudiante' || $perfilRol === 'Acudiente'): ?>
 <?php
-// Conteo real de notificaciones no leídas para el badge
 $_badgeCount = 0;
 if (!empty($_SESSION['user']['id']) && !empty($_SESSION['user']['id_institucion'])) {
     try {
@@ -438,3 +436,4 @@ if (!empty($_SESSION['user']['id']) && !empty($_SESSION['user']['id_institucion'
     setInterval(pollBadge, 60000);
   })();
 </script>
+<?php endif; ?>
