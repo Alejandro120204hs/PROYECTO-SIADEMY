@@ -7,6 +7,7 @@
  */
 
 require_once BASE_PATH . '/app/helpers/session_acudiente.php';
+require_once BASE_PATH . '/app/controllers/acudiente/view_data.php';
 require_once BASE_PATH . '/app/models/acudiente/estudiante.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -15,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $idEstudiante  = (int)($_POST['id_estudiante'] ?? 0);
-$idAcudiente   = (int)($_SESSION['user']['id_acudiente'] ?? 0);
+$idAcudiente   = acudienteObtenerIdDesdeSesion();
 $idInstitucion = (int)($_SESSION['user']['id_institucion'] ?? 0);
 $anio          = (int)date('Y');
 
@@ -26,5 +27,10 @@ if ($estudiante) {
     $_SESSION['acudiente']['id_estudiante_seleccionado'] = (int)$estudiante['id'];
 }
 
-header('Location: ' . BASE_URL . '/acudiente/dashboard');
+$redirect = (string)($_POST['redirect'] ?? '');
+if (!preg_match('#^/acudiente(/[a-zA-Z0-9\-]+)*$#', $redirect)) {
+    $redirect = '/acudiente/dashboard';
+}
+
+header('Location: ' . BASE_URL . $redirect);
 exit();
