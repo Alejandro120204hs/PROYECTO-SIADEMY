@@ -350,6 +350,7 @@
           </button>
           <div class="title">Notificaciones</div>
         </div>
+        <div class="search"></div>
         <div class="user">
           <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php' ?>
         </div>
