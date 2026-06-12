@@ -2,12 +2,12 @@
   require_once BASE_PATH . '/app/helpers/session_helper.php';
   require_once BASE_PATH . '/app/helpers/notificacion_helper.php';
   redirectIfNoSession();
-  $usuario = $_SESSION['user'] ?? [];
 
+  if (!isset($usuario) || !is_array($usuario)) $usuario = $_SESSION['user'] ?? [];
   if (!isset($notificaciones)) $notificaciones = [];
   if (!isset($totalNoLeidas))  $totalNoLeidas   = 0;
 
-  $rol = $usuario['rol'] ?? '';
+  $rol = $usuario['rol'] ?? ($_SESSION['user']['rol'] ?? '');
 
   // ── Chips por rol ─────────────────────────────────────────────────────────
   $chipsConfig = [
