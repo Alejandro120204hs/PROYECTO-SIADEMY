@@ -9,14 +9,15 @@
   }
 
   $rolUsuario = $_SESSION['user']['rol'] ?? '';
-  if ($rolUsuario !== 'Administrador' && $rolUsuario !== 'superAdmin' && $rolUsuario !== 'Docente' && $rolUsuario !== 'Estudiante') {
+  if ($rolUsuario !== 'Administrador' && $rolUsuario !== 'superAdmin' && $rolUsuario !== 'Docente' && $rolUsuario !== 'Estudiante' && $rolUsuario !== 'Acudiente') {
     header('Location: ' . BASE_URL . '/login');
     exit();
   }
 
   $esSuperAdmin = $rolUsuario === 'superAdmin';
-  $esDocente = $rolUsuario === 'Docente';
+  $esDocente    = $rolUsuario === 'Docente';
   $esEstudiante = $rolUsuario === 'Estudiante';
+  $esAcudiente  = $rolUsuario === 'Acudiente';
   $perfilFotoFolder = $esDocente ? 'docentes' : ($esEstudiante ? 'estudiantes' : 'usuarios');
 
   //ENLAZAMOS LA DEPENDENCIA DEL CONTROLADOR QUE TIENE LA FUNCION PARA MOSTRAR LOS DATOS
@@ -40,6 +41,15 @@
   include_once __DIR__ . '/../../layouts/header_coordinador.php'
   ?> 
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/perfil.css">
+  <style>
+    #appGrid {
+      grid-template-columns: 260px 1fr !important;
+    }
+    #appGrid.hide-left {
+      grid-template-columns: 0 1fr !important;
+    }
+    #appGrid .rightbar { display: none !important; }
+  </style>
 </head>
 
 <body>
@@ -51,6 +61,8 @@
       <?php include_once __DIR__ . '/../../layouts/sidebar_docente.php'; ?>
     <?php elseif ($esEstudiante): ?>
       <?php include_once __DIR__ . '/../../layouts/sidebar_estudiante.php'; ?>
+    <?php elseif ($esAcudiente): ?>
+      <?php include_once __DIR__ . '/../../layouts/sidebar_acudiente.php'; ?>
     <?php else: ?>
       <?php include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'; ?>
     <?php endif; ?>
@@ -68,9 +80,7 @@
           <i class="ri-search-2-line"></i>
           <input type="text" placeholder="Buscar">
         </div>
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
+       
       </div>
 
       <!-- PROFILE CARD -->
@@ -404,34 +414,7 @@
       </div>
     </main>
 
-    <!-- RIGHT SIDEBAR -->
-    <aside class="rightbar" id="rightSidebar">
-      <div class="user">
-      
-          <div class="avatar" title="Profesor"><img src="<?= BASE_URL ?>/public/uploads/<?= $perfilFotoFolder ?>/<?= $usuario['foto'] ?>" 
-              alt="foto"  width="40px" height="40px" style="border-radius: 50%;"></div>
-      </div>
-
-      <div class="panel-title">Actividades y notificaciones</div>
-      <p class="muted">Últimas actualizaciones</p>
-
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <p class="timeline-text">Samantha William publicó en Fotografías...</p>
-            <p class="timeline-date">5 marzo 2021 8:00</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <p class="timeline-text">Tony Soap publicó en Fotografías...</p>
-            <p class="timeline-date">6 marzo 2021 12:45 PM</p>
-          </div>
-        </div>
-      </div>
-    </aside>
+    
   </div>
 
   <script>

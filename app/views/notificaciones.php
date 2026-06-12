@@ -242,6 +242,8 @@
             include_once BASE_PATH . '/app/views/layouts/sidebar_estudiante.php'; break;
           case 'superAdmin':
             include_once BASE_PATH . '/app/views/layouts/sidebar_superAdmin.php'; break;
+          case 'Acudiente':
+            include_once BASE_PATH . '/app/views/layouts/sidebar_acudiente.php'; break;
           default:
             include_once BASE_PATH . '/app/views/layouts/sidebar_coordinador.php';
         }

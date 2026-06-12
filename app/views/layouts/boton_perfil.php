@@ -19,6 +19,8 @@
     $perfilDashboard = '/estudiante/dashboard';
   } elseif ($perfilRol === 'superAdmin') {
     $perfilDashboard = '/superAdmin-dashboard';
+  } elseif ($perfilRol === 'Acudiente') {
+    $perfilDashboard = '/acudiente/dashboard';
   }
 ?>
 
