@@ -303,14 +303,14 @@ if (!empty($_SESSION['user']['id']) && !empty($_SESSION['user']['id_institucion'
   </div>
   <div class="avatar" id="userMenuBtn">
     <img src="<?= BASE_URL . $perfilFotoUrlPath ?>?v=<?= $perfilFotoVersion ?>"
-      alt="foto" width="40px" height="40px" style="border-radius: 50%; cursor: pointer;">
+      alt="foto" style="width:44px;height:44px;border-radius:50%;cursor:pointer;object-fit:cover;display:block;">
   </div>
 
   <!-- Dropdown Menu -->
   <div class="user-dropdown" id="userDropdown">
     <div class="dropdown-header">
       <img src="<?= BASE_URL . $perfilFotoUrlPath ?>?v=<?= $perfilFotoVersion ?>"
-        alt="foto" width="48px" height="48px" style="border-radius: 50%;">
+        alt="foto" style="width:48px;height:48px;border-radius:50%;object-fit:cover;display:block;flex-shrink:0;">
       <div>
         <strong><?= htmlspecialchars($perfilNombre) ?></strong>
         <small><?= htmlspecialchars($perfilRol) ?></small>
