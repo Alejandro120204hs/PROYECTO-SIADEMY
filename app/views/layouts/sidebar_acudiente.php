@@ -34,10 +34,10 @@
 ?>
 
 <aside class="sidebar" id="leftSidebar">
-    <a class="brand" href="<?= BASE_URL ?>/acudiente/dashboard">
-        <span class="logo"><i class="ri-shield-star-line"></i></span>
-        <span>Siademy</span>
-    </a>
+     <a class="brand" href="<?= BASE_URL ?>/docente/dashboard">
+                <img width="170px" src="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
+
+      </a>
     <nav class="nav">
         <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/dashboard']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/dashboard">
             <i class="ri-home-5-line"></i> Panel
