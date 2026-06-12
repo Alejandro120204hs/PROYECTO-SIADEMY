@@ -350,6 +350,9 @@
           </button>
           <div class="title">Notificaciones</div>
         </div>
+        <div class="user">
+          <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php' ?>
+        </div>
       </div>
 
       <div style="padding: 24px; min-height: calc(100vh - 120px);">
