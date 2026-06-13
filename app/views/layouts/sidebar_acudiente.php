@@ -45,5 +45,8 @@
         <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/calificaciones']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/calificaciones">
             <i class="ri-file-text-line"></i> Calificaciones
         </a>
+        <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/boletines']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/boletines">
+            <i class="ri-file-paper-2-line"></i> Boletines
+        </a>
     </nav>
 </aside>

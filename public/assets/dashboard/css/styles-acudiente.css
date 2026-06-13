@@ -197,6 +197,82 @@ a {
   font-weight: 700;
 }
 
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.student-card-form {
+  display: contents;
+}
+
+.student-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: #171a28;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: left;
+  color: #e6e9f4;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color .2s ease;
+}
+
+.student-card:hover {
+  border-color: #4f46e5;
+}
+
+.student-card.active {
+  border-color: #4f46e5;
+  background: linear-gradient(135deg, rgba(79, 70, 229, .18), rgba(99, 102, 241, .08));
+  cursor: default;
+}
+
+.student-card-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #2d3353;
+}
+
+.student-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.student-card-info strong {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.student-card-info small {
+  font-size: 12px;
+  color: #a4b1ff;
+}
+
+.student-card-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #22c55e;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 /* STUDENT PROFILE CARD */
 .student-profile {
   background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
