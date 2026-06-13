@@ -557,6 +557,10 @@
                 require BASE_PATH . '/app/controllers/acudiente/calificaciones.php';
                 break;
 
+            case '/acudiente/boletines':
+                require BASE_PATH . '/app/controllers/acudiente/boletin.php';
+                break;
+
             case '/super-admin/dashboard':
                 require BASE_PATH . '/app/views/dashboard/superAdmin/superAdmin.php';
                 break;

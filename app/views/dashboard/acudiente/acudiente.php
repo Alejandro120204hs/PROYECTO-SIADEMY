@@ -26,89 +26,13 @@ if ($estudiante) {
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-acudiente.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-acudiente.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-acudiente.css') ?: 1 ?>">
   <style>
     .student-avatar img {
       width: 100%;
       height: 100%;
       border-radius: 50%;
       object-fit: cover;
-    }
-
-    .students-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 14px;
-    }
-
-    .student-card-form {
-      display: contents;
-    }
-
-    .student-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      background: #171a28;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
-      text-align: left;
-      color: #e6e9f4;
-      font-family: inherit;
-      cursor: pointer;
-      transition: border-color .2s ease;
-    }
-
-    .student-card:hover {
-      border-color: #4f46e5;
-    }
-
-    .student-card.active {
-      border-color: #4f46e5;
-      background: linear-gradient(135deg, rgba(79, 70, 229, .18), rgba(99, 102, 241, .08));
-      cursor: default;
-    }
-
-    .student-card-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      object-fit: cover;
-      flex-shrink: 0;
-      background: #2d3353;
-    }
-
-    .student-card-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .student-card-info strong {
-      font-size: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .student-card-info small {
-      font-size: 12px;
-      color: #a4b1ff;
-    }
-
-    .student-card-badge {
-      font-size: 11px;
-      font-weight: 600;
-      color: #22c55e;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-      white-space: nowrap;
     }
 
     .empty-state {
@@ -174,29 +98,7 @@ if ($estudiante) {
         </section>
       <?php else: ?>
 
-        <?php if (count($estudiantesAsociados) > 1): ?>
-          <section class="card">
-            <h3>Mis estudiantes</h3>
-            <div class="students-grid">
-              <?php foreach ($estudiantesAsociados as $est): ?>
-                <form class="student-card-form" method="post" action="<?= BASE_URL ?>/acudiente/seleccionar-estudiante">
-                  <input type="hidden" name="id_estudiante" value="<?= (int)$est['id'] ?>">
-                  <button type="submit" class="student-card <?= ((int)$est['id'] === (int)$estudiante['id']) ? 'active' : '' ?>">
-                    <img class="student-card-avatar" src="<?= BASE_URL ?>/public/uploads/estudiantes/<?= htmlspecialchars($est['foto'] ?: 'default.png') ?>" alt="" onerror="this.onerror=null; this.src='<?= BASE_URL ?>/public/uploads/estudiantes/default.png'">
-                    <div class="student-card-info">
-                      <strong><?= htmlspecialchars(trim($est['nombres'] . ' ' . $est['apellidos'])) ?></strong>
-                      <small><?= $est['id_curso'] ? htmlspecialchars($est['grado'] . '° - ' . $est['nombre_curso']) : 'Sin matrícula activa' ?></small>
-                      <small><?= htmlspecialchars($est['tipo_documento'] . ': ' . $est['documento']) ?></small>
-                    </div>
-                    <?php if ((int)$est['id'] === (int)$estudiante['id']): ?>
-                      <span class="student-card-badge"><i class="ri-checkbox-circle-fill"></i> Activo</span>
-                    <?php endif; ?>
-                  </button>
-                </form>
-              <?php endforeach; ?>
-            </div>
-          </section>
-        <?php endif; ?>
+        <?php include __DIR__ . '/../../layouts/mis_estudiantes_acudiente.php'; ?>
 
         <!-- STUDENT PROFILE -->
         <div class="student-profile">
