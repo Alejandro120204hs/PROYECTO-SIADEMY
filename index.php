@@ -57,6 +57,10 @@
                 require BASE_PATH . '/app/controllers/enviarCorreo.php';
                 break;
 
+            case '/contacto-soporte':
+                require BASE_PATH . '/app/controllers/contactoSoporte.php';
+                break;
+
             case '/logout':
                 require BASE_PATH . '/app/controllers/logoutController.php';
                 break;
