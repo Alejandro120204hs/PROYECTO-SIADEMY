@@ -71,8 +71,9 @@ class ProfesorEstudiante
                         COUNT(DISTINCT CASE WHEN cal.nota IS NOT NULL THEN cal.id END) AS total_calificadas,
 
                         -- Asistencia: porcentaje de clases 'Presente' o 'Tarde'
+                        -- COUNT(DISTINCT) en ambos lados evita inflación por el JOIN con actividades
                         ROUND(
-                            SUM(CASE WHEN asist.estado IN ('Presente','Tarde') THEN 1 ELSE 0 END)
+                            COUNT(DISTINCT CASE WHEN asist.estado IN ('Presente','Tarde') THEN asist.id ELSE NULL END)
                             * 100.0
                             / NULLIF(COUNT(DISTINCT asist.id), 0),
                             0

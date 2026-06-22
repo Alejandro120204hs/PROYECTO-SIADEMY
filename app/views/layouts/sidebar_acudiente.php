@@ -34,7 +34,7 @@
 ?>
 
 <aside class="sidebar" id="leftSidebar">
-     <a class="brand" href="<?= BASE_URL ?>/docente/dashboard">
+     <a class="brand" href="<?= BASE_URL ?>/acudiente/dashboard">
                 <img width="170px" src="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
 
       </a>
@@ -48,5 +48,21 @@
         <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/boletines']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/boletines">
             <i class="ri-file-paper-2-line"></i> Boletines
         </a>
+        <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/asistencia']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/asistencia">
+            <i class="ri-calendar-check-line"></i> Asistencia
+        </a>
+        <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/horario']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/horario">
+            <i class="ri-book-2-line"></i> Horario
+        </a>
+        <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/actividades']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/actividades">
+            <i class="ri-task-line"></i> Actividades
+        </a>
+        <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/profesores']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/profesores">
+            <i class="ri-user-3-line"></i> Profesores
+        </a>
+        <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/eventos']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/eventos">
+            <i class="ri-calendar-event-line"></i> Eventos
+        </a>
+        
     </nav>
 </aside>

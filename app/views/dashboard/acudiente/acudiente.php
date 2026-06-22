@@ -27,50 +27,7 @@ if ($estudiante) {
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-acudiente.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-acudiente.css') ?: 1 ?>">
-  <style>
-    .student-avatar img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: #c7cbe1;
-    }
-
-    .empty-state i {
-      font-size: 48px;
-      color: #4f46e5;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .upcoming-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-    }
-
-    .upcoming-list .upcoming-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #171a28;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 14px;
-      color: #c7cbe1;
-      font-size: 14px;
-    }
-
-    .upcoming-list .upcoming-item i {
-      font-size: 20px;
-      color: #a4b1ff;
-    }
-  </style>
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/acudiente-dashboard.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/acudiente-dashboard.css') ?: 1 ?>">
 </head>
 <body>
   <div class="app hide-right" id="appGrid">
@@ -117,18 +74,42 @@ if ($estudiante) {
           </div>
         </div>
 
-        <!-- UPCOMING SECTIONS -->
+        <!-- MODULE LINKS -->
         <section class="card">
-          <h3>Próximamente</h3>
-          <div class="upcoming-list">
-            <div class="upcoming-item"><i class="ri-bar-chart-2-line"></i> Calificaciones</div>
-            <div class="upcoming-item"><i class="ri-file-paper-2-line"></i> Boletines</div>
-            <div class="upcoming-item"><i class="ri-calendar-check-line"></i> Asistencia</div>
-            <div class="upcoming-item"><i class="ri-book-2-line"></i> Materias y horario</div>
-            <div class="upcoming-item"><i class="ri-task-line"></i> Actividades</div>
-            <div class="upcoming-item"><i class="ri-user-3-line"></i> Profesores</div>
-            <div class="upcoming-item"><i class="ri-calendar-event-line"></i> Eventos académicos</div>
-            <div class="upcoming-item"><i class="ri-notification-3-line"></i> Notificaciones</div>
+          <h3>Acceso Rápido</h3>
+          <div class="module-links">
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/calificaciones">
+              <i class="ri-bar-chart-2-line"></i>
+              Calificaciones
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/boletines">
+              <i class="ri-file-paper-2-line"></i>
+              Boletines
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/asistencia">
+              <i class="ri-calendar-check-line"></i>
+              Asistencia
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/horario">
+              <i class="ri-book-2-line"></i>
+              Horario
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/actividades">
+              <i class="ri-task-line"></i>
+              Actividades
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/profesores">
+              <i class="ri-user-3-line"></i>
+              Profesores
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/eventos">
+              <i class="ri-calendar-event-line"></i>
+              Eventos
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/notificaciones">
+              <i class="ri-notification-3-line"></i>
+              Notificaciones
+            </a>
           </div>
         </section>
 
