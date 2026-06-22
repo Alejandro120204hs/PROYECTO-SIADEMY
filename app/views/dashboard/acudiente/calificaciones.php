@@ -11,83 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-acudiente.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-acudiente.css') ?: 1 ?>">
-  <style>
-    .student-avatar-small img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .detail-row.detail-row-activo {
-      background: rgba(79, 70, 229, .12);
-      border-radius: 8px;
-      padding-left: 10px;
-      padding-right: 10px;
-      margin: 0 -10px;
-    }
-
-    .subject-activities {
-      flex: 1;
-    }
-
-    .subject-activities summary {
-      list-style: none;
-    }
-
-    .subject-activities summary::-webkit-details-marker,
-    .subject-activities summary::marker {
-      display: none;
-      content: '';
-    }
-
-    .activities-list {
-      margin-top: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .activity-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      background: #0e142e;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 14px;
-    }
-
-    .activity-info strong {
-      display: block;
-      font-size: 14px;
-    }
-
-    .activity-info small {
-      color: #97a1b6;
-      font-size: 12px;
-    }
-
-    .grade-value.nota-pendiente {
-      color: #97a1b6;
-      font-weight: 500;
-      font-size: 13px;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: #c7cbe1;
-    }
-
-    .empty-state i {
-      font-size: 48px;
-      color: #4f46e5;
-      margin-bottom: 12px;
-      display: block;
-    }
-  </style>
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/acudiente-calificaciones.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/acudiente-calificaciones.css') ?: 1 ?>">
 </head>
 
 <body>
@@ -198,87 +122,171 @@
 
         <!-- GRADES BY SUBJECT -->
         <section class="grades-section">
-          <h3>Calificaciones por Asignatura</h3>
+          <div class="grades-section-header">
+            <h3>Calificaciones por Asignatura</h3>
+            <div class="view-toggle-group">
+              <button class="btn-view-toggle active" data-view="cards" title="Vista de tarjetas">
+                <i class="ri-layout-grid-line"></i>
+              </button>
+              <button class="btn-view-toggle" data-view="table" title="Vista de tabla">
+                <i class="ri-table-line"></i>
+              </button>
+            </div>
+          </div>
 
           <?php if (empty($calificacionesMaterias)): ?>
             <div class="card">
               <p class="muted" style="margin: 0;">Este estudiante no tiene materias registradas.</p>
             </div>
           <?php else: ?>
-            <?php foreach ($calificacionesMaterias as $materia): ?>
-              <?php
-                $clase = match ($materia['estado_general']) {
-                    'superior' => 'excellent',
-                    'alto' => 'good',
-                    'basico' => 'average',
-                    'bajo' => 'low',
-                    default => '',
-                };
-                $progreso = $materia['promedio_general'] !== null
-                    ? max(0, min(100, ($materia['promedio_general'] / 5) * 100))
-                    : 0;
-                $actividadesPeriodo = $materia['periodos'][$periodoSeleccionado]['evaluaciones'];
-              ?>
-              <div class="subject-card <?= $clase ?>">
-                <div class="subject-header">
-                  <div class="subject-icon" style="background: <?= htmlspecialchars($materia['color_icono']) ?>;">
-                    <i class="<?= htmlspecialchars($materia['icono']) ?>"></i>
-                  </div>
-                  <div class="subject-info">
-                    <h4><?= htmlspecialchars($materia['nombre']) ?></h4>
-                    <small><?= $materia['profesor'] !== '' ? 'Prof. ' . htmlspecialchars($materia['profesor']) : 'Sin docente asignado' ?></small>
-                  </div>
-                  <div class="subject-grade">
-                    <div class="grade-big"><?= $materia['promedio_general'] !== null ? number_format($materia['promedio_general'], 1) : '—' ?></div>
-                    <small>Promedio</small>
-                  </div>
-                </div>
-                <div class="subject-details">
-                  <?php foreach ($materia['periodos'] as $numPeriodo => $datosPeriodo): ?>
-                    <div class="detail-row<?= $numPeriodo === $periodoSeleccionado ? ' detail-row-activo' : '' ?>">
-                      <span>Periodo <?= $numPeriodo ?><?= $numPeriodo === $periodoActual ? ' (actual)' : '' ?></span>
-                      <span class="grade-value"><?= $datosPeriodo['notaFinal'] !== null ? number_format($datosPeriodo['notaFinal'], 1) : '—' ?></span>
+
+            <!-- ── Vista: Cards ─────────────────────────────────────────── -->
+            <div id="viewCards">
+              <?php foreach ($calificacionesMaterias as $materia): ?>
+                <?php
+                  $clase = match ($materia['estado_general']) {
+                      'superior' => 'excellent',
+                      'alto' => 'good',
+                      'basico' => 'average',
+                      'bajo' => 'low',
+                      default => '',
+                  };
+                  $progreso = $materia['promedio_general'] !== null
+                      ? max(0, min(100, ($materia['promedio_general'] / 5) * 100))
+                      : 0;
+                  $actividadesPeriodo = $materia['periodos'][$periodoSeleccionado]['evaluaciones'];
+                ?>
+                <div class="subject-card <?= $clase ?>">
+                  <div class="subject-header">
+                    <div class="subject-icon" style="background: <?= htmlspecialchars($materia['color_icono']) ?>;">
+                      <i class="<?= htmlspecialchars($materia['icono']) ?>"></i>
                     </div>
-                  <?php endforeach; ?>
-
-                  <div class="progress-bar">
-                    <div class="progress-fill <?= $clase === 'low' ? 'warning' : '' ?>" style="width: <?= $progreso ?>%;"></div>
-                  </div>
-
-                  <?php if ($clase === 'low'): ?>
-                    <div class="alert-box">
-                      <i class="ri-alert-line"></i>
-                      <span>Esta materia requiere atención especial</span>
+                    <div class="subject-info">
+                      <h4><?= htmlspecialchars($materia['nombre']) ?></h4>
+                      <small><?= $materia['profesor'] !== '' ? 'Prof. ' . htmlspecialchars($materia['profesor']) : 'Sin docente asignado' ?></small>
                     </div>
-                  <?php endif; ?>
-
-                  <div class="subject-actions">
-                    <details class="subject-activities">
-                      <summary class="btn-action"><i class="ri-file-list-3-line"></i> Ver actividades del Periodo <?= $periodoSeleccionado ?></summary>
-                      <div class="activities-list">
-                        <?php if (empty($actividadesPeriodo)): ?>
-                          <p class="muted" style="margin: 0;">No hay actividades registradas en este periodo.</p>
-                        <?php else: ?>
-                          <?php foreach ($actividadesPeriodo as $actividad): ?>
-                            <div class="activity-row">
-                              <div class="activity-info">
-                                <strong><?= htmlspecialchars($actividad['nombre']) ?></strong>
-                                <small><?= htmlspecialchars($actividad['fecha']) ?> • Ponderación <?= htmlspecialchars($actividad['peso']) ?></small>
-                              </div>
-                              <?php if ($actividad['nota'] !== null): ?>
-                                <span class="grade-value"><?= number_format($actividad['nota'], 1) ?></span>
-                              <?php else: ?>
-                                <span class="grade-value nota-pendiente">Sin calificar</span>
-                              <?php endif; ?>
-                            </div>
-                          <?php endforeach; ?>
-                        <?php endif; ?>
+                    <div class="subject-grade">
+                      <div class="grade-big"><?= $materia['promedio_general'] !== null ? number_format($materia['promedio_general'], 1) : '—' ?></div>
+                      <small>Promedio</small>
+                    </div>
+                  </div>
+                  <div class="subject-details">
+                    <?php foreach ($materia['periodos'] as $numPeriodo => $datosPeriodo): ?>
+                      <div class="detail-row<?= $numPeriodo === $periodoSeleccionado ? ' detail-row-activo' : '' ?>">
+                        <span>Periodo <?= $numPeriodo ?><?= $numPeriodo === $periodoActual ? ' (actual)' : '' ?></span>
+                        <span class="grade-value"><?= $datosPeriodo['notaFinal'] !== null ? number_format($datosPeriodo['notaFinal'], 1) : '—' ?></span>
                       </div>
-                    </details>
+                    <?php endforeach; ?>
+
+                    <div class="progress-bar">
+                      <div class="progress-fill <?= $clase === 'low' ? 'warning' : '' ?>" style="width: <?= $progreso ?>%;"></div>
+                    </div>
+
+                    <?php if ($clase === 'low'): ?>
+                      <div class="alert-box">
+                        <i class="ri-alert-line"></i>
+                        <span>Esta materia requiere atención especial</span>
+                      </div>
+                    <?php endif; ?>
+
+                    <div class="subject-actions">
+                      <details class="subject-activities">
+                        <summary class="btn-action"><i class="ri-file-list-3-line"></i> Ver actividades del Periodo <?= $periodoSeleccionado ?></summary>
+                        <div class="activities-list">
+                          <?php if (empty($actividadesPeriodo)): ?>
+                            <p class="muted" style="margin: 0;">No hay actividades registradas en este periodo.</p>
+                          <?php else: ?>
+                            <?php foreach ($actividadesPeriodo as $actividad): ?>
+                              <div class="activity-row">
+                                <div class="activity-info">
+                                  <strong><?= htmlspecialchars($actividad['nombre']) ?></strong>
+                                  <small><?= htmlspecialchars($actividad['fecha']) ?> • Ponderación <?= htmlspecialchars($actividad['peso']) ?></small>
+                                </div>
+                                <?php if ($actividad['nota'] !== null): ?>
+                                  <span class="grade-value"><?= number_format($actividad['nota'], 1) ?></span>
+                                <?php else: ?>
+                                  <span class="grade-value nota-pendiente">Sin calificar</span>
+                                <?php endif; ?>
+                              </div>
+                            <?php endforeach; ?>
+                          <?php endif; ?>
+                        </div>
+                      </details>
+                    </div>
                   </div>
                 </div>
+              <?php endforeach; ?>
+            </div>
+
+            <!-- ── Vista: Tabla ─────────────────────────────────────────── -->
+            <div id="viewTable" style="display:none;">
+              <div class="card" style="padding:0; overflow:hidden;">
+                <table class="calif-table">
+                  <thead>
+                    <tr>
+                      <th>Materia</th>
+                      <th>Docente</th>
+                      <th>P1</th>
+                      <th>P2</th>
+                      <th>P3</th>
+                      <th>P4</th>
+                      <th>Promedio</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($calificacionesMaterias as $materia):
+                      $claseT = match ($materia['estado_general']) {
+                          'superior' => 'excellent',
+                          'alto'     => 'good',
+                          'basico'   => 'average',
+                          'bajo'     => 'low',
+                          default    => '',
+                      };
+                      $estadoLabel = match ($materia['estado_general']) {
+                          'superior' => 'Superior',
+                          'alto'     => 'Alto',
+                          'basico'   => 'Básico',
+                          'bajo'     => 'Bajo',
+                          default    => '—',
+                      };
+                    ?>
+                      <tr>
+                        <td>
+                          <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="tbl-icon" style="background:<?= htmlspecialchars($materia['color_icono']) ?>;"><i class="<?= htmlspecialchars($materia['icono']) ?>"></i></div>
+                            <strong><?= htmlspecialchars($materia['nombre']) ?></strong>
+                          </div>
+                        </td>
+                        <td><?= $materia['profesor'] !== '' ? htmlspecialchars($materia['profesor']) : '—' ?></td>
+                        <?php for ($p = 1; $p <= 4; $p++):
+                          $nota = $materia['periodos'][$p]['notaFinal'] ?? null;
+                          $esActual = ($p === $periodoActual);
+                          $esSelec  = ($p === $periodoSeleccionado);
+                          $cellClass = '';
+                          if ($nota !== null) {
+                              if ($nota >= 4.5) $cellClass = 'cell-excellent';
+                              elseif ($nota >= 4.0) $cellClass = 'cell-good';
+                              elseif ($nota >= 3.1) $cellClass = 'cell-average';
+                              else $cellClass = 'cell-low';
+                          }
+                        ?>
+                          <td class="grade-cell <?= $cellClass ?><?= $esSelec ? ' cell-selected' : '' ?>">
+                            <?= $nota !== null ? number_format($nota, 1) : '—' ?>
+                            <?php if ($esActual): ?><span class="cell-badge">actual</span><?php endif; ?>
+                          </td>
+                        <?php endfor; ?>
+                        <td class="grade-cell <?= $claseT !== '' ? 'cell-' . $claseT : '' ?>">
+                          <strong><?= $materia['promedio_general'] !== null ? number_format($materia['promedio_general'], 1) : '—' ?></strong>
+                        </td>
+                        <td><span class="estado-badge <?= $claseT ?>"><?= $estadoLabel ?></span></td>
+                      </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
               </div>
-            <?php endforeach; ?>
+            </div>
+
           <?php endif; ?>
         </section>
 
@@ -339,6 +347,7 @@
   </div>
 
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-acudiente.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/acudiente-calificaciones.js?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/js/acudiente-calificaciones.js') ?: 1 ?>"></script>
 </body>
 
 </html>

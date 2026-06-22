@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(php -r ' *)"
+      "Bash(php -r ' *)",
+      "Bash(ls -la \"c:\\\\xampp\\\\htdocs\\\\siademy\\\\\" | head -30)",
+      "Read(//c/xampp/htdocs/**)"
     ]
   }
 }
