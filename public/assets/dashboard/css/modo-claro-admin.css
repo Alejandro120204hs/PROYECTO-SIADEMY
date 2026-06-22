@@ -85,6 +85,13 @@ body.light-mode .user-dropdown-wrapper {
 
 body.light-mode .dataTables_wrapper .dataTables_filter input {
     background: white !important;
+    border: 1px solid var(--text-color) !important;
+    color: var(--text-color) !important;
+    box-shadow: none;
+}
+
+body.light-mode .dataTables_wrapper .dataTables_filter input:hover {
+    background: white !important;
     border: 1px solid var(--accent) !important;
     color: var(--text-color) !important;
     box-shadow: none;
@@ -1172,6 +1179,7 @@ body.light-mode .week-title {
 body.light-mode .empty-state {
     background: #f3f4f6 !important;
     border: 1px solid #e5e7eb !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
 }
 
 body.light-mode .empty-state h3 {
@@ -1187,6 +1195,42 @@ body.light-mode .day-header {
 body.light-mode .day-body {
     background: white !important;
     border: 1px solid #e5e7eb !important;
+}
+
+body.light-mode .block-card {
+    background: #f3f4f6 !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .search-wrap input:hover {
+    border: 1px solid var(--accent) !important;
+}
+
+body.light-mode .select-curso {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .select-curso option {
+    background: white !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .select-curso:hover {
+    border: 1px solid var(--accent) !important;
+}
+
+body.light-mode .table-card {
+    background: #f3f4f6 !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+body.light-mode .btn-ver-boletin {
+    background: var(--accent) !important;
+    color: white !important;
 }
 
 /* ============================================
