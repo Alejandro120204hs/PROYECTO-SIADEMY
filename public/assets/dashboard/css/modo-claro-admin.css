@@ -1233,6 +1233,189 @@ body.light-mode .btn-ver-boletin {
     color: white !important;
 }
 
+/* ============================================ 
+    ESTILOS DE LOS PANELES DE FORMULARIOS ADD
+===============================================*/
+
+body.light-mode .subtitulo {
+    background: #f3f4f6 !important;
+    color: var(--text-color) !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+body.light-mode .container-fluid {
+    background: #f3f4f6 !important;
+    color: var(--text-color) !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+body.light-mode .wizard-progress .active-step {
+    background: var(--accent) !important;
+    color: white !important;
+}
+
+body.light-mode form {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+body.light-mode .esPhoto {
+    background: white !important;
+    border: 1px solid #000000 !important;
+}
+
+body.light-mode .poFoto small {
+    color: var(--text-color) !important;
+}
+
+body.light-mode .poFoto input {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+body.light-mode form .selector {
+    background: white !important;
+    border: 1px solid #000000 !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode form .selector option {
+    background: white !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .form-control {
+    background: white !important;
+    border: 1px solid #000000 !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .choices__inner {
+    background: white !important;
+    border: 1px solid #000000 !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .choices__input {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .choices__list--dropdown .choices__item, .choices__list[aria-expanded] .choices__item {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .step p {
+    color: var(--text-color) !important;
+}
+
+body.light-mode .form-card {
+    background: white !important;
+    color: var(--text-color) !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+body.light-mode .form-card h3 {
+    color: var(--text-color) !important;
+}
+
+body.light-mode .select2-container--default .select2-selection--single {
+    background: white !important;
+    border: 1px solid #000000 !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: var(--text-color) !important;
+}
+
+body.light-mode .select2-dropdown {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .select2-container--default .select2-results__option {
+    background: white !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .select2-container--default .select2-results__option:hover {
+    background: #f3f4f6 !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .select2-container--default .select2-search--dropdown .select2-search__field {
+    background: #f3f4f6 !important;
+    border: 1px solid #e5e7eb !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .form-input-periodo {
+    background: white !important;
+    border: 1px solid #000000 !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode #formPeriodo {
+    background: white !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+body.light-mode .btn-modal-cancelar {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .btn-modal-cancelar:hover {
+    background: #f3f4f6 !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+body.light-mode .modal-box {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
+}
+
+body.light-mode #formHorario {
+    background: white !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+body.light-mode .btn-modal-close {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .btn-modal-close:hover {
+    background: #f3f4f6 !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+body.light-mode .btn-cancel {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    color: var(--text-color) !important;
+}
+
+body.light-mode .btn-cancel:hover {
+    background: #f3f4f6 !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+
 /* ============================================
    RESPONSIVE - MINOR ADJUSTMENTS
    ============================================ */

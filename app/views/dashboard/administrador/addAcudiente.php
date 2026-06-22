@@ -205,6 +205,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
     <script src="<?=BASE_URL ?>/public/assets/dashboard/js/main-formulario.js"></script>
+    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
 </body>
 
 </html>

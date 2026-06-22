@@ -186,6 +186,7 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="<?=BASE_URL ?>/public/assets/dashboard/js/main-formulario.js"></script>
     <script src="<?= BASE_URL ?>/public/assets/dashboard/js/administrador/add-curso.js"></script>
+    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
 
 </body>
 

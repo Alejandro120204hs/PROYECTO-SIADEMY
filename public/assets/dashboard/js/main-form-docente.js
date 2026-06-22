@@ -187,3 +187,47 @@ document.addEventListener('DOMContentLoaded', function () {
 //     e.preventDefault();
 //     alert("Profesor agregado con éxito");
 // });
+
+(function () {
+    const themeStorageKey = 'theme-mode';
+
+    function updateThemeIcon() {
+        const btn = document.getElementById('toggleThemeBtn');
+        const icon = btn ? btn.querySelector('i:first-child') : null;
+        if (!icon) return;
+        icon.className = document.body.classList.contains('light-mode') ? 'ri-sun-line' : 'ri-contrast-2-line';
+    }
+
+    function applyStoredTheme() {
+        try {
+            const stored = localStorage.getItem(themeStorageKey);
+            if (stored === 'light') {
+                document.body.classList.add('light-mode');
+            } else if (stored === 'dark') {
+                document.body.classList.remove('light-mode');
+            }
+        } catch (e) {
+            // localStorage puede no estar disponible
+        }
+        updateThemeIcon();
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+        try {
+            localStorage.setItem(themeStorageKey, document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        } catch (e) {
+            // localStorage puede no estar disponible
+        }
+        updateThemeIcon();
+    }
+
+    document.addEventListener('DOMContentLoaded', applyStoredTheme);
+
+    document.addEventListener('click', function (event) {
+        const btn = event.target.closest && event.target.closest('#toggleThemeBtn');
+        if (!btn) return;
+        event.preventDefault();
+        toggleTheme();
+    });
+})();

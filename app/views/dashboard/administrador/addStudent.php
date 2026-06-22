@@ -239,6 +239,7 @@
     <!-- JS de Choices.js (colócalo antes del cierre de body, tras otros scripts) -->
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="<?= BASE_URL ?>/public/assets/dashboard/js/administrador/add-student.js"></script>
+    <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
 
 
 
