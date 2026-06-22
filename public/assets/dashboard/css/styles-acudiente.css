@@ -838,11 +838,11 @@ canvas {
 .subject-card {
   background: #11193a;
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
 }
 
 .subject-card:hover {
@@ -869,18 +869,18 @@ canvas {
 .subject-header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .subject-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
   background: #0e142e;
   display: grid;
   place-items: center;
-  font-size: 28px;
+  font-size: 20px;
   color: #a4b1ff;
   flex-shrink: 0;
 }
@@ -890,14 +890,14 @@ canvas {
 }
 
 .subject-info h4 {
-  margin: 0 0 4px 0;
-  font-size: 18px;
+  margin: 0 0 2px 0;
+  font-size: 15px;
   font-weight: 600;
 }
 
 .subject-info small {
   color: #97a1b6;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .subject-grade {
@@ -905,10 +905,10 @@ canvas {
 }
 
 .grade-big {
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 700;
   line-height: 1;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .subject-grade small {
@@ -919,16 +919,16 @@ canvas {
 
 .subject-details {
   border-top: 1px solid var(--border);
-  padding-top: 16px;
+  padding-top: 12px;
 }
 
 .detail-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 7px 0;
   color: #e6e9f4;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .grade-value {
@@ -1007,56 +1007,49 @@ canvas {
 
 /* SCALE INFO (Panel derecho) */
 .scale-info {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
 
 .scale-item {
   background: #171a28;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 12px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .scale-color {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
   flex-shrink: 0;
 }
 
-.scale-color.excellent {
-  background: linear-gradient(135deg, #4ade80, #22c55e);
-}
-
-.scale-color.good {
-  background: linear-gradient(135deg, #60a5fa, #3b82f6);
-}
-
-.scale-color.average {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-}
-
-.scale-color.low {
-  background: linear-gradient(135deg, #f87171, #ef4444);
-}
+.scale-color.excellent { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,.5); }
+.scale-color.good      { background: #60a5fa; box-shadow: 0 0 6px rgba(96,165,250,.5); }
+.scale-color.average   { background: #fbbf24; box-shadow: 0 0 6px rgba(251,191,36,.5); }
+.scale-color.low       { background: #f87171; box-shadow: 0 0 6px rgba(248,113,113,.5); }
 
 .scale-item strong {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  margin-bottom: 2px;
+  color: #e2e5f0;
+  margin-bottom: 1px;
 }
 
 .scale-item small {
   display: block;
-  color: #97a1b6;
-  font-size: 12px;
+  color: #7a87b0;
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .scale-info { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* STATS (Panel derecho) */
