@@ -343,18 +343,6 @@
 const BASE_URL    = '<?= BASE_URL ?>';
 const ID_CURSO    = <?= $idCurso ?>;
 
-// ── Sidebar toggle ────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', function () {
-    const app     = document.getElementById('appGrid');
-    const sidebar = document.getElementById('leftSidebar');
-    const btnLeft = document.getElementById('toggleLeft');
-    if (btnLeft && sidebar && app) {
-        btnLeft.addEventListener('click', () => {
-            sidebar.classList.toggle('hidden');
-            app.classList.toggle('hide-left', sidebar.classList.contains('hidden'));
-        });
-    }
-});
 
 // ── Cambiar curso ────────────────────────────────────────────────────────────
 function cambiarCurso(idCurso) {

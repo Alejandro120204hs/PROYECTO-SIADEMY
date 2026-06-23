@@ -220,11 +220,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const app      = document.getElementById('appGrid');
     const sidebar  = document.getElementById('leftSidebar');
     const btnLeft  = document.getElementById('toggleLeft');
-
-    if (btnLeft && sidebar && app) {
+    const ov = document.querySelector('.sidebar-overlay') || document.createElement('div');
+    if (!ov.parentElement) { ov.className = 'sidebar-overlay'; document.body.appendChild(ov); }
+    function isMobile() { return window.innerWidth <= 768; }
+    function openDrawer()  { if (!sidebar) return; sidebar.classList.add('mobile-open'); sidebar.classList.remove('hidden'); ov.classList.add('active'); }
+    function closeDrawer() { if (!sidebar) return; sidebar.classList.remove('mobile-open'); ov.classList.remove('active'); }
+    ov.onclick = closeDrawer;
+    window.addEventListener('resize', () => { if (!isMobile()) closeDrawer(); });
+    if (btnLeft) {
         btnLeft.addEventListener('click', () => {
-            sidebar.classList.toggle('hidden');
-            app.classList.toggle('hide-left', sidebar.classList.contains('hidden'));
+            if (isMobile()) { sidebar && sidebar.classList.contains('mobile-open') ? closeDrawer() : openDrawer(); return; }
+            if (sidebar && app) { sidebar.classList.toggle('hidden'); app.classList.toggle('hide-left', sidebar.classList.contains('hidden')); }
         });
     }
 

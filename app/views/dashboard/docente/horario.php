@@ -137,10 +137,34 @@ document.addEventListener('DOMContentLoaded', function () {
     const app     = document.getElementById('appGrid');
     const sidebar = document.getElementById('leftSidebar');
     const btnLeft = document.getElementById('toggleLeft');
+    const overlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
+    if (!overlay.parentElement) {
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+    }
+    function isMobile() { return window.innerWidth <= 768; }
+    function openMobile() {
+        if (!sidebar) return;
+        sidebar.classList.add('mobile-open');
+        sidebar.classList.remove('hidden');
+        overlay.classList.add('active');
+    }
+    function closeMobile() {
+        if (!sidebar) return;
+        sidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+    }
+    overlay.onclick = closeMobile;
+    window.addEventListener('resize', function() { if (!isMobile()) closeMobile(); });
+
     if (btnLeft && sidebar && app) {
-        btnLeft.addEventListener('click', () => {
-            sidebar.classList.toggle('hidden');
-            app.classList.toggle('hide-left', sidebar.classList.contains('hidden'));
+        btnLeft.addEventListener('click', function() {
+            if (isMobile()) {
+                sidebar.classList.contains('mobile-open') ? closeMobile() : openMobile();
+            } else {
+                sidebar.classList.toggle('hidden');
+                app.classList.toggle('hide-left', sidebar.classList.contains('hidden'));
+            }
         });
     }
 

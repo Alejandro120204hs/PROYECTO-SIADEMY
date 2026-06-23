@@ -29,6 +29,9 @@
             <!-- TOPBAR -->
             <div class="topbar">
                 <div class="topbar-left">
+                    <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú">
+                        <i class="ri-menu-2-line"></i>
+                    </button>
                     <div class="title">Gestión de Asistencia</div>
                 </div>
                 <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>

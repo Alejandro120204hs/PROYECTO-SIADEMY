@@ -97,51 +97,81 @@ $(document).ready(function() {
   const toggleLeft = document.getElementById('toggleLeft');
   const toggleRight = document.getElementById('toggleRight');
 
-  if (leftSidebar && rightSidebar && appGrid) {
-    // Cargar estado desde localStorage
-    let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
-    let rightVisible = localStorage.getItem('rightSidebarVisible') !== 'false';
+  let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
+  let rightVisible = localStorage.getItem('rightSidebarVisible') !== 'false';
 
-    function updateGridState() {
-      appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
+  // ── Overlay y drawer móvil ────────────────────────────────
+  const overlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
+  if (!overlay.parentElement) {
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+  }
 
-      if (!leftVisible && !rightVisible) {
-        appGrid.classList.add('hide-both');
-      } else if (!leftVisible) {
-        appGrid.classList.add('hide-left');
-      } else if (!rightVisible) {
-        appGrid.classList.add('hide-right');
-      }
+  function isMobile() { return window.innerWidth <= 768; }
+
+  function openMobileDrawer() {
+    if (!leftSidebar) return;
+    leftSidebar.classList.add('mobile-open');
+    leftSidebar.classList.remove('hidden');
+    overlay.classList.add('active');
+  }
+
+  function closeMobileDrawer() {
+    if (!leftSidebar) return;
+    leftSidebar.classList.remove('mobile-open');
+    leftSidebar.classList.add('hidden');
+    overlay.classList.remove('active');
+  }
+
+  overlay.onclick = closeMobileDrawer;
+
+  window.addEventListener('resize', function() {
+    if (!isMobile()) {
+      overlay.classList.remove('active');
+      if (leftSidebar) leftSidebar.classList.remove('mobile-open');
     }
+  });
 
-    function toggleLeftSidebar() {
-      leftVisible = !leftVisible;
-      leftSidebar.classList.toggle('hidden', !leftVisible);
-      localStorage.setItem('leftSidebarVisible', leftVisible);
-      updateGridState();
+  function updateGridState() {
+    if (!appGrid || isMobile()) return;
+    appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
+    if (!leftVisible && !rightVisible) {
+      appGrid.classList.add('hide-both');
+    } else if (!leftVisible) {
+      appGrid.classList.add('hide-left');
+    } else if (!rightVisible) {
+      appGrid.classList.add('hide-right');
     }
+  }
 
-    function toggleRightSidebar() {
-      rightVisible = !rightVisible;
-      rightSidebar.classList.toggle('hidden', !rightVisible);
-      localStorage.setItem('rightSidebarVisible', rightVisible);
-      updateGridState();
+  function toggleLeftSidebar() {
+    if (isMobile()) {
+      const isOpen = leftSidebar && leftSidebar.classList.contains('mobile-open');
+      isOpen ? closeMobileDrawer() : openMobileDrawer();
+      return;
     }
-
-    // Event listeners para toggles
-    if (toggleLeft) {
-      toggleLeft.addEventListener('click', toggleLeftSidebar);
-    }
-
-    if (toggleRight) {
-      toggleRight.addEventListener('click', toggleRightSidebar);
-    }
-
-    // Aplicar estado inicial
-    if (!leftVisible) leftSidebar.classList.add('hidden');
-    if (!rightVisible) rightSidebar.classList.add('hidden');
+    leftVisible = !leftVisible;
+    if (leftSidebar) leftSidebar.classList.toggle('hidden', !leftVisible);
+    localStorage.setItem('leftSidebarVisible', leftVisible);
     updateGridState();
   }
+
+  function toggleRightSidebar() {
+    rightVisible = !rightVisible;
+    if (rightSidebar) rightSidebar.classList.toggle('hidden', !rightVisible);
+    localStorage.setItem('rightSidebarVisible', rightVisible);
+    updateGridState();
+  }
+
+  if (toggleLeft) toggleLeft.addEventListener('click', toggleLeftSidebar);
+  if (toggleRight) toggleRight.addEventListener('click', toggleRightSidebar);
+
+  // Aplicar estado inicial
+  if (!isMobile()) {
+    if (leftSidebar && !leftVisible) leftSidebar.classList.add('hidden');
+    if (rightSidebar && !rightVisible) rightSidebar.classList.add('hidden');
+  }
+  updateGridState();
 
   // ========================================
   // DATATABLES - PANEL PRINCIPAL
