@@ -8,24 +8,54 @@ const leftSidebar  = document.getElementById('leftSidebar');
 const appGrid      = document.getElementById('appGrid');
 const toggleLeft   = document.getElementById('toggleLeft');
 
+const overlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
+if (!overlay.parentElement) { overlay.className = 'sidebar-overlay'; document.body.appendChild(overlay); }
+
 let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
 
+function isMobile() { return window.innerWidth <= 768; }
+
 function updateGridState() {
+  if (!appGrid) return;
   appGrid.classList.remove('hide-left');
   if (!leftVisible) appGrid.classList.add('hide-left');
 }
 
+function openMobileDrawer() {
+  if (!leftSidebar) return;
+  leftSidebar.classList.add('mobile-open');
+  leftSidebar.classList.remove('hidden');
+  overlay.classList.add('active');
+}
+
+function closeMobileDrawer() {
+  if (!leftSidebar) return;
+  leftSidebar.classList.remove('mobile-open');
+  overlay.classList.remove('active');
+}
+
 function toggleLeftSidebar() {
+  if (isMobile()) {
+    leftSidebar && leftSidebar.classList.contains('mobile-open') ? closeMobileDrawer() : openMobileDrawer();
+    return;
+  }
   leftVisible = !leftVisible;
   if (leftSidebar) leftSidebar.classList.toggle('hidden', !leftVisible);
   localStorage.setItem('leftSidebarVisible', leftVisible);
   updateGridState();
 }
 
+overlay.onclick = closeMobileDrawer;
+window.addEventListener('resize', function () {
+  if (!isMobile()) { overlay.classList.remove('active'); if (leftSidebar) leftSidebar.classList.remove('mobile-open'); }
+});
+
 if (toggleLeft) toggleLeft.addEventListener('click', toggleLeftSidebar);
 
-if (leftSidebar && !leftVisible) leftSidebar.classList.add('hidden');
-updateGridState();
+if (!isMobile()) {
+  if (leftSidebar && !leftVisible) leftSidebar.classList.add('hidden');
+  updateGridState();
+}
 
 // ─── DataTable ──────────────────────────────────────────────
 $(document).ready(function () {

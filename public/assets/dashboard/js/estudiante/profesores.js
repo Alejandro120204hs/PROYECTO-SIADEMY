@@ -9,24 +9,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleRight = document.getElementById('toggleRight');
     const hasRightSidebar = !!rightSidebar;
 
-    // Cargar estado desde localStorage
+    const ov = document.querySelector('.sidebar-overlay') || document.createElement('div');
+    if (!ov.parentElement) { ov.className = 'sidebar-overlay'; document.body.appendChild(ov); }
+
     let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
     let rightVisible = hasRightSidebar && localStorage.getItem('rightSidebarVisible') !== 'false';
+
+    function isMobile() { return window.innerWidth <= 768; }
 
     function updateGridState() {
         if (!appGrid) return;
         appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
-
-        if (!leftVisible && !rightVisible) {
-            appGrid.classList.add('hide-both');
-        } else if (!leftVisible) {
-            appGrid.classList.add('hide-left');
-        } else if (!rightVisible) {
-            appGrid.classList.add('hide-right');
-        }
+        if (!leftVisible && !rightVisible) appGrid.classList.add('hide-both');
+        else if (!leftVisible) appGrid.classList.add('hide-left');
+        else if (!rightVisible) appGrid.classList.add('hide-right');
     }
 
+    function openDrawer()  { if (!leftSidebar) return; leftSidebar.classList.add('mobile-open'); leftSidebar.classList.remove('hidden'); ov.classList.add('active'); }
+    function closeDrawer() { if (!leftSidebar) return; leftSidebar.classList.remove('mobile-open'); ov.classList.remove('active'); }
+
+    ov.onclick = closeDrawer;
+    window.addEventListener('resize', () => { if (!isMobile()) closeDrawer(); });
+
     function toggleLeftSidebar() {
+        if (isMobile()) { leftSidebar && leftSidebar.classList.contains('mobile-open') ? closeDrawer() : openDrawer(); return; }
         if (!leftSidebar) return;
         leftVisible = !leftVisible;
         leftSidebar.classList.toggle('hidden', !leftVisible);
@@ -42,19 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
         updateGridState();
     }
 
-    // Event listeners
-    if (toggleLeft) {
-        toggleLeft.addEventListener('click', toggleLeftSidebar);
-    }
-    
-    if (toggleRight && hasRightSidebar) {
-        toggleRight.addEventListener('click', toggleRightSidebar);
-    }
+    if (toggleLeft) toggleLeft.addEventListener('click', toggleLeftSidebar);
+    if (toggleRight && hasRightSidebar) toggleRight.addEventListener('click', toggleRightSidebar);
 
-    // Aplicar estado inicial
-    if (!leftVisible && leftSidebar) leftSidebar.classList.add('hidden');
-    if (hasRightSidebar && !rightVisible) rightSidebar.classList.add('hidden');
-    updateGridState();
+    if (!isMobile()) {
+        if (!leftVisible && leftSidebar) leftSidebar.classList.add('hidden');
+        if (hasRightSidebar && !rightVisible) rightSidebar.classList.add('hidden');
+        updateGridState();
+    }
 
     // ===========================================
     // FILTROS DE CATEGORÍA

@@ -513,27 +513,6 @@ function adm_bol_promClase(?float $p): string {
 
 
 <script>
-// ── Sidebar toggle ────────────────────────────────────────────────────────────
-(function () {
-    const sidebar    = document.getElementById('leftSidebar');
-    const appGrid    = document.getElementById('appGrid');
-    const toggleBtn  = document.getElementById('toggleLeft');
-    let visible      = localStorage.getItem('leftSidebarVisible') !== 'false';
-
-    function apply() {
-        appGrid.classList.toggle('hide-left', !visible);
-        if (sidebar) sidebar.classList.toggle('hidden', !visible);
-    }
-
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            visible = !visible;
-            localStorage.setItem('leftSidebarVisible', visible);
-            apply();
-        });
-    }
-    apply();
-})();
 
 // ── Profile dropdown (self-contained) ────────────────────────────────────────
 (function () {

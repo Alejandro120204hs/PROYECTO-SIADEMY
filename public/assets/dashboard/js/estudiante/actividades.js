@@ -8,41 +8,46 @@ const toggleLeft = document.getElementById('toggleLeft');
 const toggleRight = document.getElementById('toggleRight');
 const hasRightSidebar = !!rightSidebar;
 
-// Estado inicial de los sidebars
+const ov = document.querySelector('.sidebar-overlay') || document.createElement('div');
+if (!ov.parentElement) { ov.className = 'sidebar-overlay'; document.body.appendChild(ov); }
+
 let leftVisible = true;
 let rightVisible = hasRightSidebar;
 
-function updateGridState() {
-    appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
+function isMobile() { return window.innerWidth <= 768; }
 
-    if (!leftVisible && !rightVisible) {
-        appGrid.classList.add('hide-both');
-    } else if (!leftVisible) {
-        appGrid.classList.add('hide-left');
-    } else if (!rightVisible) {
-        appGrid.classList.add('hide-right');
-    }
+function updateGridState() {
+    if (!appGrid) return;
+    appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
+    if (!leftVisible && !rightVisible) appGrid.classList.add('hide-both');
+    else if (!leftVisible) appGrid.classList.add('hide-left');
+    else if (!rightVisible) appGrid.classList.add('hide-right');
 }
 
+function openDrawer()  { if (!leftSidebar) return; leftSidebar.classList.add('mobile-open'); leftSidebar.classList.remove('hidden'); ov.classList.add('active'); }
+function closeDrawer() { if (!leftSidebar) return; leftSidebar.classList.remove('mobile-open'); ov.classList.remove('active'); }
+
+ov.onclick = closeDrawer;
+window.addEventListener('resize', () => { if (!isMobile()) closeDrawer(); });
+
 function toggleLeftSidebar() {
+    if (isMobile()) { leftSidebar && leftSidebar.classList.contains('mobile-open') ? closeDrawer() : openDrawer(); return; }
     leftVisible = !leftVisible;
-    leftSidebar.classList.toggle('hidden', !leftVisible);
+    if (leftSidebar) leftSidebar.classList.toggle('hidden', !leftVisible);
     updateGridState();
 }
 
 function toggleRightSidebar() {
     if (!hasRightSidebar) return;
     rightVisible = !rightVisible;
-    rightSidebar.classList.toggle('hidden', !rightVisible);
+    if (rightSidebar) rightSidebar.classList.toggle('hidden', !rightVisible);
     updateGridState();
 }
 
-// Event listeners
 toggleLeft?.addEventListener('click', toggleLeftSidebar);
 toggleRight?.addEventListener('click', toggleRightSidebar);
 
-// Aplicar estado inicial
-updateGridState();
+if (!isMobile()) updateGridState();
 
 // ===========================================
 // FILTER FUNCTIONALITY

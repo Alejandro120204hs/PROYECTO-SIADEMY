@@ -21,30 +21,39 @@
   }
 
   // ===== TOGGLE SIDEBAR IZQUIERDO =====
-  if (toggleLeft && leftSidebar) {
-    toggleLeft.addEventListener('click', function() {
-      leftSidebar.classList.toggle('hidden');
-      app.classList.toggle('hide-left');
-      
-      // Guardar preferencia en localStorage
-      try {
-        localStorage.setItem('leftSidebarHidden', leftSidebar.classList.contains('hidden'));
-      } catch (e) {
-        console.warn('No se pudo guardar en localStorage:', e);
-      }
-    });
+  const sidebarOverlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
+  if (!sidebarOverlay.parentElement) {
+    sidebarOverlay.className = 'sidebar-overlay';
+    document.body.appendChild(sidebarOverlay);
   }
 
-  // Restaurar estado del sidebar desde localStorage
-  if (leftSidebar) {
-    try {
-      if (localStorage.getItem('leftSidebarHidden') === 'true') {
-        leftSidebar.classList.add('hidden');
-        app.classList.add('hide-left');
+  function isMobile() { return window.innerWidth <= 768; }
+
+  function openMobile() {
+    if (!leftSidebar) return;
+    leftSidebar.classList.add('mobile-open');
+    leftSidebar.classList.remove('hidden');
+    sidebarOverlay.classList.add('active');
+  }
+
+  function closeMobile() {
+    if (!leftSidebar) return;
+    leftSidebar.classList.remove('mobile-open');
+    sidebarOverlay.classList.remove('active');
+  }
+
+  sidebarOverlay.onclick = closeMobile;
+  window.addEventListener('resize', function() { if (!isMobile()) closeMobile(); });
+
+  if (toggleLeft && leftSidebar) {
+    toggleLeft.addEventListener('click', function() {
+      if (isMobile()) {
+        leftSidebar.classList.contains('mobile-open') ? closeMobile() : openMobile();
+      } else {
+        leftSidebar.classList.toggle('hidden');
+        app.classList.toggle('hide-left', leftSidebar.classList.contains('hidden'));
       }
-    } catch (e) {
-      console.warn('No se pudo leer localStorage:', e);
-    }
+    });
   }
 
   // ===== FUNCIONES DE FILTRADO =====
@@ -238,17 +247,9 @@
   }
 
   // ===== RESPONSIVE - AJUSTES ADICIONALES =====
-  
+
   function handleResize() {
-    const width = window.innerWidth;
-    
-    // En móviles, ocultar sidebar por defecto
-    if (width <= 980 && leftSidebar) {
-      if (!leftSidebar.classList.contains('hidden')) {
-        leftSidebar.classList.add('hidden');
-        app.classList.add('hide-left');
-      }
-    }
+    // Sidebar position handled by CSS mobile drawer (@media 768px in styles-docente.css)
   }
 
   // ===== ACCESIBILIDAD =====

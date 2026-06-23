@@ -1,3 +1,43 @@
+// ── Sidebar toggle móvil ─────────────────────────────────────────────────────
+(function () {
+    const sidebar   = document.getElementById('leftSidebar');
+    const appGrid   = document.getElementById('appGrid');
+    const toggleBtn = document.getElementById('toggleLeft');
+
+    const overlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
+    if (!overlay.parentElement) {
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+    }
+
+    function isMobile() { return window.innerWidth <= 768; }
+    function openMobile() {
+        if (!sidebar) return;
+        sidebar.classList.add('mobile-open');
+        sidebar.classList.remove('hidden');
+        overlay.classList.add('active');
+    }
+    function closeMobile() {
+        if (!sidebar) return;
+        sidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+    }
+
+    overlay.onclick = closeMobile;
+    window.addEventListener('resize', function() { if (!isMobile()) closeMobile(); });
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            if (isMobile()) {
+                sidebar.classList.contains('mobile-open') ? closeMobile() : openMobile();
+            } else {
+                if (sidebar) sidebar.classList.toggle('hidden');
+                if (appGrid && sidebar) appGrid.classList.toggle('hide-left', sidebar.classList.contains('hidden'));
+            }
+        });
+    }
+})();
+
 let cambiosPendientes = {};
 let estadoOriginal = {};
 let confirmAcceptCallback = null;

@@ -353,9 +353,7 @@
 }
 
 @media (max-width: 480px) {
-  .user-details {
-    display: none;
-  }
+  /* user-details already hidden at 768px */
 }
     .panel-title {
       font-weight: 700;
@@ -2620,29 +2618,11 @@
   }
 }
 
-/* Eliminar scroll horizontal de las tablas */
-.datatable-card .table-responsive {
-  overflow-x: hidden;
-  overflow-y: visible;
-}
-
-/* O forzar que el ancho de la tabla se ajuste */
-.datatable-card .table-responsive {
-  overflow: visible;
-}
-
-/* Alternativa: hacer que la tabla no desborde */
-.datatable-card table {
-  table-layout: fixed;
-  width: 100% !important;
-}
-
-.datatable-card table th,
-.datatable-card table td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+/* Scroll horizontal interno en tablas — nunca scroll de página */
+.datatable-card { overflow: hidden; }
+.datatable-card .table-responsive { overflow-x: auto; overflow-y: visible; }
+.dataTables_wrapper { overflow-x: auto; min-width: 0; }
+.datatable-card table { min-width: 0; }
 
 /* ========================================
    ADMIN EVENTS - RESPONSIVE REFINEMENTS
@@ -2655,16 +2635,52 @@
   .topbar {
     flex-wrap: wrap;
     gap: 10px;
+    justify-content: flex-start;
   }
 
   .topbar-left {
     min-width: 0;
     flex: 1 1 auto;
+    order: 1;
+  }
+
+  .user {
+    order: 2;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* search y topbar-actions se mueven a fila 2, debajo del título+perfil */
+  .search,
+  .topbar-actions {
+    order: 10;
+    width: 100%;
+    margin-left: 0;
+    flex: 0 0 100%;
   }
 
   .title {
-    font-size: clamp(24px, 4vw, 32px);
+    font-size: clamp(22px, 4vw, 32px);
   }
+}
+
+@media (max-width: 768px) {
+  .user-details { display: none; }
+  .main { padding: 16px 12px 32px; }
+  .title { font-size: 22px; }
+  .topbar-actions .btn-action { width: 100%; justify-content: center; }
+
+  /* teacher-info-bar (actividades) */
+  .teacher-info-bar { flex-direction: column; align-items: flex-start; gap: 16px; padding: 16px; }
+  .teacher-stats { gap: 12px; width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .teacher-stats .stat-item { flex-shrink: 0; padding: 10px 14px; }
+  .teacher-stats .stat-item i { font-size: 22px; }
+  .teacher-stats .stat-item strong { font-size: 18px; }
+  .teacher-profile strong { font-size: 18px; }
+
+  /* actividades filter tabs */
+  .actividades-filter-tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+  .filter-tab-actividad { flex-shrink: 0; }
 }
 
 @media (max-width: 768px) {
@@ -2703,13 +2719,10 @@
 
   .datatable-card .table-responsive {
     overflow-x: auto !important;
-    overflow-y: visible !important;
   }
 
-  .datatable-card table {
-    table-layout: auto;
-    width: max-content !important;
-    min-width: 100%;
+  .dataTables_wrapper {
+    overflow-x: auto !important;
   }
 }
 
