@@ -444,24 +444,25 @@ function bol_promClase(?float $promedio): string {
 const leftSidebar = document.getElementById('leftSidebar');
 const appGrid     = document.getElementById('appGrid');
 const toggleLeft  = document.getElementById('toggleLeft');
-
+const bOv = document.querySelector('.sidebar-overlay') || document.createElement('div');
+if (!bOv.parentElement) { bOv.className = 'sidebar-overlay'; document.body.appendChild(bOv); }
 let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
-
-function updateGrid() {
-  appGrid.classList.toggle('hide-left', !leftVisible);
-}
-
+function isMobile() { return window.innerWidth <= 768; }
+function openBDrawer()  { if (!leftSidebar) return; leftSidebar.classList.add('mobile-open'); leftSidebar.classList.remove('hidden'); bOv.classList.add('active'); }
+function closeBDrawer() { if (!leftSidebar) return; leftSidebar.classList.remove('mobile-open'); bOv.classList.remove('active'); }
+bOv.onclick = closeBDrawer;
+window.addEventListener('resize', () => { if (!isMobile()) closeBDrawer(); });
+function updateGrid() { if (appGrid) appGrid.classList.toggle('hide-left', !leftVisible); }
 if (toggleLeft) {
   toggleLeft.addEventListener('click', () => {
+    if (isMobile()) { leftSidebar && leftSidebar.classList.contains('mobile-open') ? closeBDrawer() : openBDrawer(); return; }
     leftVisible = !leftVisible;
     if (leftSidebar) leftSidebar.classList.toggle('hidden', !leftVisible);
     localStorage.setItem('leftSidebarVisible', leftVisible);
     updateGrid();
   });
 }
-
-if (leftSidebar && !leftVisible) leftSidebar.classList.add('hidden');
-updateGrid();
+if (!isMobile()) { if (leftSidebar && !leftVisible) leftSidebar.classList.add('hidden'); updateGrid(); }
 
 // ── Cambio de período ────────────────────────────────────────────────────────
 function cambiarPeriodo(numPeriodo) {

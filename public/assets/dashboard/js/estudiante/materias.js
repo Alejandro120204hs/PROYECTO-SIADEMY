@@ -198,11 +198,21 @@ function initSidebar() {
     const app  = document.getElementById('appGrid');
     if (!btn || !side || !app) return;
 
+    const ov = document.querySelector('.sidebar-overlay') || document.createElement('div');
+    if (!ov.parentElement) { ov.className = 'sidebar-overlay'; document.body.appendChild(ov); }
+
+    function isMobile() { return window.innerWidth <= 768; }
+    function openDrawer()  { side.classList.add('mobile-open'); side.classList.remove('hidden'); ov.classList.add('active'); }
+    function closeDrawer() { side.classList.remove('mobile-open'); ov.classList.remove('active'); }
+
+    ov.onclick = closeDrawer;
+    window.addEventListener('resize', () => { if (!isMobile()) closeDrawer(); });
+
     btn.addEventListener('click', () => {
+        if (isMobile()) { side.classList.contains('mobile-open') ? closeDrawer() : openDrawer(); return; }
         side.classList.toggle('hidden');
         const hidden = side.classList.contains('hidden');
         app.classList.toggle('hide-left',  hidden);
-        app.classList.toggle('hide-right', !hidden);
         app.classList.remove('hide-both');
     });
 }

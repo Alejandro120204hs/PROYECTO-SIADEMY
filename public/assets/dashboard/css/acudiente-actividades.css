@@ -25,3 +25,11 @@
 .badge-Calificada  { background:rgba(74,222,128,.15);  color:#4ade80; }
 .badge-Vencida     { background:rgba(248,113,113,.15); color:#f87171; }
 .nota-value { font-size:16px; font-weight:700; color:#e2e5f0; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .filter-tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+  .filter-tab { flex-shrink: 0; }
+  .act-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .act-right { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+}

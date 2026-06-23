@@ -93,3 +93,21 @@
 .calendar-day-modal-header  { background:#0e142e; border-bottom:1px solid rgba(255,255,255,.08); border-radius:18px 18px 0 0; }
 .calendar-day-modal-header .modal-title { color:#fff; }
 .calendar-day-modal-header .btn-close   { filter:invert(1); }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .filter-section { flex-direction: column; align-items: stretch; gap: 12px; }
+  .filter-tabs-events { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
+  .filter-tab-event { flex-shrink: 0; }
+  .filter-search { width: 100%; }
+  .calendar-view-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .calendar-controls { align-self: flex-end; }
+  .events-calendar-section { padding: 16px; }
+  /* Calendario: scroll horizontal en pantallas pequeñas */
+  .calendar-large-grid { overflow-x: auto; }
+  .events-container { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .calendar-large-grid-wrapper,
+  .events-calendar-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
