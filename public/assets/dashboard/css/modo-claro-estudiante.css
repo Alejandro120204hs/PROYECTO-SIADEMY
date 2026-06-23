@@ -1,0 +1,328 @@
+/*
+ * Modo claro (light mode) — Rol Estudiante
+ * Cargado junto a modo-claro-admin.css (via header_coordinador.php)
+ * Cubre clases de styles-estudiante.css no contempladas en modo-claro-admin.css
+ */
+
+/* ── body/html FOUC gap (ya en modo-claro-admin.css, por seguridad) ── */
+html.light-mode body {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+
+/* ── RIGHTBAR ──────────────────────────────────────────────────────── */
+.light-mode .rightbar {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    border-left: 1px solid #e2e8f0 !important;
+    color: #1f2937 !important;
+}
+.light-mode .panel-title { color: #111827 !important; }
+.light-mode .muted        { color: #6b7280 !important; }
+
+/* Cursos en rightbar */
+.light-mode .course {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .course small  { color: #6b7280 !important; }
+.light-mode .course strong { color: #111827 !important; }
+
+/* Botón principal rightbar */
+.light-mode .btn-primary.block-btn,
+.light-mode .rightbar .btn-primary {
+    background: #f5f3ff !important;
+    border: 1px solid rgba(99,102,241,.25) !important;
+    color: #4f46e5 !important;
+}
+
+/* Mensajes en rightbar */
+.light-mode .msg {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .msg .avatar  { background: #e0e7ff !important; color: #4f46e5 !important; }
+.light-mode .msg .time    { color: #9ca3af !important; }
+
+/* KPI strong (número) — complementa lo de modo-claro-admin.css */
+.light-mode .kpi strong { color: #111827 !important; }
+
+/* ── CALENDARIO (mini, en rightbar o main) ─────────────────────────── */
+.light-mode .calendar-day-header {
+    background: #f1f5f9 !important;
+    color: #4f46e5 !important;
+}
+.light-mode .calendar-day {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+.light-mode .calendar-day:hover        { background: #f5f3ff !important; }
+.light-mode .calendar-day.other-month  { background: #f9fafb !important; color: #9ca3af !important; }
+
+/* ── TOPBAR toggle btn / user btn ─────────────────────────────────── */
+.light-mode .toggle-btn {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #374151 !important;
+}
+.light-mode .toggle-btn:hover {
+    background: #e5e7eb !important;
+    color: #111827 !important;
+}
+.light-mode .user .btn {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #374151 !important;
+}
+
+/* ── EVENTOS en rightbar ───────────────────────────────────────────── */
+.light-mode .event-item {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .event-content h4 { color: #111827 !important; }
+.light-mode .event-content p  { color: #6b7280 !important; }
+.light-mode .event-time       { color: #6366f1 !important; }
+
+/* ── DATATABLE ─────────────────────────────────────────────────────── */
+.light-mode .datatable-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+}
+.light-mode .table-dark {
+    --bs-table-bg: #f8fafc !important;
+    --bs-table-color: #1f2937 !important;
+    --bs-table-border-color: #e5e7eb !important;
+    --bs-table-hover-bg: #f5f3ff !important;
+}
+.light-mode .table-dark th {
+    background: #f1f5f9 !important;
+    color: #374151 !important;
+    border-color: #e2e8f0 !important;
+}
+.light-mode .table-dark td {
+    color: #1f2937 !important;
+    border-color: #e5e7eb !important;
+}
+.light-mode .dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: #374151 !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+.light-mode .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #e5e7eb !important;
+    color: #111827 !important;
+    border-color: #d1d5db !important;
+}
+.light-mode .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+.light-mode .dataTables_wrapper .dataTables_info { color: #6b7280 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MIS MATERIAS (styles-materias.css)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Stat cards top bar */
+.light-mode .stat-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+}
+.light-mode .stat-content h3 { color: #111827 !important; }
+.light-mode .stat-content p   { color: #6b7280 !important; }
+
+/* Filter bar */
+.light-mode .filter-btn {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #374151 !important;
+}
+.light-mode .filter-btn:hover { background: #e5e7eb !important; color: #111827 !important; }
+.light-mode .filter-btn.active {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+.light-mode .view-toggle {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+.light-mode .view-btn { color: #6b7280 !important; }
+.light-mode .view-btn.active { background: #4f46e5 !important; color: #ffffff !important; }
+
+/* Materia cards */
+.light-mode .materia-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+}
+.light-mode .materia-card:hover { border-color: #6366f1 !important; }
+.light-mode .materia-title    { color: #111827 !important; }
+.light-mode .materia-subtitle { color: #6b7280 !important; }
+
+/* Profesor chip inside materia card */
+.light-mode .materia-profesor {
+    background: #f1f5f9 !important;
+    border-radius: 10px;
+}
+.light-mode .materia-profesor .profesor-info strong { color: #111827 !important; }
+.light-mode .materia-profesor .profesor-info small  { color: #6b7280 !important; }
+
+/* Stat items (actividades, pendientes, asistencia chips) */
+.light-mode .materia-card .stat-item {
+    background: #f8fafc !important;
+    color: #374151 !important;
+}
+.light-mode .materia-card .stat-item i { color: #6366f1 !important; }
+
+/* Botón secundario (ícono gráfico) */
+.light-mode .btn-materia.secondary {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #374151 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MIS PROFESORES (styles-profesores.css)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.light-mode .section-title { color: #111827 !important; }
+.light-mode .count-badge {
+    background: rgba(99,102,241,.1) !important;
+    color: #4f46e5 !important;
+}
+.light-mode .profesor-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+}
+.light-mode .profesor-card:hover { border-color: rgba(99,102,241,.4) !important; }
+.light-mode .profesor-info h3    { color: #111827 !important; }
+.light-mode .profesor-correo     { color: #6b7280 !important; }
+
+/* Stat pills (TU NOTA / ASISTENCIA) */
+.light-mode .pstat-item {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+.light-mode .pstat-label { color: #6b7280 !important; }
+
+/* Progress bar track */
+.light-mode .progreso-wrap { background: #e5e7eb !important; }
+
+/* Empty state */
+.light-mode .empty-state {
+    background: #f8fafc !important;
+    border: 1px dashed #e2e8f0 !important;
+}
+.light-mode .empty-state h3 { color: #111827 !important; }
+.light-mode .empty-state p  { color: #6b7280 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CALIFICACIONES (styles-calificaciones.css)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.light-mode .grades-panel {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .grades-header {
+    background: #f1f5f9 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+.light-mode .gh-materia,
+.light-mode .gh-periodos,
+.light-mode .gh-promedio,
+.light-mode .gh-accion { color: #6b7280 !important; }
+
+.light-mode .grade-row { border-bottom-color: #e5e7eb !important; }
+.light-mode .grade-row:hover .gr-main { background: rgba(99,102,241,.04) !important; }
+.light-mode .gr-nombre { color: #111827 !important; }
+.light-mode .gr-prof   { color: #6b7280 !important; }
+.light-mode .nota-empty { color: #d1d5db !important; }
+
+/* Expand button */
+.light-mode .btn-detalle {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #6b7280 !important;
+}
+.light-mode .btn-detalle:hover { background: #e5e7eb !important; }
+
+/* Detalle expandible interior */
+.light-mode .detalle-inner {
+    background: #f8fafc !important;
+    border-top: 1px solid #e5e7eb !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BOLETÍN (styles-boletin.css)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Header del estudiante */
+.light-mode .student-header {
+    background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%) !important;
+    border: 1px solid #c7d2fe !important;
+    box-shadow: 0 2px 12px rgba(99,102,241,.1) !important;
+}
+.light-mode .student-info h2   { color: #111827 !important; }
+.light-mode .student-meta span {
+    background: rgba(99,102,241,.08) !important;
+    border: 1px solid rgba(99,102,241,.2) !important;
+    color: #374151 !important;
+}
+.light-mode .student-meta span i { color: #6366f1 !important; }
+
+/* Tabs de período */
+.light-mode .period-tab {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #6b7280 !important;
+}
+.light-mode .period-tab:hover {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+    border-color: rgba(99,102,241,.3) !important;
+}
+.light-mode .period-tab.active {
+    background: linear-gradient(135deg, #4f46e5, #818cf8) !important;
+    border-color: transparent !important;
+    color: #ffffff !important;
+}
+.light-mode .period-tab:not(.active) .tab-avg {
+    background: rgba(99,102,241,.12) !important;
+    color: #6366f1 !important;
+}
+
+/* Pills de estadísticas del período */
+.light-mode .stat-pill {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .stat-label { color: #6b7280 !important; }
+.light-mode .stat-val   { color: #111827 !important; }
+
+/* Tabla de materias del boletín */
+.light-mode .materias-table-wrap {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+}
+.light-mode .materias-table thead tr {
+    background: #f1f5f9 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+.light-mode .materias-table thead th { color: #374151 !important; }
+.light-mode .materias-table tbody tr:hover { background: #f8fafc !important; }
+.light-mode .materias-table td { color: #1f2937 !important; border-color: #f3f4f6 !important; }
+
+/* Empty period */
+.light-mode .empty-period {
+    background: #f8fafc !important;
+    border: 1px dashed #e2e8f0 !important;
+    color: #6b7280 !important;
+}

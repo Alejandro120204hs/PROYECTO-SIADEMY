@@ -1,0 +1,458 @@
+/*
+ * Modo claro (light mode) — Rol Acudiente
+ * Cargado junto a modo-claro-admin.css (via header_coordinador.php)
+ * Cubre: styles-acudiente.css + acudiente-*.css
+ */
+
+/* ── body/html FOUC gap ────────────────────────────────────────────── */
+html.light-mode body {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+
+/* ── Navegación sidebar acudiente (light mode) ──────────────────── */
+.light-mode .acudiente-nav a {
+    color: #9aa3bc !important;
+    transition: all 0.2s ease;
+}
+.light-mode .acudiente-nav a:hover {
+    background: #0b196a !important;
+    color: var(--bg) !important;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+.light-mode .acudiente-nav a.active {
+    color: var(--bg) !important;
+    box-shadow: inset 0 0 0 1px rgba(79, 70, 229, 0.2) !important;
+    font-weight: 600;
+}
+.light-mode .acudiente-nav i          { color: #9ca3af !important; }
+.light-mode .acudiente-nav a:hover i  { color: #4f46e5 !important; }
+.light-mode .acudiente-nav a.active i { color: var(--accent) !important; }
+
+/* ── KPI strong (número) ──────────────────────────────────────────── */
+.light-mode .kpi strong { color: #111827 !important; }
+
+/* ── TOPBAR toggle btn ────────────────────────────────────────────── */
+.light-mode .toggle-btn {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #374151 !important;
+}
+.light-mode .toggle-btn:hover {
+    background: #e5e7eb !important;
+    color: #111827 !important;
+}
+
+/* ── RIGHTBAR (panel lateral derecho) ────────────────────────────── */
+.light-mode .rightbar {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    border-left: 1px solid #e2e8f0 !important;
+    color: #1f2937 !important;
+}
+.light-mode .panel-title { color: #111827 !important; }
+.light-mode .muted        { color: #6b7280 !important; }
+
+.light-mode .course {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .course small  { color: #6b7280 !important; }
+.light-mode .course strong { color: #111827 !important; }
+.light-mode .rightbar .btn-primary {
+    background: #f5f3ff !important;
+    border: 1px solid rgba(99,102,241,.25) !important;
+    color: #4f46e5 !important;
+}
+.light-mode .msg {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .msg .avatar { background: #e0e7ff !important; color: #4f46e5 !important; }
+.light-mode .msg .time   { color: #9ca3af !important; }
+.light-mode .event-item {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .event-content h4 { color: #111827 !important; }
+.light-mode .event-content p  { color: #6b7280 !important; }
+.light-mode .event-time       { color: #6366f1 !important; }
+
+/* ── CALENDARIO mini ─────────────────────────────────────────────── */
+.light-mode .calendar-day-header {
+    background: #f1f5f9 !important;
+    color: #4f46e5 !important;
+}
+.light-mode .calendar-day {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+.light-mode .calendar-day:hover       { background: #f5f3ff !important; }
+.light-mode .calendar-day.other-month { background: #f9fafb !important; color: #9ca3af !important; }
+
+/* ── styles-acudiente.css — .student-card (lista de hijos) ──────── */
+.light-mode .student-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #1f2937 !important;
+}
+.light-mode .student-card:hover       { border-color: #6366f1 !important; }
+.light-mode .student-card.active      {
+    border-color: #6366f1 !important;
+    background: rgba(99,102,241,.06) !important;
+}
+.light-mode .student-card-info strong { color: #111827 !important; }
+.light-mode .student-card-info small  { color: #6b7280 !important; }
+
+/* ── acudiente-dashboard.css — module links ──────────────────────── */
+.light-mode .module-link {
+    background: #f8fafc !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .module-link:hover {
+    background: #f5f3ff !important;
+    border-color: rgba(99,102,241,.35) !important;
+    color: #4f46e5 !important;
+}
+.light-mode .empty-state { color: #6b7280 !important; }
+
+/* ── acudiente-actividades.css ───────────────────────────────────── */
+.light-mode .filter-tab {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .filter-tab.active,
+.light-mode .filter-tab:hover {
+    background: rgba(99,102,241,.1) !important;
+    border-color: #6366f1 !important;
+    color: #4f46e5 !important;
+}
+.light-mode .act-item {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .act-item:hover   { border-color: rgba(99,102,241,.35) !important; }
+.light-mode .act-title        { color: #111827 !important; }
+.light-mode .act-meta         { color: #6b7280 !important; }
+.light-mode .nota-value       { color: #111827 !important; }
+
+/* ── acudiente-asistencia.css ────────────────────────────────────── */
+.light-mode .asist-table th {
+    color: #374151 !important;
+    border-color: #e5e7eb !important;
+}
+.light-mode .asist-table td {
+    color: #1f2937 !important;
+    border-color: #f3f4f6 !important;
+}
+.light-mode .asist-table tr:hover td { background: rgba(99,102,241,.04) !important; }
+.light-mode .pct-bar { background: #e5e7eb !important; }
+
+/* ── acudiente-horario.css ───────────────────────────────────────── */
+.light-mode .dia-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+/* ── acudiente-profesores.css ────────────────────────────────────── */
+.light-mode .prof-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .prof-card:hover { border-color: rgba(99,102,241,.35) !important; box-shadow: 0 6px 20px rgba(99,102,241,.1) !important; }
+.light-mode .prof-avatar { background: #e0e7ff !important; border-color: rgba(99,102,241,.3) !important; }
+.light-mode .prof-name    { color: #111827 !important; }
+.light-mode .prof-contact { color: #6b7280 !important; }
+.light-mode .prof-stat {
+    background: #f1f5f9 !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .prof-stat small  { color: #6b7280 !important; }
+.light-mode .prof-stat strong { color: #111827 !important; }
+.light-mode .prof-card-footer { border-top: 1px solid #e5e7eb !important; }
+.light-mode .btn-contactar {
+    background: rgba(99,102,241,.08) !important;
+    border: 1px solid rgba(99,102,241,.3) !important;
+    color: #4f46e5 !important;
+}
+.light-mode .btn-contactar:hover {
+    background: rgba(99,102,241,.15) !important;
+    border-color: #6366f1 !important;
+    color: #4338ca !important;
+}
+
+/* ── acudiente-calificaciones.css ───────────────────────────────── */
+.light-mode .btn-view-toggle {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #6b7280 !important;
+}
+.light-mode .btn-view-toggle:hover {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .btn-view-toggle.active {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+.light-mode .calif-table thead tr { background: #f1f5f9 !important; }
+.light-mode .calif-table th {
+    color: #374151 !important;
+    border-color: #e5e7eb !important;
+}
+.light-mode .calif-table td {
+    color: #1f2937 !important;
+    border-color: #f3f4f6 !important;
+}
+.light-mode .calif-table tbody tr:hover td { background: rgba(99,102,241,.04) !important; }
+.light-mode .grade-cell                    { color: #1f2937 !important; }
+.light-mode .activity-row {
+    background: #f8fafc !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .activity-info strong { color: #111827 !important; }
+.light-mode .activity-info small  { color: #6b7280 !important; }
+
+/* ── acudiente-eventos.css ───────────────────────────────────────── */
+.light-mode .filter-tab-event {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .filter-tab-event:hover {
+    background: #f3f4f6 !important;
+    color: #111827 !important;
+}
+.light-mode .filter-tab-event.active {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+.light-mode .filter-search {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .filter-search input {
+    background: transparent !important;
+    color: #1f2937 !important;
+}
+.light-mode .events-calendar-section {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .btn-calendar-nav {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #374151 !important;
+}
+.light-mode .btn-calendar-nav:hover {
+    background: #ede9fe !important;
+    color: #4f46e5 !important;
+}
+.light-mode .calendar-large-header {
+    background: #f1f5f9 !important;
+    color: #374151 !important;
+}
+.light-mode .calendar-large-day {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+.light-mode .calendar-large-day:hover       { background: #f5f3ff !important; }
+.light-mode .calendar-large-day.other-month { background: #f9fafb !important; opacity: 1 !important; color: #9ca3af !important; }
+.light-mode .btn-view {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #6b7280 !important;
+}
+.light-mode .btn-view:hover  { background: #e5e7eb !important; color: #374151 !important; }
+.light-mode .btn-view.active {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+.light-mode .event-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .event-card-header,
+.light-mode .calendar-day-modal-header {
+    background: #f8fafc !important;
+    border-color: #e5e7eb !important;
+}
+.light-mode .event-card-footer {
+    background: #f8fafc !important;
+    border-color: #e5e7eb !important;
+}
+.light-mode .btn-event-secondary {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #374151 !important;
+}
+.light-mode .btn-event-secondary:hover {
+    background: #e5e7eb !important;
+    color: #111827 !important;
+}
+.light-mode .calendar-day-modal-content {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   styles-acudiente.css — KPI CARDS (.kpi) y SUMMARY CARDS (.summary-card)
+   ══════════════════════════════════════════════════════════════════════════ */
+.light-mode .kpi {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+}
+.light-mode .kpi .icon {
+    background: #f1f5f9 !important;
+    box-shadow: inset 0 0 0 1px rgba(99,102,241,.15) !important;
+    color: #6366f1 !important;
+}
+.light-mode .kpi small  { color: #6b7280 !important; }
+.light-mode .kpi strong { color: #111827 !important; }
+
+/* .summary-card — stat cards en Calificaciones, Asistencia y Actividades */
+.light-mode .summary-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+}
+.light-mode .summary-content small  { color: #6b7280 !important; }
+.light-mode .summary-content strong { color: #111827 !important; }
+.light-mode .trend.neutral {
+    background: rgba(107,114,128,.12) !important;
+    color: #6b7280 !important;
+}
+
+/* .subject-card — tarjetas de materias en Calificaciones */
+.light-mode .subject-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .subject-card:hover { box-shadow: 0 6px 20px rgba(99,102,241,.1) !important; }
+.light-mode .subject-icon {
+    background: #f1f5f9 !important;
+}
+.light-mode .subject-header .subject-name  { color: #111827 !important; }
+.light-mode .subject-header .subject-prof  { color: #6b7280 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   styles-acudiente.css — STUDENT BAR (barra de hijo seleccionado)
+   ══════════════════════════════════════════════════════════════════════════ */
+.light-mode .student-bar {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .student-quick-info strong { color: #111827 !important; }
+.light-mode .student-quick-info small  { color: #6366f1 !important; }
+.light-mode .period-selector label     { color: #374151 !important; }
+.light-mode .period-selector select {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: #111827 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   styles-acudiente.css — .card (contenedor genérico)
+   ══════════════════════════════════════════════════════════════════════════ */
+.light-mode .card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+    color: #1f2937 !important;
+}
+.light-mode .card h3 { color: #111827 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   acudiente-horario.css — internos del dia-card
+   ══════════════════════════════════════════════════════════════════════════ */
+.light-mode .dia-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .dia-header {
+    background: rgba(99,102,241,.08) !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .bloque-info strong { color: #111827 !important; }
+.light-mode .bloque-info small  { color: #6b7280 !important; }
+.light-mode .bloque-hora        { color: #6b7280 !important; }
+.light-mode .legend-item        { color: #374151 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   styles-boletin.css — (acudiente/boletin.php carga styles-boletin.css)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Header del estudiante */
+.light-mode .student-header {
+    background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%) !important;
+    border: 1px solid #c7d2fe !important;
+    box-shadow: 0 2px 12px rgba(99,102,241,.1) !important;
+}
+.light-mode .student-info h2   { color: #111827 !important; }
+.light-mode .student-meta span {
+    background: rgba(99,102,241,.08) !important;
+    border: 1px solid rgba(99,102,241,.2) !important;
+    color: #374151 !important;
+}
+.light-mode .student-meta span i { color: #6366f1 !important; }
+
+/* Tabs de período */
+.light-mode .period-tab {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #6b7280 !important;
+}
+.light-mode .period-tab:hover {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+    border-color: rgba(99,102,241,.3) !important;
+}
+.light-mode .period-tab.active {
+    background: linear-gradient(135deg, #4f46e5, #818cf8) !important;
+    border-color: transparent !important;
+    color: #ffffff !important;
+}
+.light-mode .period-tab:not(.active) .tab-avg {
+    background: rgba(99,102,241,.12) !important;
+    color: #6366f1 !important;
+}
+
+/* Pills de estadísticas del período */
+.light-mode .stat-pill {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .stat-label { color: #6b7280 !important; }
+.light-mode .stat-val   { color: #111827 !important; }
+
+/* Tabla de materias del boletín */
+.light-mode .materias-table-wrap {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .materias-table thead tr {
+    background: #f1f5f9 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+.light-mode .materias-table thead th { color: #374151 !important; }
+.light-mode .materias-table tbody tr:hover { background: #f8fafc !important; }
+.light-mode .materias-table td { color: #1f2937 !important; border-color: #f3f4f6 !important; }
+
+/* Empty period */
+.light-mode .empty-period {
+    background: #f8fafc !important;
+    border: 1px dashed #e2e8f0 !important;
+    color: #6b7280 !important;
+}

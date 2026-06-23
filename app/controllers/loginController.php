@@ -44,10 +44,28 @@
         
         // Datos base de sesión
         $_SESSION['user'] = [
-            'id' => $resultado['id'],
-            'rol' => $resultado['rol'],
-            'id_institucion' => $resultado['id_institucion']
+            'id'           => $resultado['id'],
+            'rol'          => $resultado['rol'],
+            'id_institucion' => $resultado['id_institucion'],
+            'tema'         => 'dark', // se actualiza abajo desde BD
         ];
+
+        // Cargar tema preferido desde BD (persiste entre dispositivos)
+        try {
+            require_once BASE_PATH . '/config/database.php';
+            $dbTema  = new Conexion();
+            $connTema = $dbTema->getConexion();
+            $stmtTema = $connTema->prepare(
+                "SELECT tema_preferido FROM usuario WHERE id = :id LIMIT 1"
+            );
+            $stmtTema->execute([':id' => $resultado['id']]);
+            $rowTema = $stmtTema->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['user']['tema'] = ($rowTema['tema_preferido'] ?? 'dark') === 'light'
+                ? 'light'
+                : 'dark';
+        } catch (Throwable $eTema) {
+            error_log('[login/tema] ' . $eTema->getMessage());
+        }
         
         // Si es docente, obtener id_docente de la tabla docente
         if ($resultado['rol'] === 'Docente') {

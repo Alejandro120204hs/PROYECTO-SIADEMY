@@ -19,6 +19,7 @@
     ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/perfil.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/ayuda.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/modo-claro-ayuda.css">
 </head>
 
 <body>
@@ -27,6 +28,9 @@
         <?php
         if (isset($usuario['rol'])) {
             switch ($usuario['rol']) {
+                case 'superAdmin':
+                    include_once BASE_PATH . '/app/views/layouts/sidebar_superAdmin.php';
+                    break;
                 case 'Administrador':
                     include_once BASE_PATH . '/app/views/layouts/sidebar_coordinador.php';
                     break;
