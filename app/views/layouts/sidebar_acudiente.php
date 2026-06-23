@@ -38,7 +38,7 @@
                 <img width="170px" src="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
 
       </a>
-    <nav class="nav">
+    <nav class="acudiente-nav">
         <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/dashboard']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/dashboard">
             <i class="ri-home-5-line"></i> Panel
         </a>

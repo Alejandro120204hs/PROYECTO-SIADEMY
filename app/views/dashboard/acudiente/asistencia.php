@@ -9,8 +9,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <?php include_once __DIR__ . '/../../layouts/header_coordinador.php' ?>
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-acudiente.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-acudiente.css') ?: 1 ?>">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/acudiente-asistencia.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/acudiente-asistencia.css') ?: 1 ?>">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/modo-claro-acudiente.css">
 </head>
 <body>
   <div class="app hide-right" id="appGrid">

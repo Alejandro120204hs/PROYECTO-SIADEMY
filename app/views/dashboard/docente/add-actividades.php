@@ -17,7 +17,7 @@ extract($dataVistaDocenteAgregarActividad, EXTR_SKIP);
         include_once __DIR__ . '/../../layouts/header_coordinador.php'
     ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-tabla-formulario.css">
-
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/modo-claro-docente.css">
 </head>
 <body>
     <div class="app" id="appGrid">

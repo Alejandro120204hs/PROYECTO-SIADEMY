@@ -86,6 +86,10 @@
                 require BASE_PATH . '/app/controllers/api/notificaciones_api.php';
                 break;
 
+            case '/api/tema':
+                require BASE_PATH . '/app/controllers/api/tema.php';
+                break;
+
             case '/ayuda':
                 require BASE_PATH . '/app/controllers/ayuda.php';
                 break;
