@@ -458,46 +458,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-/* ========================================
-   JAVASCRIPT PARA DROPDOWN DE USUARIO
-   Agregar al final de main-admin.js o en un archivo separado
-   ======================================== */
-
-// --- Manejador robusto para cambio de tema (delegación)
-if (!window.__siademyThemeToggleInit) {
-  window.__siademyThemeToggleInit = true;
-
-  // Delegación: escucha clicks en el documento para el botón de toggle
-  document.addEventListener('click', function (ev) {
-    const btn = ev.target.closest && ev.target.closest('#toggleThemeBtn');
-    if (!btn) return;
-    ev.preventDefault();
-
-    document.body.classList.toggle('light-mode');
-    const icon = btn.querySelector('i:first-child');
-    if (document.body.classList.contains('light-mode')) {
-      if (icon) icon.className = 'ri-sun-line';
-    } else {
-      if (icon) icon.className = 'ri-contrast-2-line';
-    }
-    try { localStorage.setItem('theme-mode', document.body.classList.contains('light-mode') ? 'light' : 'dark'); } catch (e) {}
-
-    // showNotification puede estar definido más abajo; llamarlo si existe
-    if (typeof showNotification === 'function') showNotification('Tema cambiado correctamente');
-  });
-
-  // Aplicar tema guardado inmediatamente (por si el script carga después de DOMContentLoaded)
-  try {
-    const saved = localStorage.getItem('theme-mode');
-    if (saved === 'light') {
-      document.body.classList.add('light-mode');
-      const btn = document.getElementById('toggleThemeBtn');
-      const icon = btn ? btn.querySelector('i:first-child') : null;
-      if (icon) icon.className = 'ri-sun-line';
-    }
-  } catch (e) {}
-}
-
 // --- Manejador delegado para dropdown de usuario (abre/cierra #userDropdown)
 if (!window.__siademyUserDropdownInit) {
   window.__siademyUserDropdownInit = true;

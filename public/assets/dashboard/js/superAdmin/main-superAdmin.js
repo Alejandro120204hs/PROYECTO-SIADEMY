@@ -340,28 +340,5 @@ document.addEventListener('DOMContentLoaded', function() {
     dropdownOverlay.classList.remove('show');
   }
 
-  const toggleThemeBtn = document.getElementById('toggleThemeBtn');
-  if (toggleThemeBtn) {
-    toggleThemeBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      document.body.classList.toggle('light-mode');
-
-      const icon = this.querySelector('i:first-child');
-      if (icon) {
-        icon.className = document.body.classList.contains('light-mode')
-          ? 'ri-sun-line'
-          : 'ri-contrast-2-line';
-      }
-
-      const currentMode = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-      localStorage.setItem('theme-mode', currentMode);
-    });
-
-    const savedTheme = localStorage.getItem('theme-mode');
-    if (savedTheme === 'light') {
-      document.body.classList.add('light-mode');
-      const icon = toggleThemeBtn.querySelector('i:first-child');
-      if (icon) icon.className = 'ri-sun-line';
-    }
-  }
+  // El toggle de tema es gestionado globalmente por light-mode.js
 });
