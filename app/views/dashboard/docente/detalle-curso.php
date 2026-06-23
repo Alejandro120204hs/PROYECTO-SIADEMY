@@ -43,6 +43,9 @@
         <main class="main">
             <div class="topbar">
                 <div class="topbar-left">
+                    <button class="toggle-btn" id="toggleLeft" title="Mostrar/Ocultar menú">
+                        <i class="ri-menu-2-line"></i>
+                    </button>
                     <div class="title">Detalle del Curso</div>
                 </div>
                 <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
@@ -614,6 +617,25 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?= BASE_URL ?>/public/assets/dashboard/js/docente/detalle-curso.js?v=<?= $detalleCursoJsVersion ?>"></script>
-    
-</body>   
+    <script>
+    (function () {
+        const sidebar   = document.getElementById('leftSidebar');
+        const toggleBtn = document.getElementById('toggleLeft');
+        const appGrid   = document.getElementById('appGrid');
+        const overlay   = document.querySelector('.sidebar-overlay') || document.createElement('div');
+        if (!overlay.parentElement) { overlay.className = 'sidebar-overlay'; document.body.appendChild(overlay); }
+        function isMobile() { return window.innerWidth <= 768; }
+        function openMobile()  { if (!sidebar) return; sidebar.classList.add('mobile-open'); sidebar.classList.remove('hidden'); overlay.classList.add('active'); }
+        function closeMobile() { if (!sidebar) return; sidebar.classList.remove('mobile-open'); overlay.classList.remove('active'); }
+        overlay.onclick = closeMobile;
+        window.addEventListener('resize', function () { if (!isMobile()) closeMobile(); });
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function () {
+                if (isMobile()) { sidebar && sidebar.classList.contains('mobile-open') ? closeMobile() : openMobile(); }
+                else { if (sidebar) sidebar.classList.toggle('hidden'); if (appGrid && sidebar) appGrid.classList.toggle('hide-left', sidebar.classList.contains('hidden')); }
+            });
+        }
+    })();
+    </script>
+</body>
 </html>

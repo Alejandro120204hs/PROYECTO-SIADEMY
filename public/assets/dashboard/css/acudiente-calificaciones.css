@@ -120,3 +120,14 @@
 .estado-badge.good      { background:rgba(96,165,250,.15);  color:#60a5fa; }
 .estado-badge.average   { background:rgba(251,191,36,.15);  color:#fbbf24; }
 .estado-badge.low       { background:rgba(248,113,113,.15); color:#f87171; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  #viewCards { grid-template-columns: 1fr; }
+  .grades-section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .calif-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 480px; }
+  .activity-row { flex-wrap: wrap; gap: 8px; }
+}
+@media (max-width: 480px) {
+  #viewCards { grid-template-columns: 1fr; }
+}

@@ -16,3 +16,8 @@
 .badge-Ausente     { background:rgba(248,113,113,.15); color:#f87171; }
 .badge-Tarde       { background:rgba(251,191,36,.15);  color:#fbbf24; }
 .badge-Justificado { background:rgba(99,102,241,.15);  color:#a5b4fc; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .asist-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 500px; }
+}

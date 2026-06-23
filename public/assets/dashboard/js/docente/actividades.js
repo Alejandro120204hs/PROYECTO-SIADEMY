@@ -18,10 +18,44 @@ $(document).ready(function() {
 
 // ===== SIDEBAR TOGGLE =====
 function inicializarSidebar() {
-  $('#toggleLeft').click(function() {
-    $('#sidebar').toggleClass('hidden');
-    $('#appGrid').toggleClass('hide-left');
-  });
+  const leftSidebar = document.getElementById('leftSidebar');
+  const appGrid     = document.getElementById('appGrid');
+  const toggleLeft  = document.getElementById('toggleLeft');
+
+  const overlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
+  if (!overlay.parentElement) {
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  function isMobile() { return window.innerWidth <= 768; }
+
+  function openMobile() {
+    if (!leftSidebar) return;
+    leftSidebar.classList.add('mobile-open');
+    leftSidebar.classList.remove('hidden');
+    overlay.classList.add('active');
+  }
+
+  function closeMobile() {
+    if (!leftSidebar) return;
+    leftSidebar.classList.remove('mobile-open');
+    overlay.classList.remove('active');
+  }
+
+  overlay.onclick = closeMobile;
+  window.addEventListener('resize', function() { if (!isMobile()) closeMobile(); });
+
+  if (toggleLeft) {
+    toggleLeft.addEventListener('click', function() {
+      if (isMobile()) {
+        leftSidebar.classList.contains('mobile-open') ? closeMobile() : openMobile();
+      } else {
+        leftSidebar.classList.toggle('hidden');
+        if (appGrid) appGrid.classList.toggle('hide-left', leftSidebar.classList.contains('hidden'));
+      }
+    });
+  }
 }
 
 // ===== INICIALIZAR FILTROS =====

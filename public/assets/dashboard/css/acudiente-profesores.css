@@ -28,3 +28,12 @@
   transition:all .2s ease; }
 .btn-contactar:hover { background:rgba(99,102,241,.25); border-color:#6366f1; color:#fff; }
 .btn-contactar i { font-size:16px; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .prof-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
+@media (max-width: 480px) {
+  .prof-grid { grid-template-columns: 1fr; }
+  .prof-stats { grid-template-columns: 1fr 1fr; }
+}
