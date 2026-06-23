@@ -1,0 +1,940 @@
+/*
+ * Modo claro (light mode) — Rol Docente
+ * Cargado junto a modo-claro-admin.css (via header_coordinador.php)
+ * Cubre: styles-docente.css, docente/*.css, styles-horarios.css, styles-boletines-admin.css
+ */
+
+/* ============================================
+   RIGHTBAR (panel derecho — docente.php)
+   ============================================ */
+.light-mode .rightbar {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    border-left: 1px solid #e2e8f0 !important;
+    color: #1f2937 !important;
+}
+.light-mode .panel-title  { color: #111827 !important; }
+.light-mode .muted        { color: #6b7280 !important; }
+
+/* Lista de cursos en rightbar */
+.light-mode .course {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .course small  { color: #6b7280 !important; }
+.light-mode .course strong { color: #111827 !important; }
+.light-mode .btn-primary.block-btn,
+.light-mode .rightbar .btn-primary {
+    background: #f5f3ff !important;
+    border: 1px solid rgba(99, 102, 241, .25) !important;
+    color: #4f46e5 !important;
+}
+
+/* Mensajes en rightbar */
+.light-mode .msg {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .msg .time   { color: #6b7280 !important; }
+.light-mode .msg .avatar { background: #e0e7ff !important; color: #4f46e5 !important; }
+
+/* ============================================
+   TEACHER INFO BAR
+   ============================================ */
+.light-mode .teacher-info-bar {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06) !important;
+}
+.light-mode .teacher-profile strong { color: #111827 !important; }
+.light-mode .teacher-profile small  { color: #6b7280 !important; }
+.light-mode .teacher-stats .stat-item {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+.light-mode .teacher-stats .stat-item i      { color: #6366f1 !important; }
+.light-mode .teacher-stats .stat-item strong { color: #111827 !important; }
+.light-mode .teacher-stats .stat-item small  { color: #6b7280 !important; }
+
+/* ============================================
+   CALENDARIO (rightbar + modal)
+   ============================================ */
+
+/* Nav */
+.light-mode .calendar-nav button {
+    background: #f1f5f9 !important;
+    color: #4f46e5 !important;
+}
+.light-mode .calendar-nav button:hover {
+    background: #ede9fe !important;
+    color: #4f46e5 !important;
+}
+
+/* Grid */
+.light-mode .calendar-grid { background: #e2e8f0 !important; }
+.light-mode .calendar-day-header {
+    background: #f1f5f9 !important;
+    color: #4f46e5 !important;
+}
+.light-mode .calendar-day {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+.light-mode .calendar-day:hover   { background: #f5f3ff !important; }
+.light-mode .calendar-day.other-month {
+    background: #f9fafb !important;
+    color: #9ca3af !important;
+}
+
+/* Modal del calendario */
+.light-mode .calendar-day-modal-content {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #1f2937 !important;
+}
+.light-mode .calendar-day-modal-header {
+    background: #f1f5f9 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+.light-mode #dayEventsModalLabel { color: #111827 !important; }
+.light-mode .calendar-day-modal-content .btn-close {
+    filter: none !important;
+    opacity: .6 !important;
+}
+
+/* Items de eventos dentro del modal */
+.light-mode .calendar-day-event-item {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+}
+.light-mode .calendar-day-event-item .event-icon {
+    background: #ede9fe !important;
+    color: #6366f1 !important;
+}
+.light-mode .calendar-day-event-item h6    { color: #111827 !important; }
+.light-mode .calendar-day-event-item p     { color: #6b7280 !important; }
+.light-mode .calendar-day-event-meta       { color: #6b7280 !important; }
+.light-mode .calendar-empty-day {
+    background: #f9fafb !important;
+    border-color: #d1d5db !important;
+    color: #9ca3af !important;
+}
+
+/* ============================================
+   EVENTOS (sección derecha + lista)
+   ============================================ */
+.light-mode .event-item {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .event-content h4 { color: #111827 !important; }
+.light-mode .event-content p  { color: #6b7280 !important; }
+.light-mode .event-time       { color: #6366f1 !important; }
+
+/* ============================================
+   DOCENTE/ACTIVIDADES.CSS
+   ============================================ */
+
+/* Filter tabs */
+.light-mode .filter-tab {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .filter-tab.active {
+    background: #ede9fe !important;
+    border-color: rgba(99, 102, 241, .4) !important;
+    color: #4f46e5 !important;
+}
+
+/* Selects de filtro */
+.light-mode .filter-select,
+.light-mode select.filter-select {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: #1f2937 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 16px center !important;
+    background-size: 12px !important;
+}
+.light-mode .filter-select option {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+.light-mode .filter-select:focus {
+    border-color: #6366f1 !important;
+    background: #ffffff !important;
+}
+
+/* Cards de actividades */
+.light-mode .activity-card,
+.light-mode .actividad-card,
+.light-mode .actividad-entregas-card,
+.light-mode .actividad-entregas-header {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+    color: #1f2937 !important;
+}
+.light-mode .actividad-entregas-header p { color: #6b7280 !important; }
+.light-mode .actividad-meta-info span   { color: #6b7280 !important; }
+
+/* Stat cards de entregas */
+.light-mode .stat-card-entrega {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .stat-card-entrega .stat-content small  { color: #6b7280 !important; }
+.light-mode .stat-card-entrega .stat-content p      { color: #6b7280 !important; }
+.light-mode .stat-card-entrega .stat-content strong { color: #111827 !important; }
+
+/* Tabla de entregas */
+.light-mode .submissions-table thead th,
+.light-mode .entregas-table thead th {
+    background: #f1f5f9 !important;
+    color: #374151 !important;
+    border-color: #e2e8f0 !important;
+}
+.light-mode .submissions-table td,
+.light-mode .entregas-table td {
+    color: #1f2937 !important;
+    border-color: #f3f4f6 !important;
+    background: #ffffff !important;
+}
+
+/* ============================================
+   DOCENTE/CURSOS.CSS
+   ============================================ */
+.light-mode .course-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .course-card strong,
+.light-mode .course-card h4 { color: #111827 !important; }
+.light-mode .course-card p,
+.light-mode .course-card small { color: #6b7280 !important; }
+
+/* Próximas clases */
+.light-mode .class-item {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .class-info h4    { color: #111827 !important; }
+.light-mode .class-info p     { color: #6b7280 !important; }
+.light-mode .class-time strong { color: #111827 !important; }
+.light-mode .class-time small  { color: #6b7280 !important; }
+
+/* Upcoming classes container */
+.light-mode .upcoming-classes {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+/* Weekly summary */
+.light-mode .weekly-summary {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .summary-item strong { color: #111827 !important; }
+.light-mode .summary-item small  { color: #6b7280 !important; }
+
+/* Top students */
+.light-mode .top-students {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .student-item strong,
+.light-mode .student-info strong { color: #111827 !important; }
+.light-mode .student-item small,
+.light-mode .student-info small  { color: #6b7280 !important; }
+
+/* Quick actions */
+.light-mode .quick-action {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05) !important;
+}
+.light-mode .quick-action:hover {
+    background: #f5f3ff !important;
+    border-color: rgba(99, 102, 241, .3) !important;
+    color: #4f46e5 !important;
+}
+
+/* Reminders */
+.light-mode .reminder-item {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .reminder-item strong { color: #111827 !important; }
+.light-mode .reminder-item small  { color: #6b7280 !important; }
+
+/* ============================================
+   DOCENTE/ASISTENCIA.CSS
+   ============================================ */
+.light-mode .filters-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .filter-label { color: #374151 !important; }
+.light-mode .context-chip { color: #374151 !important; }
+.light-mode .context-chip strong { color: #111827 !important; }
+
+/* No-selection message */
+.light-mode .no-selection-message {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    color: #6b7280 !important;
+}
+
+/* KPI de asistencia */
+.light-mode .kpi-att {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .kpi-att-content small  { color: #6b7280 !important; }
+.light-mode .kpi-att-content strong { color: #111827 !important; }
+.light-mode .kpi-att-pct            { color: #6b7280 !important; }
+
+/* Tabla de asistencia */
+.light-mode .attendance-table thead,
+.light-mode .attendance-table thead tr { background: #f1f5f9 !important; }
+.light-mode .attendance-table thead th {
+    color: #374151 !important;
+    background: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
+}
+.light-mode .attendance-table td {
+    color: #1f2937 !important;
+    border-color: #f3f4f6 !important;
+}
+
+/* Search box asistencia */
+.light-mode .search-box input {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: #1f2937 !important;
+}
+
+/* Context bar (barra de contexto curso/asignatura seleccionado) */
+.light-mode .context-bar {
+    background: #f5f3ff !important;
+    border: 1px solid rgba(99, 102, 241, .2) !important;
+    border-left: 4px solid #4f46e5 !important;
+}
+.light-mode .context-chip         { color: #374151 !important; }
+.light-mode .context-chip strong  { color: #111827 !important; }
+
+/* Contenedor principal de la tabla de asistencia */
+.light-mode .table-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .table-card-header {
+    border-bottom: 1px solid #f3f4f6 !important;
+    color: #111827 !important;
+}
+.light-mode .table-card-header h3,
+.light-mode .table-card-header h4 { color: #111827 !important; }
+
+/* Nombre y documento del estudiante en la tabla */
+.light-mode .student-name { color: #1f2937 !important; }
+.light-mode .student-doc  { color: #6b7280 !important; }
+
+/* Leyenda de asistencia */
+.light-mode .legend-bar {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .legend-bar-title { color: #6b7280 !important; }
+.light-mode .legend-item       { color: #374151 !important; }
+
+/* Historial de asistencia */
+.light-mode .history-panel {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .history-panel-header {
+    border-bottom: 1px solid #f3f4f6 !important;
+}
+.light-mode .history-panel-title { color: #111827 !important; }
+.light-mode .history-panel-sub   { color: #6b7280 !important; }
+.light-mode .history-empty {
+    border-color: #d1d5db !important;
+    color: #9ca3af !important;
+}
+.light-mode .history-item {
+    background: #f8fafc !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .history-date { color: #111827 !important; }
+
+/* Modal de asistencia */
+.light-mode .modal-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .modal-header {
+    background: #f1f5f9 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+.light-mode .modal-title  { color: #111827 !important; }
+.light-mode .modal-body   { color: #374151 !important; }
+.light-mode .modal-close  {
+    background: rgba(0,0,0,.04) !important;
+    border-color: #e2e8f0 !important;
+    color: #374151 !important;
+}
+.light-mode .modal-btn.secondary {
+    background: #f3f4f6 !important;
+    border-color: #d1d5db !important;
+    color: #374151 !important;
+}
+
+/* Contexto panel (sin selección) */
+.light-mode .asistencia-context-panel {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .asistencia-table-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+/* ============================================
+   DOCENTE/DETALLE-CURSO.CSS
+   ============================================ */
+.light-mode .stat-card {
+    background: linear-gradient(135deg, rgba(99,102,241,.05) 0%, rgba(79,70,229,.02) 100%) !important;
+    border: 1px solid rgba(99, 102, 241, .2) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04) !important;
+}
+.light-mode .stat-card .stat-value  { color: #111827 !important; }
+.light-mode .stat-card .stat-label  { color: #6b7280 !important; }
+
+/* Empty states */
+.light-mode .empty-state-title       { color: #1f2937 !important; }
+.light-mode .empty-state-description { color: #6b7280 !important; }
+
+/* ============================================
+   STYLES-HORARIOS.CSS
+   ============================================ */
+
+/* Filter bar */
+.light-mode .filter-bar {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .filter-bar .filter-label { color: #374151 !important; }
+.light-mode .filter-bar .filter-select {
+    background: #f9fafb !important;
+    border: 1px solid #d1d5db !important;
+    color: #1f2937 !important;
+}
+
+/* Stats grid */
+.light-mode .stats-grid .stat-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .stats-grid .stat-content h3 { color: #111827 !important; }
+.light-mode .stats-grid .stat-content p  { color: #6b7280 !important; }
+
+/* Week header */
+.light-mode .week-header {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+}
+.light-mode .week-title  { color: #111827 !important; }
+.light-mode .week-badge  {
+    background: #ede9fe !important;
+    color: #4f46e5 !important;
+}
+
+/* Schedule grid */
+.light-mode .schedule-grid { background: #f8fafc !important; }
+.light-mode .day-column    { background: transparent !important; }
+.light-mode .day-header {
+    background: #f1f5f9 !important;
+    color: #374151 !important;
+    border-color: #e2e8f0 !important;
+}
+.light-mode .day-header .day-blocks-count { color: #6b7280 !important; }
+.light-mode .day-body   { background: #f8fafc !important; }
+.light-mode .day-empty  { color: #9ca3af !important; }
+
+/* Horario cell (class block) */
+.light-mode .horario-cell,
+.light-mode .schedule-block {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06) !important;
+}
+.light-mode .horario-cell strong,
+.light-mode .horario-cell h4  { color: #111827 !important; }
+.light-mode .horario-cell small,
+.light-mode .horario-cell p   { color: #6b7280 !important; }
+
+/* Botón add horario */
+.light-mode .btn-add-horario:hover {
+    background: #4338ca !important;
+}
+
+/* ============================================
+   STYLES-BOLETINES-ADMIN.CSS
+   ============================================ */
+.light-mode .boletin-card,
+.light-mode .boletin-container,
+.light-mode .boletin-section {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #1f2937 !important;
+}
+.light-mode .boletin-header {
+    background: #f1f5f9 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    color: #111827 !important;
+}
+.light-mode .grade-row,
+.light-mode .boletin-row {
+    color: #1f2937 !important;
+    border-color: #f3f4f6 !important;
+}
+.light-mode .grade-row:hover,
+.light-mode .boletin-row:hover { background: #f5f3ff !important; }
+
+/* ============================================
+   CALENDARIO GRANDE (eventos.php - docente)
+   ============================================ */
+.light-mode .events-calendar-section,
+.light-mode .calendar-large-section {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .calendar-large-header {
+    background: #f1f5f9 !important;
+    color: #374151 !important;
+    border-color: #e2e8f0 !important;
+}
+.light-mode .calendar-large-day {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    border-color: #f3f4f6 !important;
+}
+.light-mode .calendar-large-day.other-month {
+    background: #f9fafb !important;
+    color: #9ca3af !important;
+}
+.light-mode .calendar-view-header h3  { color: #111827 !important; }
+.light-mode .events-list-section {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .events-list-header h3 { color: #111827 !important; }
+
+/* Filter tabs de eventos */
+.light-mode .filter-tab-event {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .filter-tab-event.active {
+    background: #ede9fe !important;
+    border-color: rgba(99, 102, 241, .4) !important;
+    color: #4f46e5 !important;
+}
+
+/* Botones de nav del calendario grande */
+.light-mode .btn-calendar-nav {
+    background: #f1f5f9 !important;
+    border: 1px solid #d1d5db !important;
+    color: #374151 !important;
+}
+.light-mode .btn-calendar-nav:hover {
+    background: #ede9fe !important;
+    color: #4f46e5 !important;
+}
+.light-mode .btn-calendar-today {
+    background: #ede9fe !important;
+    border-color: rgba(99, 102, 241, .3) !important;
+    color: #4f46e5 !important;
+}
+
+/* ============================================
+   DOCENTE/ACTIVIDADES.CSS
+   ============================================ */
+
+/* Filter tabs de actividades */
+.light-mode .filter-tab-actividad {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .filter-tab-actividad:hover {
+    background: #f3f4f6 !important;
+    color: #111827 !important;
+}
+.light-mode .filter-tab-actividad.active {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+.light-mode .filter-tab-actividad .badge-count {
+    background: rgba(0,0,0,.12) !important;
+}
+.light-mode .filter-tab-actividad.active .badge-count {
+    background: rgba(255,255,255,.25) !important;
+}
+
+/* Selects y búsqueda de actividades */
+.light-mode .actividades-filter-select {
+    background: #ffffff !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 16px center !important;
+    background-size: 12px !important;
+    border: 1px solid #d1d5db !important;
+    color: #1f2937 !important;
+    box-shadow: none !important;
+}
+.light-mode .actividades-filter-select option {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+.light-mode .actividades-filter-icon { color: #6366f1 !important; }
+
+.light-mode .actividades-filter-search input {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #1f2937 !important;
+}
+.light-mode .actividades-filter-search input::placeholder { color: #9ca3af !important; }
+.light-mode .actividades-filter-search input:focus {
+    border-color: #6366f1 !important;
+    background: #ffffff !important;
+}
+
+/* View toggle buttons (grid/lista) */
+.light-mode .btn-view-toggle {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #6b7280 !important;
+}
+.light-mode .btn-view-toggle:hover {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .btn-view-toggle.active {
+    background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+
+/* Cards de actividades */
+.light-mode .actividad-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+}
+.light-mode .actividad-card-header {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e5e7eb !important;
+}
+.light-mode .actividad-card-body h3 { color: #111827 !important; }
+.light-mode .actividad-card-body p  { color: #6b7280 !important; }
+.light-mode .actividad-meta-grid {
+    border-top: 1px solid #f3f4f6 !important;
+}
+.light-mode .actividad-meta-item       { color: #374151 !important; }
+.light-mode .actividad-meta-item i     { color: #6366f1 !important; }
+.light-mode .actividad-meta-item strong { color: #111827 !important; }
+.light-mode .actividad-progreso-section {
+    border-top: 1px solid #f3f4f6 !important;
+}
+.light-mode .actividad-progreso-header small { color: #6b7280 !important; }
+.light-mode .actividad-progreso-bar {
+    background: #e5e7eb !important;
+}
+.light-mode .actividad-card-footer {
+    background: #f8fafc !important;
+    border-top: 1px solid #e5e7eb !important;
+}
+.light-mode .btn-actividad-secondary {
+    background: #f1f5f9 !important;
+    border: 1px solid #d1d5db !important;
+    color: #374151 !important;
+}
+.light-mode .btn-actividad-secondary:hover {
+    background: #e5e7eb !important;
+    color: #111827 !important;
+}
+
+/* Estado empty de actividades */
+.light-mode .actividades-empty {
+    background: #f9fafb !important;
+    border-color: #d1d5db !important;
+}
+.light-mode .actividades-empty h3 { color: #111827 !important; }
+.light-mode .actividades-empty p  { color: #6b7280 !important; }
+
+/* Tabla de actividades (vista tabla) */
+.light-mode .tabla-valor-badge {
+    background: #f0fdf4 !important;
+    border: 1px solid rgba(34,197,94,.2) !important;
+    color: #15803d !important;
+}
+.light-mode .btn-tabla-action {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #374151 !important;
+}
+.light-mode .btn-tabla-action:hover {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+
+/* Tabla de entregas en actividades */
+.light-mode .detalle-actividad-entregas {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .table-entregas thead {
+    background: #f1f5f9 !important;
+}
+.light-mode .table-entregas thead th {
+    color: #374151 !important;
+    background: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
+}
+.light-mode .table-entregas tbody tr { border-color: #f3f4f6 !important; }
+.light-mode .table-entregas tbody tr:hover { background: #f5f3ff !important; }
+.light-mode .table-entregas tbody td { color: #1f2937 !important; }
+.light-mode .estudiante-nombre strong { color: #111827 !important; }
+.light-mode .estudiante-nombre small  { color: #6b7280 !important; }
+.light-mode .calificacion-display {
+    background: #f0fdf4 !important;
+    border-color: rgba(34,197,94,.2) !important;
+    color: #15803d !important;
+}
+.light-mode .btn-ver-entrega {
+    background: #f1f5f9 !important;
+    border: 1px solid #d1d5db !important;
+    color: #374151 !important;
+}
+.light-mode .btn-ver-entrega:hover {
+    background: #e5e7eb !important;
+    color: #111827 !important;
+}
+
+/* Info detalle actividad */
+.light-mode .detalle-actividad-info {
+    background: #f8fafc !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .detalle-actividad-info h4     { color: #111827 !important; }
+.light-mode .detalle-info-item label       { color: #6b7280 !important; }
+.light-mode .detalle-info-item strong      { color: #111827 !important; }
+
+/* Detalle tabs */
+.light-mode .detalle-tab {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .detalle-tab.active {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+
+/* Modal de actividad */
+.light-mode .modal-actividad {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+.light-mode .modal-actividad-header {
+    background: #f1f5f9 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+.light-mode .modal-actividad-header .modal-title   { color: #111827 !important; }
+.light-mode .modal-actividad-header .modal-title i { color: #6366f1 !important; }
+.light-mode .modal-actividad-body {
+    background: #ffffff !important;
+    color: #374151 !important;
+}
+.light-mode .modal-actividad-footer {
+    background: #f8fafc !important;
+    border-top: 1px solid #e5e7eb !important;
+}
+.light-mode .form-label-actividad       { color: #374151 !important; }
+.light-mode .form-label-actividad i     { color: #6366f1 !important; }
+.light-mode .form-control-actividad {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: #1f2937 !important;
+}
+.light-mode .form-control-actividad:focus {
+    background: #ffffff !important;
+    border-color: #6366f1 !important;
+}
+.light-mode select.form-control-actividad {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+}
+.light-mode select.form-control-actividad option {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+.light-mode .btn-modal-secondary {
+    background: #f1f5f9 !important;
+    border: 1px solid #d1d5db !important;
+    color: #374151 !important;
+}
+.light-mode .calificar-estudiante-info {
+    background: #f5f3ff !important;
+    border: 1px solid rgba(99,102,241,.2) !important;
+}
+.light-mode .calificar-estudiante-info .estudiante-data h4 { color: #111827 !important; }
+.light-mode .calificar-estudiante-info .estudiante-data p  { color: #6b7280 !important; }
+
+/* ============================================
+   DOCENTE/CURSOS.CSS
+   ============================================ */
+
+/* Filter select y búsqueda de cursos */
+.light-mode .cursos-filter-select {
+    background: #ffffff !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 16px center !important;
+    background-size: 12px !important;
+    border: 1px solid #d1d5db !important;
+    color: #1f2937 !important;
+    box-shadow: none !important;
+}
+.light-mode .cursos-filter-select option {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+.light-mode .cursos-filter-icon { color: #6366f1 !important; }
+
+.light-mode .cursos-filter-search input {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #1f2937 !important;
+}
+.light-mode .cursos-filter-search input::placeholder { color: #9ca3af !important; }
+.light-mode .cursos-filter-search input:focus {
+    border-color: #6366f1 !important;
+    background: #ffffff !important;
+}
+
+/* Curso card */
+.light-mode .curso-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+}
+.light-mode .curso-card-header {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e5e7eb !important;
+}
+.light-mode .curso-grado  { color: #6366f1 !important; }
+.light-mode .curso-nombre { color: #111827 !important; }
+.light-mode .curso-codigo { color: #6b7280 !important; }
+.light-mode .curso-meta-grid {
+    border-top: 1px solid #f3f4f6 !important;
+    border-bottom: 1px solid #f3f4f6 !important;
+}
+.light-mode .curso-meta-item i      { color: #6366f1 !important; }
+.light-mode .curso-meta-item strong { color: #111827 !important; }
+.light-mode .curso-meta-item small  { color: #6b7280 !important; }
+.light-mode .curso-ubicacion {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #374151 !important;
+}
+.light-mode .curso-ubicacion i { color: #6366f1 !important; }
+.light-mode .curso-progress-header small { color: #6b7280 !important; }
+.light-mode .curso-progress-bar {
+    background: #e5e7eb !important;
+}
+.light-mode .curso-card-footer {
+    background: #f8fafc !important;
+    border-top: 1px solid #e5e7eb !important;
+}
+.light-mode .btn-curso-secondary {
+    background: #f1f5f9 !important;
+    border: 1px solid #d1d5db !important;
+    color: #374151 !important;
+}
+.light-mode .btn-curso-secondary:hover {
+    background: #e5e7eb !important;
+    color: #111827 !important;
+}
+
+/* ============================================
+   KPI CARDS (styles-docente.css)
+   Aparecen en docente.php, actividades.php, cursos.php
+   ============================================ */
+.light-mode .kpi {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06) !important;
+}
+.light-mode .kpi .icon {
+    background: #f1f5f9 !important;
+    box-shadow: inset 0 0 0 1px rgba(99,102,241,.15) !important;
+    color: #6366f1 !important;
+}
+.light-mode .kpi small  { color: #6b7280 !important; }
+.light-mode .kpi strong { color: #111827 !important; }
+
+/* ============================================
+   EVENTOS — toggle de vista (btn-view)
+   ============================================ */
+.light-mode .btn-view {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #6b7280 !important;
+}
+.light-mode .btn-view:hover {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+}
+.light-mode .btn-view.active {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+
+/* ============================================
+   EVENTOS — barra de búsqueda general (.filter-search)
+   ============================================ */
+.light-mode .filter-search input {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #1f2937 !important;
+}
+.light-mode .filter-search input::placeholder { color: #9ca3af !important; }
+.light-mode .filter-search i { color: #6b7280 !important; }
+
+/* ============================================
+   TOPBAR toggle-btn (styles-docente.css)
+   ============================================ */
+.light-mode .toggle-btn {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #374151 !important;
+}
+.light-mode .toggle-btn:hover {
+    background: #e5e7eb !important;
+    color: #111827 !important;
+}

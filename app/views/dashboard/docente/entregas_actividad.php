@@ -43,10 +43,12 @@ $estudiantes = isset($estudiantes) && is_array($estudiantes) ? $estudiantes : []
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SIADEMY • Entregas - <?= htmlspecialchars($info_actividad['titulo']) ?></title>
+    <?php include_once __DIR__ . '/../../layouts/header_coordinador.php' ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/docente/entregas.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/modo-claro-docente.css">
 </head>
 
 <body>

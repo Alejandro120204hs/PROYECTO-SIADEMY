@@ -14,7 +14,7 @@
     <?php include_once __DIR__ . '/../../layouts/header_coordinador.php' ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/docente/asistencia.css?v=<?= $asistenciaCssVersion ?>">
-
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/modo-claro-docente.css">
 </head>
 
 <body style="margin:0;padding:0;overflow-x:hidden;">

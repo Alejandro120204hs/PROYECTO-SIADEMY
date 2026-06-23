@@ -60,7 +60,7 @@ $statsEventos = [
     'activities' => count(array_filter($eventos, fn($e) => $e['category'] === 'activities')),
 ];
 
-$eventosJson = htmlspecialchars(json_encode($eventos, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
+$eventosJson = json_encode($eventos, JSON_UNESCAPED_UNICODE);
 $usuario     = obtenerPerfilAcudienteDesdeSesion();
 
 require BASE_PATH . '/app/views/dashboard/acudiente/eventos.php';

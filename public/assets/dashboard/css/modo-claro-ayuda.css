@@ -1,0 +1,69 @@
+/*
+ * Modo claro (light mode) — Ayuda y Soporte
+ * Cargado junto a modo-claro-admin.css (via header_coordinador.php)
+ * Cubre clases de ayuda.css
+ */
+
+/* ── Cabecera ── */
+.light-mode .ayuda-header h2 { color: #111827 !important; }
+.light-mode .ayuda-header p  { color: #6b7280 !important; }
+
+/* ── Tabs ── */
+.light-mode .help-tabs {
+    border-bottom-color: #e5e7eb !important;
+}
+.light-mode .help-tab          { color: #6b7280 !important; }
+.light-mode .help-tab:hover    { color: #111827 !important; }
+.light-mode .help-tab.active   { color: #6366f1 !important; border-bottom-color: #6366f1 !important; }
+
+/* ── FAQ ── */
+.light-mode .faq-item {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-left: 3px solid #6366f1 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .faq-item:hover { box-shadow: 0 6px 20px rgba(99,102,241,.1) !important; }
+.light-mode .faq-question       { color: #111827 !important; }
+.light-mode .faq-question:hover { background: rgba(99,102,241,.04) !important; }
+.light-mode .faq-answer {
+    color: #374151 !important;
+    border-top-color: #f3f4f6 !important;
+}
+
+/* ── Guías ── */
+.light-mode .guide-item {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05) !important;
+}
+.light-mode .guide-item:hover {
+    border-color: rgba(99,102,241,.4) !important;
+    box-shadow: 0 8px 24px rgba(99,102,241,.12) !important;
+}
+.light-mode .guide-icon { background: rgba(99,102,241,.1) !important; }
+.light-mode .guide-item h4 { color: #111827 !important; }
+.light-mode .guide-item p  { color: #6b7280 !important; }
+
+/* ── Contacto ── */
+.light-mode .contact-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08) !important;
+}
+.light-mode .contact-card h3   { color: #111827 !important; }
+.light-mode .contact-card > p  { color: #6b7280 !important; }
+.light-mode .contact-form label { color: #374151 !important; }
+.light-mode .contact-form input,
+.light-mode .contact-form textarea {
+    background: #f9fafb !important;
+    border: 1px solid #d1d5db !important;
+    color: #111827 !important;
+}
+.light-mode .contact-form input::placeholder,
+.light-mode .contact-form textarea::placeholder { color: #9ca3af !important; }
+.light-mode .contact-form input:focus,
+.light-mode .contact-form textarea:focus {
+    border-color: #6366f1 !important;
+    background: #faf5ff !important;
+}
