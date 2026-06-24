@@ -36,6 +36,14 @@
                 require BASE_PATH . '/app/views/website/index.php';
                 break;
 
+            case '/sitemap.xml':
+                require BASE_PATH . '/app/views/website/sitemap.php';
+                break;
+
+            case '/robots.txt':
+                require BASE_PATH . '/app/views/website/robots.php';
+                break;
+
             // INICIO RUTAS LOGIN
             case '/login':
                 require BASE_PATH . '/app/views/auth/login.php';
