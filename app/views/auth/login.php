@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Iniciar Sesión - Siademy</title>
+    <title>Iniciar Sesión - SIADEMY</title>
+    <meta name="description" content="Inicia sesión en SIADEMY para acceder a la plataforma de gestión académica de tu institución educativa.">
+    <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/extras/css/login.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>

@@ -4,7 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIADEMY - Gestiona tu institución académica</title>
+    <title>SIADEMY - Plataforma de Gestión Académica para Instituciones Educativas</title>
+
+    <!-- Verificación Google Search Console -->
+    <meta name="google-site-verification" content="CCw8WHY1qXah7i3AKtFK8ZB8yoPthsDpsLcHp0DQw_U" />
+
+    <!-- SEO Básico -->
+    <meta name="description" content="SIADEMY es una plataforma integral de gestión académica para instituciones educativas. Administra estudiantes, docentes, calificaciones, asistencia, horarios y más desde un solo lugar.">
+    <meta name="keywords" content="gestión académica, plataforma educativa, sistema académico, administración escolar, calificaciones online, asistencia estudiantil, Colombia, institución educativa, software educativo">
+    <meta name="author" content="SIADEMY">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="<?= BASE_URL ?>/">
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SIADEMY - Plataforma de Gestión Académica">
+    <meta property="og:description" content="Plataforma integral para gestionar estudiantes, docentes, calificaciones, asistencia y más. Diseñada para instituciones educativas en Colombia.">
+    <meta property="og:image" content="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png">
+    <meta property="og:url" content="<?= BASE_URL ?>/">
+    <meta property="og:site_name" content="SIADEMY">
+    <meta property="og:locale" content="es_CO">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SIADEMY - Plataforma de Gestión Académica">
+    <meta name="twitter:description" content="Plataforma integral para gestionar estudiantes, docentes, calificaciones y asistencia en instituciones educativas.">
+    <meta name="twitter:image" content="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png">
+
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="public/assets/website/css/styles.css">
@@ -16,7 +42,7 @@
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <img src="public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
+                    <img src="public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="SIADEMY - Plataforma de Gestión Académica">
                 </div>
 
                 <ul class="nav-menu">
@@ -536,7 +562,7 @@
                 <!-- Logo y Contacto -->
                 <div class="footer-info">
                     <div class="footer-logo">
-                        <img src="public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="">
+                        <img src="public/assets/extras/img/LOGO-NEGATIVO 1 (1).png" alt="SIADEMY">
 
                     </div>
 
