@@ -19,8 +19,13 @@ require_once __DIR__ . '/../../models/administradores/eventos.php'; // Evento
 function obtenerDataEventosAcudiente(int $idInstitucion): array
 {
     $model      = new Evento();
-    $rawEventos = $model->listar($idInstitucion);
     $hoy        = date('Y-m-d');
+
+    $rawEventos = array_filter(
+        $model->listar($idInstitucion),
+        fn($ev) => ($ev['fecha_evento'] ?? '') >= $hoy
+                   && in_array($ev['grado'] ?? '', ['', 'Todos', 'Acudientes'], true)
+    );
 
     $categoryMap = [
         'reuniones'   => 'meetings',
