@@ -59,6 +59,21 @@
 
   function renderDayEventsModal(dateString, events) {
     if (!dayEventsModalEl) return;
+
+    // Ocultar eventos pasados: si el día ya pasó se descartan todos sus
+    // eventos; si es hoy, se descartan los que ya terminaron (hora_fin/hora_inicio).
+    var now      = new Date();
+    var hoyStr   = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+    var nowHHMM  = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    events = (events || []).filter(function (ev) {
+      if (dateString < hoyStr) return false;
+      if (dateString === hoyStr) {
+        var fin = (ev.hora_fin || ev.time || '').slice(0, 5);
+        if (fin && fin < nowHHMM) return false;
+      }
+      return true;
+    });
+
     var parts = dateString.split('-');
     dayEventsModalTitle.textContent = 'Eventos del ' + parts[2] + '/' + parts[1] + '/' + parts[0];
 

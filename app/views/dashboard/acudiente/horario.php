@@ -55,7 +55,7 @@
             </div>
             <div>
               <strong><?= htmlspecialchars($nombreEstudiante) ?></strong>
-              <small><?= htmlspecialchars($cursoActual) ?><?= $cursoNombre ? ' · ' . htmlspecialchars($cursoNombre) : '' ?></small>
+              <small><?= htmlspecialchars($cursoActual) ?></small>
             </div>
           </div>
           <div style="color:#9aa3b2;font-size:13px;"><?= $totalBloques ?> bloque<?= $totalBloques !== 1 ? 's' : '' ?> en total</div>

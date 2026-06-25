@@ -110,4 +110,11 @@
 @media (max-width: 480px) {
   .calendar-large-grid-wrapper,
   .events-calendar-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Tabs de filtro: en vez de generar scroll horizontal, se dejan pasar
+     a una segunda fila (más compactos) para que no sobre ninguno. */
+  .filter-tabs-events { flex-wrap: wrap; overflow-x: visible; }
+  .filter-tab-event { flex-shrink: 1; padding: 7px 10px; gap: 5px; font-size: 12px; }
+  .filter-tab-event i { font-size: 13px; }
+  .filter-tab-event .badge-count { padding: 1px 6px; font-size: 11px; }
 }

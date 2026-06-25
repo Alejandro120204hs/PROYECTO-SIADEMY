@@ -581,10 +581,6 @@
                 require BASE_PATH . '/app/controllers/acudiente/profesores.php';
                 break;
 
-            case '/acudiente/eventos':
-                require BASE_PATH . '/app/controllers/acudiente/eventos.php';
-                break;
-
             case '/super-admin/dashboard':
                 require BASE_PATH . '/app/views/dashboard/superAdmin/superAdmin.php';
                 break;
