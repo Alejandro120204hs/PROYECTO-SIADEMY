@@ -13,7 +13,10 @@ $estudiantesAsociados   = $estudianteModel->obtenerEstudiantesAsociados($idAcudi
 $estudianteSeleccionado = acudienteObtenerEstudianteSeleccionado($estudiantesAsociados);
 
 $model      = new Evento();
-$rawEventos = $model->listar($idInstitucion);
+$rawEventos = array_filter(
+    $model->listar($idInstitucion),
+    fn($ev) => in_array($ev['grado'] ?? '', ['', 'Todos', 'Acudientes'], true)
+);
 $hoy        = date('Y-m-d');
 
 // Mapeo de tipo a category/icon (mismo que docente)

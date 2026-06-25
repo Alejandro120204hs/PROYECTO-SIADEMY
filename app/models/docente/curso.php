@@ -176,6 +176,7 @@
                     FROM eventos ev
                     WHERE ev.id_institucion = :id_institucion_evento
                       AND ev.fecha_evento IS NOT NULL
+                      AND ev.fecha_evento >= CURDATE()
                       AND (ev.grado IS NULL OR ev.grado = '' OR ev.grado = 'Todos' OR ev.grado = 'Docentes')
 
                     ORDER BY fecha_evento ASC, hora_inicio ASC, nombre_evento ASC

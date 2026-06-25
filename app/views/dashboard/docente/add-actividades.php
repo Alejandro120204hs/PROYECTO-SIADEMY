@@ -141,7 +141,7 @@ extract($dataVistaDocenteAgregarActividad, EXTR_SKIP);
                                 
                                 <div class="mb-3">
                                     <label for="">Fecha de entrega*</label>
-                                    <input type="date" class="form-control" name="fecha_entrega" required tabindex="4">
+                                    <input type="date" class="form-control" name="fecha_entrega" required tabindex="4" min="<?= date('Y-m-d') ?>">
                                 </div>
 
                                  <div class="mb-3">
