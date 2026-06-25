@@ -1490,11 +1490,9 @@ canvas {
   .user { order: 2; margin-left: auto; flex-shrink: 0; }
   .search, .topbar-actions { order: 10; width: 100%; margin-left: 0; flex: 0 0 100%; }
   .title { font-size: clamp(22px, 4vw, 32px); }
+}
 
-  /* Drawer del sidebar — antes solo aplicaba en ≤768px; se extiende hasta
-     ≤1024px (cubre tablets como iPad 820px) para que el sidebar no se
-     apile arriba del contenido (regla de ≤980px más abajo) y en su lugar
-     use el mismo patrón de "oculto + botón hamburguesa" que en celular. */
+@media (max-width: 768px) {
   .sidebar {
     position: fixed !important;
     left: -270px !important;
@@ -1518,9 +1516,6 @@ canvas {
     left: 0 !important;
     box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6);
   }
-}
-
-@media (max-width: 768px) {
   .user-details { display: none; }
   .main { padding: 16px 12px 32px; }
   .title { font-size: 22px; }
@@ -1528,23 +1523,9 @@ canvas {
   .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
 
-.title-short,
-.student-card-name-short {
-  display: none;
-}
-
 @media (max-width: 480px) {
   .kpis, .stats-grid { grid-template-columns: 1fr !important; }
   .title { font-size: 20px; }
   .main { padding: 14px 10px 24px; }
-
-  /* Título corto del topbar, solo para no empujar el bloque de perfil */
-  .title-full { display: none; }
-  .title-short { display: inline; }
-
-  /* Nombre corto en las tarjetas de "Mis estudiantes" para que no
-     se desborden al combinarse con la insignia "Activo" */
-  .student-card-name-full { display: none; }
-  .student-card-name-short { display: inline; }
 }
 

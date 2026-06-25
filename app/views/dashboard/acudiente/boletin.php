@@ -43,7 +43,7 @@ function bol_promClase(?float $promedio): string {
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <?php include_once __DIR__ . '/../../layouts/header_coordinador.php' ?>
-  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-boletin.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-boletin.css') ?: 1 ?>">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-boletin.css">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/modo-claro-acudiente.css">
   <style>
     /* Tipografía de los demás módulos del Acudiente (definida en
@@ -630,7 +630,7 @@ const toggleLeft  = document.getElementById('toggleLeft');
 const bOv = document.querySelector('.sidebar-overlay') || document.createElement('div');
 if (!bOv.parentElement) { bOv.className = 'sidebar-overlay'; document.body.appendChild(bOv); }
 let leftVisible = localStorage.getItem('leftSidebarVisible') !== 'false';
-function isMobile() { return window.innerWidth <= 1024; }
+function isMobile() { return window.innerWidth <= 768; }
 function openBDrawer()  { if (!leftSidebar) return; leftSidebar.classList.add('mobile-open'); leftSidebar.classList.remove('hidden'); bOv.classList.add('active'); }
 function closeBDrawer() { if (!leftSidebar) return; leftSidebar.classList.remove('mobile-open'); bOv.classList.remove('active'); }
 bOv.onclick = closeBDrawer;

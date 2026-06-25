@@ -29,7 +29,6 @@ if ($estudiante) {
   <?php include_once __DIR__ . '/../../layouts/header_coordinador.php' ?>
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-acudiente.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/styles-acudiente.css') ?: 1 ?>">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/acudiente-dashboard.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/acudiente-dashboard.css') ?: 1 ?>">
-  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/acudiente-eventos.css?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/css/acudiente-eventos.css') ?: 1 ?>">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/modo-claro-acudiente.css">
 </head>
 <body>
@@ -80,122 +79,42 @@ if ($estudiante) {
           </div>
         </div>
 
-        <!-- FILTER TABS -->
-        <section class="filter-section">
-          <div class="filter-tabs-events">
-            <button class="filter-tab-event active" data-filter="all">
-              <i class="ri-calendar-line"></i>
-              <span>Todos</span>
-              <span class="badge-count"><?= (int)($statsEventos['all'] ?? 0) ?></span>
-            </button>
-            <button class="filter-tab-event" data-filter="upcoming">
-              <i class="ri-time-line"></i>
-              <span>Próximos</span>
-              <span class="badge-count"><?= (int)($statsEventos['upcoming'] ?? 0) ?></span>
-            </button>
-            <button class="filter-tab-event" data-filter="meetings">
-              <i class="ri-user-voice-line"></i>
-              <span>Reuniones</span>
-              <span class="badge-count"><?= (int)($statsEventos['meetings'] ?? 0) ?></span>
-            </button>
-            <button class="filter-tab-event" data-filter="exams">
-              <i class="ri-file-edit-line"></i>
-              <span>Exámenes</span>
-              <span class="badge-count"><?= (int)($statsEventos['exams'] ?? 0) ?></span>
-            </button>
-            <button class="filter-tab-event" data-filter="activities">
-              <i class="ri-basketball-line"></i>
-              <span>Actividades</span>
-              <span class="badge-count"><?= (int)($statsEventos['activities'] ?? 0) ?></span>
-            </button>
-          </div>
-          <div class="filter-search">
-            <i class="ri-search-2-line"></i>
-            <input type="text" placeholder="Buscar eventos..." id="searchEvents">
-          </div>
-        </section>
-
-        <!-- CALENDAR GRID -->
-        <section class="events-calendar-section">
-          <div class="calendar-view-header">
-            <h3>
-              <i class="ri-calendar-2-line"></i>
-              <span id="calendarMonthYear"></span>
-            </h3>
-            <div class="calendar-controls">
-              <button class="btn-calendar-nav" id="prevMonthEvents"><i class="ri-arrow-left-s-line"></i></button>
-              <button class="btn-calendar-today" id="todayBtn">Hoy</button>
-              <button class="btn-calendar-nav" id="nextMonthEvents"><i class="ri-arrow-right-s-line"></i></button>
-            </div>
-          </div>
-          <div class="calendar-large-grid" id="calendarLargeGrid"></div>
-        </section>
-
-        <!-- EVENTS CARDS LIST -->
-        <section class="events-list-section">
-          <div class="events-list-header">
-            <h3><i class="ri-list-check"></i> Eventos</h3>
-            <div class="view-options">
-              <button class="btn-view active" data-view="grid"><i class="ri-grid-line"></i></button>
-              <button class="btn-view" data-view="list"><i class="ri-list-check"></i></button>
-            </div>
-          </div>
-
-          <div class="events-container" id="eventsContainer">
-            <?php if (empty($eventos)): ?>
-              <div class="event-card" data-category="none" data-date="">
-                <div class="event-card-body">
-                  <h4>Sin eventos registrados</h4>
-                  <p>La institución no ha publicado eventos aún.</p>
-                </div>
-              </div>
-            <?php else: foreach ($eventos as $evento): ?>
-              <div class="event-card"
-                   data-category="<?= htmlspecialchars($evento['category'], ENT_QUOTES) ?>"
-                   data-upcoming="<?= $evento['is_upcoming'] ? '1' : '0' ?>"
-                   data-date="<?= htmlspecialchars($evento['fecha_evento'], ENT_QUOTES) ?>"
-                   data-nombre="<?= htmlspecialchars($evento['nombre_evento'], ENT_QUOTES) ?>"
-                   data-descripcion="<?= htmlspecialchars($evento['descripcion'], ENT_QUOTES) ?>"
-                   data-tipo="<?= htmlspecialchars($evento['category_name'], ENT_QUOTES) ?>"
-                   data-hora-inicio="<?= htmlspecialchars(substr($evento['hora_inicio'], 0, 5), ENT_QUOTES) ?>"
-                   data-hora-fin="<?= htmlspecialchars(substr($evento['hora_fin'], 0, 5), ENT_QUOTES) ?>"
-                   data-ubicacion="<?= htmlspecialchars($evento['ubicacion'], ENT_QUOTES) ?>"
-                   data-responsable="<?= htmlspecialchars($evento['responsable'], ENT_QUOTES) ?>"
-                   data-correo="<?= htmlspecialchars($evento['correo_contacto'], ENT_QUOTES) ?>"
-                   data-fuente="evento">
-                <div class="event-card-header">
-                  <div class="event-type-badge <?= htmlspecialchars($evento['category'], ENT_QUOTES) ?>">
-                    <i class="<?= htmlspecialchars($evento['icon'], ENT_QUOTES) ?>"></i>
-                    <span><?= htmlspecialchars($evento['category_name'], ENT_QUOTES) ?></span>
-                  </div>
-                </div>
-                <div class="event-card-body">
-                  <h4><?= htmlspecialchars($evento['nombre_evento']) ?></h4>
-                  <p><?= htmlspecialchars($evento['descripcion']) ?></p>
-                  <div class="event-meta">
-                    <div class="meta-item">
-                      <i class="ri-calendar-line"></i>
-                      <span><strong><?= date('d M, Y', strtotime($evento['fecha_evento'])) ?></strong></span>
-                    </div>
-                    <div class="meta-item">
-                      <i class="ri-time-line"></i>
-                      <span><?= $evento['hora_inicio'] ? htmlspecialchars(substr($evento['hora_inicio'], 0, 5)) : 'Sin hora' ?></span>
-                    </div>
-                    <?php if ($evento['ubicacion']): ?>
-                    <div class="meta-item">
-                      <i class="ri-map-pin-line"></i>
-                      <span><?= htmlspecialchars($evento['ubicacion']) ?></span>
-                    </div>
-                    <?php endif; ?>
-                  </div>
-                </div>
-                <div class="event-card-footer" style="padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);">
-                  <button class="btn-event-secondary btn-ver-detalle-evento" style="cursor:pointer;">
-                    <i class="ri-information-line"></i> Ver detalles
-                  </button>
-                </div>
-              </div>
-            <?php endforeach; endif; ?>
+        <!-- MODULE LINKS -->
+        <section class="card">
+          <h3>Acceso Rápido</h3>
+          <div class="module-links">
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/calificaciones">
+              <i class="ri-bar-chart-2-line"></i>
+              Calificaciones
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/boletines">
+              <i class="ri-file-paper-2-line"></i>
+              Boletines
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/asistencia">
+              <i class="ri-calendar-check-line"></i>
+              Asistencia
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/horario">
+              <i class="ri-book-2-line"></i>
+              Horario
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/actividades">
+              <i class="ri-task-line"></i>
+              Actividades
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/profesores">
+              <i class="ri-user-3-line"></i>
+              Profesores
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/acudiente/eventos">
+              <i class="ri-calendar-event-line"></i>
+              Eventos
+            </a>
+            <a class="module-link" href="<?= BASE_URL ?>/notificaciones">
+              <i class="ri-notification-3-line"></i>
+              Notificaciones
+            </a>
           </div>
         </section>
 
