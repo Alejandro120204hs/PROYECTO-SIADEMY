@@ -7,6 +7,7 @@
     <title>Iniciar Sesión - SIADEMY</title>
     <meta name="description" content="Inicia sesión en SIADEMY para acceder a la plataforma de gestión académica de tu institución educativa.">
     <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="<?= BASE_URL ?>/public/assets/extras/img/favicon.png">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/extras/css/login.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
