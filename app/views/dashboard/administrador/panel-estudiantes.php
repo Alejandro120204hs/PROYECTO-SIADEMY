@@ -108,7 +108,7 @@
               <td><?= $estudiante['fecha_de_nacimiento'] ?></td>
               <td><?= $estudiante['estado'] ?></td>
               <td class="acciones">
-                  <a class="btn-action" href="">Ver</a>
+                  <a class="btn-action" href="<?= BASE_URL ?>/administrador/detalle-estudiante?id=<?= $estudiante['id'] ?>">Ver</a>
                   <a class="btn-action" href="<?= BASE_URL ?>/administrador/editar-estudiante?id=<?= $estudiante['id'] ?>">
                     Editar
                   </a>
