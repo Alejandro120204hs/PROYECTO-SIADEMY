@@ -39,7 +39,7 @@
             '/superAdmin-editar-administrador'
           ]) ? 'active' : '' ?>" href="<?= BASE_URL ?>/superAdmin-panel-administradores"><i class="ri-user-settings-line"></i> Administradores</a>
         <a class="<?= $isActiveSidebar(['/superAdmin-panel-pagos']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/superAdmin-panel-pagos"><i class="ri-bill-line"></i> Pagos</a>
-        <a href="#"><i class="ri-bar-chart-box-line"></i> Reportes</a>
+        <a class="<?= $isActiveSidebar(['/superAdmin-reportes']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/superAdmin-reportes"><i class="ri-bar-chart-box-line"></i> Reportes</a>
         <div class="spacer"></div>
         <div class="section">Configuración</div>
         <a href="#"><i class="ri-settings-3-line"></i> Ajustes</a>

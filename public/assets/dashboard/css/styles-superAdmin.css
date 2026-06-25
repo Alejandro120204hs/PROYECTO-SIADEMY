@@ -162,7 +162,10 @@ a {
   padding: 28px 28px 40px 28px;
   overflow-y: auto;
   max-height: 100vh;
+  /* scrollbar invisible en webkit y firefox */
+  scrollbar-width: none;
 }
+.main::-webkit-scrollbar { display: none; }
 
 .topbar {
   display: flex;
