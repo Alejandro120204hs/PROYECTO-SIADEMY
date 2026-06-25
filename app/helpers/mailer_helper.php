@@ -15,7 +15,7 @@
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
         $mail->Username   = 'soportesiademy@gmail.com';                     //SMTP username
-        $mail->Password   = 'zcqe xyzr jaoy trfs';                               //SMTP password
+        $mail->Password   = 'klbz ftgx nbgn ksws';                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;
         $mail->CharSet = "UTF-8";
