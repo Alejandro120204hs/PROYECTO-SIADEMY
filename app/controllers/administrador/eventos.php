@@ -62,6 +62,12 @@
             exit();
         }
 
+        // VALIDAMOS QUE LA FECHA NO SEA ANTERIOR A HOY
+        if($fecha_evento < date('Y-m-d')){
+            mostrarSweetAlert('error', 'Fecha inválida', 'No puedes crear un evento con una fecha anterior al día de hoy.');
+            exit();
+        }
+
          // CAPTURAMOS EL ID DE LA INSTITUCIÓN DEL ADMIN LOGUEADO
         if (session_status() === PHP_SESSION_NONE) { session_start(); }
         if(!isset($_SESSION['user']['id_institucion'])){
@@ -147,8 +153,8 @@
         // INSTANCEAMOS LA CLASE EVENTO
         $resultado = new Evento();
 
-        // LISTAMOS SOLO LOS EVENTOS DE ESA INSTITUCIÓN
-        $eventos = $resultado->listar($id_institucion);
+        // LISTAMOS SOLO LOS EVENTOS PRÓXIMOS (HOY EN ADELANTE) DE ESA INSTITUCIÓN
+        $eventos = $resultado->listarProximos($id_institucion);
 
         return $eventos;
     }
@@ -185,6 +191,12 @@
         // VALIDAMOS LOS CAMPOS OBLIGATORIOS
         if(empty($id) || empty($nombre_evento) || empty($tipo_evento) || empty($fecha_evento) || empty($hora_inicio) || empty($hora_fin) || empty($ubicacion) || empty($responsable) || empty($correo_contacto)){
             mostrarSweetAlert('error', 'Campos incompletos', 'Por favor complete todos los campos obligatorios.');
+            exit();
+        }
+
+        // VALIDAMOS QUE LA FECHA NO SEA ANTERIOR A HOY
+        if($fecha_evento < date('Y-m-d')){
+            mostrarSweetAlert('error', 'Fecha inválida', 'No puedes establecer una fecha anterior al día de hoy.');
             exit();
         }
 

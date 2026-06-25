@@ -111,6 +111,12 @@ function guardarActividad() {
         $datos['archivo'] = $nombreArchivo;
     }
 
+    // Validar que la fecha de entrega no sea anterior a hoy
+    if (!empty($datos['fecha_entrega']) && $datos['fecha_entrega'] < date('Y-m-d')) {
+        mostrarSweetAlert('error', 'Fecha inválida', 'La fecha de entrega no puede ser anterior al día de hoy.');
+        exit;
+    }
+
     // Validar que la ponderación esté entre 0 y 100
     if ($datos['ponderacion'] < 0 || $datos['ponderacion'] > 100) {
         mostrarSweetAlert('error', 'Error de validación', 'La ponderación debe estar entre 0 y 100%');
@@ -234,6 +240,12 @@ function actualizarActividad() {
     $id = filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT);
     
     $fechaEntregaRaw = $_POST['fecha_entrega'] ?? '';
+
+    // Validar que la fecha de entrega no sea anterior a hoy
+    if (!empty($fechaEntregaRaw) && date('Y-m-d', strtotime($fechaEntregaRaw)) < date('Y-m-d')) {
+        mostrarSweetAlert('error', 'Fecha inválida', 'La fecha de entrega no puede ser anterior al día de hoy.');
+        exit;
+    }
 
     // Calcular el estado correcto basado en la fecha (no en el POST['estado']).
     // Comparación solo de fechas, sin horas → inmune a desfases de zona horaria.
