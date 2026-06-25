@@ -31,6 +31,8 @@
     <meta name="twitter:description" content="Plataforma integral para gestionar estudiantes, docentes, calificaciones y asistencia en instituciones educativas.">
     <meta name="twitter:image" content="<?= BASE_URL ?>/public/assets/extras/img/LOGO-NEGATIVO 1 (1).png">
 
+    <link rel="icon" type="image/png" href="<?= BASE_URL ?>/public/assets/extras/img/favicon.png">
+
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="public/assets/website/css/styles.css">
