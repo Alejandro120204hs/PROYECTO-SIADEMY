@@ -86,7 +86,8 @@
 
                         <div class="col-md-4">
                             <label for="fecha_evento">Fecha del Evento*</label>
-                            <input type="date" id="fecha_evento" class="form-control" required name="fecha_evento" value="<?= htmlspecialchars($evento['fecha_evento']) ?>">
+                            <?php $minFecha = ($evento['fecha_evento'] < date('Y-m-d')) ? $evento['fecha_evento'] : date('Y-m-d'); ?>
+                            <input type="date" id="fecha_evento" class="form-control" required name="fecha_evento" value="<?= htmlspecialchars($evento['fecha_evento']) ?>" min="<?= $minFecha ?>">
                         </div>
 
                         <div class="col-md-4">

@@ -636,7 +636,7 @@
                 </div>
                 <div class="col-md-4">
                   <label class="form-label">Fecha de entrega *</label>
-                  <input type="date" class="form-control" name="fecha_entrega" id="editFechaEntrega" required>
+                  <input type="date" class="form-control" name="fecha_entrega" id="editFechaEntrega" required min="<?= date('Y-m-d') ?>">
                 </div>
                 <div class="col-md-4">
                   <label class="form-label">Estado *</label>

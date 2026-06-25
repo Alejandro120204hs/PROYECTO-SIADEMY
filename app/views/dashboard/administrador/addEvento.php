@@ -90,7 +90,7 @@
                         <!-- Fecha -->
                         <div class="col-md-4">
                             <label for="fecha_evento">Fecha del Evento*</label>
-                            <input type="date" id="fecha_evento" class="form-control" required name="fecha_evento">
+                            <input type="date" id="fecha_evento" class="form-control" required name="fecha_evento" min="<?= date('Y-m-d') ?>">
                         </div>
 
                         <!-- Hora de Inicio -->

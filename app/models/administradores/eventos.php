@@ -39,6 +39,19 @@
             }
         }
 
+        public function listarProximos($id_institucion){
+            try{
+                $consultar = "SELECT * FROM eventos WHERE id_institucion = :id_institucion AND fecha_evento >= CURDATE() ORDER BY fecha_evento ASC, hora_inicio ASC";
+                $resultado = $this->conexion->prepare($consultar);
+                $resultado->bindParam(':id_institucion', $id_institucion);
+                $resultado->execute();
+                return $resultado->fetchAll(PDO::FETCH_ASSOC);
+            }catch(PDOException $e){
+                error_log("Error en Evento::listarProximos->" . $e->getMessage());
+                return [];
+            }
+        }
+
         public function listarEventoId($id){
             try{
                 $consultar = "SELECT * FROM eventos WHERE id = :id LIMIT 1";

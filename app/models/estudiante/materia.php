@@ -532,13 +532,12 @@ class MateriaEstudiante
                     FROM eventos ev
                     WHERE ev.id_institucion = :id_institucion
                       AND ev.fecha_evento IS NOT NULL
-                      AND YEAR(ev.fecha_evento) = :anio
+                      AND ev.fecha_evento >= CURDATE()
                       AND (ev.grado IS NULL OR ev.grado = '' OR ev.grado = 'Todos' OR ev.grado = 'Estudiantes')
                     ORDER BY ev.fecha_evento ASC";
 
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
-            $stmt->bindParam(':anio',           $anio,           PDO::PARAM_INT);
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

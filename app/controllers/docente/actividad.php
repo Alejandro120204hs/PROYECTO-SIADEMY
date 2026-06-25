@@ -65,7 +65,7 @@ function guardarActividad() {
         'id_asignatura'       => filter_var($_POST['id_asignatura'],       FILTER_SANITIZE_NUMBER_INT),
         'titulo'              => htmlspecialchars(trim($_POST['titulo_actividad']), ENT_QUOTES, 'UTF-8'),
         'descripcion'         => htmlspecialchars(trim($_POST['descripcion']),      ENT_QUOTES, 'UTF-8'),
-        'tipo'                => htmlspecialchars(trim($_POST['tipo_actividad']),   ENT_QUOTES, 'UTF-8'),
+        'tipo'                => trim($_POST['tipo_actividad']),
         'ponderacion'         => filter_var($_POST['ponderacion'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
         'fecha_entrega'       => $_POST['fecha_entrega'],
         'archivo'             => null
@@ -109,6 +109,12 @@ function guardarActividad() {
             exit;
         }
         $datos['archivo'] = $nombreArchivo;
+    }
+
+    // Validar que la fecha de entrega no sea anterior a hoy
+    if (!empty($datos['fecha_entrega']) && $datos['fecha_entrega'] < date('Y-m-d')) {
+        mostrarSweetAlert('error', 'Fecha inválida', 'La fecha de entrega no puede ser anterior al día de hoy.');
+        exit;
     }
 
     // Validar que la ponderación esté entre 0 y 100
@@ -235,6 +241,12 @@ function actualizarActividad() {
     
     $fechaEntregaRaw = $_POST['fecha_entrega'] ?? '';
 
+    // Validar que la fecha de entrega no sea anterior a hoy
+    if (!empty($fechaEntregaRaw) && date('Y-m-d', strtotime($fechaEntregaRaw)) < date('Y-m-d')) {
+        mostrarSweetAlert('error', 'Fecha inválida', 'La fecha de entrega no puede ser anterior al día de hoy.');
+        exit;
+    }
+
     // Calcular el estado correcto basado en la fecha (no en el POST['estado']).
     // Comparación solo de fechas, sin horas → inmune a desfases de zona horaria.
     // Regla: fecha_entrega >= hoy → 'activa';  fecha_entrega < hoy → 'cerrada'.
@@ -248,7 +260,7 @@ function actualizarActividad() {
     $datos = [
         'titulo'        => htmlspecialchars(trim($_POST['titulo_actividad']), ENT_QUOTES, 'UTF-8'),
         'descripcion'   => htmlspecialchars(trim($_POST['descripcion']),      ENT_QUOTES, 'UTF-8'),
-        'tipo'          => htmlspecialchars(trim($_POST['tipo_actividad']),   ENT_QUOTES, 'UTF-8'),
+        'tipo'          => trim($_POST['tipo_actividad']),
         'ponderacion'   => filter_var($_POST['ponderacion'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
         'fecha_entrega' => $fechaEntregaRaw,
         'estado'        => $estadoCalculado,   // calculado por fecha, no por el campo del modal
