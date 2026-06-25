@@ -133,13 +133,17 @@ class Estudiante {
         try {
             $consultar = "SELECT
                               estudiante.*,
-                              usuario.correo          AS correo,
-                              usuario.estado          AS estado,
-                              acudiente.nombres       AS nombres_acudiente,
-                              acudiente.apellidos     AS apellidos_acudiente
+                              usuario.correo              AS correo,
+                              usuario.estado              AS estado,
+                              acudiente.nombres           AS nombres_acudiente,
+                              acudiente.apellidos         AS apellidos_acudiente,
+                              acudiente.parentesco        AS parentesco_acudiente,
+                              acudiente.telefono          AS telefono_acudiente,
+                              ua.correo                   AS correo_acudiente
                           FROM estudiante
-                          INNER JOIN usuario   ON estudiante.id_usuario  = usuario.id
-                          INNER JOIN acudiente ON estudiante.id_acudiente = acudiente.id
+                          INNER JOIN usuario   ON estudiante.id_usuario   = usuario.id
+                          LEFT JOIN acudiente  ON estudiante.id_acudiente = acudiente.id
+                          LEFT JOIN usuario ua ON acudiente.id_usuario    = ua.id
                           WHERE estudiante.id = :id
                           LIMIT 1";
 
@@ -151,6 +155,24 @@ class Estudiante {
         } catch (PDOException $e) {
             error_log("Error en Estudiante::listarId -> " . $e->getMessage());
             return null;
+        }
+    }
+
+    public function obtenerMatriculaActiva($id_estudiante) {
+        try {
+            $sql = "SELECT m.anio, c.grado, c.curso, c.jornada
+                    FROM matricula m
+                    INNER JOIN curso c ON c.id = m.id_curso
+                    WHERE m.id_estudiante = :id AND m.estado = 'Activa'
+                    ORDER BY m.anio DESC
+                    LIMIT 1";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id', $id_estudiante, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+        } catch (PDOException $e) {
+            error_log("Error en Estudiante::obtenerMatriculaActiva -> " . $e->getMessage());
+            return [];
         }
     }
 

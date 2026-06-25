@@ -1,26 +1,61 @@
-<?php 
-  require_once BASE_PATH . '/app/helpers/session_administrador.php';
+<?php
+require_once BASE_PATH . '/app/helpers/session_administrador.php';
+require_once BASE_PATH . '/app/models/administradores/estudiante.php';
+
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    header('Location: ' . BASE_URL . '/administrador-panel-estudiantes');
+    exit();
+}
+
+if (session_status() === PHP_SESSION_NONE) session_start();
+$id_institucion = $_SESSION['user']['id_institucion'];
+
+$modelEstudiante = new Estudiante();
+$estudiante      = $modelEstudiante->listarId((int)$_GET['id']);
+
+if (!$estudiante || (int)$estudiante['id_institucion'] !== (int)$id_institucion) {
+    header('Location: ' . BASE_URL . '/administrador-panel-estudiantes');
+    exit();
+}
+
+$matricula = $modelEstudiante->obtenerMatriculaActiva($estudiante['id']);
+
+$edad = null;
+if (!empty($estudiante['fecha_de_nacimiento'])) {
+    $edad = (new DateTime($estudiante['fecha_de_nacimiento']))->diff(new DateTime())->y;
+}
+
+$iniciales = strtoupper(
+    substr($estudiante['nombres'] ?? 'E', 0, 1) .
+    substr($estudiante['apellidos'] ?? '', 0, 1)
+);
+
+$gradientes = [
+    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    'linear-gradient(135deg, #f7971e 0%, #ffd200 100%)',
+];
+$gradiente = $gradientes[ord($iniciales[0]) % count($gradientes)];
+
+$tieneGrado      = !empty($matricula['grado']) && !empty($matricula['curso']);
+$tieneAcudiente  = !empty($estudiante['nombres_acudiente']);
+$estadoEstudiante = $estudiante['estado'] ?? 'Activo';
 ?>
 <!doctype html>
 <html lang="es">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SIADEMY • Detalle Estudiante</title>
-  <?php 
-    include_once __DIR__ . '/../../layouts/header_coordinador.php'
-  ?>
+  <?php include_once __DIR__ . '/../../layouts/header_coordinador.php' ?>
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-admin.css">
 </head>
 <body>
-  <div class="app" id="appGrid">
-    <!-- LEFT SIDEBAR -->
-    <?php 
-      include_once __DIR__ . '/../../layouts/sidebar_coordinador.php'
-    ?>
+  <div class="app hide-right" id="appGrid">
+    <?php include_once __DIR__ . '/../../layouts/sidebar_coordinador.php' ?>
 
-    <!-- MAIN -->
     <main class="main">
       <div class="topbar">
         <div class="topbar-left">
@@ -32,469 +67,283 @@
           </button>
           <div class="title">Detalle del Estudiante</div>
         </div>
-        <button class="toggle-btn" id="toggleRight" title="Mostrar/Ocultar panel derecho">
-          <i class="ri-layout-right-2-line"></i>
-        </button>
       </div>
 
-      <!-- STUDENT PROFILE HEADER -->
+      <!-- PERFIL HEADER -->
       <div class="student-profile-header">
         <div class="profile-main">
-          <div class="profile-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            SW
+          <div class="profile-avatar" style="background: <?= $gradiente ?>;">
+            <?= htmlspecialchars($iniciales) ?>
           </div>
           <div class="profile-info">
-            <h2>Samanta William</h2>
-            <p class="profile-subtitle">Estudiante • Grado VII A</p>
+            <h2><?= htmlspecialchars($estudiante['nombres'] . ' ' . $estudiante['apellidos']) ?></h2>
+            <p class="profile-subtitle">
+              Estudiante<?= $tieneGrado ? ' • Grado ' . htmlspecialchars($matricula['curso']) : '' ?>
+            </p>
             <div class="profile-badges">
-              <span class="badge-item badge-active">
-                <i class="ri-checkbox-circle-fill"></i> Activo
+              <span class="badge-item <?= $estadoEstudiante === 'Activo' ? 'badge-active' : 'badge-inactive' ?>">
+                <i class="ri-checkbox-circle-fill"></i>
+                <?= htmlspecialchars($estadoEstudiante) ?>
               </span>
+              <?php if ($tieneGrado): ?>
               <span class="badge-item badge-info">
-                <i class="ri-calendar-line"></i> 2016 - Actual
+                <i class="ri-calendar-line"></i>
+                <?= htmlspecialchars($matricula['anio']) ?>
               </span>
+              <?php endif; ?>
             </div>
           </div>
         </div>
         <div class="profile-actions">
-          <button class="btn-profile-action btn-primary-action">
-            <i class="ri-edit-line"></i> Editar Perfil
-          </button>
-          <button class="btn-profile-action btn-secondary-action">
-            <i class="ri-printer-line"></i> Imprimir
-          </button>
-          <button class="btn-profile-action btn-icon-action">
-            <i class="ri-more-2-fill"></i>
-          </button>
+          <a class="btn-profile-action btn-primary-action"
+             href="<?= BASE_URL ?>/administrador/editar-estudiante?id=<?= $estudiante['id'] ?>">
+            <i class="ri-edit-line"></i> Editar
+          </a>
         </div>
       </div>
 
-      <!-- QUICK STATS -->
+      <!-- STATS -->
       <div class="quick-stats">
         <div class="stat-card">
           <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            <i class="ri-trophy-line"></i>
+            <i class="ri-graduation-cap-line"></i>
           </div>
           <div class="stat-content">
-            <span class="stat-label">Promedio General</span>
-            <strong class="stat-value grade-excellent">4.2</strong>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-            <i class="ri-book-2-line"></i>
-          </div>
-          <div class="stat-content">
-            <span class="stat-label">Asignaturas Cursando</span>
-            <strong class="stat-value">12</strong>
+            <span class="stat-label">Grado Actual</span>
+            <strong class="stat-value">
+              <?= $tieneGrado ? htmlspecialchars($matricula['curso']) : '—' ?>
+            </strong>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-            <i class="ri-calendar-check-line"></i>
+            <i class="ri-cake-line"></i>
           </div>
           <div class="stat-content">
-            <span class="stat-label">Asistencia</span>
-            <strong class="stat-value grade-good">95%</strong>
+            <span class="stat-label">Edad</span>
+            <strong class="stat-value"><?= $edad !== null ? $edad . ' años' : '—' ?></strong>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-            <i class="ri-award-line"></i>
+            <i class="ri-time-line"></i>
           </div>
           <div class="stat-content">
-            <span class="stat-label">Ranking Curso</span>
-            <strong class="stat-value">3° / 42</strong>
+            <span class="stat-label">Jornada</span>
+            <strong class="stat-value"><?= $tieneGrado ? htmlspecialchars($matricula['jornada']) : '—' ?></strong>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <i class="ri-shield-user-line"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Estado</span>
+            <strong class="stat-value" style="color: <?= $estadoEstudiante === 'Activo' ? '#10b981' : '#ef4444' ?>">
+              <?= htmlspecialchars($estadoEstudiante) ?>
+            </strong>
           </div>
         </div>
       </div>
 
-      <!-- TABS NAVIGATION -->
+      <!-- TABS -->
       <div class="tabs-navigation">
         <button class="tab-btn active" data-tab="informacion">
           <i class="ri-user-line"></i> Información Personal
         </button>
         <button class="tab-btn" data-tab="academico">
-          <i class="ri-book-open-line"></i> Rendimiento Académico
+          <i class="ri-graduation-cap-line"></i> Información Académica
         </button>
-        <button class="tab-btn" data-tab="asistencia">
-          <i class="ri-calendar-line"></i> Asistencia
-        </button>
-        <button class="tab-btn" data-tab="disciplina">
-          <i class="ri-shield-check-line"></i> Disciplina
+        <button class="tab-btn" data-tab="familiar">
+          <i class="ri-parent-line"></i> Acudiente
         </button>
       </div>
 
-      <!-- TAB CONTENT -->
       <div class="tabs-content">
-        <!-- INFORMACIÓN PERSONAL TAB -->
+
+        <!-- TAB: INFORMACIÓN PERSONAL -->
         <div class="tab-pane active" id="informacion">
           <div class="info-grid">
-            <!-- Información Básica -->
+
             <div class="info-card">
               <div class="info-card-header">
                 <h3><i class="ri-user-3-line"></i> Información Básica</h3>
               </div>
               <div class="info-card-body">
                 <div class="info-row">
-                  <span class="info-label">Nombres Completos:</span>
-                  <span class="info-value">Samanta William</span>
+                  <span class="info-label">Nombres:</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['nombres'] ?? '—') ?></span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Apellidos:</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['apellidos'] ?? '—') ?></span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Tipo documento:</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['tipo_documento'] ?? '—') ?></span>
                 </div>
                 <div class="info-row">
                   <span class="info-label">N° Identificación:</span>
-                  <span class="info-value">#463436465</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['documento'] ?? '—') ?></span>
                 </div>
                 <div class="info-row">
-                  <span class="info-label">Fecha de Nacimiento:</span>
-                  <span class="info-value">28 de marzo de 2016</span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Edad:</span>
-                  <span class="info-value">8 años</span>
+                  <span class="info-label">Fecha de nacimiento:</span>
+                  <span class="info-value">
+                    <?= !empty($estudiante['fecha_de_nacimiento'])
+                        ? date('d/m/Y', strtotime($estudiante['fecha_de_nacimiento'])) . ($edad !== null ? " ($edad años)" : '')
+                        : '—' ?>
+                  </span>
                 </div>
                 <div class="info-row">
                   <span class="info-label">Género:</span>
-                  <span class="info-value">Femenino</span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Tipo de Sangre:</span>
-                  <span class="info-value">O+</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['genero'] ?? '—') ?></span>
                 </div>
               </div>
             </div>
 
-            <!-- Información de Contacto -->
             <div class="info-card">
               <div class="info-card-header">
                 <h3><i class="ri-contacts-line"></i> Información de Contacto</h3>
               </div>
               <div class="info-card-body">
                 <div class="info-row">
-                  <span class="info-label">Dirección:</span>
-                  <span class="info-value">Calle 123 #45-67, Jatarta</span>
+                  <span class="info-label">Correo:</span>
+                  <span class="info-value">
+                    <a href="mailto:<?= htmlspecialchars($estudiante['correo'] ?? '') ?>"
+                       style="color:#818cf8; text-decoration:none;">
+                      <?= htmlspecialchars($estudiante['correo'] ?? '—') ?>
+                    </a>
+                  </span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Teléfono:</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['telefono'] ?? '—') ?></span>
                 </div>
                 <div class="info-row">
                   <span class="info-label">Ciudad:</span>
-                  <span class="info-value">Jatarta</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['ciudad'] ?? '—') ?></span>
                 </div>
                 <div class="info-row">
-                  <span class="info-label">Teléfono:</span>
-                  <span class="info-value">+62 812-3456-7890</span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Email:</span>
-                  <span class="info-value">samanta.william@estudiante.edu</span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Teléfono Emergencia:</span>
-                  <span class="info-value">+62 821-9876-5432</span>
+                  <span class="info-label">Dirección:</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['direccion'] ?? '—') ?></span>
                 </div>
               </div>
             </div>
 
-            <!-- Información Académica -->
+          </div>
+        </div>
+
+        <!-- TAB: INFORMACIÓN ACADÉMICA -->
+        <div class="tab-pane" id="academico">
+          <div class="info-grid">
             <div class="info-card">
               <div class="info-card-header">
-                <h3><i class="ri-graduation-cap-line"></i> Información Académica</h3>
+                <h3><i class="ri-graduation-cap-line"></i> Matrícula Activa</h3>
               </div>
               <div class="info-card-body">
+                <?php if ($tieneGrado): ?>
                 <div class="info-row">
-                  <span class="info-label">Grado Actual:</span>
-                  <span class="info-value">VII A</span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Año de Ingreso:</span>
-                  <span class="info-value">2020</span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Estado:</span>
-                  <span class="badge-status status-active">Activo</span>
+                  <span class="info-label">Grado:</span>
+                  <span class="info-value"><?= htmlspecialchars($matricula['curso']) ?></span>
                 </div>
                 <div class="info-row">
                   <span class="info-label">Jornada:</span>
-                  <span class="info-value">Mañana</span>
+                  <span class="info-value"><?= htmlspecialchars($matricula['jornada'] ?? '—') ?></span>
                 </div>
                 <div class="info-row">
-                  <span class="info-label">Director de Grupo:</span>
-                  <span class="info-value">Prof. Carlos Méndez</span>
+                  <span class="info-label">Año lectivo:</span>
+                  <span class="info-value"><?= htmlspecialchars($matricula['anio'] ?? '—') ?></span>
                 </div>
+                <?php else: ?>
+                <div style="text-align:center; padding:32px 0; color:#64748b;">
+                  <i class="ri-book-close-line" style="font-size:40px; display:block; margin-bottom:8px;"></i>
+                  Sin matrícula activa registrada.
+                </div>
+                <?php endif; ?>
               </div>
             </div>
 
-            <!-- Información Familiar -->
             <div class="info-card">
               <div class="info-card-header">
-                <h3><i class="ri-parent-line"></i> Información Familiar</h3>
+                <h3><i class="ri-id-card-line"></i> Datos del Sistema</h3>
               </div>
               <div class="info-card-body">
                 <div class="info-row">
-                  <span class="info-label">Nombre del Padre/Madre:</span>
-                  <span class="info-value">Maria William</span>
+                  <span class="info-label">Estado:</span>
+                  <span class="info-value">
+                    <span class="badge-status <?= $estadoEstudiante === 'Activo' ? 'status-active' : 'status-inactive' ?>">
+                      <?= htmlspecialchars($estadoEstudiante) ?>
+                    </span>
+                  </span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Correo acceso:</span>
+                  <span class="info-value">
+                    <a href="mailto:<?= htmlspecialchars($estudiante['correo'] ?? '') ?>"
+                       style="color:#818cf8; text-decoration:none;">
+                      <?= htmlspecialchars($estudiante['correo'] ?? '—') ?>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: ACUDIENTE -->
+        <div class="tab-pane" id="familiar">
+          <?php if ($tieneAcudiente): ?>
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-header">
+                <h3><i class="ri-parent-line"></i> Datos del Acudiente</h3>
+              </div>
+              <div class="info-card-body">
+                <div class="info-row">
+                  <span class="info-label">Nombres:</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['nombres_acudiente'] ?? '—') ?></span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Apellidos:</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['apellidos_acudiente'] ?? '—') ?></span>
                 </div>
                 <div class="info-row">
                   <span class="info-label">Parentesco:</span>
-                  <span class="info-value">Madre</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['parentesco_acudiente'] ?? '—') ?></span>
                 </div>
                 <div class="info-row">
                   <span class="info-label">Teléfono:</span>
-                  <span class="info-value">+62 821-9876-5432</span>
+                  <span class="info-value"><?= htmlspecialchars($estudiante['telefono_acudiente'] ?? '—') ?></span>
                 </div>
                 <div class="info-row">
-                  <span class="info-label">Email:</span>
-                  <span class="info-value">maria.william@email.com</span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Ocupación:</span>
-                  <span class="info-value">Ingeniera de Sistemas</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RENDIMIENTO ACADÉMICO TAB -->
-        <div class="tab-pane" id="academico">
-          <div class="academic-section">
-            <h3 class="section-title">Calificaciones por Período</h3>
-            
-            <div class="subjects-table">
-              <table class="table table-dark table-hover">
-                <thead>
-                  <tr>
-                    <th>Asignatura</th>
-                    <th>Período 1</th>
-                    <th>Período 2</th>
-                    <th>Período 3</th>
-                    <th>Período 4</th>
-                    <th>Promedio</th>
-                    <th>Estado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Matemáticas</strong></td>
-                    <td>4.5</td>
-                    <td>4.2</td>
-                    <td>4.3</td>
-                    <td>-</td>
-                    <td><strong class="grade-excellent">4.3</strong></td>
-                    <td><span class="badge-mini badge-success">Aprobado</span></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Lengua Castellana</strong></td>
-                    <td>4.8</td>
-                    <td>4.6</td>
-                    <td>4.7</td>
-                    <td>-</td>
-                    <td><strong class="grade-excellent">4.7</strong></td>
-                    <td><span class="badge-mini badge-success">Aprobado</span></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Ciencias Naturales</strong></td>
-                    <td>4.0</td>
-                    <td>3.8</td>
-                    <td>4.1</td>
-                    <td>-</td>
-                    <td><strong class="grade-good">4.0</strong></td>
-                    <td><span class="badge-mini badge-success">Aprobado</span></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Ciencias Sociales</strong></td>
-                    <td>4.2</td>
-                    <td>4.0</td>
-                    <td>3.9</td>
-                    <td>-</td>
-                    <td><strong class="grade-good">4.0</strong></td>
-                    <td><span class="badge-mini badge-success">Aprobado</span></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Inglés</strong></td>
-                    <td>3.5</td>
-                    <td>3.8</td>
-                    <td>4.0</td>
-                    <td>-</td>
-                    <td><strong class="grade-good">3.8</strong></td>
-                    <td><span class="badge-mini badge-success">Aprobado</span></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Educación Física</strong></td>
-                    <td>4.5</td>
-                    <td>4.7</td>
-                    <td>4.6</td>
-                    <td>-</td>
-                    <td><strong class="grade-excellent">4.6</strong></td>
-                    <td><span class="badge-mini badge-success">Aprobado</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="performance-chart">
-              <h3 class="section-title">Evolución del Rendimiento</h3>
-              <div class="chart-placeholder">
-                <canvas id="performanceChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ASISTENCIA TAB -->
-        <div class="tab-pane" id="asistencia">
-          <div class="attendance-section">
-            <h3 class="section-title">Registro de Asistencia</h3>
-            
-            <div class="attendance-stats">
-              <div class="attendance-card">
-                <div class="attendance-icon" style="background: #10b981;">
-                  <i class="ri-checkbox-circle-line"></i>
-                </div>
-                <div class="attendance-info">
-                  <span class="attendance-label">Días Asistidos</span>
-                  <strong class="attendance-value">171</strong>
-                </div>
-              </div>
-              <div class="attendance-card">
-                <div class="attendance-icon" style="background: #f59e0b;">
-                  <i class="ri-time-line"></i>
-                </div>
-                <div class="attendance-info">
-                  <span class="attendance-label">Tardanzas</span>
-                  <strong class="attendance-value">5</strong>
-                </div>
-              </div>
-              <div class="attendance-card">
-                <div class="attendance-icon" style="background: #ef4444;">
-                  <i class="ri-close-circle-line"></i>
-                </div>
-                <div class="attendance-info">
-                  <span class="attendance-label">Inasistencias</span>
-                  <strong class="attendance-value">4</strong>
-                </div>
-              </div>
-              <div class="attendance-card">
-                <div class="attendance-icon" style="background: #6366f1;">
-                  <i class="ri-bar-chart-line"></i>
-                </div>
-                <div class="attendance-info">
-                  <span class="attendance-label">Porcentaje</span>
-                  <strong class="attendance-value">95%</strong>
+                  <span class="info-label">Correo:</span>
+                  <span class="info-value">
+                    <?php if (!empty($estudiante['correo_acudiente'])): ?>
+                    <a href="mailto:<?= htmlspecialchars($estudiante['correo_acudiente']) ?>"
+                       style="color:#818cf8; text-decoration:none;">
+                      <?= htmlspecialchars($estudiante['correo_acudiente']) ?>
+                    </a>
+                    <?php else: ?>—<?php endif; ?>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- DISCIPLINA TAB -->
-        <div class="tab-pane" id="disciplina">
-          <div class="discipline-section">
-            <h3 class="section-title">Registro Disciplinario</h3>
-            
-            <div class="discipline-summary">
-              <div class="discipline-card good">
-                <i class="ri-emotion-happy-line"></i>
-                <h4>Comportamiento Ejemplar</h4>
-                <p>La estudiante mantiene un excelente comportamiento en todas sus actividades académicas.</p>
-              </div>
-            </div>
-
-            <div class="observations-list">
-              <h4>Observaciones Positivas</h4>
-              <div class="observation-item positive">
-                <div class="observation-date">15 Oct 2024</div>
-                <div class="observation-content">
-                  <strong>Participación Destacada</strong>
-                  <p>Excelente participación en el proyecto de ciencias naturales.</p>
-                  <span class="observation-teacher">Prof. Ana García</span>
-                </div>
-              </div>
-              <div class="observation-item positive">
-                <div class="observation-date">02 Oct 2024</div>
-                <div class="observation-content">
-                  <strong>Liderazgo</strong>
-                  <p>Demostró habilidades de liderazgo durante la actividad grupal de matemáticas.</p>
-                  <span class="observation-teacher">Prof. Carlos Méndez</span>
-                </div>
-              </div>
-            </div>
+          <?php else: ?>
+          <div style="text-align:center; padding:48px 24px; color:#64748b;">
+            <i class="ri-user-unfollow-line" style="font-size:48px; display:block; margin-bottom:12px;"></i>
+            Este estudiante no tiene acudiente vinculado.
           </div>
+          <?php endif; ?>
         </div>
+
       </div>
-
     </main>
-
-    <!-- RIGHT SIDEBAR -->
-    <aside class="rightbar" id="rightSidebar">
-      <div class="user">
-        <button class="btn" title="Notificaciones"><i class="ri-notification-3-line"></i></button>
-        <button class="btn" title="Configuración"><i class="ri-settings-3-line"></i></button>
-        <div class="avatar" title="Diego A.">DA</div>
-      </div>
-
-      <div class="panel-title">Acciones Rápidas</div>
-      <div class="quick-actions">
-        <button class="quick-action-btn">
-          <i class="ri-message-3-line"></i>
-          <span>Enviar Mensaje</span>
-        </button>
-        <button class="quick-action-btn">
-          <i class="ri-phone-line"></i>
-          <span>Llamar Acudiente</span>
-        </button>
-        <button class="quick-action-btn">
-          <i class="ri-file-text-line"></i>
-          <span>Ver Certificados</span>
-        </button>
-        <button class="quick-action-btn">
-          <i class="ri-download-line"></i>
-          <span>Descargar Boletín</span>
-        </button>
-      </div>
-
-      <div class="panel-title" style="margin-top:24px">Documentos</div>
-      <div class="documents-list">
-        <div class="document-item">
-          <i class="ri-file-pdf-line"></i>
-          <div>
-            <strong>Boletín Período 1</strong>
-            <small>PDF • 245 KB</small>
-          </div>
-        </div>
-        <div class="document-item">
-          <i class="ri-file-pdf-line"></i>
-          <div>
-            <strong>Boletín Período 2</strong>
-            <small>PDF • 238 KB</small>
-          </div>
-        </div>
-        <div class="document-item">
-          <i class="ri-file-text-line"></i>
-          <div>
-            <strong>Certificado Matrícula</strong>
-            <small>PDF • 156 KB</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel-title" style="margin-top:24px">Próximos Eventos</div>
-      <div class="event-item">
-        <div class="event-date">
-          <span class="day">30</span>
-          <span class="month">Oct</span>
-        </div>
-        <div class="event-content">
-          <h4>Examen de Matemáticas</h4>
-          <p>Evaluación final del período</p>
-          <div class="event-time">📚 8:00 AM - 10:00 AM</div>
-        </div>
-      </div>
-    </aside>
   </div>
 
-  <!-- SCRIPT -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-admin.js"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/administrador/detalle-estudiante.js"></script>
 </body>
-
 </html>
