@@ -21,11 +21,11 @@ function obtenerDataEventosAcudiente(int $idInstitucion): array
     $model      = new Evento();
     $hoy        = date('Y-m-d');
 
-    $rawEventos = array_filter(
+    $rawEventos = array_values(array_filter(
         $model->listar($idInstitucion),
         fn($ev) => ($ev['fecha_evento'] ?? '') >= $hoy
                    && in_array($ev['grado'] ?? '', ['', 'Todos', 'Acudientes'], true)
-    );
+    ));
 
     $categoryMap = [
         'reuniones'   => 'meetings',
@@ -40,7 +40,7 @@ function obtenerDataEventosAcudiente(int $idInstitucion): array
         'activities' => 'ri-calendar-event-line',
     ];
 
-    $eventos = array_map(function ($ev) use ($hoy, $categoryMap, $iconMap) {
+    $eventos = array_values(array_map(function ($ev) use ($hoy, $categoryMap, $iconMap) {
         $tipo     = strtolower($ev['tipo_evento'] ?? '');
         $category = $categoryMap[$tipo] ?? 'activities';
         return [
@@ -58,7 +58,7 @@ function obtenerDataEventosAcudiente(int $idInstitucion): array
             'fuente'          => 'evento',
             'is_upcoming'     => ($ev['fecha_evento'] >= $hoy),
         ];
-    }, $rawEventos);
+    }, $rawEventos));
 
     $statsEventos = [
         'all'        => count($eventos),
