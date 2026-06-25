@@ -200,6 +200,41 @@ class Acudiente {
     }
 
     // -----------------------------------------------------------------
+    // ESTUDIANTES VINCULADOS AL ACUDIENTE
+    // -----------------------------------------------------------------
+    public function listarEstudiantesVinculados($id_acudiente, $id_institucion) {
+        try {
+            $sql = "SELECT
+                        e.id,
+                        e.nombres,
+                        e.apellidos,
+                        e.documento,
+                        e.foto,
+                        c.grado,
+                        c.curso AS nombre_curso,
+                        c.jornada,
+                        u.estado
+                    FROM estudiante e
+                    LEFT JOIN matricula m ON m.id_estudiante = e.id AND m.estado = 'Activa'
+                    LEFT JOIN curso c ON c.id = m.id_curso
+                    LEFT JOIN usuario u ON u.id = e.id_usuario
+                    WHERE e.id_acudiente = :id_acudiente
+                      AND e.id_institucion = :id_institucion
+                    ORDER BY e.apellidos ASC, e.nombres ASC";
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id_acudiente', $id_acudiente, PDO::PARAM_INT);
+            $stmt->bindParam(':id_institucion', $id_institucion, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            error_log("Error en Acudiente::listarEstudiantesVinculados -> " . $e->getMessage());
+            return [];
+        }
+    }
+
+    // -----------------------------------------------------------------
     // CONTAR — filtra por institución y usuarios Activos
     // -----------------------------------------------------------------
     public function contar($id_institucion) {

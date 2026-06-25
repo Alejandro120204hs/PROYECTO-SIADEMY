@@ -209,6 +209,33 @@ class Docente {
     }
 
     // -----------------------------------------------------------------
+    // ASIGNATURAS Y CURSOS ASIGNADOS AL DOCENTE
+    // -----------------------------------------------------------------
+    public function obtenerAsignaciones($id_docente) {
+        try {
+            $sql = "SELECT
+                        a.nombre  AS nombre_asignatura,
+                        c.curso,
+                        c.jornada,
+                        dac.estado,
+                        (SELECT COUNT(*) FROM matricula m WHERE m.id_curso = c.id AND m.estado = 'Activa') AS total_estudiantes
+                    FROM docente_asignatura_curso dac
+                    INNER JOIN asignatura_curso ac ON dac.id_asignatura_curso = ac.id
+                    INNER JOIN asignatura a         ON ac.id_asignatura = a.id
+                    INNER JOIN curso c              ON ac.id_curso = c.id
+                    WHERE dac.id_docente = :id_docente AND dac.estado = 'activo'
+                    ORDER BY c.curso ASC, a.nombre ASC";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id_docente', $id_docente, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en Docente::obtenerAsignaciones -> " . $e->getMessage());
+            return [];
+        }
+    }
+
+    // -----------------------------------------------------------------
     // CONTAR — filtra por institución y usuarios Activos
     // -----------------------------------------------------------------
     public function contar($id_institucion) {
