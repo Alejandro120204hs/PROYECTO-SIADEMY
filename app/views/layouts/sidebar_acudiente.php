@@ -60,9 +60,5 @@
         <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/profesores']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/profesores">
             <i class="ri-user-3-line"></i> Profesores
         </a>
-        <a class="<?= navAcudienteIsActive($currentPath, ['/acudiente/eventos']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/acudiente/eventos">
-            <i class="ri-calendar-event-line"></i> Eventos
-        </a>
-        
     </nav>
 </aside>
