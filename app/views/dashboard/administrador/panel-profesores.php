@@ -107,7 +107,7 @@
               <td><?= $docente['estado'] ?></td>
               
               <td class="acciones">
-                <a class="btn-action" href="">
+                <a class="btn-action" href="<?= BASE_URL ?>/administrador/detalle-profesor?id=<?= $docente['id'] ?>">
                   Ver
                 </a>
                 <a class="btn-action" href="<?= BASE_URL ?>/administrador/editar-docente?id=<?= $docente['id'] ?>">

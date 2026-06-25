@@ -71,12 +71,28 @@ class Actividad_docente {
             $stmt->bindParam(':archivo',           $archivoVal,                 PDO::PARAM_STR);
             
             $resultado = $stmt->execute();
-            
+
             if ($resultado) {
+                $nuevoId = $this->conexion->lastInsertId();
+                // Verificar que el tipo se guardó correctamente (protección contra columna ENUM en producción)
+                $check = $this->conexion->prepare("SELECT tipo FROM actividad WHERE id = :id");
+                $check->bindParam(':id', $nuevoId, PDO::PARAM_INT);
+                $check->execute();
+                $fila = $check->fetch(PDO::FETCH_ASSOC);
+                if ($fila && $fila['tipo'] === '') {
+                    // La BD rechazó el tipo (posiblemente ENUM sin ese valor); revertir
+                    $del = $this->conexion->prepare("DELETE FROM actividad WHERE id = :id");
+                    $del->bindParam(':id', $nuevoId, PDO::PARAM_INT);
+                    $del->execute();
+                    return [
+                        'success' => false,
+                        'message' => 'El tipo de actividad "' . $datos['tipo'] . '" no está soportado en la base de datos de producción. Contacta al administrador para actualizar la columna tipo.'
+                    ];
+                }
                 return [
                     'success' => true,
                     'message' => 'Actividad creada exitosamente',
-                    'id' => $this->conexion->lastInsertId()
+                    'id' => $nuevoId
                 ];
             } else {
                 return [

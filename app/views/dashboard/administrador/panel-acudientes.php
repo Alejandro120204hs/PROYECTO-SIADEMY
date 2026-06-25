@@ -113,7 +113,7 @@
               
            
               <td class="acciones">
-                <a class="btn-action" href="<?= BASE_URL ?>/administrador/detalle-acudiente">
+                <a class="btn-action" href="<?= BASE_URL ?>/administrador/detalle-acudiente?id=<?= $acudiente['id'] ?>">
                   Ver
                 </a>
                 <a class="btn-action" href="<?= BASE_URL ?>/administrador/editar-acudiente?id=<?= $acudiente['id'] ?>">
