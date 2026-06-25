@@ -180,7 +180,18 @@
                 require BASE_PATH . '/app/views/dashboard/superAdmin/pagos.php';
                 break;
 
-        
+            // --------------------------------SUPER ADMIN(MÓDULO REPORTES)------------------------
+            case '/superAdmin-reportes':
+                require BASE_PATH . '/app/views/dashboard/superAdmin/reportes.php';
+                break;
+
+            case '/superAdmin/exportar-pagos-csv':
+                require BASE_PATH . '/app/controllers/superAdmin/exportar_pagos_csv.php';
+                break;
+
+            case '/superAdmin/exportar-reporte-csv':
+                require BASE_PATH . '/app/controllers/superAdmin/exportar_reporte_csv.php';
+                break;
 
             // -----------------------------ROL: ADMINISTRADOR--------------------------------------------------------------
 
@@ -591,6 +602,22 @@
 
             case '/acudiente/profesores':
                 require BASE_PATH . '/app/controllers/acudiente/profesores.php';
+                break;
+
+            case '/administrador/pagos':
+                require BASE_PATH . '/app/views/dashboard/administrador/pagos.php';
+                break;
+
+            case '/administrador/iniciar-pago':
+                require BASE_PATH . '/app/controllers/administrador/iniciar_pago.php';
+                break;
+
+            case '/administrador/pago-resultado':
+                require BASE_PATH . '/app/views/dashboard/administrador/pago-resultado.php';
+                break;
+
+            case '/pagos/webhook':
+                require BASE_PATH . '/app/controllers/pagos/webhook.php';
                 break;
 
             case '/super-admin/dashboard':

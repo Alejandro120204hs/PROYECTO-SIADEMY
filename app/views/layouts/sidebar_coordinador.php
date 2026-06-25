@@ -38,6 +38,8 @@
         <a class="<?= navIsActive($currentPath, ['/administrador-panel-profesores', '/administrador/registrar-profesores', '/administrador/editar-docente', '/administrador/detalle-profesor']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-panel-profesores"><i class="ri-user-3-line"></i> Profesores</a>
         <a class="<?= navIsActive($currentPath, ['/administrador-panel-eventos', '/administrador-eventos', '/administrador/registrar-evento', '/administrador/editar-evento']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-panel-eventos"><i class="ri-calendar-event-line"></i> Eventos</a>
         
+        <a class="<?= navIsActive($currentPath, ['/administrador/pagos', '/administrador/pago-resultado']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador/pagos"><i class="ri-bank-card-line"></i> Pagos</a>
+
         <div class="spacer"></div>
         <div class="section">Gestión académica</div>
          <a class="<?= navIsActive($currentPath, ['/administrador-panel-cursos', '/administrador/registrar-curso', '/administrador/editar-curso', '/administrador/detalle-curso']) ? 'active' : '' ?>" href="<?= BASE_URL ?>/administrador-panel-cursos"><i class="ri-book-2-line"></i> Cursos</a>
