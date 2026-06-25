@@ -669,9 +669,10 @@ a { color: inherit; text-decoration: none; }
   .topbar-left { min-width: 0; flex: 1 1 auto; order: 1; }
   .user { order: 2; margin-left: auto; flex-shrink: 0; }
   .search, .topbar-actions { order: 10; width: 100%; margin-left: 0; flex: 0 0 100%; }
-}
 
-@media (max-width: 768px) {
+  /* Sidebar fuera de pantalla (drawer) — antes solo aplicaba en ≤768px,
+     ahora también cubre anchos de tablet (ej. iPad 820px), donde el
+     sidebar fijo de 260px ya no convivía bien con el contenido. */
   .sidebar {
     position: fixed !important;
     left: -270px !important;
@@ -702,4 +703,70 @@ a { color: inherit; text-decoration: none; }
   .user-details { display: none; }
   .app { grid-template-columns: 1fr !important; }
   .main { padding: 16px 12px 32px; }
+
+  .student-header {
+    flex-wrap: wrap;
+  }
+  .student-header .btn-print {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Cabecera del estudiante: de fila a columna centrada, evitando que
+     el nombre/etiquetas queden desordenados junto al avatar. */
+  .student-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .student-info {
+    min-width: 0;
+  }
+  .student-info h2 {
+    margin-bottom: 4px;
+  }
+  .student-meta {
+    justify-content: center;
+  }
+
+  /* Stats del período: de 4 a 2 columnas para que no se corten */
+  .periodo-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Tabla de materias: scroll horizontal en vez de recortar columnas */
+  .materias-table-wrap {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Stats del período: una sola columna en celulares angostos */
+  .periodo-stats {
+    grid-template-columns: 1fr;
+  }
+
+  /* Tabs de período: de una lista vertical de píldoras grandes a una
+     cuadrícula compacta de 2 columnas */
+  .period-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .period-tab {
+    padding: 8px 10px;
+    gap: 6px;
+    font-size: 12px;
+    justify-content: center;
+    text-align: center;
+  }
+  .period-tab i {
+    font-size: 14px;
+  }
+  .tab-avg {
+    font-size: 11px;
+    padding: 1px 6px;
+  }
 }
