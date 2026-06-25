@@ -65,7 +65,7 @@ function guardarActividad() {
         'id_asignatura'       => filter_var($_POST['id_asignatura'],       FILTER_SANITIZE_NUMBER_INT),
         'titulo'              => htmlspecialchars(trim($_POST['titulo_actividad']), ENT_QUOTES, 'UTF-8'),
         'descripcion'         => htmlspecialchars(trim($_POST['descripcion']),      ENT_QUOTES, 'UTF-8'),
-        'tipo'                => htmlspecialchars(trim($_POST['tipo_actividad']),   ENT_QUOTES, 'UTF-8'),
+        'tipo'                => trim($_POST['tipo_actividad']),
         'ponderacion'         => filter_var($_POST['ponderacion'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
         'fecha_entrega'       => $_POST['fecha_entrega'],
         'archivo'             => null
@@ -260,7 +260,7 @@ function actualizarActividad() {
     $datos = [
         'titulo'        => htmlspecialchars(trim($_POST['titulo_actividad']), ENT_QUOTES, 'UTF-8'),
         'descripcion'   => htmlspecialchars(trim($_POST['descripcion']),      ENT_QUOTES, 'UTF-8'),
-        'tipo'          => htmlspecialchars(trim($_POST['tipo_actividad']),   ENT_QUOTES, 'UTF-8'),
+        'tipo'          => trim($_POST['tipo_actividad']),
         'ponderacion'   => filter_var($_POST['ponderacion'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
         'fecha_entrega' => $fechaEntregaRaw,
         'estado'        => $estadoCalculado,   // calculado por fecha, no por el campo del modal
