@@ -18,13 +18,22 @@ if (count($estudiantesAsociados ?? []) > 1):
   <h3>Mis estudiantes</h3>
   <div class="students-grid">
     <?php foreach ($estudiantesAsociados as $est): ?>
+      <?php
+        $nombreCompletoEst = trim($est['nombres'] . ' ' . $est['apellidos']);
+        $primerNombreEst   = preg_split('/\s+/', trim($est['nombres']))[0] ?? '';
+        $primerApellidoEst = preg_split('/\s+/', trim($est['apellidos']))[0] ?? '';
+        $nombreCortoEst    = trim($primerNombreEst . ' ' . $primerApellidoEst) ?: $nombreCompletoEst;
+      ?>
       <form class="student-card-form" method="post" action="<?= BASE_URL ?>/acudiente/seleccionar-estudiante">
         <input type="hidden" name="id_estudiante" value="<?= (int)$est['id'] ?>">
         <input type="hidden" name="redirect" value="<?= htmlspecialchars($rutaActualSelector) ?>">
         <button type="submit" class="student-card <?= ((int)$est['id'] === (int)$estudianteSeleccionado['id']) ? 'active' : '' ?>">
           <img class="student-card-avatar" src="<?= BASE_URL ?>/public/uploads/estudiantes/<?= htmlspecialchars($est['foto'] ?: 'default.png') ?>" alt="" onerror="this.onerror=null; this.src='<?= BASE_URL ?>/public/uploads/estudiantes/default.png'">
           <div class="student-card-info">
-            <strong><?= htmlspecialchars(trim($est['nombres'] . ' ' . $est['apellidos'])) ?></strong>
+            <strong>
+              <span class="student-card-name-full"><?= htmlspecialchars($nombreCompletoEst) ?></span>
+              <span class="student-card-name-short"><?= htmlspecialchars($nombreCortoEst) ?></span>
+            </strong>
             <small><?= $est['id_curso'] ? htmlspecialchars($est['grado'] . '° - ' . $est['nombre_curso']) : 'Sin matrícula activa' ?></small>
           </div>
           <?php if ((int)$est['id'] === (int)$estudianteSeleccionado['id']): ?>

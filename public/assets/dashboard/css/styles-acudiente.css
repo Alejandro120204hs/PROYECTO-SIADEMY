@@ -160,6 +160,7 @@ a {
 /* MAIN */
 .main {
   padding: 28px 28px 40px 28px;
+  min-width: 0;
 }
 
 .topbar {
@@ -305,6 +306,10 @@ a {
   border: 3px solid rgba(255, 255, 255, .3);
 }
 
+.student-info {
+  min-width: 0;
+}
+
 .student-info h2 {
   margin: 0 0 8px 0;
   font-size: 28px;
@@ -313,6 +318,7 @@ a {
 
 .student-meta {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   font-size: 14px;
   opacity: 0.95;
@@ -487,7 +493,7 @@ canvas {
   align-items: center;
   gap: 12px;
   justify-content: flex-end;
-  margin-bottom: 12px;
+  margin-bottom: 0;
 }
 
 .user .btn {
@@ -689,6 +695,14 @@ canvas {
   .student-profile {
     flex-direction: column;
     text-align: center;
+  }
+
+  .student-meta {
+    justify-content: center;
+  }
+
+  .students-grid {
+    grid-template-columns: 1fr;
   }
 }
 

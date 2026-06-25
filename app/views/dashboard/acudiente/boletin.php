@@ -46,6 +46,79 @@ function bol_promClase(?float $promedio): string {
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-boletin.css">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/modo-claro-acudiente.css">
   <style>
+    /* Tipografía de los demás módulos del Acudiente (definida en
+       styles-acudiente.css, que esta página no carga porque usa
+       styles-boletin.css). Se replica aquí para que Boletines luzca
+       igual al resto, sin tocar otras páginas. */
+    body {
+      font-family: 'Open Sans', sans-serif;
+      color: #fff;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .title {
+      font-size: 34px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 600px) {
+      .title {
+        font-size: 26px;
+      }
+    }
+
+    /* Estilos del sidebar del Acudiente (definidos en styles-acudiente.css,
+       que esta página no carga porque usa styles-boletin.css). Se replican
+       aquí, sin tocar el partial compartido ni otras páginas. */
+    .acudiente-nav {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+    }
+
+    .acudiente-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .acudiente-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #d7d9df;
+      flex-shrink: 0;
+    }
+
+    .acudiente-nav a.active,
+    .acudiente-nav a:hover {
+      background: #1d2030;
+      color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+    }
+
+    .acudiente-nav i {
+      width: 22px;
+      height: 22px;
+      font-size: 22px;
+      color: #aab1c1;
+    }
+
+    .acudiente-nav .section {
+      color: #8b91a3;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      padding: 6px 10px;
+    }
+
     .card {
       background: #11193a;
       border: 1px solid var(--border);
@@ -53,6 +126,12 @@ function bol_promClase(?float $promedio): string {
       padding: 20px;
       box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
       margin-bottom: 24px;
+    }
+
+    .card h3 {
+      margin: 0 0 20px 0;
+      font-size: 22px;
+      color: white;
     }
 
     .muted {
@@ -245,7 +324,6 @@ function bol_promClase(?float $promedio): string {
           <?php foreach ($boletin_por_periodo as $bloque): ?>
             <?php
               $numP    = (int)$bloque['periodo']['numero_periodo'];
-              $promP   = $bloque['promedio_periodo'] !== null ? (float)$bloque['promedio_periodo'] : null;
               $isActive = ($numP === $periodoActivoDefault);
             ?>
             <button
@@ -255,9 +333,6 @@ function bol_promClase(?float $promedio): string {
             >
               <i class="ri-calendar-2-line"></i>
               <?= htmlspecialchars($bloque['periodo']['nombre'] ?: 'Período ' . $numP) ?>
-              <?php if ($promP !== null): ?>
-                <span class="tab-avg"><?= number_format($promP, 1) ?></span>
-              <?php endif; ?>
             </button>
           <?php endforeach; ?>
         </div>

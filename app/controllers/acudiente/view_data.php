@@ -8,6 +8,67 @@
 
 require_once __DIR__ . '/../perfil.php';                         // mostrarPerfil()
 require_once __DIR__ . '/../../models/acudiente/estudiante.php'; // EstudianteAcudiente
+require_once __DIR__ . '/../../models/administradores/eventos.php'; // Evento
+
+/**
+ * Obtiene los eventos institucionales transformados al formato que
+ * entiende el calendario del panel principal.
+ *
+ * @return array{eventos: array, statsEventos: array, eventosJson: string}
+ */
+function obtenerDataEventosAcudiente(int $idInstitucion): array
+{
+    $model      = new Evento();
+    $rawEventos = $model->listar($idInstitucion);
+    $hoy        = date('Y-m-d');
+
+    $categoryMap = [
+        'reuniones'   => 'meetings',
+        'examen'      => 'exams',
+        'actividad'   => 'activities',
+        'taller'      => 'activities',
+        'conferencia' => 'meetings',
+    ];
+    $iconMap = [
+        'meetings'   => 'ri-user-voice-line',
+        'exams'      => 'ri-file-edit-line',
+        'activities' => 'ri-calendar-event-line',
+    ];
+
+    $eventos = array_map(function ($ev) use ($hoy, $categoryMap, $iconMap) {
+        $tipo     = strtolower($ev['tipo_evento'] ?? '');
+        $category = $categoryMap[$tipo] ?? 'activities';
+        return [
+            'fecha_evento'    => $ev['fecha_evento'],
+            'nombre_evento'   => $ev['nombre_evento'] ?? $ev['nombre'] ?? 'Evento',
+            'descripcion'     => $ev['descripcion'] ?? '',
+            'hora_inicio'     => $ev['hora_inicio'] ?? '',
+            'hora_fin'        => $ev['hora_fin']    ?? '',
+            'ubicacion'       => $ev['ubicacion']   ?? '',
+            'responsable'     => $ev['responsable'] ?? '',
+            'correo_contacto' => $ev['correo_contacto'] ?? '',
+            'category'        => $category,
+            'category_name'   => ucfirst($ev['tipo_evento'] ?? 'Evento'),
+            'icon'            => $iconMap[$category] ?? 'ri-calendar-event-line',
+            'fuente'          => 'evento',
+            'is_upcoming'     => ($ev['fecha_evento'] >= $hoy),
+        ];
+    }, $rawEventos);
+
+    $statsEventos = [
+        'all'        => count($eventos),
+        'upcoming'   => count(array_filter($eventos, fn($e) => $e['is_upcoming'])),
+        'meetings'   => count(array_filter($eventos, fn($e) => $e['category'] === 'meetings')),
+        'exams'      => count(array_filter($eventos, fn($e) => $e['category'] === 'exams')),
+        'activities' => count(array_filter($eventos, fn($e) => $e['category'] === 'activities')),
+    ];
+
+    return [
+        'eventos'      => $eventos,
+        'statsEventos' => $statsEventos,
+        'eventosJson'  => json_encode($eventos, JSON_UNESCAPED_UNICODE),
+    ];
+}
 
 function obtenerPerfilAcudienteDesdeSesion()
 {
@@ -108,5 +169,5 @@ function obtenerDataVistaAcudienteDashboard()
         'usuario'                => obtenerPerfilAcudienteDesdeSesion(),
         'estudiantesAsociados'   => $estudiantesAsociados,
         'estudianteSeleccionado' => $estudianteSeleccionado,
-    ];
+    ] + obtenerDataEventosAcudiente($idInstitucion);
 }
