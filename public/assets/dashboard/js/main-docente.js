@@ -107,7 +107,7 @@ $(document).ready(function() {
     document.body.appendChild(overlay);
   }
 
-  function isMobile() { return window.innerWidth <= 768; }
+  function isMobile() { return window.innerWidth <= 980; }
 
   function openMobileDrawer() {
     if (!leftSidebar) return;
@@ -134,12 +134,14 @@ $(document).ready(function() {
 
   function updateGridState() {
     if (!appGrid || isMobile()) return;
+    const hasRightSidebar = !!document.getElementById('rightSidebar');
+    const effectiveRightVisible = hasRightSidebar && rightVisible;
     appGrid.classList.remove('hide-left', 'hide-right', 'hide-both');
-    if (!leftVisible && !rightVisible) {
+    if (!leftVisible && !effectiveRightVisible) {
       appGrid.classList.add('hide-both');
     } else if (!leftVisible) {
       appGrid.classList.add('hide-left');
-    } else if (!rightVisible) {
+    } else if (!effectiveRightVisible) {
       appGrid.classList.add('hide-right');
     }
   }
@@ -166,12 +168,14 @@ $(document).ready(function() {
   if (toggleLeft) toggleLeft.addEventListener('click', toggleLeftSidebar);
   if (toggleRight) toggleRight.addEventListener('click', toggleRightSidebar);
 
-  // Aplicar estado inicial
+  // Aplicar estado inicial sin animación para evitar el deslizamiento al cargar
+  if (appGrid) appGrid.style.transition = 'none';
   if (!isMobile()) {
     if (leftSidebar && !leftVisible) leftSidebar.classList.add('hidden');
     if (rightSidebar && !rightVisible) rightSidebar.classList.add('hidden');
   }
   updateGridState();
+  if (appGrid) requestAnimationFrame(() => requestAnimationFrame(() => { appGrid.style.transition = ''; }));
 
   // ========================================
   // DATATABLES - PANEL PRINCIPAL

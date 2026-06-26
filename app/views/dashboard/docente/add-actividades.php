@@ -20,7 +20,7 @@ extract($dataVistaDocenteAgregarActividad, EXTR_SKIP);
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/modo-claro-docente.css">
 </head>
 <body>
-    <div class="app" id="appGrid">
+    <div class="app hide-right" id="appGrid">
    <!-- LEFT SIDEBAR -->
       <?php 
         include_once __DIR__ . '/../../layouts/sidebar_docente.php'
@@ -161,7 +161,7 @@ extract($dataVistaDocenteAgregarActividad, EXTR_SKIP);
                         <div class="tabla-titulo mb-3">
                             <h5>Confirmar Registro</h5>
                         </div>
-                        <p>Revisa los datos ingresados antes de agregar el acudiente.</p>
+                        <p>Revisa los datos ingresados antes de agregar la actividad.</p>
 
                         <div class="botones mt-3">
                             <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
