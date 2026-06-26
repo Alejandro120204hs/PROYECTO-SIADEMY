@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         overlay.className = 'sidebar-overlay';
         document.body.appendChild(overlay);
     }
-    function isMobile() { return window.innerWidth <= 768; }
+    function isMobile() { return window.innerWidth <= 1000; }
     function openMobile() {
         if (!sidebar) return;
         sidebar.classList.add('mobile-open');

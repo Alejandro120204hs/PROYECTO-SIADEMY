@@ -22,7 +22,7 @@
 </head>
 
 <body>
-    <div class="app" id="appGrid"
+    <div class="app hide-right" id="appGrid"
          data-base-url="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>"
          data-id-curso="<?= (int) $id_curso ?>"
          data-detalle-actividades='<?= docenteJsonParaHtml($detalleActividadesPorAsignatura) ?>'
@@ -624,7 +624,7 @@
         const appGrid   = document.getElementById('appGrid');
         const overlay   = document.querySelector('.sidebar-overlay') || document.createElement('div');
         if (!overlay.parentElement) { overlay.className = 'sidebar-overlay'; document.body.appendChild(overlay); }
-        function isMobile() { return window.innerWidth <= 768; }
+        function isMobile() { return window.innerWidth <= 980; }
         function openMobile()  { if (!sidebar) return; sidebar.classList.add('mobile-open'); sidebar.classList.remove('hidden'); overlay.classList.add('active'); }
         function closeMobile() { if (!sidebar) return; sidebar.classList.remove('mobile-open'); overlay.classList.remove('active'); }
         overlay.onclick = closeMobile;

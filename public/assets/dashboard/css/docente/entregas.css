@@ -4,9 +4,11 @@
    =========================================== */
 
 /* Layout base */
-.app { grid-template-columns: 260px 1fr !important; }
-.main { padding: 0 0 48px 0 !important; }
-.topbar { padding: 28px 32px 0 32px !important; margin-bottom: 24px; }
+@media (min-width: 981px) {
+  .app { grid-template-columns: 260px 1fr !important; }
+  .main { padding: 0 0 48px 0 !important; }
+  .topbar { padding: 28px 32px 0 32px !important; margin-bottom: 24px; }
+}
 
 /* Header actividad */
 .actividad-entregas-header {
