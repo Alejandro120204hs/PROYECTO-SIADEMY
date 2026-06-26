@@ -20,6 +20,7 @@ extract($dataVistaDocenteEventos, EXTR_SKIP);
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-docente.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/styles-boletines-admin.css">
   <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/dashboard/css/modo-claro-docente.css">
 </head>
 
@@ -36,6 +37,37 @@ extract($dataVistaDocenteEventos, EXTR_SKIP);
           <div class="title">Eventos Académicos</div>
         </div>
         <?php include_once BASE_PATH . '/app/views/layouts/boton_perfil_solo.php'; ?>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="ri-calendar-line"></i></div>
+          <div class="stat-content">
+            <h3><?= (int)($statsEventos['all'] ?? 0) ?></h3>
+            <p>Total eventos</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="ri-time-line"></i></div>
+          <div class="stat-content">
+            <h3><?= (int)($statsEventos['upcoming'] ?? 0) ?></h3>
+            <p>Próximos</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="ri-user-voice-line"></i></div>
+          <div class="stat-content">
+            <h3><?= (int)($statsEventos['meetings'] ?? 0) ?></h3>
+            <p>Reuniones</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="ri-file-edit-line"></i></div>
+          <div class="stat-content">
+            <h3><?= (int)($statsEventos['exams'] ?? 0) ?></h3>
+            <p>Exámenes</p>
+          </div>
+        </div>
       </div>
 
       <section class="filter-section">

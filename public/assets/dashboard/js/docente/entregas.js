@@ -15,7 +15,7 @@
         document.body.appendChild(overlay);
     }
 
-    function isMobile() { return window.innerWidth <= 768; }
+    function isMobile() { return window.innerWidth <= 980; }
     function openMobile() {
         if (!sidebar) return;
         sidebar.classList.add('mobile-open');

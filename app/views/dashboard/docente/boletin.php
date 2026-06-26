@@ -508,7 +508,7 @@ function doc_bol_promClase(?float $p): string {
     }
 
     let visible = localStorage.getItem('leftSidebarVisible') !== 'false';
-    function isMobile() { return window.innerWidth <= 768; }
+    function isMobile() { return window.innerWidth <= 900; }
 
     function openMobile() {
         if (!sidebar) return;

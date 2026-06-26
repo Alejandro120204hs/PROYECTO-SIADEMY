@@ -28,7 +28,7 @@ function inicializarSidebar() {
     document.body.appendChild(overlay);
   }
 
-  function isMobile() { return window.innerWidth <= 768; }
+  function isMobile() { return window.innerWidth <= 980; }
 
   function openMobile() {
     if (!leftSidebar) return;
