@@ -6,7 +6,7 @@ const toggleLeft  = document.getElementById('toggleLeft');
 const overlay = document.querySelector('.sidebar-overlay') || document.createElement('div');
 if (!overlay.parentElement) { overlay.className = 'sidebar-overlay'; document.body.appendChild(overlay); }
 
-function isMobile() { return window.innerWidth <= 768; }
+function isMobile() { return window.innerWidth <= 1024; }
 
 function openMobileDrawer() {
   if (!leftSidebar) return;

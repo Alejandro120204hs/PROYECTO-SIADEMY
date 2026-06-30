@@ -255,7 +255,7 @@ if ($estudiante) {
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-acudiente.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-acudiente.js?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-acudiente.js') ?: 1 ?>"></script>
   <script src="<?= BASE_URL ?>/public/assets/dashboard/js/acudiente-eventos.js?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/js/acudiente-eventos.js') ?: 1 ?>"></script>
 </body>
 </html>
