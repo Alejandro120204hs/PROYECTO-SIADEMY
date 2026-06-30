@@ -123,6 +123,6 @@
     </main>
   </div>
 
-  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-acudiente.js"></script>
+  <script src="<?= BASE_URL ?>/public/assets/dashboard/js/main-acudiente.js?v=<?= @filemtime(BASE_PATH . '/public/assets/dashboard/js/main-acudiente.js') ?: 1 ?>"></script>
 </body>
 </html>

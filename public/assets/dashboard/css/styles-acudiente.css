@@ -183,7 +183,7 @@ a {
   border-radius: 12px;
   background: #11193a;
   border: 1px solid var(--border);
-  display: grid;
+  display: none;
   place-items: center;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1484,6 +1484,7 @@ canvas {
 .sidebar-overlay.active { display: block; }
 
 @media (max-width: 1024px) {
+  .toggle-btn { display: grid; }
   .main { padding: 18px 12px 26px; }
   .topbar { flex-wrap: wrap; gap: 10px; justify-content: flex-start; }
   .topbar-left { min-width: 0; flex: 1 1 auto; order: 1; }
